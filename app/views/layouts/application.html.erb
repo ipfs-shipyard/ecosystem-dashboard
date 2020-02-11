@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html class='h-100'>
+  <head>
+    <title>Ecosystem Research</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class='d-flex flex-column h-100'>
+    <header>
+      <nav class="navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-md">
+        <a class="navbar-brand" href="/">Ecosystem Research</a>
+      </nav>
+    </header>
+
+    <main role="main" class="flex-shrink-0">
+      <div class="container">
+        <% flash.each do |key, value| %>
+          <div class="<%= flash_class(key) %>">
+            <%= value %>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

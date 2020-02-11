@@ -1,0 +1,23 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <%= link_to "https://github.com/#{issue.user.gsub('[bot]', '')}", target: :_blank, class: 'float-right' do %>
+      <img src="https://github.com/<%= issue.user.gsub('[bot]', '') %>.png" class="rounded" height='40'>
+    <% end %>
+    <h5 class="card-title mb-0">
+      <span class='mr-1 text-<%= issue.state == 'open' ? 'success' : 'danger' %>'>
+      <% if issue.pull_request? %>
+        <%= octicon('git-pull-request', :height => 18) %>
+      <% else %>
+        <%= octicon('issue-opened', :height => 18) %>
+      <% end %>
+      </span>
+
+      <%= link_to issue.title, issue.html_url, target: :_blank %>
+      in <%= issue.repo_full_name %>
+      <span class='text-muted'>#<%= issue.number %></span>
+    </h5>
+    <small class='text-muted'> <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user)) %> - <%= time_ago_in_words(issue.created_at) %> ago - <%= issue.comments_count %> <%= octicon('comment', height: 14) %></small>
+    <br>
+    <%= truncate(issue.body, length: 100) %>
+  </div>
+</div>

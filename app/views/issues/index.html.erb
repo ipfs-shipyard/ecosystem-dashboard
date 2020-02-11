@@ -1,0 +1,99 @@
+<div class="row mt-3 mb-3">
+  <div class="col-md-12">
+    <ul class="nav nav-pills">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:user].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Author</a>
+        <div class="dropdown-menu">
+          <% if params[:user].present? %>
+            <a class="dropdown-item active" href="<%= url_for(request.params.merge(user: nil)) %>">
+              <%= params[:user] %>
+            </a>
+          <% end %>
+          <% @users.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |user,count| %>
+            <% unless params[:user] == user %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(user: user)) %>">
+                <%= user %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:state].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">State</a>
+        <div class="dropdown-menu">
+          <% @states.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |state,count| %>
+            <% if params[:state].present? &&  state == params[:state] %>
+            <a class="dropdown-item active" href="<%= url_for(request.params.merge(state: nil)) %>">
+              <%= state %>
+            </a>
+            <% else %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(state: state)) %>">
+                <%= state %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:repo_full_name].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Repository</a>
+        <div class="dropdown-menu">
+          <% if params[:repo_full_name].present? %>
+            <a class="dropdown-item active" href="<%= url_for(request.params.merge(repo_full_name: nil)) %>">
+              <%= params[:repo_full_name] %>
+            </a>
+          <% end %>
+          <% @repos.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |repo,count| %>
+            <% unless repo == params[:repo_full_name] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(repo_full_name: repo)) %>">
+                <%= repo %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
+        <div class="dropdown-menu">
+          <% if params[:org].present? %>
+            <a class="dropdown-item active" href="<%= url_for(request.params.merge(org: nil)) %>">
+              <%= params[:org] %>
+            </a>
+          <% end %>
+          <% @orgs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |org,count| %>
+            <% unless org == params[:org] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(org: org)) %>">
+                <%= org %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <%= line_chart @scope.group_by_month(:created_at).count, height: "200px" %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <%= render @issues %>
+  </div>
+</div>
+
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
