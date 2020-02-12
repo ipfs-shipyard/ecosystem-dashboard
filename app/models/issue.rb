@@ -9,7 +9,7 @@ class Issue < ApplicationRecord
                 "raulk", "olizilla", "satazor", "magik6k", "flyingzumwalt", "kevina",
                 "satazor", "vyzo", "pgte", "PedroMiguelSS", "chriscool", "hugomrdias",
                 "jessicaschilling", 'aschmahmann', 'dirkmc', 'ericronne', 'andrew',
-                "Mr0grog", 'rvagg', 'lanzafame']
+                "Mr0grog", 'rvagg', 'lanzafame', 'mikeal']
 
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
