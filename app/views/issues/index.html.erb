@@ -1,6 +1,6 @@
 <div class="row mt-3 mb-3">
   <div class="col-md-12">
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills d-flex">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:user].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Author</a>
         <div class="dropdown-menu">
@@ -99,6 +99,11 @@
             <% end %>
           <% end %>
         </div>
+      </li>
+      <li class='nav-item ml-auto'>
+        <span class="text-muted nav-link">
+          <%== pagy_info(@pagy) %>
+        </span>
       </li>
     </ul>
   </div>
