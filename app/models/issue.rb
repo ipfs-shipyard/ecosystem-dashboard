@@ -8,7 +8,8 @@ class Issue < ApplicationRecord
                 "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
                 "raulk", "olizilla", "satazor", "magik6k", "flyingzumwalt", "kevina",
                 "satazor", "vyzo", "pgte", "PedroMiguelSS", "chriscool", "hugomrdias",
-                "jessicaschilling"]
+                "jessicaschilling", 'aschmahmann', 'dirkmc', 'ericronne', 'andrew',
+                "Mr0grog", 'rvagg']
 
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
