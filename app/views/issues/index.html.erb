@@ -117,7 +117,11 @@
     <h5>
       Issues+PRs created by <%= collab_title %> contributors
     </h5>
-    <%= render @issues %>
+    <% if @issues.any? %>
+      <%= render @issues %>
+    <% else %>
+      <p>No issues or pull requests found.</p>
+    <% end %>
 
     <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
   </div>
