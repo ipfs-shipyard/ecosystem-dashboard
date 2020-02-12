@@ -1,24 +1,15 @@
-# README
+IPFS Ecosystem Research
+====
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A dashboard for discovering issues and pull requests opened by IPFS collaborators.
 
-Things you may want to cover:
 
-* Ruby version
+License
+-------
 
-* System dependencies
+Copyright (c) Protocol Labs, Inc.
 
-* Configuration
+This project is dual-licensed under Apache 2.0 and MIT terms:
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
+- MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
