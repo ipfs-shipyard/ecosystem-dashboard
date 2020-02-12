@@ -5,13 +5,13 @@
         <a class="nav-link dropdown-toggle <%= 'active' if params[:user].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Author</a>
         <div class="dropdown-menu">
           <% if params[:user].present? %>
-            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(user: nil)) %>">
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, user: nil)) %>">
               <%= params[:user] %>
             </a>
           <% end %>
           <% @users.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |user,count| %>
             <% unless params[:user] == user %>
-              <a class="dropdown-item" href="<%= url_for(request.params.merge(user: user)) %>">
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, user: user)) %>">
                 <%= user %>
                 <small class='text-muted'>
                   <%= number_with_delimiter count %>
@@ -26,11 +26,11 @@
         <div class="dropdown-menu">
           <% @states.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |state,count| %>
             <% if params[:state].present? &&  state == params[:state] %>
-            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(state: nil)) %>">
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, state: nil)) %>">
               <%= state %>
             </a>
             <% else %>
-              <a class="dropdown-item" href="<%= url_for(request.params.merge(state: state)) %>">
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, state: state)) %>">
                 <%= state %>
                 <small class='text-muted'>
                   <%= number_with_delimiter count %>
@@ -44,13 +44,13 @@
         <a class="nav-link dropdown-toggle <%= 'active' if params[:repo_full_name].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Repository</a>
         <div class="dropdown-menu">
           <% if params[:repo_full_name].present? %>
-            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(repo_full_name: nil)) %>">
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, repo_full_name: nil)) %>">
               <%= params[:repo_full_name] %>
             </a>
           <% end %>
           <% @repos.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |repo,count| %>
             <% unless repo == params[:repo_full_name] %>
-              <a class="dropdown-item" href="<%= url_for(request.params.merge(repo_full_name: repo)) %>">
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, repo_full_name: repo)) %>">
                 <%= repo %>
                 <small class='text-muted'>
                   <%= number_with_delimiter count %>
@@ -64,13 +64,13 @@
         <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
         <div class="dropdown-menu">
           <% if params[:org].present? %>
-            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(org: nil)) %>">
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, org: nil)) %>">
               <%= params[:org] %>
             </a>
           <% end %>
           <% @orgs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |org,count| %>
             <% unless org == params[:org] %>
-              <a class="dropdown-item" href="<%= url_for(request.params.merge(org: org)) %>">
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, org: org)) %>">
                 <%= org %>
                 <small class='text-muted'>
                   <%= number_with_delimiter count %>
@@ -84,13 +84,13 @@
         <a class="nav-link dropdown-toggle <%= 'active' if params[:collab].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Collabs</a>
         <div class="dropdown-menu">
           <% if params[:collab].present? %>
-            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(collab: nil)) %>">
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, collab: nil)) %>">
               <%= params[:collab] %>
             </a>
           <% end %>
           <% @collabs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |collab,count| %>
             <% unless collab == params[:collab] %>
-              <a class="dropdown-item" href="<%= url_for(request.params.merge(collab: collab)) %>">
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, collab: collab)) %>">
                 <%= collab %>
               </a>
             <% end %>
