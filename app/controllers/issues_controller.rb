@@ -3,9 +3,9 @@ class IssuesController < ApplicationController
     @scope = Issue.protocol.humans.where("html_url <> ''")
 
     if params[:collab].present?
-      @collab_users = Issue.org_contributor_names(params[:collab]).select{|user,count| count > 3 }
+      @collab_users = Issue.org_contributor_names(params[:collab])
     else
-      @collab_users = Issue.not_protocol.humans.not_employees.group(:user).count.select{|user,count| count > 3 }
+      @collab_users = Issue.not_protocol.humans.not_employees.group(:user).count
     end
 
     @scope = @scope.where(user: @collab_users.map(&:first))
