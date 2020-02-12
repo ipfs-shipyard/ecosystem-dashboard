@@ -8,6 +8,8 @@ class IssuesController < ApplicationController
       @collab_users = Issue.not_protocol.humans.not_employees.group(:user).count
     end
 
+    @scope = @scope.where(comments_count: 0) if params[:uncommented].present?
+
     @scope = @scope.where(user: @collab_users.map(&:first))
 
     @scope = @scope.where(user: params[:user]) if params[:user].present?
