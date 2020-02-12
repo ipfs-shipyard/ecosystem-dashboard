@@ -80,6 +80,26 @@
           <% end %>
         </div>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:collab].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Collabs</a>
+        <div class="dropdown-menu">
+          <% if params[:collab].present? %>
+            <a class="dropdown-item active" href="<%= url_for(request.params.merge(collab: nil)) %>">
+              <%= params[:collab] %>
+            </a>
+          <% end %>
+          <% @collabs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |collab,count| %>
+            <% unless collab == params[:collab] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(collab: collab)) %>">
+                <%= collab %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
     </ul>
   </div>
 </div>
@@ -91,8 +111,27 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-9">
+    <h5>
+      Issues+PRs created by <%= collab_title %> contributors
+    </h5>
     <%= render @issues %>
+  </div>
+  <div class="col-md-3">
+    <h5>
+      <%= collab_title %> contributors
+    </h5>
+    <ul class="list-group">
+      <% @collab_users.sort_by(&:last).reverse.first(50).each do |user, count| %>
+        <li class="list-group-item">
+          <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
+          <%= user %>
+          <small class='text-muted'>
+            <%= number_with_delimiter count %>
+          </small>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </div>
 

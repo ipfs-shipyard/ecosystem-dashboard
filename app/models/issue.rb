@@ -1,5 +1,20 @@
 class Issue < ApplicationRecord
 
+  PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld']
+  BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
+          'greenkeeperio-bot', 'ghost', 'rollbar[bot]', 'guardrails[bot]']
+  EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
+                "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
+                "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
+                "raulk", "olizilla", "satazor", "magik6k", "flyingzumwalt", "kevina",
+                "satazor", "vyzo", "pgte", "PedroMiguelSS", "chriscool", "hugomrdias",
+                "jessicaschilling"]
+
+  scope :protocol, -> { where(org: PROTOCOL_ORGS) }
+  scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
+  scope :humans, -> { where.not(user: BOTS) }
+  scope :not_employees, -> { where.not(user: EMPLOYEES) }
+
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
     remote_issues.each do |remote_issue|
@@ -36,6 +51,14 @@ class Issue < ApplicationRecord
 
   def self.active_repo_names
     Issue.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
+  end
+
+  def self.org_contributor_names(org_name)
+    Issue.where(org: org_name).humans.not_employees.group(:user).count
+  end
+
+  def self.collab_orgs
+    Issue.not_protocol.group(:org).count
   end
 
   def self.download_active_repos
