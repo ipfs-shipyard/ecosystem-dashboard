@@ -2,14 +2,16 @@ class Issue < ApplicationRecord
 
   PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld']
   BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
-          'greenkeeperio-bot', 'ghost', 'rollbar[bot]', 'guardrails[bot]']
+          'greenkeeperio-bot', 'ghost', 'rollbar[bot]', 'guardrails[bot]',
+          'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot']
   EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
                 "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
                 "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
                 "raulk", "olizilla", "satazor", "magik6k", "flyingzumwalt", "kevina",
                 "satazor", "vyzo", "pgte", "PedroMiguelSS", "chriscool", "hugomrdias",
                 "jessicaschilling", 'aschmahmann', 'dirkmc', 'ericronne', 'andrew',
-                "Mr0grog", 'rvagg', 'lanzafame', 'mikeal']
+                "Mr0grog", 'rvagg', 'lanzafame', 'mikeal', 'warpfork', 'terichadbourne',
+                'mburns', 'nonsense', 'twittner', 'momack2']
 
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
