@@ -114,8 +114,16 @@
 
 <div class="row mb-3">
   <div class="col-md-9">
-    <h5>
-      Issues+PRs created by <%= collab_title %> contributors
+    <h5 class='mb-2'>
+      <%= params[:state].capitalize if params[:state] %>
+      Issues+PRs created by
+      <% if params[:user].present? %>
+        <%= params[:user] %>
+      <% else %>
+        <%= collab_title %> contributors
+      <% end %>
+      <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
+      <%= "in #{params[:org]}" if params[:org] %>
     </h5>
     <% if @issues.any? %>
       <%= render @issues %>
