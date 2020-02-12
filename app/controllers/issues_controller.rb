@@ -21,6 +21,6 @@ class IssuesController < ApplicationController
     @states = @scope.unscope(where: :state).group(:state).count
     @repos = @scope.unscope(where: :repo_full_name).group(:repo_full_name).count
     @orgs = @scope.unscope(where: :org).protocol.group(:org).count
-    @collabs = @scope.unscope(where: :user).unscope(where: :org).not_protocol.group(:org).count
+    @collabs = @scope.unscope(where: :user).unscope(where: :org).humans.not_employees.not_protocol.group(:org).count
   end
 end
