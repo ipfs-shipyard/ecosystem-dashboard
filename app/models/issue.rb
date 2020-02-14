@@ -69,7 +69,7 @@ class Issue < ApplicationRecord
   end
 
   def self.update_collab_labels
-    Issue.not_protocol.humans.not_employees.group(:org).count.each do |u, count|
+    Issue.not_protocol.humans.not_employees.group(:user).count.each do |u, count|
       collabs = Issue.not_protocol.where(user: u).group(:org).count
       Issue.protocol.where(user: u).update_all(collabs: collabs.map(&:first))
     end
