@@ -1,8 +1,8 @@
 <h1 class='mt-2 mb-2'>Collabs</h1>
 
-<% @collabs.in_groups(3).each do |group| %>
+<% @collabs.in_groups_of(3, false).each do |group| %>
   <div class="card-deck mb-4">
-    <% group.compact.each do |collab, count| %>
+    <% group.each do |collab, count| %>
       <div class="card" >
         <div class="card-header">
           <h3 class=m-0>
