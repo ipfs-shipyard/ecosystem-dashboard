@@ -3,7 +3,8 @@ class Issue < ApplicationRecord
   PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld']
   BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
           'greenkeeperio-bot', 'ghost', 'rollbar[bot]', 'guardrails[bot]',
-          'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]']
+          'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]',
+          'gitter-badger']
   EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
                 "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
                 "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
