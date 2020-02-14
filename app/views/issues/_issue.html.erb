@@ -16,7 +16,14 @@
       in <%= issue.repo_full_name %>
       <span class='text-muted'>#<%= issue.number %></span>
     </h5>
-    <small class='text-muted'> <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user)) %> - <%= time_ago_in_words(issue.created_at) %> ago - <%= issue.comments_count %> <%= octicon('comment', height: 14) %></small>
+    <small class='text-muted'>
+      <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user, page: nil)) %>
+      - <%= time_ago_in_words(issue.created_at) %> ago
+      - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
+      <% issue.collabs.each do |collab| %>
+        <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+      <% end %>
+    </small>
     <br>
     <%= truncate(issue.body, length: 100) %>
   </div>

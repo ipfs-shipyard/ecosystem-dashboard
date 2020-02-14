@@ -3,7 +3,7 @@ class Issue < ApplicationRecord
   PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld']
   BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
           'greenkeeperio-bot', 'ghost', 'rollbar[bot]', 'guardrails[bot]',
-          'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot']
+          'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]']
   EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
                 "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
                 "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
@@ -66,6 +66,13 @@ class Issue < ApplicationRecord
 
   def self.download_active_repos
     active_repo_names.each{|repo_full_name| download(repo_full_name) }
+  end
+
+  def self.update_collab_labels
+    Issue.not_protocol.humans.not_employees.group(:org).count.each do |u, count|
+      collabs = Issue.not_protocol.where(user: u).group(:org).count
+      Issue.protocol.where(user: u).update_all(collabs: collabs.map(&:first))
+    end
   end
 
   def pull_request?
