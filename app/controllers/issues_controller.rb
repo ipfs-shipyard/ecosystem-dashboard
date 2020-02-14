@@ -23,4 +23,9 @@ class IssuesController < ApplicationController
     @orgs = @scope.unscope(where: :org).protocol.group(:org).count
     @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
   end
+
+  def collabs
+    @scope = Issue.protocol.not_employees.where("html_url <> ''")
+    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+  end
 end
