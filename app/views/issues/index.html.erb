@@ -92,6 +92,9 @@
             <% unless collab == params[:collab] %>
               <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, collab: collab)) %>">
                 <%= collab %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
               </a>
             <% end %>
           <% end %>
@@ -138,10 +141,13 @@
       <%= collab_title %> contributors
     </h5>
     <ul class="list-group">
-      <% @collab_users.sort_by(&:last).reverse.first(50).each do |user, count| %>
+      <% @users.sort_by(&:last).reverse.first(50).each do |user, count| %>
         <li class="list-group-item">
           <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
           <%= user %>
+          <small class='text-muted'>
+            <%= number_with_delimiter count %>
+          </small>
         </li>
       <% end %>
     </ul>

@@ -16,7 +16,9 @@ class Issue < ApplicationRecord
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
   scope :humans, -> { where.not(user: BOTS) }
-  scope :not_employees, -> { where.not(user: EMPLOYEES) }
+  scope :not_employees, -> { where.not(user: EMPLOYEES + BOTS) }
+  scope :all_collabs, -> { where.not("collabs = '{}'") }
+  scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
 
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
@@ -57,7 +59,7 @@ class Issue < ApplicationRecord
   end
 
   def self.org_contributor_names(org_name)
-    Issue.where(org: org_name).humans.not_employees.group(:user).count
+    Issue.where(org: org_name).not_employees.group(:user).count
   end
 
   def self.collab_orgs
@@ -69,7 +71,7 @@ class Issue < ApplicationRecord
   end
 
   def self.update_collab_labels
-    Issue.not_protocol.humans.not_employees.group(:user).count.each do |u, count|
+    Issue.not_protocol.not_employees.group(:user).count.each do |u, count|
       collabs = Issue.not_protocol.where(user: u).group(:org).count
       Issue.protocol.where(user: u).update_all(collabs: collabs.map(&:first))
     end
