@@ -20,25 +20,36 @@
         <%= octicon('git-pull-request') %> Pull Requests
         <small class='text-muted'><%= number_with_delimiter @scope.collab(collab).select(:html_url).select(&:pull_request?).length %></small>
       </li>
+      <% contributors = @scope.collab(collab).group(:user).count.sort_by{|k,v| -v} %>
       <li class="list-group-item pt-2 pb-2">
         <%= octicon('person') %> Unique Contributors
-        <small class='text-muted'><%= number_with_delimiter  @scope.collab(collab).group(:user).count.length %></small>
-
+        <small class='text-muted'><%= number_with_delimiter contributors.length %></small>
       </li>
-    </ul>
-
-    <div class="card-header">
-      Related collabs
-    </div>
-    <% related_collabs = @scope.collab(collab).pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v}.reject{|k,v| k == collab } %>
-    <ul class="list-group list-group-flush">
-      <%  related_collabs.each do |related_collab, count| %>
-        <li class="list-group-item pt-2 pb-2">
-          <img src="https://github.com/<%= related_collab %>.png" class="rounded" height='20'>
-          <%= related_collab %>
+      <% contributors.first(3).each do |user, count| %>
+        <li class="list-group-item pt-2 pl-5 pb-2">
+          <img src="https://github.com/<%= user %>.png" class="rounded" height='20'>
+          <%= user %>
           <small class='text-muted'><%= number_with_delimiter count %></small>
         </li>
       <% end %>
+
+      <% related_collabs = @scope.collab(collab).pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v}.reject{|k,v| k == collab } %>
+
+      <% if related_collabs.any? %>
+        <li class="list-group-item pt-2 pb-2">
+          <%= octicon('organization') %> Related collabs
+          <small class='text-muted'><%= number_with_delimiter related_collabs.length %></small>
+        </li>
+
+        <% related_collabs.first(3).each do |related_collab, count| %>
+          <li class="list-group-item pt-2 pl-5 pb-2">
+            <img src="https://github.com/<%= related_collab %>.png" class="rounded" height='20'>
+            <%= related_collab %>
+            <small class='text-muted'><%= number_with_delimiter count %></small>
+          </li>
+        <% end %>
+      <% end %>
+
     </ul>
   </div>
 <% end %>
