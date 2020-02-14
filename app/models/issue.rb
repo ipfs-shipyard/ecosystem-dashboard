@@ -12,7 +12,7 @@ class Issue < ApplicationRecord
                 "jessicaschilling", 'aschmahmann', 'dirkmc', 'ericronne', 'andrew',
                 "Mr0grog", 'rvagg', 'lanzafame', 'mikeal', 'warpfork', 'terichadbourne',
                 'mburns', 'nonsense', 'twittner', 'momack2', 'creationix', 'djdv',
-                'jimpick', 'meiqimichelle', 'mgoelzer']
+                'jimpick', 'meiqimichelle', 'mgoelzer', 'kishansagathiya', 'dryajov']
 
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
