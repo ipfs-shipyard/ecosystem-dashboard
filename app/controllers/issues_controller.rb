@@ -14,6 +14,20 @@ class IssuesController < ApplicationController
     @scope = @scope.where(state: params[:state]) if params[:state].present?
     @scope = @scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
     @scope = @scope.where(org: params[:org]) if params[:org].present?
+
+    @types = {
+      'issues' => @scope.issues.count,
+      'pull_requests' => @scope.pull_requests.count
+    }
+
+    if params[:type].present?
+      if params[:type] == 'issues'
+        @scope = @scope.issues
+      else
+        @scope = @scope.pull_requests
+      end
+    end
+
     @pagy, @issues = pagy(@scope.order('issues.created_at DESC'))
 
     @users = @scope.unscope(where: :user).not_employees.group(:user).count

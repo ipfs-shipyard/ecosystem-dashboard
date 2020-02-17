@@ -23,6 +23,9 @@ class Issue < ApplicationRecord
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
 
+  scope :pull_requests, -> { where("html_url like ?", '%/pull/%') }
+  scope :issues, -> { where.not("html_url like ?", '%/pull/%') }
+
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
     remote_issues.each do |remote_issue|
