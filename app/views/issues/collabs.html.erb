@@ -51,6 +51,19 @@
             <% end %>
           <% end %>
 
+          <% orgs = @scope.collab(collab).group(:org).count.sort_by{|k,v| -v} %>
+          <li class="list-group-item pt-2 pb-2">
+            <%= octicon('person') %> Most Active Orgs
+            <small class='text-muted'><%= number_with_delimiter contributors.length %></small>
+          </li>
+          <% orgs.first(2).each do |org, count| %>
+            <li class="list-group-item pt-2 pl-5 pb-2">
+              <img src="https://github.com/<%= org %>.png" class="rounded" height='20'>
+              <%= org %>
+              <small class='text-muted'><%= number_with_delimiter count %></small>
+            </li>
+          <% end %>
+
         </ul>
       </div>
     <% end %>
