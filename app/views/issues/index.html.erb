@@ -153,7 +153,11 @@
 
 <div class="row mb-3">
   <div class="col-md-12">
-    <%= line_chart @scope.group_by_month(:created_at).count, height: "200px" %>
+    <% if params[:recent] %>
+      <%= line_chart @scope.group_by_day(:created_at).count, height: "200px" %>
+    <% else %>
+      <%= line_chart @scope.group_by_month(:created_at).count, height: "200px" %>
+    <% end %>
   </div>
 </div>
 
