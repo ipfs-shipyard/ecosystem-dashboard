@@ -24,3 +24,5 @@
 /config/master.key
 .env
 *.dump
+
+*topics*
