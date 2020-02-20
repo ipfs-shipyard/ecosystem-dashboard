@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_14_102051) do
+ActiveRecord::Schema.define(version: 2020_02_20_174016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 2020_02_14_102051) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "org"
     t.string "collabs", default: [], array: true
+    t.index ["collabs"], name: "index_issues_on_collabs", using: :gin
+    t.index ["html_url"], name: "index_issues_on_html_url"
     t.index ["org"], name: "index_issues_on_org"
     t.index ["repo_full_name"], name: "index_issues_on_repo_full_name"
     t.index ["state"], name: "index_issues_on_state"
