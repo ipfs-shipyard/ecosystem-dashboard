@@ -119,6 +119,29 @@
           <% end %>
         </div>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:uncommented].present? || params[:recent].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
+        <div class="dropdown-menu">
+          <% if params[:uncommented].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, uncommented: nil)) %>">
+              Uncommented
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, uncommented: 'true')) %>">
+              Uncommented
+            </a>
+          <% end %>
+          <% if params[:recent].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, recent: nil)) %>">
+              Recent
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, recent: 'true')) %>">
+              Recent
+            </a>
+          <% end %>
+        </div>
+      </li>
       <li class='nav-item ml-auto'>
         <span class="text-muted nav-link">
           <%== pagy_info(@pagy) %>
@@ -137,12 +160,15 @@
 <div class="row mb-3">
   <div class="col-md-9">
     <h5 class='mb-2'>
+      <%= 'Uncommented' if params[:uncommented] %>
       <%= params[:state].capitalize if params[:state] %>
-      Issues+PRs created by
+      Issues+PRs
+      <%= 'in the last month' if params[:recent] %>
+      created by
       <% if params[:user].present? %>
         <%= params[:user] %>
       <% else %>
-        <%= collab_title %> contributors
+        all <%= collab_title %> contributors
       <% end %>
       <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
       <%= "in #{params[:org]}" if params[:org] %>
