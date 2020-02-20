@@ -157,7 +157,10 @@
   </div>
   <div class="col-md-3">
     <h5>
-      <%= collab_title %> contributors
+      Top <%= collab_title %> contributors
+      <small class='text-muted'>
+        <%= number_with_delimiter @users.length %>
+      </small>
     </h5>
     <ul class="list-group">
       <% @users.sort_by(&:last).reverse.first(50).each do |user, count| %>
