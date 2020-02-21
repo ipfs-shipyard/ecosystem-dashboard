@@ -162,11 +162,6 @@
           <% end %>
         </div>
       </li>
-      <li class='nav-item ml-auto'>
-        <span class="text-muted nav-link">
-          <%== pagy_info(@pagy) %>
-        </span>
-      </li>
     </ul>
   </div>
 </div>
@@ -196,6 +191,9 @@
       <% end %>
       <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
       <%= "in #{params[:org]}" if params[:org] %>
+      <small class='text-muted'>
+        <%= @pagy.count %>
+      </small>
     </h5>
     <% if @issues.any? %>
       <%= render @issues %>
