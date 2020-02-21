@@ -22,6 +22,12 @@ class IssuesController < ApplicationController
       'pull_requests' => @scope.pull_requests.count
     }
 
+    @languages = Issue::LANGUAGES.to_h do |language|
+      [language, @scope.language(language).count]
+    end
+
+    @scope = @scope.language(params[:language]) if params[:language].present?
+
     if params[:type].present?
       if params[:type] == 'issues'
         @scope = @scope.issues

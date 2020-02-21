@@ -16,6 +16,8 @@ class Issue < ApplicationRecord
                 'jimpick', 'meiqimichelle', 'mgoelzer', 'kishansagathiya', 'dryajov',
                 'autonome', 'bigs']
 
+  LANGUAGES = ['Go', 'JS', 'Rust']
+
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
   scope :humans, -> { where.not(user: BOTS) }
@@ -25,6 +27,8 @@ class Issue < ApplicationRecord
 
   scope :pull_requests, -> { where("html_url like ?", '%/pull/%') }
   scope :issues, -> { where.not("html_url like ?", '%/pull/%') }
+
+  scope :language, ->(language) { where('repo_full_name ilike ?', "%/#{language}-%") }
 
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
