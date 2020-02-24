@@ -6,6 +6,13 @@ module ApplicationHelper
    end
 
    def language_title(lang)
-     lang == 'py' ? 'Python' : lang
+     case lang
+     when 'py'
+       'Python'
+     when 'cs'
+       'C#'
+     else
+       lang
+     end
    end
 end
