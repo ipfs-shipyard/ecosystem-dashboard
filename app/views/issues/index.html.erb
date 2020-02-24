@@ -104,13 +104,13 @@
         <div class="dropdown-menu">
           <% if params[:language].present? %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, language: nil)) %>">
-              <%= params[:language] %>
+              <%= language_title(params[:language]) %>
             </a>
           <% end %>
           <% @languages.sort_by(&:last).reverse.reject{|r| r[0].blank? || r[1].zero? }.each do |language,count| %>
             <% unless language == params[:language] %>
               <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, language: language)) %>">
-                <%= language %>
+                <%= language_title(language) %>
                 <small class='text-muted'>
                   <%= number_with_delimiter count %>
                 </small>
@@ -180,7 +180,7 @@
   <div class="col-md-9">
     <h5 class='mb-2'>
       <%= 'Uncommented' if params[:uncommented] %>
-      <%= params[:language] if params[:language] %>
+      <%= language_title(params[:language]) if params[:language] %>
       <%= params[:state].capitalize if params[:state] %>
       Issues+PRs
       <%= 'in the last month' if params[:recent] %>

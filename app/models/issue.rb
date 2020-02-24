@@ -16,7 +16,7 @@ class Issue < ApplicationRecord
                 'jimpick', 'meiqimichelle', 'mgoelzer', 'kishansagathiya', 'dryajov',
                 'autonome', 'bigs', 'jesseclay']
 
-  LANGUAGES = ['Go', 'JS', 'Rust']
+  LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java']
 
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
