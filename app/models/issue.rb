@@ -14,7 +14,7 @@ class Issue < ApplicationRecord
                 "Mr0grog", 'rvagg', 'lanzafame', 'mikeal', 'warpfork', 'terichadbourne',
                 'mburns', 'nonsense', 'twittner', 'momack2', 'creationix', 'djdv',
                 'jimpick', 'meiqimichelle', 'mgoelzer', 'kishansagathiya', 'dryajov',
-                'autonome', 'bigs', 'jesseclay']
+                'autonome', 'bigs', 'jesseclay', 'yusefnapora', 'paulobmarcos']
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
