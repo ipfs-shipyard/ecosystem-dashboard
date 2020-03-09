@@ -8,6 +8,23 @@ class IssuesController < ApplicationController
       @scope = @scope.all_collabs
     end
 
+    apply_filters
+    @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
+  end
+
+  def collabs
+    @scope = Issue.protocol.not_employees.where("html_url <> ''")
+    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+  end
+
+  def all
+    @scope = Issue.protocol.humans.where("html_url <> ''")
+    apply_filters
+  end
+
+  private
+
+  def apply_filters
     @scope = @scope.where(comments_count: 0) if params[:uncommented].present?
 
     @scope = @scope.where('created_at > ?', 1.month.ago) if params[:recent].present?
@@ -47,11 +64,5 @@ class IssuesController < ApplicationController
     @states = @scope.unscope(where: :state).group(:state).count
     @repos = @scope.unscope(where: :repo_full_name).group(:repo_full_name).count
     @orgs = @scope.unscope(where: :org).protocol.group(:org).count
-    @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
-  end
-
-  def collabs
-    @scope = Issue.protocol.not_employees.where("html_url <> ''")
-    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
   end
 end

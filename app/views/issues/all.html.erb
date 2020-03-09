@@ -1,0 +1,229 @@
+<div class="row mt-3 mb-3">
+  <div class="col-md-12">
+    <ul class="nav nav-pills d-flex">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:user].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Author</a>
+        <div class="dropdown-menu">
+          <% if params[:user].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, user: nil)) %>">
+              <%= params[:user] %>
+            </a>
+          <% end %>
+          <% @users.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |user,count| %>
+            <% unless params[:user] == user %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, user: user)) %>">
+                <%= user %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:state].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">State</a>
+        <div class="dropdown-menu">
+          <% @states.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |state,count| %>
+            <% if params[:state].present? &&  state == params[:state] %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, state: nil)) %>">
+              <%= state %>
+            </a>
+            <% else %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, state: state)) %>">
+                <%= state %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:type].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
+        <div class="dropdown-menu">
+          <% @types.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |type,count| %>
+            <% if params[:type].present? && type == params[:type] %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, type: nil)) %>">
+              <%= type.humanize %>
+            </a>
+            <% else %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, type: type)) %>">
+                <%= type.humanize %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:repo_full_name].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Repository</a>
+        <div class="dropdown-menu">
+          <% if params[:repo_full_name].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, repo_full_name: nil)) %>">
+              <%= params[:repo_full_name] %>
+            </a>
+          <% end %>
+          <% @repos.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |repo,count| %>
+            <% unless repo == params[:repo_full_name] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, repo_full_name: repo)) %>">
+                <%= repo %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
+        <div class="dropdown-menu">
+          <% if params[:org].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, org: nil)) %>">
+              <%= params[:org] %>
+            </a>
+          <% end %>
+          <% @orgs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |org,count| %>
+            <% unless org == params[:org] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, org: org)) %>">
+                <%= org %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:language].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Language</a>
+        <div class="dropdown-menu">
+          <% if params[:language].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, language: nil)) %>">
+              <%= language_title(params[:language]) %>
+            </a>
+          <% end %>
+          <% @languages.sort_by(&:last).reverse.reject{|r| r[0].blank? || r[1].zero? }.each do |language,count| %>
+            <% unless language == params[:language] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, language: language)) %>">
+                <%= language_title(language) %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:uncommented].present? || params[:recent].present? || params[:no_milestone].present? || params[:unlabelled].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
+        <div class="dropdown-menu">
+          <% if params[:uncommented].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, uncommented: nil)) %>">
+              Uncommented
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, uncommented: 'true')) %>">
+              Uncommented
+            </a>
+          <% end %>
+          <% if params[:no_milestone].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, no_milestone: nil)) %>">
+              No Milestone
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, no_milestone: 'true')) %>">
+              No Milestone
+            </a>
+          <% end %>
+          <% if params[:unlabelled].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, unlabelled: nil)) %>">
+              Unlabelled
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, unlabelled: 'true')) %>">
+              Unlabelled
+            </a>
+          <% end %>
+          <% if params[:recent].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, recent: nil)) %>">
+              Recent
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, recent: 'true')) %>">
+              Recent
+            </a>
+          <% end %>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<% if @issues.any? %>
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <% if params[:recent] %>
+        <%= line_chart @scope.group_by_day(:created_at).count, height: "200px" %>
+      <% else %>
+        <%= line_chart @scope.group_by_month(:created_at).count, height: "200px" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="row mb-3">
+  <div class="col-md-9">
+    <% if @issues.any? %>
+      <h5 class='mb-2'>
+        <%= 'Uncommented' if params[:uncommented] %>
+        <%= language_title(params[:language]) if params[:language] %>
+        <%= params[:state].capitalize if params[:state] %>
+        Issues+PRs
+        <%= 'in the last month' if params[:recent] %>
+        created by
+        <% if params[:user].present? %>
+          <%= params[:user] %>
+        <% else %>
+          all contributors
+        <% end %>
+        <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
+        <%= "in #{params[:org]}" if params[:org] %>
+        <small class='text-muted'>
+          <%= @pagy.count %>
+        </small>
+      </h5>
+
+      <%= render @issues %>
+    <% else %>
+      <p>No issues or pull requests found.</p>
+    <% end %>
+
+    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+  </div>
+  <% if @issues.any? %>
+    <div class="col-md-3">
+      <h5>
+        Top contributors
+        <small class='text-muted'>
+          <%= number_with_delimiter @users.length %>
+        </small>
+      </h5>
+      <ul class="list-group">
+        <% @users.sort_by(&:last).reverse.first(50).each do |user, count| %>
+          <li class="list-group-item">
+            <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
+            <%= user %>
+            <small class='text-muted'>
+              <%= number_with_delimiter count %>
+            </small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
