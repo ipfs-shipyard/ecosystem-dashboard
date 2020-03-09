@@ -20,6 +20,11 @@
       <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user, page: nil)) %>
       - <%= time_ago_in_words(issue.created_at) %> ago
       - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
+      <% if issue.milestone_name %>
+        <a href='https://github.com/<%= issue.repo_full_name %>/milestone/<%= issue.milestone_id %>' target='_blank' class='badge badge-warning'>
+          Milestone: <%= issue.milestone_name %>
+        </a>
+      <% end %>
       <% issue.collabs.each do |collab| %>
         <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
       <% end %>

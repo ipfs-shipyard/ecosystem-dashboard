@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_174016) do
+ActiveRecord::Schema.define(version: 2020_03_09_103547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,12 +29,29 @@ ActiveRecord::Schema.define(version: 2020_02_20_174016) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "org"
     t.string "collabs", default: [], array: true
+    t.string "milestone_name"
+    t.integer "milestone_id"
     t.index ["collabs"], name: "index_issues_on_collabs", using: :gin
     t.index ["html_url"], name: "index_issues_on_html_url"
     t.index ["org"], name: "index_issues_on_org"
     t.index ["repo_full_name"], name: "index_issues_on_repo_full_name"
     t.index ["state"], name: "index_issues_on_state"
     t.index ["user"], name: "index_issues_on_user"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.integer "remote_id"
+    t.string "title"
+    t.integer "posts_count"
+    t.boolean "closed"
+    t.integer "views"
+    t.boolean "has_accepted_answer"
+    t.integer "like_count"
+    t.string "username"
+    t.integer "category_id"
+    t.string "category_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end

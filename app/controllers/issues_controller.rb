@@ -12,6 +12,8 @@ class IssuesController < ApplicationController
 
     @scope = @scope.where('created_at > ?', 1.month.ago) if params[:recent].present?
 
+    @scope = @scope.no_milestone if params[:no_milestone].present?
+
     @scope = @scope.where(user: params[:user]) if params[:user].present?
     @scope = @scope.where(state: params[:state]) if params[:state].present?
     @scope = @scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
