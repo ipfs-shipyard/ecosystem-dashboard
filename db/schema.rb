@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_09_103547) do
+ActiveRecord::Schema.define(version: 2020_03_09_105246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2020_03_09_103547) do
     t.string "collabs", default: [], array: true
     t.string "milestone_name"
     t.integer "milestone_id"
+    t.string "labels", default: [], array: true
     t.index ["collabs"], name: "index_issues_on_collabs", using: :gin
     t.index ["html_url"], name: "index_issues_on_html_url"
     t.index ["org"], name: "index_issues_on_org"

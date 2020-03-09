@@ -31,6 +31,7 @@ class Issue < ApplicationRecord
   scope :language, ->(language) { where('repo_full_name ilike ?', "%/#{language}-%") }
 
   scope :no_milestone, -> { where(milestone_name: nil) }
+  scope :unlabelled, -> { where("labels = '{}'") }
 
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
@@ -49,11 +50,13 @@ class Issue < ApplicationRecord
         issue.org = repo_full_name.split('/').first
         issue.milestone_name = remote_issue.milestone.try(:title)
         issue.milestone_id = remote_issue.milestone.try(:number)
+        issue.labels = remote_issue.labels.map(&:name)
         issue.save if issue.changed?
       rescue ArgumentError
         # derp
       end
     end
+    nil
   end
 
   def self.github_client

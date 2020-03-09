@@ -14,6 +14,8 @@ class IssuesController < ApplicationController
 
     @scope = @scope.no_milestone if params[:no_milestone].present?
 
+    @scope = @scope.unlabelled if params[:unlabelled].present?
+
     @scope = @scope.where(user: params[:user]) if params[:user].present?
     @scope = @scope.where(state: params[:state]) if params[:state].present?
     @scope = @scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
