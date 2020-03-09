@@ -19,6 +19,9 @@ class IssuesController < ApplicationController
 
   def all
     @scope = Issue.protocol.humans.where("html_url <> ''")
+
+    @scope = @scope.not_employees if params[:exclude_employees]
+
     apply_filters
   end
 

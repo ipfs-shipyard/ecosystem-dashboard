@@ -149,6 +149,15 @@
               Unlabelled
             </a>
           <% end %>
+          <% if params[:exclude_employees].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, exclude_employees: nil)) %>">
+              Exclude Employees
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, exclude_employees: 'true')) %>">
+              Exclude Employees
+            </a>
+          <% end %>
           <% if params[:recent].present? %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, recent: nil)) %>">
               Recent
