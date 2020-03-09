@@ -75,6 +75,10 @@ class Issue < ApplicationRecord
     Issue.protocol.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
   end
 
+  def self.active_collab_repo_names
+    Issue.not_protocol.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
+  end
+
   def self.org_contributor_names(org_name)
     Issue.where(org: org_name).not_employees.group(:user).count
   end
@@ -85,6 +89,10 @@ class Issue < ApplicationRecord
 
   def self.download_active_repos
     active_repo_names.each{|repo_full_name| download(repo_full_name) }
+  end
+
+  def self.download_active_collab_repos
+    active_collab_repo_names.each{|repo_full_name| download(repo_full_name) }
   end
 
   def self.update_collab_labels

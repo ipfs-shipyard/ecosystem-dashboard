@@ -3,4 +3,8 @@ namespace :issues do
     Issue.download_active_repos
     Issue.update_collab_labels
   end
+
+  task sync_collabs: :environment do
+    Issue.download_active_collab_repos
+  end
 end
