@@ -16,13 +16,16 @@ class Issue < ApplicationRecord
                 'jimpick', 'meiqimichelle', 'mgoelzer', 'kishansagathiya', 'dryajov',
                 'autonome', 'bigs', 'jesseclay', 'yusefnapora', 'paulobmarcos', 'ribasushi',
                 'willscott', 'johnnymatthews', 'coryschwartz', 'fsdiogo', 'zebateira',
-                'dominguesgm']
+                'dominguesgm', 'catiatpereira', 'andreforsousa', 'travisperson', 'krl',
+                'nicola', 'hannahhoward']
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
   scope :humans, -> { where.not(user: BOTS) }
+  scope :bots, -> { where(user: BOTS) }
+  scope :employees, -> { where(user: EMPLOYEES) }
   scope :not_employees, -> { where.not(user: EMPLOYEES + BOTS) }
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
@@ -34,6 +37,9 @@ class Issue < ApplicationRecord
 
   scope :no_milestone, -> { where(milestone_name: nil) }
   scope :unlabelled, -> { where("labels = '{}'") }
+
+  scope :org, ->(org) { where(org: org) }
+  scope :state, ->(state) { where(state: state) }
 
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
@@ -82,7 +88,7 @@ class Issue < ApplicationRecord
   end
 
   def self.org_contributor_names(org_name)
-    Issue.where(org: org_name).not_employees.group(:user).count
+    Issue.org(org_name).not_employees.group(:user).count
   end
 
   def self.collab_orgs
