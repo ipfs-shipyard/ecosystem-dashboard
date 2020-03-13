@@ -1,4 +1,25 @@
-<h1 class='mt-2 mb-2'>Protocol Orgs</h1>
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong>Protocol Orgs</strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item <%= 'active bg-light' if params[:range].blank? %>">
+        <a class="nav-link" href="<%= orgs_path %>">All time</a>
+      </li>
+      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 365 %>">
+        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 365)) %>">Last Year</a>
+      </li>
+      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 90 %>">
+        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 90)) %>">Last Quater</a>
+      </li>
+      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 30 %>">
+        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 30)) %>">Last 30 days</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <% @orgs.in_groups_of(3, false).each do |group| %>
   <div class="card-deck mb-4">
