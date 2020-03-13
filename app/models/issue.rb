@@ -1,6 +1,6 @@
 class Issue < ApplicationRecord
 
-  PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld']
+  PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld', 'ProtoSchool']
   BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
           'greenkeeperio-bot', 'ghost', 'rollbar[bot]', 'guardrails[bot]',
           'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]',
@@ -15,7 +15,7 @@ class Issue < ApplicationRecord
                 'mburns', 'nonsense', 'twittner', 'momack2', 'creationix', 'djdv',
                 'jimpick', 'meiqimichelle', 'mgoelzer', 'kishansagathiya', 'dryajov',
                 'autonome', 'bigs', 'jesseclay', 'yusefnapora', 'paulobmarcos', 'ribasushi',
-                'willscott', 'johnnymatthews', 'coryschwartz']
+                'willscott', 'johnnymatthews', 'coryschwartz', 'fsdiogo', 'zebateira']
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
