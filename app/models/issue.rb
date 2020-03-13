@@ -17,7 +17,8 @@ class Issue < ApplicationRecord
                 'autonome', 'bigs', 'jesseclay', 'yusefnapora', 'paulobmarcos', 'ribasushi',
                 'willscott', 'johnnymatthews', 'coryschwartz', 'fsdiogo', 'zebateira',
                 'dominguesgm', 'catiatpereira', 'andreforsousa', 'travisperson', 'krl',
-                'nicola', 'hannahhoward', 'renrutnnej', 'marten-seemann', 'cwaring', 'AfonsoVReis']
+                'nicola', 'hannahhoward', 'renrutnnej', 'marten-seemann', 'cwaring',
+                'AfonsoVReis', 'pkafei', 'jkosem']
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
