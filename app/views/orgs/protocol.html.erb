@@ -65,11 +65,12 @@
               <small class='text-muted'><%= number_with_delimiter org[:closed_pull_requests_count] %></small>
             </li>
 
-          <li class="list-group-item pt-2 pb-2">
-            <%= octicon('comment') %> Comments
-            <small class='text-muted'><%= number_with_delimiter org[:comments] %></small>
-          </li>
-
+          <% if params[:range].blank? %>
+            <li class="list-group-item pt-2 pb-2">
+              <%= octicon('comment') %> Comments
+              <small class='text-muted'><%= number_with_delimiter org[:comments] %></small>
+            </li>
+          <% end %>
 
           <li class="list-group-item pt-2 pb-2">
             <%= octicon('repo-clone') %> Repos
@@ -82,8 +83,6 @@
               <small class='text-muted'><%= number_with_delimiter count %></small>
             </li>
           <% end %>
-
-
 
           <li class="list-group-item pt-2 pb-2">
             <%= octicon('briefcase') %> PL Contributors
