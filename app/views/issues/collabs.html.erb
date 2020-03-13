@@ -7,7 +7,7 @@
         <div class="card-header">
           <h3 class=m-0>
             <img src="https://github.com/<%= collab %>.png" class="rounded" height='30'>
-            <%= collab %>
+            <%= link_to collab, org_path(collab) %>
             <%= link_to octicon('mark-github'), "https://github.com/"+collab, target: :_blank %>
           </h3>
         </div>
