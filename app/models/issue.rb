@@ -2,7 +2,7 @@ class Issue < ApplicationRecord
 
   PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld', 'ProtoSchool']
   BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
-          'greenkeeperio-bot', 'ghost', 'rollbar[bot]', 'guardrails[bot]',
+          'greenkeeperio-bot', 'rollbar[bot]', 'guardrails[bot]',
           'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]',
           'gitter-badger', 'weekly-digest[bot]', 'todo[bot]']
   EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
@@ -24,7 +24,7 @@ class Issue < ApplicationRecord
 
   scope :protocol, -> { where(org: PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
-  scope :humans, -> { where.not(user: BOTS) }
+  scope :humans, -> { where.not(user: BOTS + ['ghost']) }
   scope :bots, -> { where(user: BOTS) }
   scope :employees, -> { where(user: EMPLOYEES) }
   scope :not_employees, -> { where.not(user: EMPLOYEES + BOTS) }
