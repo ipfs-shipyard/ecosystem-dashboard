@@ -19,7 +19,6 @@ class IssuesController < ApplicationController
 
   def all
     @scope = Issue.protocol.humans.where("html_url <> ''")
-
     @scope = @scope.not_employees if params[:exclude_employees]
 
     apply_filters
@@ -62,8 +61,7 @@ class IssuesController < ApplicationController
 
     @pagy, @issues = pagy(@scope.order('issues.created_at DESC'))
 
-    @users = @scope.unscope(where: :user).not_employees.group(:user).count
-
+    @users = @scope.group(:user).count
     @states = @scope.unscope(where: :state).group(:state).count
     @repos = @scope.unscope(where: :repo_full_name).group(:repo_full_name).count
     @orgs = @scope.unscope(where: :org).protocol.group(:org).count
