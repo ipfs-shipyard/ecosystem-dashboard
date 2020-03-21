@@ -5,11 +5,15 @@
     <% end %>
     <h5 class="card-title mb-0">
       <span class='mr-1 text-<%= issue.state == 'open' ? 'success' : 'danger' %>'>
-      <% if issue.pull_request? %>
-        <%= octicon('git-pull-request', :height => 18) %>
-      <% else %>
-        <%= octicon('issue-opened', :height => 18) %>
-      <% end %>
+        <% if issue.locked? %>
+          <%= octicon('lock', :height => 18) %>
+        <% else %>
+          <% if issue.pull_request? %>
+            <%= octicon('git-pull-request', :height => 18) %>
+          <% else %>
+            <%= octicon('issue-opened', :height => 18) %>
+          <% end %>
+        <% end %>
       </span>
 
       <%= link_to issue.title, issue.html_url, target: :_blank %>

@@ -31,6 +31,9 @@ class Issue < ApplicationRecord
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
 
+  scope :locked, -> { where(locked: true) }
+  scope :unlocked, -> { where(locked: [false, nil]) }
+
   scope :pull_requests, -> { where("html_url like ?", '%/pull/%') }
   scope :issues, -> { where.not("html_url like ?", '%/pull/%') }
 
@@ -51,6 +54,7 @@ class Issue < ApplicationRecord
         issue.body = remote_issue.body.try(:delete, "\u0000")
         issue.state = remote_issue.state
         issue.html_url = remote_issue.html_url
+        issue.locked = remote_issue.locked
         issue.comments_count = remote_issue.comments
         issue.user = remote_issue.user.login
         issue.closed_at = remote_issue.closed_at

@@ -1,6 +1,6 @@
 class IssuesController < ApplicationController
   def index
-    @scope = Issue.protocol.not_employees.where("html_url <> ''")
+    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''")
 
     if params[:collab].present?
       @scope = @scope.collab(params[:collab])
@@ -13,12 +13,12 @@ class IssuesController < ApplicationController
   end
 
   def collabs
-    @scope = Issue.protocol.not_employees.where("html_url <> ''")
+    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''")
     @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
   end
 
   def all
-    @scope = Issue.protocol.humans.where("html_url <> ''")
+    @scope = Issue.protocol.humans.unlocked.where("html_url <> ''")
     @scope = @scope.not_employees if params[:exclude_employees]
 
     apply_filters
