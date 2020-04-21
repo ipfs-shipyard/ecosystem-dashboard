@@ -65,7 +65,7 @@ class Issue < ApplicationRecord
         issue.milestone_id = remote_issue.milestone.try(:number)
         issue.labels = remote_issue.labels.map(&:name)
         issue.save if issue.changed?
-      rescue ArgumentError
+      rescue ArgumentError, Octokit::Error
         # derp
       end
     end
