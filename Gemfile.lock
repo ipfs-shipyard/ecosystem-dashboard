@@ -160,8 +160,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.3.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -221,7 +219,7 @@ DEPENDENCIES
   pghero
   puma
   rails
-  sass-rails
+  sassc-rails
   spring
   spring-watcher-listen
   sprockets-rails

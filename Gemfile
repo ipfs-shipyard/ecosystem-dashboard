@@ -9,7 +9,7 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma'
 # Use SCSS for stylesheets
-gem 'sass-rails'
+gem 'sassc-rails'
 gem 'sprockets-rails'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks'
