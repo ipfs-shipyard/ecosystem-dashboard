@@ -6,5 +6,6 @@ namespace :issues do
 
   task sync_collabs: :environment do
     Issue.download_active_collab_repos
+    Issue.update_collab_labels
   end
 end

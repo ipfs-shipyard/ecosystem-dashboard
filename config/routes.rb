@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
 
+  get 'weekly', to: 'issues#weekly'
   get 'collabs', to: 'issues#collabs'
   get 'all', to: 'issues#all'
   get 'orgs/:id', to: 'orgs#show', as: :org

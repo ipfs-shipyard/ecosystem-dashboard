@@ -22,8 +22,13 @@
     </h5>
     <small class='text-muted'>
       <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user, page: nil)) %>
-      - <%= time_ago_in_words(issue.created_at) %> ago
+      - opened <%= time_ago_in_words(issue.created_at) %> ago
+      <% if issue.closed_at %>
+        - closed <%= time_ago_in_words(issue.closed_at) %> ago
+        (open for <%= distance_of_time_in_words(issue.created_at, issue.closed_at) %>)
+      <% end %>
       - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
+      <br/>
       <% if issue.milestone_name %>
         <a href='https://github.com/<%= issue.repo_full_name %>/milestone/<%= issue.milestone_id %>' target='_blank' class='badge badge-warning'>
           Milestone: <%= issue.milestone_name %>
