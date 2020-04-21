@@ -31,6 +31,7 @@ class IssuesController < ApplicationController
     @both = @scope.where('closed_at > ? OR created_at > ?', 1.week.ago, 1.week.ago)
     @pagy, @issues = pagy(@both.order('issues.created_at DESC'))
     @collabs = @both.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+    @users = @both.group(:user).count
   end
 
   private

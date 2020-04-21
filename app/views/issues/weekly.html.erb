@@ -1,4 +1,4 @@
-<h1>This week in collabs</h1>
+<h1>This Week in collabs</h1>
 
 <div class="row mb-3">
   <div class="col-md-12">
@@ -41,13 +41,31 @@
   <% if @issues.any? %>
     <div class="col-md-3">
       <h5>
-        Top <%= collab_title %> contributors
+        Top collabs
         <small class='text-muted'>
           <%= number_with_delimiter @collabs.length %>
         </small>
       </h5>
-      <ul class="list-group">
+      <ul class="list-group mb-3">
         <% @collabs.sort_by(&:last).reverse.first(50).each do |user, count| %>
+          <li class="list-group-item">
+            <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
+            <%= user %>
+            <small class='text-muted'>
+              <%= number_with_delimiter count %>
+            </small>
+          </li>
+        <% end %>
+      </ul>
+
+      <h5>
+        Top <%= collab_title %> contributors
+        <small class='text-muted'>
+          <%= number_with_delimiter @users.length %>
+        </small>
+      </h5>
+      <ul class="list-group">
+        <% @users.sort_by(&:last).reverse.first(50).each do |user, count| %>
           <li class="list-group-item">
             <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
             <%= user %>
