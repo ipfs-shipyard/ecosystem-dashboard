@@ -3,8 +3,8 @@
 <div class="row mb-3">
   <div class="col-md-12">
     <%= line_chart [
-      {name: 'New Issues + PRs', data: @opened.group_by_day(:created_at).count },
-      {name: 'Closed/Merged Issues + PRs', data: @closed.group_by_day(:closed_at).count }
+      {name: 'New Issues + PRs', data: @opened.group_by_day(:created_at, last: 7).count },
+      {name: 'Closed/Merged Issues + PRs', data: @closed.group_by_day(:closed_at, last: 7).count }
     ], height: "200px", colors: ["#5cb85c", "#d9534f"] %>
   </div>
 </div>
