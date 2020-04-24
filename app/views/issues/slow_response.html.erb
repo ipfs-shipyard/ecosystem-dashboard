@@ -3,8 +3,8 @@
 <div class="row mb-3">
   <div class="col-md-12">
     <%= line_chart [
-        {name: 'Slow Issues + PRs', data: @slow.group_by_day(:created_at, last: @date_range-2).count },
-        {name: 'All Issues + PRs', data: @scope.group_by_day(:created_at, last: @date_range-2).count }
+        {name: 'Slow Issues + PRs', data: @slow.group_by_day(:created_at).count },
+        {name: 'All Issues + PRs', data: @scope.group_by_day(:created_at).count }
       ] %>
   </div>
 </div>
