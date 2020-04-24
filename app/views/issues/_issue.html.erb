@@ -28,7 +28,7 @@
         (open for <%= distance_of_time_in_words(issue.created_at, issue.closed_at) %>)
       <% end %>
       - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
-      <br/>
+      <% "<br/>" if issue.milestone_name || issue.collabs.any? || issue.labels.any? %>
       <% if issue.milestone_name %>
         <a href='https://github.com/<%= issue.repo_full_name %>/milestone/<%= issue.milestone_id %>' target='_blank' class='badge badge-warning'>
           Milestone: <%= issue.milestone_name %>
