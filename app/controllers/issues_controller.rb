@@ -35,11 +35,13 @@ class IssuesController < ApplicationController
   end
 
   def slow_response
+    @date_range = 9
     @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").all_collabs
-    @scope = @scope.open_for_over_2_days.where('created_at > ?', 30.days.ago)
-    @pagy, @issues = pagy(@scope.order('issues.created_at DESC'))
-    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
-    @users = @scope.group(:user).count
+    @scope = @scope.where('created_at > ?', @date_range.days.ago).where('created_at < ?', 2.days.ago)
+    @slow = @scope.open_for_over_2_days
+    @pagy, @issues = pagy(@slow.order('issues.created_at DESC'))
+    @collabs = @slow.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+    @users = @slow.group(:user).count
   end
 
   private
