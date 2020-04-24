@@ -15,4 +15,9 @@ module ApplicationHelper
        lang
      end
    end
+
+   def issue_colour(issue)
+     return 'merged' if issue.merged_at
+     issue.state == 'open' ? 'success' : 'danger'
+   end
 end
