@@ -22,13 +22,13 @@
         <% if params[:user].present? %>
           <%= params[:user] %>
         <% else %>
-          all <%= collab_title %> contributors
+          all contributors
         <% end %>
         <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
         <%= "in #{params[:org]}" if params[:org] %>
         with slow response times
         <small class='text-muted'>
-          <%= @pagy.count %>
+          <%= @pagy.count %> out of <%= @scope.count %> ( <%= number_to_percentage (@pagy.count.to_f/@scope.count)*100 %>)
         </small>
       </h5>
 
