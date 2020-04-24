@@ -143,7 +143,7 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_merged_pull_requests
-    pull_requests.where('closed_at > ?', 1.month.ago).state('closed').where(merged_at: nil).find_each(&:download_merged_at)
+    pull_requests.where('closed_at > ?', 1.week.ago).state('closed').where(merged_at: nil).find_each(&:download_merged_at)
   end
 
   def download_merged_at
