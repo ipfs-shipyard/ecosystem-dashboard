@@ -88,7 +88,7 @@ class Issue < ApplicationRecord
   end
 
   def self.active_repo_names
-    Issue.protocol.pluck(:repo_full_name).uniq
+    Issue.protocol.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
   end
 
   def self.active_collab_repo_names
