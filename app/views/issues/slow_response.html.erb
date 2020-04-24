@@ -1,0 +1,77 @@
+<h1>Slow responses</h1>
+
+<div class="row mb-3">
+  <div class="col-md-12">
+    <%= line_chart @scope.group_by_day(:created_at, last: 30).count %>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col-md-9">
+    <% if @issues.any? %>
+      <h5 class='mb-2'>
+        <%= 'Uncommented' if params[:uncommented] %>
+        <%= language_title(params[:language]) if params[:language] %>
+        <%= params[:state].capitalize if params[:state] %>
+        Issues+PRs
+        <%= 'in the last month' if params[:recent] %>
+        created by
+        <% if params[:user].present? %>
+          <%= params[:user] %>
+        <% else %>
+          all <%= collab_title %> contributors
+        <% end %>
+        <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
+        <%= "in #{params[:org]}" if params[:org] %>
+        <small class='text-muted'>
+          <%= @pagy.count %>
+        </small>
+      </h5>
+
+      <%= render @issues %>
+    <% else %>
+      <p>No issues or pull requests found.</p>
+    <% end %>
+
+    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+  </div>
+  <% if @issues.any? %>
+    <div class="col-md-3">
+      <h5>
+        Top collabs
+        <small class='text-muted'>
+          <%= number_with_delimiter @collabs.length %>
+        </small>
+      </h5>
+      <ul class="list-group mb-3">
+        <% @collabs.sort_by(&:last).reverse.first(50).each do |user, count| %>
+          <li class="list-group-item">
+            <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
+            <%= user %>
+            <small class='text-muted'>
+              <%= number_with_delimiter count %>
+            </small>
+          </li>
+        <% end %>
+      </ul>
+
+      <h5>
+        Top <%= collab_title %> contributors
+        <small class='text-muted'>
+          <%= number_with_delimiter @users.length %>
+        </small>
+      </h5>
+      <ul class="list-group">
+        <% @users.sort_by(&:last).reverse.first(50).each do |user, count| %>
+          <li class="list-group-item">
+            <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
+            <%= user %>
+            <small class='text-muted'>
+              <%= number_with_delimiter count %>
+            </small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>

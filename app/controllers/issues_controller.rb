@@ -34,6 +34,14 @@ class IssuesController < ApplicationController
     @users = @both.group(:user).count
   end
 
+  def slow_response
+    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").all_collabs
+    @scope = @scope.open_for_over_2_days.where('created_at > ?', 30.days.ago)
+    @pagy, @issues = pagy(@scope.order('issues.created_at DESC'))
+    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+    @users = @scope.group(:user).count
+  end
+
   private
 
   def apply_filters

@@ -45,6 +45,8 @@ class Issue < ApplicationRecord
   scope :org, ->(org) { where(org: org) }
   scope :state, ->(state) { where(state: state) }
 
+  scope :open_for_over_2_days, -> { where("DATE_PART('day', issues.closed_at - issues.created_at) > 2 OR issues.closed_at is NULL") }
+
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
     remote_issues.each do |remote_issue|
