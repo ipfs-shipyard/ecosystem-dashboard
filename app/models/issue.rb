@@ -141,4 +141,15 @@ class Issue < ApplicationRecord
   def pull_request?
     html_url && html_url.match?(/\/pull\//i)
   end
+
+  def self.sync_merged_pull_requests
+    pull_requests.where('closed_at > ?', 1.month.ago).state('closed').where(merged_at: nil).find_each(&:download_merged_at)
+  end
+
+  def download_merged_at
+    return unless pull_request?
+    return if merged_at.present?
+    resp = Issue.github_client.pull_request(repo_full_name, number)
+    update(merged_at: resp.merged_at) if resp.merged_at.present?
+  end
 end
