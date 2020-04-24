@@ -3,6 +3,7 @@ namespace :issues do
     Issue.download_active_repos
     Issue.download_new_repos
     Issue.update_collab_labels
+    Issue.sync_merged_pull_requests
   end
 
   task sync_collabs: :environment do
