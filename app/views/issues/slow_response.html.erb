@@ -26,6 +26,7 @@
         <% end %>
         <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
         <%= "in #{params[:org]}" if params[:org] %>
+        with slow response times
         <small class='text-muted'>
           <%= @pagy.count %>
         </small>
@@ -33,7 +34,7 @@
 
       <%= render @issues %>
     <% else %>
-      <p>No issues or pull requests found.</p>
+      <p>No slow issues or pull requests found.</p>
     <% end %>
 
     <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
