@@ -2,7 +2,7 @@
 
 <div class="row mb-3">
   <div class="col-md-12">
-    <% range = 9.days.ago.midnight..2.days.ago %>
+    <% range = @date_range.days.ago.midnight..2.days.ago %>
     <%= line_chart [
         {name: 'Slow Issues + PRs', data: @slow.group_by_day(:created_at, range: range).count },
         {name: 'All Issues + PRs', data: @scope.group_by_day(:created_at, range: range).count }
