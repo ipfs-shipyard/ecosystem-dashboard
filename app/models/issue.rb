@@ -51,28 +51,32 @@ class Issue < ApplicationRecord
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
     remote_issues.each do |remote_issue|
-      begin
-        issue = Issue.find_or_create_by(repo_full_name: repo_full_name, number: remote_issue.number)
-        issue.title = remote_issue.title.delete("\u0000")
-        issue.body = remote_issue.body.try(:delete, "\u0000")
-        issue.state = remote_issue.state
-        issue.html_url = remote_issue.html_url
-        issue.locked = remote_issue.locked
-        issue.comments_count = remote_issue.comments
-        issue.user = remote_issue.user.login
-        issue.closed_at = remote_issue.closed_at
-        issue.created_at = remote_issue.created_at
-        issue.updated_at = remote_issue.updated_at
-        issue.org = repo_full_name.split('/').first
-        issue.milestone_name = remote_issue.milestone.try(:title)
-        issue.milestone_id = remote_issue.milestone.try(:number)
-        issue.labels = remote_issue.labels.map(&:name)
-        issue.save if issue.changed?
-      rescue ArgumentError, Octokit::Error
-        # derp
-      end
+      update_from_github(repo_full_name, remote_issue)
     end
     nil
+  end
+
+  def self.update_from_github(repo_full_name, remote_issue)
+    begin
+      issue = Issue.find_or_create_by(repo_full_name: repo_full_name, number: remote_issue.number)
+      issue.title = remote_issue.title.delete("\u0000")
+      issue.body = remote_issue.body.try(:delete, "\u0000")
+      issue.state = remote_issue.state
+      issue.html_url = remote_issue.html_url
+      issue.locked = remote_issue.locked
+      issue.comments_count = remote_issue.comments
+      issue.user = remote_issue.user.login
+      issue.closed_at = remote_issue.closed_at
+      issue.created_at = remote_issue.created_at
+      issue.updated_at = remote_issue.updated_at
+      issue.org = repo_full_name.split('/').first
+      issue.milestone_name = remote_issue.milestone.try(:title)
+      issue.milestone_id = remote_issue.milestone.try(:number)
+      issue.labels = remote_issue.labels.map(&:name)
+      issue.save if issue.changed?
+    rescue ArgumentError, Octokit::Error
+      # derp
+    end
   end
 
   def self.github_client
@@ -194,5 +198,17 @@ class Issue < ApplicationRecord
       destroy
     end
 
+  end
+
+  def self.sync_recent
+    Issue.where('created_at > ?', 1.week.ago).each(&:sync)
+  end
+
+  def sync
+    remote_issue = Issue.github_client.issue(repo_full_name, number)
+    Issue.update_from_github(repo_full_name, remote_issue)
+    download_merged_at
+    download_draft
+    calculate_first_response
   end
 end

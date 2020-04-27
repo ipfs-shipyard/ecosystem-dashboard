@@ -12,4 +12,8 @@ namespace :issues do
     Issue.download_new_collab_repos
     Issue.update_collab_labels
   end
+
+  task sync_recent: :environment do
+    Issue.sync_recent
+  end
 end
