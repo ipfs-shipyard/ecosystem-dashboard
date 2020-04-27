@@ -205,14 +205,18 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_recent
-    Issue.where('created_at > ?', 1.week.ago).state('open').not_employees.unlocked.where("html_url <> ''").each(&:sync)
+    Issue.where('created_at > ?', 9.days.ago).state('open').not_employees.unlocked.where("html_url <> ''").each(&:sync)
   end
 
   def sync
-    remote_issue = Issue.github_client.issue(repo_full_name, number)
-    Issue.update_from_github(repo_full_name, remote_issue)
-    download_merged_at
-    download_draft
-    calculate_first_response
+    begin
+      remote_issue = Issue.github_client.issue(repo_full_name, number)
+      Issue.update_from_github(repo_full_name, remote_issue)
+      download_merged_at
+      download_draft
+      calculate_first_response
+    rescue Octokit::NotFound
+      destroy
+    end
   end
 end
