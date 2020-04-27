@@ -25,11 +25,13 @@
       - opened <%= time_ago_in_words(issue.created_at) %> ago
       <% if issue.closed_at %>
         - closed <%= time_ago_in_words(issue.closed_at) %> ago
-        (open for <%= distance_of_time_in_words(issue.created_at, issue.closed_at) %>)
-      <% elsif issue.first_response_at %>
+        <% if issue.contributed? %>
+          (open for <%= distance_of_time_in_words(issue.created_at, issue.closed_at) %>)
+        <% end %>
+      <% elsif issue.contributed? && issue.first_response_at %>
         - first response <%= time_ago_in_words(issue.first_response_at) %> ago
-        (within <%= distance_of_time_in_words(issue.created_at, issue.first_response_at) %>)
-      <% else %>
+        (took <%= distance_of_time_in_words(issue.created_at, issue.first_response_at) %>)
+      <% elsif issue.contributed? %>
         - No response yet
       <% end %>
       - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
@@ -39,8 +41,12 @@
           Milestone: <%= issue.milestone_name %>
         </a>
       <% end %>
-      <% issue.collabs.first(5).each do |collab| %>
-        <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+      <% if issue.contributed? %>
+        <% issue.collabs.first(5).each do |collab| %>
+          <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+        <% end %>
+      <% else %>
+        <span class='badge badge-dark'>PL</span>
       <% end %>
       <% issue.labels.first(5).each do |label| %>
         <span class='badge badge-light'>

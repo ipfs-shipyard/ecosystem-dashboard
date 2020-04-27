@@ -48,6 +48,10 @@ class Issue < ApplicationRecord
 
   scope :open_for_over_2_days, -> { where("DATE_PART('day', issues.closed_at - issues.created_at) > 2 OR issues.closed_at is NULL") }
 
+  def contributed?
+    !Issue::EMPLOYEES.include?(user)
+  end
+
   def self.download(repo_full_name)
     remote_issues = github_client.issues(repo_full_name, state: 'all')
     remote_issues.each do |remote_issue|
@@ -201,7 +205,7 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_recent
-    Issue.where('created_at > ?', 1.week.ago).each(&:sync)
+    Issue.where('created_at > ?', 1.week.ago).state('open').not_employees.unlocked.where("html_url <> ''").each(&:sync)
   end
 
   def sync
