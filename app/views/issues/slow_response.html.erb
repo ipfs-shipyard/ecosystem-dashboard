@@ -12,6 +12,10 @@
 
 <div class="row mb-3">
   <div class="col-md-9">
+    <% responded = @scope.where.not(first_response_at: nil).map{|i| i.first_response_at - i.created_at} %>
+    <h5>Avg first response time for <%= responded.length %> issues+prs this week: <%= (responded.sum.fdiv(responded.length)/60/60).round %> hours</h5>
+
+
     <% if @issues.any? %>
       <h5 class='mb-2'>
         <%= 'Uncommented' if params[:uncommented] %>
@@ -19,17 +23,12 @@
         <%= params[:state].capitalize if params[:state] %>
         Issues+PRs
         <%= 'in the last month' if params[:recent] %>
-        created by
-        <% if params[:user].present? %>
-          <%= params[:user] %>
-        <% else %>
-          all contributors
-        <% end %>
         <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
         <%= "in #{params[:org]}" if params[:org] %>
-        with slow response times
+        with slow response times:
+        <%= @pagy.count %> out of <%= @scope.count %>
         <small class='text-muted'>
-          <%= @pagy.count %> out of <%= @scope.count %> ( <%= number_to_percentage (@pagy.count.to_f/@scope.count)*100 %>)
+           (<%= number_to_percentage (@pagy.count.to_f/@scope.count)*100 %>)
         </small>
       </h5>
 
@@ -40,36 +39,16 @@
 
     <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
   </div>
-  <% if @issues.any? %>
-    <div class="col-md-3">
-      <% if @collabs.any? %>
-        <h5>
-          Top collabs
-          <small class='text-muted'>
-            <%= number_with_delimiter @collabs.length %>
-          </small>
-        </h5>
-        <ul class="list-group mb-3">
-          <% @collabs.sort_by(&:last).reverse.first(50).each do |user, count| %>
-            <li class="list-group-item">
-              <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
-              <%= user %>
-              <small class='text-muted'>
-                <%= number_with_delimiter count %>
-              </small>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-
+  <div class="col-md-3">
+    <% if @collabs.any? %>
       <h5>
-        Top <%= collab_title %> contributors
+        Top collabs
         <small class='text-muted'>
-          <%= number_with_delimiter @users.length %>
+          <%= number_with_delimiter @collabs.length %>
         </small>
       </h5>
-      <ul class="list-group">
-        <% @users.sort_by(&:last).reverse.first(50).each do |user, count| %>
+      <ul class="list-group mb-3">
+        <% @collabs.sort_by(&:last).reverse.first(50).each do |user, count| %>
           <li class="list-group-item">
             <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
             <%= user %>
@@ -79,6 +58,24 @@
           </li>
         <% end %>
       </ul>
-    </div>
-  <% end %>
+    <% end %>
+
+    <h5>
+      Top <%= collab_title %> contributors
+      <small class='text-muted'>
+        <%= number_with_delimiter @users.length %>
+      </small>
+    </h5>
+    <ul class="list-group">
+      <% @users.sort_by(&:last).reverse.first(50).each do |user, count| %>
+        <li class="list-group-item">
+          <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
+          <%= user %>
+          <small class='text-muted'>
+            <%= number_with_delimiter count %>
+          </small>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
