@@ -5,7 +5,7 @@
     <% days = @scope.group_by_day(:created_at).count.keys.length %>
     <%= line_chart [
         {name: 'Slow Issues + PRs', data: @slow.group_by_day(:created_at, last: days).count },
-        {name: 'All Issues + PRs', data: @scope.group_by_day(:created_at, last: days).count }
+        {name: 'All Issues + PRs', data: @scope.group_by_day(:created_at).count }
       ] %>
   </div>
 </div>
