@@ -38,8 +38,10 @@ class IssuesController < ApplicationController
     @date_range = 9
     @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").not_draft
     @scope = @scope.where('created_at > ?', @date_range.days.ago).where('created_at < ?', 2.days.ago)
+    apply_filters
     @slow = @scope.slow_response
     @pagy, @issues = pagy(@slow.order('issues.created_at DESC'))
+
     @collabs = @slow.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
     @users = @slow.group(:user).count
   end
