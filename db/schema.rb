@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_24_150239) do
+ActiveRecord::Schema.define(version: 2020_04_27_094656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2020_04_24_150239) do
     t.string "labels", default: [], array: true
     t.boolean "locked"
     t.datetime "merged_at"
+    t.boolean "draft"
     t.index ["collabs"], name: "index_issues_on_collabs", using: :gin
     t.index ["html_url"], name: "index_issues_on_html_url"
     t.index ["org"], name: "index_issues_on_org"

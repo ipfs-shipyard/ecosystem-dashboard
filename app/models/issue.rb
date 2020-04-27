@@ -152,4 +152,15 @@ class Issue < ApplicationRecord
     resp = Issue.github_client.pull_request(repo_full_name, number)
     update(merged_at: resp.merged_at) if resp.merged_at.present?
   end
+
+  def self.sync_draft_pull_requests
+    protocol.pull_requests.state('open').find_each(&:download_draft)
+  end
+
+  def download_draft
+    return unless pull_request?
+    return if closed_at.present?
+    resp = Issue.github_client.pull_request(repo_full_name, number)
+    update(draft: resp.draft)
+  end
 end
