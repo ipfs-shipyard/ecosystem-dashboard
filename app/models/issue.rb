@@ -47,7 +47,7 @@ class Issue < ApplicationRecord
   scope :state, ->(state) { where(state: state) }
 
   scope :open_for_over_2_days, -> { where("DATE_PART('day', issues.closed_at - issues.created_at) > 2 OR issues.closed_at is NULL") }
-  scope :slow_response, -> { where("DATE_PART('day', issues.first_response_at - issues.created_at) > 2 OR issues.first_response_at is NULL") }
+  scope :slow_response, -> { open_for_over_2_days.where("DATE_PART('day', issues.first_response_at - issues.created_at) > 2 OR issues.first_response_at is NULL") }
 
   scope :draft, -> { where(draft: true) }
   scope :not_draft, -> { where('draft IS NULL or draft is false') }
