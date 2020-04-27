@@ -48,6 +48,9 @@ class Issue < ApplicationRecord
 
   scope :open_for_over_2_days, -> { where("DATE_PART('day', issues.closed_at - issues.created_at) > 2 OR issues.closed_at is NULL") }
 
+  scope :draft, -> { where(draft: true) }
+  scope :not_draft, -> { where('draft IS NULL or draft is false') }
+
   def contributed?
     !Issue::EMPLOYEES.include?(user)
   end

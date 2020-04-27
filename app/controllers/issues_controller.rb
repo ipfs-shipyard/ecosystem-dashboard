@@ -25,7 +25,7 @@ class IssuesController < ApplicationController
   end
 
   def weekly
-    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").all_collabs
+    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").all_collabs.not_draft
     @opened = @scope.where('created_at > ?', 1.week.ago)
     @closed = @scope.where('closed_at > ?', 1.week.ago)
     @both = @scope.where('closed_at > ? OR created_at > ?', 1.week.ago, 1.week.ago)
@@ -36,7 +36,7 @@ class IssuesController < ApplicationController
 
   def slow_response
     @date_range = 9
-    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''")
+    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").not_draft
     @scope = @scope.where('created_at > ?', @date_range.days.ago).where('created_at < ?', 2.days.ago)
     @slow = @scope.open_for_over_2_days.where('comments_count < ?', 1).unlabelled.no_milestone
     @pagy, @issues = pagy(@slow.order('issues.created_at DESC'))
