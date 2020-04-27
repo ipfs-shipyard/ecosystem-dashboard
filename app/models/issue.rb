@@ -149,18 +149,27 @@ class Issue < ApplicationRecord
   def download_merged_at
     return unless pull_request?
     return if merged_at.present?
-    resp = Issue.github_client.pull_request(repo_full_name, number)
-    update(merged_at: resp.merged_at) if resp.merged_at.present?
+
+    begin
+      resp = Issue.github_client.pull_request(repo_full_name, number)
+      update(merged_at: resp.merged_at) if resp.merged_at.present?
+    rescue Octokit::NotFound
+      destroy
+    end
   end
 
   def self.sync_draft_pull_requests
-    protocol.pull_requests.state('open').where('created_at > ?', 1.month.ago).find_each(&:download_draft)
+    protocol.pull_requests.state('open').where('created_at > ?', 1.year.ago).find_each(&:download_draft)
   end
 
   def download_draft
     return unless pull_request?
     return if closed_at.present?
-    resp = Issue.github_client.pull_request(repo_full_name, number)
-    update(draft: resp.draft)
+    begin
+      resp = Issue.github_client.pull_request(repo_full_name, number)
+      update(draft: resp.draft)
+    rescue Octokit::NotFound
+      destroy
+    end
   end
 end
