@@ -154,7 +154,7 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_draft_pull_requests
-    protocol.pull_requests.state('open').find_each(&:download_draft)
+    protocol.pull_requests.state('open').where('created_at > ?', 1.month.ago).find_each(&:download_draft)
   end
 
   def download_draft
