@@ -172,4 +172,27 @@ class Issue < ApplicationRecord
       destroy
     end
   end
+
+  def calculate_first_response
+    begin
+      events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview')
+      events = events.select{|e| (e.actor && Issue::EMPLOYEES.include?(e.actor.login)) || (e.user && Issue::EMPLOYEES.include?(e.user.login)) } # filter for events by employees
+      events = events.select{|e| !['subscribed', 'mentioned'].include?(e.event)  } # ignore events where actor isn't who acted
+
+      return if events.empty? # no employee response yet
+
+      e = events.first
+
+      puts html_url
+      puts "#{e.actor.try(:login) || e.user.try(:login)}"
+      puts "#{e.event}"
+      puts "#{e.created_at || e.submitted_at}"
+
+      update(first_response_at: (e.created_at || e.submitted_at))
+
+    rescue Octokit::NotFound
+      destroy
+    end
+
+  end
 end
