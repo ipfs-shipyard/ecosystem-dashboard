@@ -1,4 +1,7 @@
 class Repository < ApplicationRecord
+
+  scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
+
   def self.download_org_repos(org)
     remote_repos = Issue.github_client.org_repos(org, type: 'public')
     remote_repos.each do |remote_repo|
