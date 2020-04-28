@@ -32,6 +32,7 @@ class Repository < ApplicationRecord
       repo.default_branch = remote_repo.default_branch
       repo.last_sync_at = Time.now
       repo.save
+      repo
     rescue ArgumentError, Octokit::Error
       # derp
     end
@@ -64,12 +65,10 @@ class Repository < ApplicationRecord
 
   def self.sync_recently_active_repos(org)
     repo_names = download_org_events(org).map(&:repo).map(&:name).uniq
-    Repository.where(full_name: repo_names).each do |repo|
+    repo_names.each do |full_name|
+      repo = Repository.download(full_name)
       e = repo.download_events
-      if e.any?
-        Repository.download(repo.full_name)
-        Issue.download(repo.full_name)
-      end
+      Issue.download(full_name) if e.any?
     end
   end
 
