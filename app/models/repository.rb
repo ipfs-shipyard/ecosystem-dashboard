@@ -59,8 +59,7 @@ class Repository < ApplicationRecord
   end
 
   def self.download_org_events(org)
-    client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
-    client.organization_public_events(org)
+    Issue.github_client.organization_public_events(org)
   end
 
   def self.sync_recently_active_repos(org)
