@@ -14,6 +14,6 @@ namespace :issues do
   end
 
   task sync_recent: :environment do
-    Issue.sync_recent
+    Repository.sync_recently_active_protocol_repos
   end
 end
