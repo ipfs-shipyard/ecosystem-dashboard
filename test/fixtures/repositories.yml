@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  full_name: MyString
+  org: MyString
+  language: MyString
+  archived: false
+  fork: false
+  description: MyString
+  pushed_at: 2020-04-28 09:38:29
+  size: 1
+  stargazers_count: 1
+  open_issues_count: 1
+  forks_count: 1
+  forks_count: 1
+  default_branch: MyString
+
+two:
+  full_name: MyString
+  org: MyString
+  language: MyString
+  archived: false
+  fork: false
+  description: MyString
+  pushed_at: 2020-04-28 09:38:29
+  size: 1
+  stargazers_count: 1
+  open_issues_count: 1
+  forks_count: 1
+  forks_count: 1
+  default_branch: MyString

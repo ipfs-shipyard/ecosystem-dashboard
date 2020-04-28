@@ -57,7 +57,7 @@ class Issue < ApplicationRecord
   end
 
   def self.download(repo_full_name)
-    remote_issues = github_client.issues(repo_full_name, state: 'all')
+    remote_issues = github_client.issues(repo_full_name, state: 'all', since: 1.week.ago)
     remote_issues.each do |remote_issue|
       update_from_github(repo_full_name, remote_issue)
     end
@@ -88,7 +88,7 @@ class Issue < ApplicationRecord
   end
 
   def self.github_client
-    client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'], auto_paginate: true)
+    @client ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'], auto_paginate: true)
   end
 
   def self.org_repo_names(org_name)
@@ -154,8 +154,8 @@ class Issue < ApplicationRecord
     html_url && html_url.match?(/\/pull\//i)
   end
 
-  def self.sync_merged_pull_requests
-    protocol.pull_requests.where('closed_at > ?', 1.week.ago).state('closed').where(merged_at: nil).find_each(&:download_merged_at)
+  def self.sync_merged_pull_requests(time_range = 1.week.ago)
+    protocol.pull_requests.where('closed_at > ?', time_range).state('closed').where(merged_at: nil).find_each(&:download_merged_at)
   end
 
   def download_merged_at
@@ -170,8 +170,8 @@ class Issue < ApplicationRecord
     end
   end
 
-  def self.sync_draft_pull_requests
-    protocol.pull_requests.state('open').where('created_at > ?', 1.year.ago).find_each(&:download_draft)
+  def self.sync_draft_pull_requests(time_range = 1.week.ago)
+    protocol.pull_requests.state('open').where('created_at > ?', time_range).find_each(&:download_draft)
   end
 
   def download_draft

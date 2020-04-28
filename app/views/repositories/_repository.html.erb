@@ -1,0 +1,19 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <%= link_to "https://github.com/#{repository.org}", target: :_blank, class: 'float-right' do %>
+      <img src="https://github.com/<%= repository.org %>.png" class="rounded" height='40'>
+    <% end %>
+    <h5 class="card-title mb-0">
+      <span class='mr-1'>
+        <%= octicon('repo', :height => 18) %>
+      </span>
+
+      <%= link_to repository.full_name, repository.html_url, target: :_blank %>
+      <span class='text-muted'><%= repository.language %></span>
+    </h5>
+    <small class='text-muted'>
+      Last pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago<br/>
+      Size: <%= number_to_human_size repository.size*1000 %>
+    </small>
+  </div>
+</div>

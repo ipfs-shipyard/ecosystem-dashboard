@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_130444) do
+ActiveRecord::Schema.define(version: 2020_04_28_091703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -43,6 +43,27 @@ ActiveRecord::Schema.define(version: 2020_04_27_130444) do
     t.index ["repo_full_name"], name: "index_issues_on_repo_full_name"
     t.index ["state"], name: "index_issues_on_state"
     t.index ["user"], name: "index_issues_on_user"
+  end
+
+  create_table "repositories", force: :cascade do |t|
+    t.integer "github_id"
+    t.string "full_name"
+    t.string "org"
+    t.string "language"
+    t.boolean "archived"
+    t.boolean "fork"
+    t.string "description"
+    t.datetime "pushed_at"
+    t.integer "size"
+    t.integer "stargazers_count"
+    t.integer "open_issues_count"
+    t.integer "forks_count"
+    t.integer "subscribers_count"
+    t.string "default_branch"
+    t.datetime "last_sync_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "etag"
   end
 
   create_table "topics", force: :cascade do |t|

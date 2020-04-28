@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
 
+  resources :repositories
+
   get 'slow_response', to: 'issues#slow_response'
   get 'weekly', to: 'issues#weekly'
   get 'collabs', to: 'issues#collabs'
