@@ -144,9 +144,9 @@ class Issue < ApplicationRecord
   end
 
   def self.update_collab_labels
-    Issue.not_protocol.not_employees.group(:user).count.each do |u, count|
-      collabs = Issue.not_protocol.where(user: u).group(:org).count
-      Issue.protocol.where(user: u).update_all(collabs: collabs.map(&:first))
+    Issue.not_protocol.where('created_at > ?', 1.month.ago).not_employees.group(:user).count.each do |u, count|
+      collabs = Issue.not_protocol.where(user: u).group(:org).count.map(&:first)
+      Issue.protocol.where(collabs: []).where(user: u).update_all(collabs: collabs) if collabs.any?
     end
   end
 
