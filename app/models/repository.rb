@@ -73,9 +73,14 @@ class Repository < ApplicationRecord
   def self.sync_recently_active_repos(org)
     repo_names = download_org_events(org).map(&:repo).map(&:name).uniq
     repo_names.each do |full_name|
-      repo = Repository.download(full_name)
+      repo = existing_repo = Repository.find_by_full_name(full_name)
+      repo = Repository.download(full_name) if existing_repo.nil?
+
       e = repo.download_events
-      Issue.download(full_name) if e.any?
+      if e.any?
+        Issue.download(full_name)
+        Repository.download(full_name) if existing_repo
+      end
     end
   end
 
