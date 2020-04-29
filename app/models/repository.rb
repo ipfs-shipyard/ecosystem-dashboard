@@ -11,8 +11,12 @@ class Repository < ApplicationRecord
   end
 
   def self.download(full_name)
-    remote_repo = Issue.github_client.repo(full_name)
-    update_from_github(remote_repo)
+    begin
+      remote_repo = Issue.github_client.repo(full_name)
+      update_from_github(remote_repo)
+    rescue Octokit::NotFound
+      Repository.find_by_full_name(full_name).destroy
+    end
   end
 
   def self.update_from_github(remote_repo)
