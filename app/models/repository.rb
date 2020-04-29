@@ -15,7 +15,7 @@ class Repository < ApplicationRecord
       remote_repo = Issue.github_client.repo(full_name)
       update_from_github(remote_repo)
     rescue Octokit::NotFound
-      Repository.find_by_full_name(full_name).destroy
+      Repository.find_by_full_name(full_name).try(:destroy)
     end
   end
 
