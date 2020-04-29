@@ -75,7 +75,7 @@ class Repository < ApplicationRecord
     repo_names.each do |full_name|
       repo = existing_repo = Repository.find_by_full_name(full_name)
       repo = Repository.download(full_name) if existing_repo.nil?
-
+      next unless repo
       e = repo.download_events
       if e.any?
         Issue.download(full_name)
