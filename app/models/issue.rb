@@ -195,17 +195,10 @@ class Issue < ApplicationRecord
 
       e = events.first
 
-      puts html_url
-      puts "#{e.actor.try(:login) || e.user.try(:login)}"
-      puts "#{e.event}"
-      puts "#{e.created_at || e.submitted_at}"
-
       update(first_response_at: (e.created_at || e.submitted_at))
-
     rescue Octokit::NotFound
       destroy
     end
-
   end
 
   def self.sync_recent
