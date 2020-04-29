@@ -194,15 +194,16 @@
         {name: 'New Issues + PRs', data: @scope.group_by_day(:created_at, range: range).count }
       ], ytitle: 'Slow Responses' %>
 
-    <%= line_chart Issue.protocol.where.not(response_time: nil).where('created_at > ?', 1.year.ago).group_by_week('created_at').average(:response_time).map{|k,v| [k,(v/60/60).round(1)] }, label: "Hours", ytitle: 'Avg Response Time' %>
+    <%= line_chart @response_times, label: "Hours", ytitle: 'Avg Response Time (hrs)' %>
   </div>
 </div>
 
 <div class="row mb-3">
   <div class="col-md-9">
-    <% responded = @scope.where.not(first_response_at: nil).map{|i| i.first_response_at - i.created_at} %>
-    <h5>Avg first response time for <%= responded.length %> issues+prs this week: <%= (responded.sum.fdiv(responded.length)/60/60).round %> hours</h5>
-
+    <% responded = @scope.where.not(response_time: nil) %>
+    <% if responded.count > 0 %>
+    <h5>Avg first response time for <%= responded.count %> issues+prs this week: <%= (responded.average(:response_time)/60/60).round(1) %> hours</h5>
+    <% end %>
 
     <% if @issues.any? %>
       <h5 class='mb-2'>
