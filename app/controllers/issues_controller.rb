@@ -39,7 +39,7 @@ class IssuesController < ApplicationController
     @orginal_scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").not_draft
     @scope = @orginal_scope.where('created_at > ?', @date_range.days.ago).where('created_at < ?', 2.days.ago)
     apply_filters
-    @response_times = Issue::PROTOCOL_ORGS.map do |org|
+    @response_times = ['ipfs'].map do |org|
       {
         name: org,
         data: @orginal_scope.where(org: org).where.not(response_time: nil).where('created_at > ?', 1.year.ago).group_by_week('created_at').average(:response_time).map do |k,v|
