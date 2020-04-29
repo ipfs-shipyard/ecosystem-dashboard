@@ -39,10 +39,16 @@ class IssuesController < ApplicationController
     @orginal_scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").not_draft
     @scope = @orginal_scope.where('created_at > ?', @date_range.days.ago).where('created_at < ?', 2.days.ago)
     apply_filters
-    @response_times = ['ipfs'].map do |org|
+
+    @orginal_scope = @orginal_scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
+    @orginal_scope = @orginal_scope.org(params[:org]) if params[:org].present?
+
+    name = params[:repo_full_name] || params[:org] || 'All PL'
+
+    @response_times = [
       {
-        name: org,
-        data: @orginal_scope.where(org: org).where.not(response_time: nil).where('created_at > ?', 1.year.ago).group_by_week('created_at').average(:response_time).map do |k,v|
+        name: name,
+        data: @orginal_scope.where.not(response_time: nil).where('created_at > ?', 1.year.ago).group_by_week('created_at').average(:response_time).map do |k,v|
           if v
             [k,(v/60/60).round(1)]
           else
@@ -50,7 +56,7 @@ class IssuesController < ApplicationController
           end
         end
       }
-    end
+    ]
 
     @slow = @scope.slow_response
     @pagy, @issues = pagy(@slow.order('issues.created_at DESC'))
