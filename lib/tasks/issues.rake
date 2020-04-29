@@ -13,9 +13,6 @@ namespace :issues do
 
   task sync_recent: :environment do
     Repository.sync_recently_active_protocol_repos
-  end
-
-  task update_collab_labels: :environment do
     Issue.update_collab_labels
   end
 end
