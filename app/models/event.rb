@@ -5,6 +5,7 @@ class Event < ApplicationRecord
   scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
   scope :org, ->(org) { where(org: org) }
   scope :user, ->(user) { where(actor: user)}
+  scope :event_type, ->(event_type) { where(event_type: event_type)}
 
   def self.record_event(repository, event_json)
     e = Event.find_or_initialize_by(github_id: event_json.id)

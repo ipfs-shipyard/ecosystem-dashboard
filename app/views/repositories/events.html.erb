@@ -41,6 +41,26 @@
           <% end %>
         </div>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:user].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
+        <div class="dropdown-menu">
+          <% if params[:event_type].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, event_type: nil)) %>">
+              <%= event_name(params[:event_type]) %>
+            </a>
+          <% end %>
+          <% @event_types.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |event_type,count| %>
+            <% unless params[:event_type] == event_type %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, event_type: event_type)) %>">
+                <%= event_name event_type %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
     </ul>
   </div>
 </div>

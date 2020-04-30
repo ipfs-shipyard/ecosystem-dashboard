@@ -85,4 +85,33 @@ module ApplicationHelper
       'forked'
     end
   end
+
+  def event_name(event_type)
+    case event_type
+    when 'WatchEvent'
+      'Starred'
+    when "CreateEvent"
+      'Branched'
+    when "CommitCommentEvent"
+      'Comment Comments'
+    when "ReleaseEvent"
+      'Release'
+    when "IssuesEvent"
+      'Issues'
+    when "DeleteEvent"
+      'Delete Branch'
+    when "IssueCommentEvent"
+      'Issue Comment'
+    when "PublicEvent"
+      'Open Sourced'
+    when "PushEvent"
+      'Pushed'
+    when "PullRequestReviewCommentEvent"
+      'Review Comments'
+    when "PullRequestEvent"
+      'Pull Requests'
+    when "ForkEvent"
+      'Forked'
+    end
+  end
 end
