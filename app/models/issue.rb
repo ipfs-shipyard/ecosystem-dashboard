@@ -100,11 +100,11 @@ class Issue < ApplicationRecord
   end
 
   def self.active_repo_names
-    Issue.protocol.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
+    Issue.protocol.unlocked.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
   end
 
   def self.active_collab_repo_names
-    Issue.not_protocol.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
+    Issue.not_protocol.unlocked.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
   end
 
   def self.org_contributor_names(org_name)
@@ -144,9 +144,9 @@ class Issue < ApplicationRecord
   end
 
   def self.update_collab_labels
-    Issue.not_protocol.where('created_at > ?', 1.month.ago).not_employees.group(:user).count.each do |u, count|
+    Issue.unlocked.not_protocol.where('created_at > ?', 1.month.ago).not_employees.group(:user).count.each do |u, count|
       collabs = Issue.not_protocol.where(user: u).group(:org).count.map(&:first)
-      Issue.protocol.where(collabs: []).where(user: u).update_all(collabs: collabs) if collabs.any?
+      Issue.protocol.unlocked.where(collabs: []).where(user: u).update_all(collabs: collabs) if collabs.any?
     end
   end
 
