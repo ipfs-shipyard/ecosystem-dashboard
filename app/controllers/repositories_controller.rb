@@ -12,7 +12,7 @@ class RepositoriesController < ApplicationController
   end
 
   def events
-    @scope = Event.includes(:repository).where(event_type: 'ReleaseEvent')
+    @scope = Event.includes(:repository)
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.user(params[:user]) if params[:user].present?
     @pagy, @events = pagy(@scope.order('created_at DESC'))
