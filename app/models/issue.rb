@@ -186,6 +186,7 @@ class Issue < ApplicationRecord
   end
 
   def calculate_first_response
+    return if first_response_at.present?
     begin
       events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview')
       events = events.select{|e| (e.actor && Issue::EMPLOYEES.include?(e.actor.login)) || (e.user && Issue::EMPLOYEES.include?(e.user.login)) } # filter for events by employees
