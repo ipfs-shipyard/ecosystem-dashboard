@@ -4,12 +4,11 @@
       <img src="https://github.com/<%= repository.org %>.png" class="rounded" height='40'>
     <% end %>
     <h5 class="card-title mb-0">
-      <span class='mr-1'>
-        <%= octicon('repo', :height => 18) %>
+      <span class='mr-1' style='color: <%= repository.color %>;' title='<%= repository.language %>'>
+        <%= octicon(repo_icon(repository), height: 18) %>
       </span>
 
       <%= link_to repository.full_name, repository.html_url, target: :_blank %>
-      <span class='text-muted'><%= repository.language %></span>
     </h5>
     <small class='text-muted'>
       Last pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago<br/>

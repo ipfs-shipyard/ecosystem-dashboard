@@ -1,6 +1,10 @@
 class Repository < ApplicationRecord
 
   scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
+  scope :org, ->(org) { where(org: org) }
+  scope :language, ->(language) { where(language: language) }
+  scope :fork, ->(fork) { where(fork: fork) }
+  scope :archived, ->(archived) { where(archived: archived) }
 
   def self.download_org_repos(org)
     remote_repos = Issue.github_client.org_repos(org, type: 'public')
@@ -89,5 +93,9 @@ class Repository < ApplicationRecord
     Issue::PROTOCOL_ORGS.each do |org|
       sync_recently_active_repos(org)
     end
+  end
+
+  def color
+    Languages::Language[language].try(:color)
   end
 end

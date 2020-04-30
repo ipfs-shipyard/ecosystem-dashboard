@@ -25,6 +25,7 @@ gem 'bootstrap'
 gem 'octicons_helper'
 gem "chartkick"
 gem 'groupdate'
+gem 'languages', github: 'andrew/languages'
 
 gem 'pghero'
 gem 'pg_query', '>= 0.9.0'

@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/andrew/languages.git
+  revision: f9f35a47ed0f5fc30af2c17c8c7aac20dc5aaaf7
+  specs:
+    languages (2.0.0)
+      escape_utils (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -76,6 +83,7 @@ GEM
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
     erubi (1.9.0)
+    escape_utils (1.2.1)
     execjs (2.7.0)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
@@ -210,6 +218,7 @@ DEPENDENCIES
   dotenv-rails
   groupdate
   jquery-rails
+  languages!
   listen
   octicons_helper
   octokit
