@@ -64,6 +64,12 @@ class Repository < ApplicationRecord
     events
   end
 
+  def sync_events
+    download_events.each do |e|
+      Event.record_event(self, e)
+    end
+  end
+
   def self.download_protocol_repos
     Issue::PROTOCOL_ORGS.each do |org|
       download_org_repos(org)

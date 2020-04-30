@@ -10,11 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_30_133327) do
+ActiveRecord::Schema.define(version: 2020_04_30_152230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
+
+  create_table "events", force: :cascade do |t|
+    t.string "github_id"
+    t.string "actor"
+    t.string "event_type"
+    t.string "action"
+    t.integer "repository_id"
+    t.string "repository_full_name"
+    t.string "org"
+    t.jsonb "payload", default: "{}", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "issues", force: :cascade do |t|
     t.string "title"

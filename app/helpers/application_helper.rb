@@ -27,4 +27,62 @@ module ApplicationHelper
     return 'repo-forked' if repo.fork?
     'repo'
   end
+
+  def event_icon(event)
+    case event.event_type
+    when 'WatchEvent'
+      'star'
+    when "CreateEvent"
+      'git-branch'
+    when "CommitCommentEvent"
+      'comment'
+    when "ReleaseEvent"
+      'tag'
+    when "IssuesEvent"
+      'issue-opened'
+    when "DeleteEvent"
+      'trashcan'
+    when "IssueCommentEvent"
+      'comment'
+    when "PublicEvent"
+      'squirrel'
+    when "PushEvent"
+      'repo-push'
+    when "PullRequestReviewCommentEvent"
+      'comment-discussion'
+    when "PullRequestEvent"
+      'git-pull-request'
+    when "ForkEvent"
+      'repo-forked'
+    end
+  end
+
+  def event_title(event)
+    case event.event_type
+    when 'WatchEvent'
+      'starred'
+    when "CreateEvent"
+      'created branch on'
+    when "CommitCommentEvent"
+      'commented on a commit on'
+    when "ReleaseEvent"
+      "#{event.action} a release on"
+    when "IssuesEvent"
+      "#{event.action} an issue on"
+    when "DeleteEvent"
+      "deleted a #{event.payload['ref_type']}"
+    when "IssueCommentEvent"
+      "#{event.action} a comment on an issue on"
+    when "PublicEvent"
+      'open sourced'
+    when "PushEvent"
+      'pushed to'
+    when "PullRequestReviewCommentEvent"
+      "#{event.action} a review comment on an pull request on"
+    when "PullRequestEvent"
+      "#{event.action} an pull request on"
+    when "ForkEvent"
+      'forked'
+    end
+  end
 end

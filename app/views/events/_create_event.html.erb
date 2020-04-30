@@ -1,0 +1,3 @@
+<p>
+  <%= link_to event.payload['ref'], "https://github.com/#{event.repository.full_name}/tree/#{event.payload['ref']}" %> - <%= event.payload['description'] %>
+</p>

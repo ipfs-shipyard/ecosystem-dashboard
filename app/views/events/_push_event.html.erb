@@ -1,0 +1,14 @@
+<p>
+  <%= event.payload['size'] %> commits to <%= link_to event.payload['ref'].gsub("refs/heads/", ''), "https://github.com/#{event.repository.full_name}/tree/#{event.payload['ref'].gsub("refs/heads/", '')}" %>
+</p>
+
+<ul>
+  <% event.payload['commits'].each do |commit| %>
+    <li>
+      <%= commit['message'] %>
+    </li>
+  <% end %>
+  <% if event.payload['commits'].length != event.payload['size'] %>
+    <li>and more ...</li>
+  <% end %>
+</ul>

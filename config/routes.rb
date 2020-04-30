@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :repositories
 
+  get 'events', to: 'repositories#events'
   get 'slow_response', to: 'issues#slow_response'
   get 'weekly', to: 'issues#weekly'
   get 'collabs', to: 'issues#collabs'

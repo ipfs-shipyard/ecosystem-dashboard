@@ -1,0 +1,49 @@
+<div class="row mt-3 mb-3">
+  <div class="col-md-12">
+    <ul class="nav nav-pills d-flex">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
+        <div class="dropdown-menu">
+          <% if params[:org].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, org: nil)) %>">
+              <%= params[:org] %>
+            </a>
+          <% end %>
+          <% @orgs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |org,count| %>
+            <% unless org == params[:org] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, org: org)) %>">
+                <%= org %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:user].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+        <div class="dropdown-menu">
+          <% if params[:user].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, user: nil)) %>">
+              <%= params[:user] %>
+            </a>
+          <% end %>
+          <% @users.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |user,count| %>
+            <% unless params[:user] == user %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, user: user)) %>">
+                <%= user %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<%= render @events %>
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
