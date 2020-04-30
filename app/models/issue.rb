@@ -164,7 +164,7 @@ class Issue < ApplicationRecord
 
     begin
       resp = Issue.github_client.pull_request(repo_full_name, number)
-      update(merged_at: resp.merged_at) if resp.merged_at.present?
+      update_columns(merged_at: resp.merged_at) if resp.merged_at.present?
     rescue Octokit::NotFound
       destroy
     end
@@ -179,7 +179,7 @@ class Issue < ApplicationRecord
     return if closed_at.present?
     begin
       resp = Issue.github_client.pull_request(repo_full_name, number)
-      update(draft: resp.draft)
+      update_columns(draft: resp.draft)
     rescue Octokit::NotFound
       destroy
     end
@@ -197,7 +197,7 @@ class Issue < ApplicationRecord
 
       first_response_at = e.created_at || e.submitted_at
 
-      update(first_response_at: first_response_at, response_time: first_response_at - created_at)
+      update_columns(first_response_at: first_response_at, response_time: first_response_at - created_at)
     rescue Octokit::NotFound
       destroy
     end
