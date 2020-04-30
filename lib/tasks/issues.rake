@@ -2,8 +2,7 @@ namespace :issues do
   task sync: :environment do
     Issue.download_active_repos
     Issue.download_new_repos
-    Issue.sync_merged_pull_requests
-    Issue.sync_draft_pull_requests
+    Issue.sync_pull_requests
   end
 
   task sync_collabs: :environment do

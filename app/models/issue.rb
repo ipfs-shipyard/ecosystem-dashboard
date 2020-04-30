@@ -154,32 +154,17 @@ class Issue < ApplicationRecord
     html_url && html_url.match?(/\/pull\//i)
   end
 
-  def self.sync_merged_pull_requests(time_range = 1.week.ago)
-    protocol.pull_requests.where('closed_at > ?', time_range).state('closed').where(merged_at: nil).find_each(&:download_merged_at)
+  def self.sync_pull_requests(time_range = 1.week.ago)
+    protocol.pull_requests.where('created_at > ?', time_range).where(merged_at: nil).find_each(&:download_pull_request)
   end
 
-  def download_merged_at
+  def download_pull_request
     return unless pull_request?
     return if merged_at.present?
 
     begin
       resp = Issue.github_client.pull_request(repo_full_name, number)
-      update_columns(merged_at: resp.merged_at) if resp.merged_at.present?
-    rescue Octokit::NotFound
-      destroy
-    end
-  end
-
-  def self.sync_draft_pull_requests(time_range = 1.week.ago)
-    protocol.pull_requests.state('open').where('created_at > ?', time_range).find_each(&:download_draft)
-  end
-
-  def download_draft
-    return unless pull_request?
-    return if closed_at.present?
-    begin
-      resp = Issue.github_client.pull_request(repo_full_name, number)
-      update_columns(draft: resp.draft)
+      update_columns(merged_at: resp.merged_at, draft: resp.draft)
     rescue Octokit::NotFound
       destroy
     end
@@ -219,8 +204,7 @@ class Issue < ApplicationRecord
   end
 
   def update_extra_attributes
-    download_merged_at
-    download_draft
+    download_pull_request
     calculate_first_response
   end
 end
