@@ -212,11 +212,15 @@ class Issue < ApplicationRecord
     begin
       remote_issue = Issue.github_client.issue(repo_full_name, number)
       Issue.update_from_github(repo_full_name, remote_issue)
-      download_merged_at
-      download_draft
-      calculate_first_response
+      update_extra_attributes
     rescue Octokit::NotFound
       destroy
     end
+  end
+
+  def update_extra_attributes
+    download_merged_at
+    download_draft
+    calculate_first_response
   end
 end
