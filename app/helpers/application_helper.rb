@@ -54,6 +54,8 @@ module ApplicationHelper
       'git-pull-request'
     when "ForkEvent"
       'repo-forked'
+    when 'MemberEvent'
+      'person'
     end
   end
 
@@ -87,6 +89,8 @@ module ApplicationHelper
       "#{event.action} an pull request on"
     when "ForkEvent"
       'forked'
+    when 'MemberEvent'
+      "#{event.action} #{event.payload['member']['login']} to"
     end
   end
 
@@ -116,6 +120,8 @@ module ApplicationHelper
       'Pull Requests'
     when "ForkEvent"
       'Forked'
+    when 'MemberEvent'
+      'Member'
     end
   end
 
