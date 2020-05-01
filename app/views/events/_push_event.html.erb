@@ -5,7 +5,7 @@
 <ul>
   <% event.payload['commits'].each do |commit| %>
     <li>
-      <%= commit['message'] %>
+      <%= commit['message'] %> <small class='text-muted'><%= commit['sha'][0..6] %></small>
     </li>
   <% end %>
   <% if event.payload['commits'].length != event.payload['size'] %>
