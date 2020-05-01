@@ -120,8 +120,17 @@
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle <%= 'active' if params[:uncommented].present? || params[:recent].present? || params[:no_milestone].present? || params[:unlabelled].present? || params[:exclude_employees].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:no_response].present? || params[:uncommented].present? || params[:recent].present? || params[:no_milestone].present? || params[:unlabelled].present? || params[:exclude_employees].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
         <div class="dropdown-menu">
+          <% if params[:no_response].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, no_response: nil)) %>">
+              No PL response
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, no_response: 'true')) %>">
+              No PL response
+            </a>
+          <% end %>
           <% if params[:uncommented].present? %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, uncommented: nil)) %>">
               Uncommented

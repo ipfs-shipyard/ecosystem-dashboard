@@ -80,6 +80,7 @@ class IssuesController < ApplicationController
     @scope = @scope.where(state: params[:state]) if params[:state].present?
     @scope = @scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
+    @scope = @scope.no_response if params[:no_response].present?
 
     @types = {
       'issues' => @scope.issues.count,
