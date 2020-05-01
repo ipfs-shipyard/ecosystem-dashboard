@@ -31,7 +31,12 @@
       <ul class="list-group list-group-flush">
         <% manifest.repository_dependencies.each do |dependency| %>
           <li class="list-group-item">
-            <%= link_to dependency.package_name %> <%= dependency.requirements %>
+            <% if dependency.package %>
+              <%= link_to dependency.package_name, package_url(dependency.package.id) %>
+            <% else %>
+              <%= dependency.package_name %>
+            <% end %>
+            <%= dependency.requirements %>
             <small class='text-muted'>
             <% if dependency.kind != 'runtime' %>
               <%= dependency.kind %>
