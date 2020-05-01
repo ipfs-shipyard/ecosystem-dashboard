@@ -72,7 +72,11 @@ module ApplicationHelper
     when "DeleteEvent"
       "deleted a #{event.payload['ref_type']}"
     when "IssueCommentEvent"
-      "#{event.action} a comment on an issue on"
+      if event.payload['issue']['pull_request'].present?
+        "#{event.action} a comment on a pull request on"
+      else
+        "#{event.action} a comment on an issue on"
+      end
     when "PublicEvent"
       'open sourced'
     when "PushEvent"
