@@ -30,6 +30,8 @@ gem 'languages', github: 'andrew/languages'
 gem 'pghero'
 gem 'pg_query', '>= 0.9.0'
 
+gem 'commonmarker'
+
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console'

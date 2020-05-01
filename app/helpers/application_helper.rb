@@ -114,4 +114,11 @@ module ApplicationHelper
       'Forked'
     end
   end
+
+  def parse_markdown(str)
+    return if str.blank?
+    content_tag :div, class: 'markdown' do
+      CommonMarker.render_html(str, :UNSAFE, [:tagfilter, :autolink, :table, :strikethrough]).html_safe
+    end
+  end
 end

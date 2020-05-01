@@ -1,11 +1,5 @@
-<p>
-  <strong>
-    <%= event.payload['issue']['title'] %>
-  </strong>
-</p>
+<h5>
+  <%= link_to event.payload['issue']['title'], event.payload['issue']['html_url'], target: :_blank %>
+</h5>
 
-<%= simple_format event.payload['issue']['body'] %>
-
-<p>
-  <%= link_to 'View on GitHub', event.payload['issue']['html_url'], target: :_blank %>
-</p>
+<%== parse_markdown event.payload['issue']['body'] %>

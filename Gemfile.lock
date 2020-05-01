@@ -76,6 +76,8 @@ GEM
       sassc-rails (>= 2.0.0)
     builder (3.2.4)
     chartkick (3.3.1)
+    commonmarker (0.21.0)
+      ruby-enum (~> 0.5)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
     dotenv (2.7.5)
@@ -168,6 +170,8 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    ruby-enum (0.8.0)
+      i18n
     sassc (2.3.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -215,6 +219,7 @@ DEPENDENCIES
   bootsnap
   bootstrap
   chartkick
+  commonmarker
   dotenv-rails
   groupdate
   jquery-rails

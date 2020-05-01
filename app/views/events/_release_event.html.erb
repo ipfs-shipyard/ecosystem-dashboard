@@ -1,11 +1,5 @@
-<p>
-  <strong>
-    <%= event.payload['release']['name'] %>
-  </strong>
-</p>
+<h5>
+  <%= link_to event.payload['release']['name'], event.payload['release']['html_url'], target: :_blank %>
+</h5>
 
-<%= simple_format event.payload['release']['body'] %>
-
-<p>
-  <%= link_to 'View on GitHub', event.payload['release']['html_url'], target: :_blank %>
-</p>
+<%== parse_markdown event.payload['release']['body'] %>
