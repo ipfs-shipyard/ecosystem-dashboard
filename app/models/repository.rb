@@ -86,7 +86,7 @@ class Repository < ApplicationRecord
       repo = existing_repo = Repository.find_by_full_name(full_name)
       repo = Repository.download(full_name) if existing_repo.nil?
       next unless repo
-      e = repo.download_events
+      e = repo.sync_events
       if e.any?
         Issue.download(full_name)
         Issue.where(repo_full_name: full_name).where('updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
