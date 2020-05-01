@@ -62,7 +62,7 @@ module ApplicationHelper
     when 'WatchEvent'
       'starred'
     when "CreateEvent"
-      'created branch on'
+      "created a #{event.payload['ref_type']} on"
     when "CommitCommentEvent"
       'commented on a commit on'
     when "ReleaseEvent"
@@ -80,7 +80,7 @@ module ApplicationHelper
     when "PublicEvent"
       'open sourced'
     when "PushEvent"
-      'pushed to'
+      "pushed #{pluralize(event.payload['size'], 'commit')} to #{event.payload['ref'].gsub("refs/heads/", '')}"
     when "PullRequestReviewCommentEvent"
       "#{event.action} a review comment on an pull request on"
     when "PullRequestEvent"

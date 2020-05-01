@@ -1,7 +1,3 @@
-<p>
-  <%= event.payload['size'] %> commits to <%= link_to event.payload['ref'].gsub("refs/heads/", ''), "https://github.com/#{event.repository.full_name}/tree/#{event.payload['ref'].gsub("refs/heads/", '')}" %>
-</p>
-
 <ul>
   <% event.payload['commits'].each do |commit| %>
     <li>
@@ -9,6 +5,10 @@
     </li>
   <% end %>
   <% if event.payload['commits'].length != event.payload['size'] %>
-    <li>and more ...</li>
+    <li>and <%= events.payload['size'] - event.payload['commits'].length %> more ...</li>
   <% end %>
 </ul>
+
+<p>
+  <%= link_to 'View on GitHub', "https://github.com/#{event.repository.full_name}/tree/#{event.payload['ref'].gsub("refs/heads/", '')}" %>
+</p>
