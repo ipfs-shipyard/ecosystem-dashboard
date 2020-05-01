@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  package _id: 1
+  number: MyString
+  published_at: 2020-05-01 17:13:38
+  runtime_dependencies_count: 1
+  spdx_expression: MyString
+  original_license:
+
+two:
+  package_id: 1
+  number: MyString
+  published_at: 2020-05-01 17:13:38
+  runtime_dependencies_count: 1
+  spdx_expression: MyString
+  original_license:

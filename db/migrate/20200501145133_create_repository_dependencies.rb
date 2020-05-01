@@ -4,7 +4,7 @@ class CreateRepositoryDependencies < ActiveRecord::Migration[6.0]
       t.integer :package_id
       t.integer :manifest_id
       t.integer :repository_id
-      t.boolean :optional
+      t.boolean :optional, default: false
       t.string :package_name
       t.string :platform
       t.string :requirements

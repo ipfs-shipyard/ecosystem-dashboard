@@ -1,0 +1,47 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  platform: MyString
+  description: MyText
+  keywords: MyText
+  homepage: MyString
+  licenses: MyString
+  repository_url: MyString
+  repository_id: 1
+  normalized_licenses: MyString
+  versions_count: 1
+  latest_release_published_at: 2020-05-01 16:56:52
+  latest_release_number: MyString
+  keywords_array: MyString
+  dependents_count: 1
+  language: MyString
+  status: MyString
+  last_synced_at: 2020-05-01 16:56:52
+  dependent_repos_count: 1
+  runtime_dependencies_count: 1
+  latest_stable_release_number: MyString
+  latest_stable_release_published_at: MyString
+
+two:
+  name: MyString
+  platform: MyString
+  description: MyText
+  keywords: MyText
+  homepage: MyString
+  licenses: MyString
+  repository_url: MyString
+  repository_id: 1
+  normalized_licenses: MyString
+  versions_count: 1
+  latest_release_published_at: 2020-05-01 16:56:52
+  latest_release_number: MyString
+  keywords_array: MyString
+  dependents_count: 1
+  language: MyString
+  status: MyString
+  last_synced_at: 2020-05-01 16:56:52
+  dependent_repos_count: 1
+  runtime_dependencies_count: 1
+  latest_stable_release_number: MyString
+  latest_stable_release_published_at: MyString

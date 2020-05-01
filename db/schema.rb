@@ -10,11 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_145133) do
+ActiveRecord::Schema.define(version: 2020_05_01_173219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
+
+  create_table "dependencies", force: :cascade do |t|
+    t.integer "version_id"
+    t.integer "package_id"
+    t.string "package_name"
+    t.string "platform"
+    t.string "kind"
+    t.boolean "optional", default: false
+    t.string "requirements"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "events", force: :cascade do |t|
     t.string "github_id"
@@ -70,6 +82,33 @@ ActiveRecord::Schema.define(version: 2020_05_01_145133) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "packages", force: :cascade do |t|
+    t.string "name"
+    t.string "platform"
+    t.text "description"
+    t.text "keywords"
+    t.string "homepage"
+    t.string "licenses"
+    t.string "repository_url"
+    t.integer "repository_id"
+    t.string "normalized_licenses", default: [], array: true
+    t.integer "versions_count", default: 0, null: false
+    t.datetime "latest_release_published_at"
+    t.string "latest_release_number"
+    t.string "keywords_array", default: [], array: true
+    t.integer "dependents_count", default: 0, null: false
+    t.string "language"
+    t.string "status"
+    t.datetime "last_synced_at"
+    t.integer "dependent_repos_count"
+    t.integer "runtime_dependencies_count"
+    t.string "latest_stable_release_number"
+    t.string "latest_stable_release_published_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "license_normalized", default: false
+  end
+
   create_table "repositories", force: :cascade do |t|
     t.integer "github_id"
     t.string "full_name"
@@ -104,6 +143,16 @@ ActiveRecord::Schema.define(version: 2020_05_01_145133) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.integer "repository_id"
+    t.string "name"
+    t.string "sha"
+    t.string "kind"
+    t.datetime "published_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "topics", force: :cascade do |t|
     t.integer "remote_id"
     t.string "title"
@@ -115,6 +164,17 @@ ActiveRecord::Schema.define(version: 2020_05_01_145133) do
     t.string "username"
     t.integer "category_id"
     t.string "category_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.integer "package_id"
+    t.string "number"
+    t.datetime "published_at"
+    t.integer "runtime_dependencies_count"
+    t.string "spdx_expression"
+    t.jsonb "original_license"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

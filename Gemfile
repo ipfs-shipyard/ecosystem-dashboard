@@ -32,6 +32,15 @@ gem 'pg_query', '>= 0.9.0'
 
 gem 'commonmarker'
 gem 'bibliothecary'
+gem "license-compatibility"
+gem "semantic", git: "https://github.com/librariesio/semantic"
+gem "semantic_range"
+gem 'oj'
+gem 'ox'
+gem "faraday-http-cache"
+gem "faraday_middleware"
+gem "counter_culture"
+gem "spdx", git: "https://github.com/librariesio/spdx"
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.

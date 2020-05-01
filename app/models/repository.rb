@@ -165,10 +165,10 @@ class Repository < ApplicationRecord
       dependencies.each do |dep|
         platform = manifest.platform
         next unless dep.is_a?(Hash)
-        project = nil # Project.platform(platform).find_by_name(dep[:name])
+        package = nil # Package.platform(platform).find_by_name(dep[:name])
 
         manifest.repository_dependencies.create({
-          package_id: project.try(:id),
+          package_id: package.try(:id),
           package_name: dep[:name].try(:strip),
           platform: platform,
           requirements: dep[:requirement],
