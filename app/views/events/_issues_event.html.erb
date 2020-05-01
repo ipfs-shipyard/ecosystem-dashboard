@@ -5,3 +5,7 @@
 </p>
 
 <%= simple_format event.payload['issue']['body'] %>
+
+<p>
+  <%= link_to 'View on GitHub', event.payload['issue']['html_url'], target: :_blank %>
+</p>

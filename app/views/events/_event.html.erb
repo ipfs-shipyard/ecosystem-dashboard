@@ -8,7 +8,7 @@
         <%= octicon(event_icon(event), height: 18) %>
       </span>
 
-      <%= link_to event.actor, "https://github.com/#{event.actor.gsub('[bot]', '')}" %>
+      <%= link_to event.actor, "https://github.com/#{event.actor.gsub('[bot]', '')}", target: :_blank %>
 
       <%= event_title(event) %>
 

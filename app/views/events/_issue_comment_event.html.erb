@@ -1,1 +1,5 @@
 <%= simple_format event.payload['comment']['body'] %>
+
+<p>
+  <%= link_to 'View on GitHub', event.payload['comment']['html_url'], target: :_blank %>
+</p>

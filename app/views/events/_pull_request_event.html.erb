@@ -1,1 +1,5 @@
 <%= simple_format event.payload['pull_request']['body'] %>
+
+<p>
+  <%= link_to 'View on GitHub', event.payload['pull_request']['html_url'], target: :_blank %>
+</p>
