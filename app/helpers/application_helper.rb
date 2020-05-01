@@ -93,7 +93,7 @@ module ApplicationHelper
     when "CreateEvent"
       'Branched'
     when "CommitCommentEvent"
-      'Comment Comments'
+      'Commit Comments'
     when "ReleaseEvent"
       'Release'
     when "IssuesEvent"
