@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_30_152230) do
+ActiveRecord::Schema.define(version: 2020_05_01_145133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -59,6 +59,17 @@ ActiveRecord::Schema.define(version: 2020_04_30_152230) do
     t.index ["user"], name: "index_issues_on_user"
   end
 
+  create_table "manifests", force: :cascade do |t|
+    t.integer "repository_id"
+    t.string "platform"
+    t.string "filepath"
+    t.string "sha"
+    t.string "branch"
+    t.string "kind"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "repositories", force: :cascade do |t|
     t.integer "github_id"
     t.string "full_name"
@@ -78,6 +89,19 @@ ActiveRecord::Schema.define(version: 2020_04_30_152230) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "etag"
+  end
+
+  create_table "repository_dependencies", force: :cascade do |t|
+    t.integer "package_id"
+    t.integer "manifest_id"
+    t.integer "repository_id"
+    t.boolean "optional"
+    t.string "package_name"
+    t.string "platform"
+    t.string "requirements"
+    t.string "kind"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "topics", force: :cascade do |t|

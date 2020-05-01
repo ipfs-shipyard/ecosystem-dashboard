@@ -24,4 +24,8 @@ class RepositoriesController < ApplicationController
     @users = @scope.unscope(where: :actor).group(:actor).count
     @event_types = @scope.unscope(where: :event_type).group(:event_type).count
   end
+
+  def show
+    @repository = Repository.find(params[:id])
+  end
 end
