@@ -21,7 +21,7 @@ class Issue < ApplicationRecord
                 'dominguesgm', 'catiatpereira', 'andreforsousa', 'travisperson', 'krl',
                 'nicola', 'hannahhoward', 'renrutnnej', 'marten-seemann', 'cwaring',
                 'AfonsoVReis', 'pkafei', 'jkosem', 'aarshkshah1992', 'thattommyhall',
-                'rafaelramalho19', 'andyschwab', 'parkan']
+                'rafaelramalho19', 'andyschwab', 'parkan', 'yiannisbot']
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
