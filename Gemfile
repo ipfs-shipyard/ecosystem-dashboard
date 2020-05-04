@@ -37,6 +37,7 @@ gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range"
 gem 'oj'
 gem 'ox'
+gem 'faraday', '0.15.4'
 gem "faraday-http-cache"
 gem "faraday_middleware"
 gem "counter_culture"

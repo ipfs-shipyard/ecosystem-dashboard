@@ -64,6 +64,8 @@ module PackageManager
         &.sub(/https?:\/\//, "")
 
       go_import&.start_with?(*KNOWN_HOSTS) ? [go_import] : [name]
+    rescue Faraday::ConnectionFailed, URI::InvalidURIError
+      []
     end
 
     def self.get_repository_url(package)
