@@ -5,7 +5,7 @@
     </li>
   <% end %>
   <% if event.payload['commits'].length != event.payload['size'] %>
-    <li>and <%= events.payload['size'] - event.payload['commits'].length %> more ...</li>
+    <li>and <%= event.payload['size'] - event.payload['commits'].length %> more ...</li>
   <% end %>
 </ul>
 
