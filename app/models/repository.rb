@@ -1,12 +1,31 @@
 class Repository < ApplicationRecord
 
+  IGNORABLE_EXCEPTIONS = [
+    Octokit::Unauthorized,
+    Octokit::InvalidRepository,
+    Octokit::RepositoryUnavailable,
+    Octokit::NotFound,
+    Octokit::Conflict,
+    Octokit::Forbidden,
+    Octokit::InternalServerError,
+    Octokit::BadGateway,
+    Octokit::ClientError,
+    Octokit::UnavailableForLegalReasons
+  ]
+
   has_many :events
+  has_many :manifests, dependent: :destroy
+  has_many :repository_dependencies
+  has_many :dependencies, through: :manifests, source: :repository_dependencies
 
   scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
   scope :org, ->(org) { where(org: org) }
   scope :language, ->(language) { where(language: language) }
   scope :fork, ->(fork) { where(fork: fork) }
   scope :archived, ->(archived) { where(archived: archived) }
+
+  scope :with_manifests, -> { joins(:manifests) }
+  scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
 
   def self.download_org_repos(org)
     remote_repos = Issue.github_client.org_repos(org, type: 'public')
@@ -105,5 +124,87 @@ class Repository < ApplicationRecord
 
   def color
     Languages::Language[language].try(:color)
+  end
+
+  def download_manifests
+    file_list = get_file_list
+    return if file_list.blank?
+    new_manifests = parse_manifests(file_list)
+    # sync_metadata(file_list)
+
+    return if new_manifests.blank?
+
+    new_manifests.each {|m| sync_manifest(m) }
+
+    delete_old_manifests(new_manifests)
+  end
+
+  def parse_manifests(file_list)
+    manifest_paths = Bibliothecary.identify_manifests(file_list)
+
+    manifest_paths.map do |manifest_path|
+      file = get_file_contents(manifest_path)
+      if file.present? && file[:content].present?
+        begin
+          manifest = Bibliothecary.analyse_file(manifest_path, file[:content]).first
+          manifest.merge!(sha: file[:sha]) if manifest
+          manifest
+        rescue
+          nil
+        end
+      end
+    end.reject(&:blank?)
+  end
+
+  def sync_manifest(m)
+    args = {platform: m[:platform], kind: m[:kind], filepath: m[:path], sha: m[:sha]}
+
+    unless manifests.find_by(args)
+      manifest = manifests.create(args)
+      return unless m[:dependencies].present?
+      dependencies = m[:dependencies].map(&:with_indifferent_access).uniq{|dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]]}
+      dependencies.each do |dep|
+        platform = manifest.platform
+        next unless dep.is_a?(Hash)
+        package = nil # Package.platform(platform).find_by_name(dep[:name])
+
+        manifest.repository_dependencies.create({
+          package_id: package.try(:id),
+          package_name: dep[:name].try(:strip),
+          platform: platform,
+          requirements: dep[:requirement],
+          kind: dep[:type],
+          repository_id: self.id
+        })
+      end
+    end
+  end
+
+  def delete_old_manifests(new_manifests)
+    existing_manifests = manifests.map{|m| [m.platform, m.filepath] }
+    to_be_removed = existing_manifests - new_manifests.map{|m| [m[:platform], m[:path]] }
+    to_be_removed.each do |m|
+      manifests.where(platform: m[0], filepath: m[1]).each(&:destroy)
+    end
+    manifests.where.not(id: manifests.latest.map(&:id)).each(&:destroy)
+  end
+
+  def get_file_list
+    tree = Issue.github_client.tree(full_name, default_branch, :recursive => true).tree
+    tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+  rescue *IGNORABLE_EXCEPTIONS
+    nil
+  end
+
+  def get_file_contents(path)
+    file = Issue.github_client.contents(full_name, path: path)
+    {
+      sha: file.sha,
+      content: file.content.present? ? Base64.decode64(file.content) : file.content
+    }
+  rescue URI::InvalidURIError
+    nil
+  rescue *IGNORABLE_EXCEPTIONS
+    nil
   end
 end

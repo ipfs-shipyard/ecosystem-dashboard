@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  package_id: 1
+  manifest_id: 1
+  repository_id: 1
+  optional: false
+  package_name: MyString
+  platform: MyString
+  requirements: MyString
+  kind: MyString
+
+two:
+  package_id: 1
+  manifest_id: 1
+  repository_id: 1
+  optional: false
+  package_name: MyString
+  platform: MyString
+  requirements: MyString
+  kind: MyString

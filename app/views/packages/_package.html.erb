@@ -1,0 +1,16 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title mb-0">
+      <%= link_to "#{package.platform.downcase}/#{package.name}", package_path(package.id) %>
+    </h5>
+
+      <%= package.description %>
+    <br/>
+    <small class='text-muted'>
+      Latest version: <%= package.latest_release_number %><br/>
+      Versions: <%= package.versions_count %><br/>
+      Dependent Pacakges: <%= package.dependents_count %><br/>
+      Dependent Repositories: <%= package.dependent_repos_count %>
+    </small>
+  </div>
+</div>

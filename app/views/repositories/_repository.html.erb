@@ -8,11 +8,12 @@
         <%= octicon(repo_icon(repository), height: 18) %>
       </span>
 
-      <%= link_to repository.full_name, repository.html_url, target: :_blank %>
+      <%= link_to repository.full_name, repository %>
     </h5>
     <small class='text-muted'>
       Last pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago<br/>
-      Size: <%= number_to_human_size repository.size*1000 %>
+      Size: <%= number_to_human_size repository.size*1000 %><br/>
+      Dependencies: <%= number_with_delimiter repository.dependencies.count %>
     </small>
   </div>
 </div>
