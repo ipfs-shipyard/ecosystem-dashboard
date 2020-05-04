@@ -6,8 +6,9 @@ namespace :issues do
   end
 
   task sync_collabs: :environment do
-    Issue.download_active_collab_repos
-    Issue.download_new_collab_repos
+    Issue.not_protocol.group(:org).count.each do |org, _count|
+      Repository.sync_recently_active_repos(org)
+    end
   end
 
   task sync_recent: :environment do
