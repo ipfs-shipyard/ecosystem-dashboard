@@ -33,6 +33,10 @@ class OrgsController < ApplicationController
     @event_types = @scope.unscope(where: :event_type).group(:event_type).count
   end
 
+  def dependencies
+    @repositories = Repository.archived(false).fork(false).where('pushed_at > ?', 6.months.ago).org(params[:id]).order('stargazers_count DESC').includes(manifests: :repository_dependencies)
+  end
+
   private
 
   def load_org_data(scope, org)

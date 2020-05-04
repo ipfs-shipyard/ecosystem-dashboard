@@ -94,3 +94,12 @@
     margin: 0 0 1.5em 0;
   }
 }
+
+.dependencies .card-header:after {
+    content: "-";
+    float: right;
+}
+.dependencies .card-header.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "+";
+}
