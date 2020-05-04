@@ -2,26 +2,6 @@
   <div class="col-md-12">
     <ul class="nav nav-pills d-flex">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
-        <div class="dropdown-menu">
-          <% if params[:org].present? %>
-            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, org: nil)) %>">
-              <%= params[:org] %>
-            </a>
-          <% end %>
-          <% @orgs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |org,count| %>
-            <% unless org == params[:org] %>
-              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, org: org)) %>">
-                <%= org %>
-                <small class='text-muted'>
-                  <%= number_with_delimiter count %>
-                </small>
-              </a>
-            <% end %>
-          <% end %>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:repo_full_name].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Repository</a>
         <div class="dropdown-menu">
           <% if params[:repo_full_name].present? %>
