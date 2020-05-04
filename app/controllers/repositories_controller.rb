@@ -12,7 +12,7 @@ class RepositoriesController < ApplicationController
   end
 
   def events
-    @scope = Event.includes(:repository)
+    @scope = Event.includes(:repository).where('created_at > ?', 1.month.ago)
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.user(params[:user]) if params[:user].present?
     @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?
