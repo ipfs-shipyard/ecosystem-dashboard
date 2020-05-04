@@ -16,6 +16,9 @@
         <div class="card mb-3">
           <div class="card-header collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#manifest-<%= manifest.id %>">
             <%= manifest.filepath %>
+            <small class='text-muted'>
+              <%= manifest.repository_dependencies.group_by(&:package_name).keys.length %> unique packages
+            </small>
           </div>
           <ul id='manifest-<%= manifest.id %>' class="list-group list-group-flush collapse">
             <% manifest.repository_dependencies.group_by(&:package_name).each do |name, dependencies| %>
