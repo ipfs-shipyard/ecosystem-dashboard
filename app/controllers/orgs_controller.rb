@@ -21,6 +21,19 @@ class OrgsController < ApplicationController
     @orgs = [load_org_data(scope, params[:id])]
   end
 
+  def events
+    @scope = Event.org(params[:id]).includes(:repository).protocol.where('created_at > ?', 1.month.ago).humans
+    @scope = @scope.user(params[:user]) if params[:user].present?
+    @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?
+    @scope = @scope.event_type(params[:event_type]) if params[:event_type].present?
+    @pagy, @events = pagy(@scope.order('created_at DESC'))
+
+    @orgs = @scope.unscope(where: :org).protocol.group(:org).count
+    @repos = @scope.unscope(where: :repository_full_name).protocol.group(:repository_full_name).count
+    @users = @scope.unscope(where: :actor).humans.group(:actor).count
+    @event_types = @scope.unscope(where: :event_type).group(:event_type).count
+  end
+
   private
 
   def load_org_data(scope, org)

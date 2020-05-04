@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get 'weekly', to: 'issues#weekly'
   get 'collabs', to: 'issues#collabs'
   get 'all', to: 'issues#all'
+  get 'orgs/:id/events', to: 'orgs#events', as: :org_events
   get 'orgs/:id', to: 'orgs#show', as: :org
   get 'orgs', to: 'orgs#protocol'
 
