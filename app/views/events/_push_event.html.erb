@@ -10,5 +10,5 @@
 </ul>
 
 <p>
-  <%= link_to 'View on GitHub', "https://github.com/#{event.repository.full_name}/tree/#{event.payload['ref'].gsub("refs/heads/", '')}" %>
+  <%= link_to 'View on GitHub', "https://github.com/#{event.repository.full_name}/commits/#{event.payload['ref'].gsub("refs/heads/", '')}" %>
 </p>
