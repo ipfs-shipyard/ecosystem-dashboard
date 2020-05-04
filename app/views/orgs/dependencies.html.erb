@@ -11,7 +11,7 @@
           Last pushed: <%= distance_of_time_in_words_to_now repo.pushed_at %> ago
         </small>
       </h5>
-      <% repo.manifests.each do |manifest| %>
+      <% repo.manifests.sort_by(&:kind).reverse.each do |manifest| %>
         <% next unless manifest.repository_dependencies.any?  %>
         <div class="card mb-3">
           <div class="card-header collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#manifest-<%= manifest.id %>">
