@@ -3,6 +3,7 @@ class Event < ApplicationRecord
   belongs_to :repository
 
   scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
+  scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
   scope :org, ->(org) { where(org: org) }
   scope :user, ->(user) { where(actor: user)}
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
