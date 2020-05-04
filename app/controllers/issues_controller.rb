@@ -1,6 +1,6 @@
 class IssuesController < ApplicationController
   def index
-    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''")
+    @scope = Issue.protocol.not_employees.unlocked.humans.where("html_url <> ''")
 
     if params[:collab].present?
       @scope = @scope.collab(params[:collab])
