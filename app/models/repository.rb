@@ -1,5 +1,7 @@
 class Repository < ApplicationRecord
 
+  has_many :events
+
   scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
   scope :org, ->(org) { where(org: org) }
   scope :language, ->(language) { where(language: language) }
