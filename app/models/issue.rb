@@ -4,7 +4,9 @@ class Issue < ApplicationRecord
   BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
           'greenkeeperio-bot', 'rollbar[bot]', 'guardrails[bot]',
           'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]',
-          'gitter-badger', 'weekly-digest[bot]', 'todo[bot]']
+          'gitter-badger', 'weekly-digest[bot]', 'todo[bot]', 'auto-comment[bot]',
+          'github-actions[bot]', 'codecov[bot]', 'auto-comment[bot]', 'gitcoinbot',
+          'reminders[bot]']
   EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
                 "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
                 "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",

@@ -8,6 +8,11 @@ class Event < ApplicationRecord
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
   scope :event_type, ->(event_type) { where(event_type: event_type)}
 
+  scope :humans, -> { where.not(actor: Issue::BOTS + ['ghost']) }
+  scope :bots, -> { where(actor: Issue::BOTS) }
+  scope :employees, -> { where(actor: Issue::EMPLOYEES) }
+  scope :not_employees, -> { where.not(actor: Issue::EMPLOYEES + Issue::BOTS) }
+
   def self.record_event(repository, event_json)
     e = Event.find_or_initialize_by(github_id: event_json.id)
 
