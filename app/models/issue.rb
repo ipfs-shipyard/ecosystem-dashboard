@@ -152,8 +152,8 @@ class Issue < ApplicationRecord
 
   def self.update_collab_labels
     Issue.unlocked.protocol.where('created_at > ?', 1.month.ago).not_employees.group(:user).count.each do |u, count|
-      collabs = Issue.not_protocol.where(user: u).group(:org).count.map(&:first)
-      Issue.protocol.unlocked.where(collabs: []).where(user: u).update_all(collabs: collabs) if collabs.any?
+      collabs = Event.not_protocol.user(u).event_type('PushEvent').group(:org).count.map(&:first)
+      Issue.protocol.unlocked.where(user: u).update_all(collabs: collabs)
     end
   end
 
