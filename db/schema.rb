@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_173219) do
+ActiveRecord::Schema.define(version: 2020_05_05_133355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 2020_05_01_173219) do
     t.string "requirements"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["package_id"], name: "index_dependencies_on_package_id"
+    t.index ["version_id"], name: "index_dependencies_on_version_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -80,6 +82,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_173219) do
     t.string "kind"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["repository_id"], name: "index_manifests_on_repository_id"
   end
 
   create_table "packages", force: :cascade do |t|
@@ -107,6 +110,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_173219) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "license_normalized", default: false
+    t.index ["platform", "name"], name: "index_packages_on_platform_and_name", unique: true
   end
 
   create_table "repositories", force: :cascade do |t|
@@ -141,6 +145,9 @@ ActiveRecord::Schema.define(version: 2020_05_01_173219) do
     t.string "kind"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
+    t.index ["package_id"], name: "index_repository_dependencies_on_package_id"
+    t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -177,6 +184,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_173219) do
     t.jsonb "original_license"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["package_id", "number"], name: "index_versions_on_package_id_and_number", unique: true
   end
 
 end
