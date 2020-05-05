@@ -104,7 +104,7 @@ module PackageManager
         end
       end
 
-      save_dependencies(mapped_package) if self::HAS_DEPENDENCIES
+      #save_dependencies(mapped_package) if self::HAS_DEPENDENCIES
       dbpackage.reload
       # dbpackage.download_registry_users
       dbpackage.last_synced_at = Time.now
@@ -119,7 +119,7 @@ module PackageManager
       exit 0
     rescue StandardError => e
       if ENV["RACK_ENV"] == "production"
-        Bugsnag.notify(e)
+        # Bugsnag.notify(e)
       else
         raise
       end
