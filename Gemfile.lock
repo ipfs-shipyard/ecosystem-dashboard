@@ -84,7 +84,7 @@ GEM
       activesupport (>= 3.0.0)
     autoprefixer-rails (9.7.6)
       execjs
-    bibliothecary (6.8.5)
+    bibliothecary (6.8.6)
       commander
       deb_control
       librariesio-gem-parser
