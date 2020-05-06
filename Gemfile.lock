@@ -13,9 +13,9 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/spdx
-  revision: 9e80cc76c8c35cbe8bdda46c2d838ab9cbd709af
+  revision: d3403ea88f7e8cd069c13ce453ffec7a163dc717
   specs:
-    spdx (2.0.3)
+    spdx (2.0.4)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
 
@@ -265,7 +265,7 @@ GEM
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
     unicode_utils (1.4.0)
-    web-console (4.0.1)
+    web-console (4.0.2)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
