@@ -2,47 +2,34 @@
   <%= params[:id] %> dependencies
 </h1>
 
+<h5 class='mb-3'>
+  <%= pluralize @protocol_packages.length, 'protocol packages' %> required in <%= pluralize @dependencies.map(&:repository_id).uniq.length, ' active repository' %>
+</h5>
+
 <div class="dependencies">
-  <% @repositories.each do |repo| %>
-    <% if repo.manifests.any? && repo.manifests.any?{|m| m.repository_dependencies.any? } %>
-      <h5>
-        <%= repo.full_name %>
+  <% @protocol_packages.each do |package, repository_dependencies| %>
+    <div class="card mb-1">
+      <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#package-<%= package.id %>">
+        <%= link_to "#{package.platform_name}/#{package.name}", package_path(package.id) %>
         <small class='text-muted'>
-          Last pushed: <%= distance_of_time_in_words_to_now repo.pushed_at %> ago
+        <%= pluralize repository_dependencies.length, 'repository' %>
         </small>
-      </h5>
-      <% repo.manifests.sort_by(&:kind).reverse.each do |manifest| %>
-        <% next unless manifest.repository_dependencies.any?  %>
-        <div class="card mb-3">
-          <div class="card-header collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#manifest-<%= manifest.id %>">
-            <%= manifest.filepath %>
-            <small class='text-muted'>
-              <%= manifest.repository_dependencies.group_by(&:package_name).keys.length %> unique packages
+      </div>
+      <ul id='package-<%= package.id %>' class="list-group list-group-flush collapse">
+        <% repository_dependencies.group_by(&:repository).each do |repo, repository_dependencies| %>
+          <li class='list-group-item pt-2 pb-2'>
+            <small>
+              <%= link_to repo.full_name, repository_path(repo.id) %>
+              <span class='text-muted'>
+                <%= repository_dependencies.map(&:requirements).uniq.sort.join(', ') %>
+              </span>
+              <% if  repository_dependencies.any?(&:outdated) %>
+                <span class='badge badge-danger' title='Latest stable version is <%= package.latest_stable_release_number %>' >Outdated</span>
+              <% end %>
             </small>
-          </div>
-          <ul id='manifest-<%= manifest.id %>' class="list-group list-group-flush collapse">
-            <% manifest.repository_dependencies.group_by(&:package_name).sort_by(&:first).each do |name, dependencies| %>
-              <% dependency = dependencies.first %>
-              <li class="list-group-item">
-                <% if dependency.package %>
-                  <%= link_to dependency.package_name, package_url(dependency.package.id) %>
-                <% else %>
-                  <%= dependency.package_name %>
-                <% end %>
-                <small class='text-muted'>
-                <%= dependencies.map(&:requirements).uniq.join(', ') %>
-                <% if dependency.kind != 'runtime' %>
-                  - <%= dependency.kind %>
-                <% end %>
-                <% if dependency.optional %>
-                  (optional)
-                <% end %>
-                </small>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-    <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   <% end %>
 </div>

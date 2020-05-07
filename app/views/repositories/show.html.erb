@@ -45,6 +45,9 @@
               (optional)
             <% end %>
             </small>
+            <% if  dependency.outdated? %>
+              <span class='badge badge-danger' title='Latest stable version is <%= dependency.package.latest_stable_release_number %>' >Outdated</span>
+            <% end %>
           </li>
         <% end %>
       </ul>

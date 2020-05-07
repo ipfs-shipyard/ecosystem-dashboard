@@ -22,6 +22,10 @@ class RepositoryDependency < ApplicationRecord
   delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :package, allow_nil: true
   delegate :filepath, to: :manifest
 
+  def self.protocol
+    with_package.where(packages: {repository_id: Repository.protocol.pluck(:id)})
+  end
+
   def find_package_id
     Package.find_best(platform, package_name&.strip)&.id
   end

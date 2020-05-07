@@ -3,26 +3,29 @@
 </h1>
 
 <p>
-  <%= @package.description %>
-</p>
+<%= @package.description %><br/>
 
-<p>
 <small class='text-muted'>
+  Repository: <%= link_to @package.repository_url, @package.repository_url, target: :_blank %><br/>
   Latest version: <%= @package.latest_release_number %><br/>
   Versions: <%= @package.versions_count %><br/>
-  Dependent Pacakges: <%= @package.dependents_count %><br/>
   Dependent Repositories: <%= @package.dependent_repos_count %>
 </small>
 </p>
 
 <h5>Dependent Repositories</h5>
 
-<div class="card mb-3">
-  <ul class="list-group list-group-flush">
-    <% @package.dependent_repositories.order('stargazers_count DESC').each do |repository| %>
-      <li class="list-group-item">
-        <%= link_to repository.full_name, repository %>
-      </li>
-    <% end %>
-  </ul>
-</div>
+<% @package.dependent_repositories.order('stargazers_count DESC').group_by(&:org).each do |org, repositories| %>
+  <div class="card mb-3">
+    <div class="card-header">
+      <%= link_to org, org_dependencies_path(org) %>
+    </div>
+    <ul class="list-group list-group-flush">
+      <% repositories.each do |repository| %>
+        <li class="list-group-item">
+          <%= link_to repository.full_name, repository %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
