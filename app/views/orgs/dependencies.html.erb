@@ -21,7 +21,7 @@
             </small>
           </div>
           <ul id='manifest-<%= manifest.id %>' class="list-group list-group-flush collapse">
-            <% manifest.repository_dependencies.group_by(&:package_name).each do |name, dependencies| %>
+            <% manifest.repository_dependencies.group_by(&:package_name).sort_by(&:first).each do |name, dependencies| %>
               <% dependency = dependencies.first %>
               <li class="list-group-item">
                 <% if dependency.package %>
