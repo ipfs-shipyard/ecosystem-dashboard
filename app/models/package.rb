@@ -378,7 +378,7 @@ class Package < ApplicationRecord
 
   def update_repository
     return false unless known_repository_host_name.present?
-    r = Repository.create_from_host(known_repository_host, known_repository_host_name)
+    r = Repository.find_by_full_name(known_repository_host_name)
     return if r.nil?
     unless self.new_record?
       self.repository_id = r.id
