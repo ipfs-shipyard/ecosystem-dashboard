@@ -23,7 +23,7 @@
     Dependencies
   </h5>
 
-  <% @repository.manifests.order('kind DESC').each do |manifest| %>
+  <% @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC').each do |manifest| %>
     <div class="card mb-3">
       <div class="card-header">
         <%= manifest.filepath %>
