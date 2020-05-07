@@ -15,17 +15,20 @@
 
 <h5>Dependent Repositories</h5>
 
-<% @package.dependent_repositories.order('stargazers_count DESC').group_by(&:org).each do |org, repositories| %>
-  <div class="card mb-3">
-    <div class="card-header">
-      <%= link_to org, org_dependencies_path(org) %>
+<div class="dependencies">
+  <% @package.dependent_repositories.order('stargazers_count DESC').group_by(&:org).sort_by(&:first).each do |org, repositories| %>
+    <div class="card mb-3">
+      <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
+        <%= link_to org, org_dependencies_path(org) %>
+      </div>
+      <ul id='org-<%= org %>' class="list-group list-group-flush collapse">
+        <% repositories.sort_by(&:full_name).each do |repository| %>
+          <li class="list-group-item">
+            <%= octicon(repo_icon(repository)) %>
+            <%= link_to repository.full_name, repository %>
+          </li>
+        <% end %>
+      </ul>
     </div>
-    <ul class="list-group list-group-flush">
-      <% repositories.each do |repository| %>
-        <li class="list-group-item">
-          <%= link_to repository.full_name, repository %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+  <% end %>
+</div>

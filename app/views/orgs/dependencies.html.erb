@@ -19,6 +19,7 @@
         <% repository_dependencies.group_by(&:repository).each do |repo, repository_dependencies| %>
           <li class='list-group-item pt-2 pb-2'>
             <small>
+              <%= octicon(repo_icon(repo), class: 'mr-1') %>
               <%= link_to repo.full_name, repository_path(repo.id) %>
               <span class='text-muted'>
                 <%= repository_dependencies.map(&:requirements).uniq.sort.join(', ') %>
