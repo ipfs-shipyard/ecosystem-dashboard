@@ -35,7 +35,7 @@ class OrgsController < ApplicationController
 
   def dependencies
     @repositories = Repository.archived(false).fork(false).where('pushed_at > ?', 3.months.ago).org(params[:id])
-    @dependencies = RepositoryDependency.protocol.where(repository_id: @repositories.pluck(:id)).includes(:package, :repository, :manifest)
+    @dependencies = RepositoryDependency.protocol.where(repository_id: @repositories.pluck(:id)).includes({package: :versions}, :repository, :manifest)
     @protocol_packages = @dependencies.group_by(&:package).sort_by{|p,rd| [-rd.length, p.name] }
   end
 
