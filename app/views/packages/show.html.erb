@@ -16,16 +16,23 @@
 <h5>Dependent Repositories</h5>
 
 <div class="dependencies">
-  <% @package.dependent_repositories.order('stargazers_count DESC').group_by(&:org).sort_by(&:first).each do |org, repositories| %>
+  <% @package.repository_dependencies.includes(:repository).group_by{|rd| rd.repository.org }.each do |org, repository_dependencies| %>
     <div class="card mb-3">
       <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
         <%= link_to org, org_dependencies_path(org) %>
       </div>
       <ul id='org-<%= org %>' class="list-group list-group-flush collapse">
-        <% repositories.sort_by(&:full_name).each do |repository| %>
+        <% repository_dependencies.group_by(&:repository).each do |repository, dependencies| %>
           <li class="list-group-item">
             <%= octicon(repo_icon(repository)) %>
             <%= link_to repository.full_name, repository %>
+            <small class='text-muted'>
+              <% dep = dependencies.sort_by(&:requirements).first %>
+              <%= dep.requirements %>
+              <% if dep.outdated? %>
+                <span class='badge badge-danger' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
+              <% end %>
+            </small>
           </li>
         <% end %>
       </ul>
