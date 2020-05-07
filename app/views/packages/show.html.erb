@@ -18,10 +18,10 @@
 <div class="dependencies">
   <% @package.repository_dependencies.includes(:repository).group_by{|rd| rd.repository.org }.each do |org, repository_dependencies| %>
     <div class="card mb-3">
-      <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
+      <div class="card-header p-2 pl-3 pr-3" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
         <%= link_to org, org_dependencies_path(org) %>
       </div>
-      <ul id='org-<%= org %>' class="list-group list-group-flush collapse">
+      <ul id='org-<%= org %>' class="list-group list-group-flush">
         <% repository_dependencies.group_by(&:repository).each do |repository, dependencies| %>
           <li class="list-group-item">
             <%= octicon(repo_icon(repository)) %>
