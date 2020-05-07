@@ -11,7 +11,7 @@ class RepositoryDependency < ApplicationRecord
   scope :platform, ->(platform) { where('lower(repository_dependencies.platform) = ?', platform.try(:downcase)) }
   scope :kind, ->(kind) { where(kind: kind) }
 
-  before_create :set_package_id
+  # before_create :set_package_id
 
   alias_attribute :name, :package_name
   alias_attribute :latest_stable, :latest_stable_release_number
