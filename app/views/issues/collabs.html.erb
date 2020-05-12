@@ -21,7 +21,7 @@
             <%= octicon('git-pull-request') %> Pull Requests
             <small class='text-muted'><%= number_with_delimiter @scope.collab(collab).select(:html_url).select(&:pull_request?).length %></small>
           </li>
-          <% contributors = @scope.collab(collab).group(:user).count.sort_by{|k,v| -v} %>
+          <% contributors = @scope.collab(collab).humans.group(:user).count.sort_by{|k,v| -v} %>
           <li class="list-group-item pt-2 pb-2">
             <%= octicon('person') %> Unique Contributors
             <small class='text-muted'><%= number_with_delimiter contributors.length %></small>
