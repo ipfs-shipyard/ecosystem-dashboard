@@ -44,6 +44,12 @@ class Repository < ApplicationRecord
     end
   end
 
+  def self.import_org(org)
+    Repository.download_org_repos(org)
+    Repository.org(org).each(&:download_events)
+    Repository.org(org).each(&:download_manifests)
+  end
+
   def self.update_from_github(remote_repo)
     begin
       repo = Repository.find_or_create_by(github_id: remote_repo.id)
