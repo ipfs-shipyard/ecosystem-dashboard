@@ -56,7 +56,7 @@
               <% dep = dependencies.sort_by(&:requirements).first %>
               <%= dep.requirements %>
               <% if dep.latest_resolvable_version && dep.outdated? %>
-                <% if dep.latest_resolvable_version.semantic_version.major < @package.latest_stable_release.semantic_version.major %>
+                <% if major_versions.length < 2 || dep.latest_resolvable_version.semantic_version.major < @package.latest_stable_release.semantic_version.major %>
                   <span class='badge badge-danger' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
                 <% else %>
                   <span class='badge badge-warning' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
