@@ -1,0 +1,4 @@
+<h1>Packages matching "<%= params[:query] %>"</h1>
+
+<%= render @packages %>
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>

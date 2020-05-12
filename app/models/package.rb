@@ -4,6 +4,18 @@ class Package < ApplicationRecord
   # include Status
   include Releases
 
+  include PgSearch::Model
+  pg_search_scope :search_by_name,
+                  against: :name,
+                  order_within_rank: 'packages.collab_dependent_repos_count DESC nulls last',
+                  using: {
+                    tsearch: {
+                      prefix: true,
+                      negation: true,
+                      dictionary: "english"
+                    }
+                  }
+
   # include GithubPackage
 
   validates_presence_of :name, :platform

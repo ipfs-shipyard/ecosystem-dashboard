@@ -8,4 +8,9 @@ class PackagesController < ApplicationController
     @package = Package.find(params[:id])
     @repository_dependencies = @package.repository_dependencies.active.source.includes(:repository, :manifest)
   end
+
+  def search
+    @scope = Package.search_by_name(params[:query]).includes(:repository)
+    @pagy, @packages = pagy(@scope)
+  end
 end

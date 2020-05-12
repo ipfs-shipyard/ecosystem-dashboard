@@ -1,7 +1,9 @@
 <div class="card mb-3">
   <div class="card-body">
-    <%= link_to "https://github.com/#{package.repository.org}", target: :_blank, class: 'float-right' do %>
-      <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='40'>
+    <% if package.repository %>
+      <%= link_to "https://github.com/#{package.repository.org}", target: :_blank, class: 'float-right' do %>
+        <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='40'>
+      <% end %>
     <% end %>
     <h5 class="card-title mb-0">
       <%= link_to "#{package.platform.downcase}/#{package.name}", package_path(package.id) %>
@@ -11,7 +13,7 @@
       <%= package.description %>
     <br/>
     <small class='text-muted'>
-      Dependent collab repositories: <%= package.collab_dependent_repos_count %>
+      Dependent collab repositories: <%= package.collab_dependent_repos_count || 0 %>
     </small>
   </div>
 </div>

@@ -2,7 +2,11 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
 
-  resources :packages
+  resources :packages do
+    collection do
+      get :search
+    end
+  end
   resources :repositories
 
   get 'events', to: 'repositories#events'
