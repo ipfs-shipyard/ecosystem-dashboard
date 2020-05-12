@@ -77,6 +77,8 @@ class Package < ApplicationRecord
   scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order(Arel.sql("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC")) }
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 2.weeks.ago)}
 
+  scope :protocol, -> { where(repository_id: Repository.protocol.pluck(:id)) }
+
   after_commit :update_repository_async, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
   before_save  :update_details
@@ -212,10 +214,12 @@ class Package < ApplicationRecord
     return if destroyed?
     new_dependents_count = dependents.joins(:version).pluck(Arel.sql('DISTINCT versions.package_id')).count
     new_dependent_repos_count = dependent_repositories.count.length
+    new_collab_dependent_repos_count = dependent_repositories.not_protocol.count.length
 
     updates = {}
     updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
     updates[:dependent_repos_count] = new_dependent_repos_count if read_attribute(:dependent_repos_count) != new_dependent_repos_count
+    updates[:collab_dependent_repos_count] = new_collab_dependent_repos_count if read_attribute(:collab_dependent_repos_count) != new_collab_dependent_repos_count
     self.update_columns(updates) if updates.present?
   end
 

@@ -19,6 +19,7 @@ class Repository < ApplicationRecord
   has_many :dependencies, through: :manifests, source: :repository_dependencies
 
   scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
+  scope :not_protocol, -> { where.not(org: Issue::PROTOCOL_ORGS) }
   scope :org, ->(org) { where(org: org) }
   scope :language, ->(language) { where(language: language) }
   scope :fork, ->(fork) { where(fork: fork) }
