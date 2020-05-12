@@ -27,7 +27,8 @@
         <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
         <%= "in #{params[:org]}" if params[:org] %>
         <small class='text-muted'>
-          <%= @pagy.count %>
+          <%= @opened.count %> opened -
+          <%= @closed.count %> closed
         </small>
       </h5>
 
