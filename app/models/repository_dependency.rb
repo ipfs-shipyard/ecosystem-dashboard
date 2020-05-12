@@ -11,6 +11,7 @@ class RepositoryDependency < ApplicationRecord
   scope :platform, ->(platform) { where('lower(repository_dependencies.platform) = ?', platform.try(:downcase)) }
   scope :kind, ->(kind) { where(kind: kind) }
   scope :active, -> { joins(:repository).where(repositories: {archived: false}) }
+  scope :source, -> { joins(:repository).where(repositories: {fork: false}) }
 
   # before_create :set_package_id
 
@@ -55,5 +56,9 @@ class RepositoryDependency < ApplicationRecord
 
   def package_name
     read_attribute(:package_name).try(:tr, " \n\t\r", '')
+  end
+
+  def direct?
+    manifest.kind == 'manifest'
   end
 end

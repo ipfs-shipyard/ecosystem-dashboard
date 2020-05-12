@@ -16,7 +16,7 @@
 <h5>Dependent Repositories</h5>
 
 <div class="dependencies">
-  <% @package.repository_dependencies.active.includes(:repository).group_by{|rd| rd.repository.org }.sort_by{|o,rd| o }.each do |org, repository_dependencies| %>
+  <% @repository_dependencies.group_by{|rd| rd.repository.org }.sort_by{|o,rd| o }.each do |org, repository_dependencies| %>
     <div class="card mb-3">
       <div class="card-header p-2 pl-3 pr-3" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
         <%= link_to "https://github.com/#{org}", target: :_blank, class: 'mr-1' do %>
@@ -25,7 +25,7 @@
         <%= link_to org, org_dependencies_path(org) %>
       </div>
       <ul id='org-<%= org %>' class="list-group list-group-flush">
-        <% repository_dependencies.group_by(&:repository).each do |repository, dependencies| %>
+        <% repository_dependencies.group_by(&:repository).sort_by{|r,d| d.any?(&:direct?) ? 0 : 1 }.each do |repository, dependencies| %>
           <li class="list-group-item">
             <%= octicon(repo_icon(repository)) %>
             <%= link_to repository.full_name, repository %>
@@ -34,6 +34,9 @@
               <%= dep.requirements %>
               <% if dep.outdated? %>
                 <span class='badge badge-danger' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
+              <% end %>
+              <% if dependencies.none?(&:direct?) %>
+                <span class='badge badge-info' title='Pulled in by another dependency' >Transitive</span>
               <% end %>
             </small>
           </li>

@@ -25,6 +25,7 @@ class Repository < ApplicationRecord
   scope :fork, ->(fork) { where(fork: fork) }
   scope :archived, ->(archived) { where(archived: archived) }
   scope :active, -> { archived(false) }
+  scope :source, -> { fork(false) }
 
   scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
