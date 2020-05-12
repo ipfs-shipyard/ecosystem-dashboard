@@ -13,6 +13,19 @@
 </small>
 </p>
 
+<table class='table'>
+  <tr>
+    <th>Version range</th>
+    <th>Usage Percentage</th>
+  </tr>
+  <% @repository_dependencies.group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }.each do |version, repository_dependencies| %>
+    <tr>
+      <td><%= version.join('.') %>.x</td>
+      <td title='<%= repository_dependencies.length %> repos'><%= (repository_dependencies.length.to_f/@repository_dependencies.length*100).round(1) %>%</td>
+    </tr>
+  <% end %>
+</table>
+
 <h5>Dependent Repositories</h5>
 
 <div class="dependencies">
