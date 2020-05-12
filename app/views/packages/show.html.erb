@@ -18,9 +18,19 @@
     <th>Version range</th>
     <th>Usage Percentage</th>
   </tr>
-  <% @repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }.each do |version, repository_dependencies| %>
+
+  <% major_versions = @repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major } %>
+  <% if major_versions.length > 1 %>
+    <% groups = @repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v } %>
+  <% else %>
+    <% groups = @repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v } %>
+  <% end %>
+
+  <% groups.each do |version, repository_dependencies| %>
     <tr>
-      <td><%= version.join('.') %>.x</td>
+      <td>
+        <%= Array(version).join('.') %>.x
+      </td>
       <td title='<%= repository_dependencies.length %> repos'><%= (repository_dependencies.length.to_f/@repository_dependencies.length*100).round(1) %>%</td>
     </tr>
   <% end %>
@@ -45,8 +55,12 @@
             <small class='text-muted'>
               <% dep = dependencies.sort_by(&:requirements).first %>
               <%= dep.requirements %>
-              <% if dep.outdated? %>
-                <span class='badge badge-danger' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
+              <% if dep.latest_resolvable_version && dep.outdated? %>
+                <% if dep.latest_resolvable_version.semantic_version.major < @package.latest_stable_release.semantic_version.major %>
+                  <span class='badge badge-danger' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
+                <% else %>
+                  <span class='badge badge-warning' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
+                <% end %>
               <% end %>
               <% if dependencies.none?(&:direct?) %>
                 <span class='badge badge-info' title='Pulled in by another dependency' >Transitive</span>
