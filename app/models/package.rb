@@ -478,6 +478,22 @@ class Package < ApplicationRecord
     BitbucketUrlParser.parse(repository_url) || BitbucketUrlParser.parse(homepage)
   end
 
+  def set_outdated_percentage
+    major_versions = repository_dependencies.active.source.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v }
+    if major_versions.length > 1
+      groups = major_versions
+    else
+      groups = repository_dependencies.active.source.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }
+    end
+    outdated = groups[0..-2].map(&:last).flatten.length
+    outdated_percentage = (outdated.to_f/groups.sum(&:last).length*100).round(1)
+    update_attribute(:outdated, outdated_percentage)
+  end
+
+  def self.set_outdated_percentage
+    Package.protocol.where('collab_dependent_repos_count > 0').includes(:versions).each(&:set_outdated_percentage)
+  end
+
   private
 
   def spdx_license

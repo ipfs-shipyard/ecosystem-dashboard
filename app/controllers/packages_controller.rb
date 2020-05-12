@@ -15,6 +15,6 @@ class PackagesController < ApplicationController
   end
 
   def outdated
-    @packages = Package.platform('npm').where('collab_dependent_repos_count > 0').includes(:versions)
+    @packages = Package.platform('npm').where('outdated > 0').where('collab_dependent_repos_count > 0').order('outdated DESC')
   end
 end

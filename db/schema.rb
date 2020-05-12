@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_12_103305) do
+ActiveRecord::Schema.define(version: 2020_05_12_142647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 2020_05_12_103305) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "license_normalized", default: false
     t.integer "collab_dependent_repos_count"
+    t.integer "outdated"
     t.index ["platform", "name"], name: "index_packages_on_platform_and_name", unique: true
   end
 
