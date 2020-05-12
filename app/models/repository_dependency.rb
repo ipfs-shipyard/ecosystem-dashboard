@@ -10,6 +10,7 @@ class RepositoryDependency < ApplicationRecord
   scope :with_package_name, -> { where("repository_dependencies.package_name <> ''") }
   scope :platform, ->(platform) { where('lower(repository_dependencies.platform) = ?', platform.try(:downcase)) }
   scope :kind, ->(kind) { where(kind: kind) }
+  scope :active, -> { joins(:repository).where(repositories: {archived: false}) }
 
   # before_create :set_package_id
 
