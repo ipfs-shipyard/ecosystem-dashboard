@@ -24,7 +24,13 @@
       <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user, page: nil)) %>
       - opened <%= time_ago_in_words(issue.created_at) %> ago
       <% if issue.closed_at %>
-        - closed after <%= distance_of_time_in_words(issue.created_at, issue.closed_at) %>
+        -
+        <% if issue.merged_at == issue.closed_at %>
+        merged
+        <% else %>
+        closed
+        <% end %>
+        after <%= distance_of_time_in_words(issue.created_at, issue.closed_at) %>
       <% end %>
       <% if issue.contributed? && issue.first_response_at %>
         - first response took <%= distance_of_time_in_words(issue.created_at, issue.first_response_at) %>
