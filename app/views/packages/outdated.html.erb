@@ -1,9 +1,12 @@
 <h1>Outdated packages</h1>
 
-<table class='table'>
+<table class='table text-center'>
   <tr>
-    <th>
+    <th class="text-left">
       Package Name
+    </th>
+    <th>
+      Dependent Collab Repositories
     </th>
     <th>
       Dependent repos using outdated significant version
@@ -12,8 +15,14 @@
 
   <% @packages.each do |package| %>
       <tr>
-        <td>
+        <td class="text-left">
+          <%= link_to "https://github.com/#{package.repository.org}", target: :_blank, class: 'float-left mr-2' do %>
+            <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20'>
+          <% end %>
           <%= link_to "#{package.platform_name}/#{package.name}", package_path(id: package.id) %>
+        </td>
+        <td>
+          <%= package.collab_dependent_repos_count %>
         </td>
         <td>
           <%= package.outdated %>%
