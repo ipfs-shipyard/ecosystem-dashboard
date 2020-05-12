@@ -13,4 +13,8 @@ class PackagesController < ApplicationController
     @scope = Package.search_by_name(params[:query]).includes(:repository)
     @pagy, @packages = pagy(@scope)
   end
+
+  def outdated
+    @packages = Package.platform('npm').where('collab_dependent_repos_count > 0').includes(:versions)
+  end
 end

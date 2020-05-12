@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :packages do
     collection do
       get :search
+      get :outdated
     end
   end
   resources :repositories

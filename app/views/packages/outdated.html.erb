@@ -1,0 +1,34 @@
+<h1>Outdated packages</h1>
+
+<table class='table'>
+  <tr>
+    <th>
+      Package Name
+    </th>
+    <th>
+      Percentage using outdated major version
+    </th>
+  </tr>
+  <% packages =  @packages.map{|package|
+    major_versions = package.repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }
+    if major_versions.length > 1
+      groups = package.repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v }
+    else
+      groups = package.repository_dependencies.active.source.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }
+    end
+    outdated = groups[0..-2].map(&:last).flatten.length
+    outdated = (outdated.to_f/groups.sum(&:last).length*100).round(1)
+    [package, outdated]
+  } %>
+
+  <% packages.select{|p,o| o > 0}.sort_by{|p,o| o }.reverse.each do |package, outdated| %>
+      <tr>
+        <td>
+          <%= link_to "#{package.platform_name}/#{package.name}", package_path(id: package.id) %>
+        </td>
+        <td>
+          <%= outdated %>%
+        </td>
+      </tr>
+  <% end %>
+</table>
