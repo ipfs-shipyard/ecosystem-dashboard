@@ -1,4 +1,19 @@
 GIT
+  remote: https://github.com/andrew/bibliothecary
+  revision: 638530466883a77de33cbf26f35b1a4932272b8c
+  specs:
+    bibliothecary (6.8.6)
+      commander
+      deb_control
+      librariesio-gem-parser
+      ox (>= 2.8.1)
+      sdl4r
+      strings
+      strings-ansi
+      toml-rb (~> 2.0)
+      typhoeus
+
+GIT
   remote: https://github.com/andrew/languages.git
   revision: f9f35a47ed0f5fc30af2c17c8c7aac20dc5aaaf7
   specs:
@@ -84,16 +99,6 @@ GEM
       activesupport (>= 3.0.0)
     autoprefixer-rails (9.7.6)
       execjs
-    bibliothecary (6.8.6)
-      commander
-      deb_control
-      librariesio-gem-parser
-      ox (>= 2.8.1)
-      sdl4r
-      strings
-      strings-ansi
-      toml-rb (~> 1.0)
-      typhoeus
     bindex (0.8.1)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
@@ -255,7 +260,7 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    toml-rb (1.1.2)
+    toml-rb (2.0.1)
       citrus (~> 3.0, > 3.0)
     treetop (1.6.10)
       polyglot (~> 0.3)
@@ -282,7 +287,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bibliothecary
+  bibliothecary!
   bootsnap
   bootstrap
   chartkick

@@ -32,7 +32,7 @@ gem 'pg_query', '>= 0.9.0'
 gem 'pg_search'
 
 gem 'commonmarker'
-gem 'bibliothecary'
+gem 'bibliothecary', git: "https://github.com/andrew/bibliothecary"
 gem "license-compatibility"
 gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range"
