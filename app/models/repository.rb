@@ -17,6 +17,7 @@ class Repository < ApplicationRecord
   has_many :manifests, dependent: :destroy
   has_many :repository_dependencies
   has_many :dependencies, through: :manifests, source: :repository_dependencies
+  has_many :tags
 
   scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
   scope :not_protocol, -> { where.not(org: Issue::PROTOCOL_ORGS) }
