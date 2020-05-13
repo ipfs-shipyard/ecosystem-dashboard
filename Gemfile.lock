@@ -28,9 +28,9 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/spdx
-  revision: d3403ea88f7e8cd069c13ce453ffec7a163dc717
+  revision: 037a403d3da0acc4ee02b0447e26763c3c5e5abd
   specs:
-    spdx (2.0.4)
+    spdx (2.0.5)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
 
@@ -114,7 +114,7 @@ GEM
     commonmarker (0.21.0)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.6)
-    counter_culture (2.4.0)
+    counter_culture (2.5.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
       after_commit_action (~> 1.0)
