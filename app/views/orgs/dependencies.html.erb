@@ -12,7 +12,7 @@
       <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#package-<%= package.id %>">
         <%= link_to "#{package.platform_name}/#{package.name}", package_path(package.id) %>
         <small class='text-muted'>
-        <%= pluralize repository_dependencies.length, 'repository' %>
+        <%= pluralize repository_dependencies.group_by(&:repository).length, 'repository' %>
         </small>
       </div>
       <ul id='package-<%= package.id %>' class="list-group list-group-flush collapse">
