@@ -54,7 +54,7 @@
             <%= link_to repository.full_name, repository %>
             <small class='text-muted'>
               <% dep = dependencies.sort_by(&:requirements).first %>
-              <%= dep.requirements %>
+              <%= dependencies.map(&:requirements).uniq.sort.join(', ') %>
               <% if dep.latest_resolvable_version && dep.outdated? %>
                 <% if major_versions.length < 2 || dep.latest_resolvable_version.semantic_version.major < @package.latest_stable_release.semantic_version.major %>
                   <span class='badge badge-danger' title='Latest stable version is <%= @package.latest_stable_release_number %>' >Outdated</span>
