@@ -91,7 +91,7 @@ class Package < ApplicationRecord
 
   scope :protocol, -> { where(repository_id: Repository.protocol.pluck(:id)) }
 
-  after_commit :update_repository_async, on: :create
+  # after_commit :update_repository_async, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
   before_save  :update_details
   before_destroy :destroy_versions
