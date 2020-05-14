@@ -74,6 +74,7 @@ class Issue < ApplicationRecord
   def self.update_from_github(repo_full_name, remote_issue)
     begin
       issue = Issue.find_or_create_by(repo_full_name: repo_full_name, number: remote_issue.number)
+      issue.github_id = remote_issue.id
       issue.title = remote_issue.title.delete("\u0000")
       issue.body = remote_issue.body.try(:delete, "\u0000")
       issue.state = remote_issue.state
