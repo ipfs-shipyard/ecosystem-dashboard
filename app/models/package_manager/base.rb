@@ -165,7 +165,7 @@ module PackageManager
     def self.save_dependencies(mapped_package)
       name = mapped_package[:name]
       proj = Package.find_by(name: name, platform: self.name.demodulize)
-      proj.versions.order('published_at DESC').limit(10).includes(:dependencies).each do |version|
+      proj.versions.order('published_at DESC').includes(:dependencies).each do |version|
         next if version.dependencies.any?
 
         deps = begin
