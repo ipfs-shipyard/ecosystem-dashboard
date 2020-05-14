@@ -64,9 +64,13 @@ class Issue < ApplicationRecord
   end
 
   def self.download(repo_full_name)
-    remote_issues = github_client.issues(repo_full_name, state: 'all', since: 1.week.ago)
-    remote_issues.each do |remote_issue|
-      update_from_github(repo_full_name, remote_issue)
+    begin
+      remote_issues = github_client.issues(repo_full_name, state: 'all', since: 1.week.ago)
+      remote_issues.each do |remote_issue|
+        update_from_github(repo_full_name, remote_issue)
+      end
+    rescue Octokit::NotFound
+      # its gone
     end
     nil
   end
