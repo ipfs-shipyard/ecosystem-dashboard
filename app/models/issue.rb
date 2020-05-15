@@ -117,24 +117,12 @@ class Issue < ApplicationRecord
     Issue.protocol.unlocked.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
   end
 
-  def self.active_collab_repo_names
-    Issue.not_protocol.unlocked.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
-  end
-
   def self.org_contributor_names(org_name)
     Issue.org(org_name).not_employees.group(:user).count
   end
 
-  def self.collab_orgs
-    Issue.not_protocol.group(:org).count
-  end
-
   def self.download_new_repos
     new_repo_names.each{|repo_full_name| download(repo_full_name) }
-  end
-
-  def self.download_new_collab_repos
-    new_collab_repo_names.each{|repo_full_name| download(repo_full_name) }
   end
 
   def self.new_repo_names
@@ -143,18 +131,8 @@ class Issue < ApplicationRecord
     end.flatten
   end
 
-  def self.new_collab_repo_names
-    collab_orgs.keys.map do |org_name|
-      org_repo_names(org_name) - active_repo_names
-    end.flatten
-  end
-
   def self.download_active_repos
     active_repo_names.each{|repo_full_name| download(repo_full_name) }
-  end
-
-  def self.download_active_collab_repos
-    active_collab_repo_names.each{|repo_full_name| download(repo_full_name) }
   end
 
   def self.update_collab_labels
