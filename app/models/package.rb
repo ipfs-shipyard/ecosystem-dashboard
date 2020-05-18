@@ -485,6 +485,7 @@ class Package < ApplicationRecord
     else
       groups = repository_dependencies.active.source.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }
     end
+    return if groups.empty?
     outdated = groups[0..-2].map(&:last).flatten.length
     outdated_percentage = (outdated.to_f/groups.sum(&:last).length*100).round(1)
     update_attribute(:outdated, outdated_percentage)
