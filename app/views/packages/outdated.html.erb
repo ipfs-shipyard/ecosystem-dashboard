@@ -3,25 +3,43 @@
 <table class='table text-center'>
   <tr>
     <th class="text-left">
+      Org
+    </th>
+    <th class="text-left">
+      PM
+    </th>
+    <th class="text-left">
       Package Name
     </th>
     <th>
-      Dependent Collab Repositories
+      Last release
     </th>
     <th>
-      Dependent repos using outdated significant version
+      Collab Usage
+    </th>
+    <th>
+      % outdated
     </th>
   </tr>
 
   <% @packages.each do |package| %>
       <tr>
-        <td class="text-left">
+        <td>
           <% if package.repository %>
-            <%= link_to "https://github.com/#{package.repository.org}", target: :_blank, class: 'float-left mr-2' do %>
+            <%= link_to "https://github.com/#{package.repository.org}", title: package.repository.org, target: :_blank, class: 'float-left mr-2' do %>
               <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20'>
             <% end %>
           <% end %>
-          <%= link_to "#{package.platform_name}/#{package.name}", package_path(id: package.id) %>
+        </td>
+        <td class="text-left">
+          <%= package.platform_name %>
+        </td>
+        <td class="text-left">
+          <%= link_to package.name, package_path(id: package.id) %>
+          <small class='text-muted'><%= package.latest_stable_release_number %></small>
+        </td>
+        <td>
+          <%= distance_of_time_in_words_to_now package.latest_release_published_at %> ago
         </td>
         <td>
           <%= package.collab_dependent_repos_count %>
