@@ -16,8 +16,10 @@
   <% @packages.each do |package| %>
       <tr>
         <td class="text-left">
-          <%= link_to "https://github.com/#{package.repository.org}", target: :_blank, class: 'float-left mr-2' do %>
-            <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20'>
+          <% if package.repository %>
+            <%= link_to "https://github.com/#{package.repository.org}", target: :_blank, class: 'float-left mr-2' do %>
+              <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20'>
+            <% end %>
           <% end %>
           <%= link_to "#{package.platform_name}/#{package.name}", package_path(id: package.id) %>
         </td>
