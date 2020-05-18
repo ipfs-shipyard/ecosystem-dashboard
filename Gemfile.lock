@@ -28,9 +28,9 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/spdx
-  revision: 60907c2afc9c9281b76a28bdcdd6b33a108f0036
+  revision: a1deea4e22bd4397952ead22d26fca226ff04621
   specs:
-    spdx (2.0.7)
+    spdx (2.0.8)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
 
@@ -164,7 +164,7 @@ GEM
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.0)
+    minitest (5.14.1)
     msgpack (1.3.3)
     multipart-post (2.1.1)
     nio4r (2.5.2)
