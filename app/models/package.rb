@@ -33,6 +33,7 @@ class Package < ApplicationRecord
   has_many :dependent_packages, -> { group('packages.id') }, through: :dependent_versions, source: :packages, class_name: 'Package'
   has_many :repository_dependencies
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.stargazers_count DESC') }, through: :repository_dependencies, source: :repository
+  has_many :direct_dependent_repositories, -> { where(repository_dependencies: {direct: true}).group('repositories.id').order('repositories.stargazers_count DESC') }, through: :repository_dependencies, source: :repository
 
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
   scope :lower_platform, ->(platform) { where('lower(packages.platform) = ?', platform.try(:downcase)) }
@@ -90,6 +91,7 @@ class Package < ApplicationRecord
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 2.weeks.ago)}
 
   scope :protocol, -> { where(repository_id: Repository.protocol.pluck(:id)) }
+  scope :not_protocol, -> { where.not(repository_id: Repository.protocol.pluck(:id)) }
 
   after_commit :update_repository, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
@@ -226,7 +228,7 @@ class Package < ApplicationRecord
     return if destroyed?
     new_dependents_count = dependents.joins(:version).pluck(Arel.sql('DISTINCT versions.package_id')).count
     new_dependent_repos_count = dependent_repositories.active.source.count.length
-    new_collab_dependent_repos_count = dependent_repositories.active.source.not_protocol.count.length
+    new_collab_dependent_repos_count = direct_dependent_repositories.active.source.not_protocol.count.length
 
     updates = {}
     updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count

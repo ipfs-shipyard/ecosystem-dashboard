@@ -7,7 +7,7 @@ class PackagesController < ApplicationController
   def show
     @package = Package.find(params[:id])
     direct = params[:direct] == 'false' ? false : true
-    @repository_dependencies = @package.repository_dependencies.where(direct: direct).active.source.includes(:repository, :manifest)
+    @repository_dependencies = @package.repository_dependencies.not_protocol.where(direct: direct).active.source.includes(:repository, :manifest)
   end
 
   def search

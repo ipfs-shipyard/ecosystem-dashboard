@@ -13,6 +13,8 @@ class RepositoryDependency < ApplicationRecord
   scope :active, -> { joins(:repository).where(repositories: {archived: false}) }
   scope :source, -> { joins(:repository).where(repositories: {fork: false}) }
 
+  scope :not_protocol, -> { where.not(repository_id: Repository.protocol.pluck(:id)) }
+
   before_create :set_package_id
 
   alias_attribute :name, :package_name
