@@ -74,6 +74,7 @@ class Repository < ApplicationRecord
       repo.default_branch = remote_repo.default_branch
       repo.last_sync_at = Time.now
       repo.save
+      # repo.download_manifests
       repo
     rescue ArgumentError, Octokit::Error
       # derp
@@ -184,7 +185,8 @@ class Repository < ApplicationRecord
           platform: platform,
           requirements: dep[:requirement],
           kind: dep[:type],
-          repository_id: self.id
+          repository_id: self.id,
+          direct: manifest.kind == 'manifest'
         })
       end
     end
