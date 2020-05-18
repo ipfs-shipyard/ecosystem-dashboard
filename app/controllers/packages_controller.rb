@@ -6,7 +6,8 @@ class PackagesController < ApplicationController
 
   def show
     @package = Package.find(params[:id])
-    @repository_dependencies = @package.repository_dependencies.active.source.includes(:repository, :manifest)
+    direct = params[:direct] == 'false' ? false : true
+    @repository_dependencies = @package.repository_dependencies.where(direct: direct).active.source.includes(:repository, :manifest)
   end
 
   def search

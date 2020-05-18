@@ -38,6 +38,15 @@
 
 <h5>Dependent Repositories</h5>
 
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:direct] != 'false' %>" href="<%= url_for(request.params.merge(direct: true)) %>">Direct Dependent Repositories</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false)) %>">Transitive Dependent Repositories</a>
+  </li>
+</ul>
+
 <div class="dependencies">
   <% @repository_dependencies.group_by{|rd| rd.repository.org }.sort_by{|o,rd| o }.each do |org, repository_dependencies| %>
     <div class="card mb-3">
