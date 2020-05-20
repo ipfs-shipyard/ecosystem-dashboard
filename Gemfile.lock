@@ -191,7 +191,7 @@ GEM
     polyglot (0.3.5)
     popper_js (1.16.0)
     public_suffix (4.0.5)
-    puma (4.3.4)
+    puma (4.3.5)
       nio4r (~> 2.0)
     rack (2.2.2)
     rack-test (1.1.0)
