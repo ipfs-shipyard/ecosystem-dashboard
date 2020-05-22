@@ -22,7 +22,11 @@
     </h5>
     <small class='text-muted'>
       <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user, page: nil)) %>
-      - opened <%= time_ago_in_words(issue.created_at) %> ago
+      <% if params[:sort] == 'updated_at' %>
+        - last updated <%= time_ago_in_words(issue.updated_at) %> ago
+      <% else %>
+        - opened <%= time_ago_in_words(issue.created_at) %> ago
+      <% end %>
       <% if issue.closed_at %>
         -
         <% if issue.merged_at == issue.closed_at %>

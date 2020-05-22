@@ -101,7 +101,10 @@ class IssuesController < ApplicationController
       end
     end
 
-    @pagy, @issues = pagy(@scope.order('issues.created_at DESC'))
+    sort = params[:sort] || 'created_at'
+    order = params[:order] || 'desc'
+
+    @pagy, @issues = pagy(@scope.order(sort => order))
 
     @users = @scope.group(:user).count
     @states = @scope.unscope(where: :state).group(:state).count
