@@ -26,3 +26,5 @@
 *.dump
 
 *topics*
+
+data/*
