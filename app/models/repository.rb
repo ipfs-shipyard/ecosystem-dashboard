@@ -85,6 +85,11 @@ class Repository < ApplicationRecord
     "https://github.com/#{full_name}"
   end
 
+  def blob_url(sha = nil)
+    sha ||= default_branch
+    "#{html_url}/blob/#{sha}/"
+  end
+
   def download_events
     client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
     events = client.repository_events(full_name, auto_paginate: false, headers: {'If-None-Match' => etag})

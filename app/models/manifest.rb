@@ -9,4 +9,8 @@ class Manifest < ApplicationRecord
   def repository_link
     repository.blob_url(branch) + filepath
   end
+
+  def lockfile?
+    kind == 'lockfile'
+  end
 end
