@@ -25,13 +25,13 @@ class IssuesController < ApplicationController
   end
 
   def weekly
-    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").all_collabs.not_draft
+    @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''").all_collabs.not_draft.where('closed_at > ? OR created_at > ?', 1.week.ago, 1.week.ago)
+    apply_filters
     @opened = @scope.where('created_at > ?', 1.week.ago)
     @closed = @scope.where('closed_at > ?', 1.week.ago)
-    @both = @scope.where('closed_at > ? OR created_at > ?', 1.week.ago, 1.week.ago)
-    @pagy, @issues = pagy(@both.order('issues.created_at DESC'))
-    @collabs = @both.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
-    @users = @both.group(:user).count
+    @pagy, @issues = pagy(@scope.order('issues.created_at DESC'))
+    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+    @users = @scope.group(:user).count
   end
 
   def slow_response
