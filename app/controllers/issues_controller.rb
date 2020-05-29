@@ -29,7 +29,10 @@ class IssuesController < ApplicationController
     apply_filters
     @opened = @scope.where('created_at > ?', 1.week.ago)
     @closed = @scope.where('closed_at > ?', 1.week.ago)
-    @pagy, @issues = pagy(@scope.order('issues.created_at DESC'))
+    sort = params[:sort] || 'created_at'
+    order = params[:order] || 'desc'
+
+    @pagy, @issues = pagy(@scope.order(sort => order))
     @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
     @users = @scope.group(:user).count
   end
@@ -59,7 +62,11 @@ class IssuesController < ApplicationController
     ]
 
     @slow = @scope.slow_response
-    @pagy, @issues = pagy(@slow.order('issues.created_at DESC'))
+
+    sort = params[:sort] || 'created_at'
+    order = params[:order] || 'desc'
+
+    @pagy, @issues = pagy(@slow.order(sort => order))
 
     @collabs = @slow.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
     @users = @slow.group(:user).count
@@ -68,6 +75,12 @@ class IssuesController < ApplicationController
   private
 
   def apply_filters
+    @scope = @scope.exclude_user(params[:exclude_user]) if params[:exclude_user].present?
+    @scope = @scope.exclude_repo(params[:exclude_repo]) if params[:exclude_repo].present?
+    @scope = @scope.exclude_org(params[:exclude_org]) if params[:exclude_org].present?
+    @scope = @scope.exclude_language(params[:exclude_language]) if params[:exclude_language].present?
+    @scope = @scope.exclude_collab(params[:exclude_collab]) if params[:exclude_collab].present?
+
     @scope = @scope.where(comments_count: 0) if params[:uncommented].present?
 
     @scope = @scope.where('created_at > ?', 1.month.ago) if params[:recent].present?

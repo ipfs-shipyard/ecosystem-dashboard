@@ -2,6 +2,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def collab_title
+    return nil if action_name == 'all'
     params[:collab].presence || 'collab'
   end
 

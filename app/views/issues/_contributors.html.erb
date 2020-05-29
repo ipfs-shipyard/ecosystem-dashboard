@@ -1,0 +1,19 @@
+<% if @users.any? %>
+  <h5>
+    Top <%= collab_title %> contributors
+    <small class='text-muted'>
+      <%= number_with_delimiter @users.length %>
+    </small>
+  </h5>
+  <ul class="list-group">
+    <% @users.sort_by(&:last).reverse.first(25).each do |user, count| %>
+      <li class="list-group-item">
+        <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20'>
+        <%= user %>
+        <small class='text-muted'>
+          <%= number_with_delimiter count %>
+        </small>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

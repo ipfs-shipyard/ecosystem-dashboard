@@ -1,0 +1,19 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle <%= 'active' if params[:state].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">State</a>
+  <div class="dropdown-menu">
+    <% @states.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |state,count| %>
+      <% if params[:state].present? &&  state == params[:state] %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, state: nil)) %>">
+        <%= state %>
+      </a>
+      <% else %>
+        <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, state: state)) %>">
+          <%= state %>
+          <small class='text-muted'>
+            <%= number_with_delimiter count %>
+          </small>
+        </a>
+      <% end %>
+    <% end %>
+  </div>
+</li>

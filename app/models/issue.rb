@@ -60,6 +60,12 @@ class Issue < ApplicationRecord
   scope :draft, -> { where(draft: true) }
   scope :not_draft, -> { where('draft IS NULL or draft is false') }
 
+  scope :exclude_user, ->(user) { where.not(user: user) }
+  scope :exclude_repo, ->(repo_full_name) { where.not(repo_full_name: repo_full_name) }
+  scope :exclude_org, ->(org) { where.not(org: org) }
+  scope :exclude_language, ->(language) { where.not('repo_full_name ilike ?', "%/#{language}-%") }
+  scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
+
   def contributed?
     !Issue::EMPLOYEES.include?(user)
   end

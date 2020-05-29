@@ -5,3 +5,14 @@
 //= require turbolinks
 //= require Chart.bundle
 //= require_tree .
+
+document.addEventListener("turbolinks:load", function() {
+  $(".dropdown-item").click(function (e) {
+    if ($(this).data().alt.length > 0) {
+      if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey){
+        e.preventDefault();
+        window.location = $(this).data().alt
+      }
+    }
+  });
+})
