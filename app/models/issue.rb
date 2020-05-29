@@ -10,7 +10,7 @@ class Issue < ApplicationRecord
           'release-drafter[bot]', 'allcontributors[bot]', 'now[bot]', 'move[bot]',
           'welcome[bot]', 'dependency-lockfile-snitch[bot]', 'netlify[bot]', 'renovate[bot]',
           'delete-merged-branch[bot]', 'parity-cla-bot', 'snyk-bot',  'metamaskbot',
-          'arabot-1', 'status-im-bot']
+          'arabot-1', 'status-im-bot', 'ipfs-helper']
   EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
                 "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
                 "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
