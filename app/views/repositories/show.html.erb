@@ -14,16 +14,30 @@
   Language: <%= @repository.language %><br/>
   Last pushed: <%= distance_of_time_in_words_to_now @repository.pushed_at %> ago<br/>
   Size: <%= number_to_human_size @repository.size*1000 %><br/>
-  Dependencies: <%= number_with_delimiter @repository.dependencies.count %>
+  Dependencies: <%= number_with_delimiter @manifests.map(&:repository_dependencies).flatten.length %>
 </small>
 </p>
 
-<% if @repository.manifests.any? %>
+<% if @repository.packages.present? %>
+  <h5>Packages</h5>
+
+  <div class="card mb-3">
+    <ul class="list-group list-group-flush">
+      <% @repository.packages.each do |package| %>
+        <li class="list-group-item">
+          <%= package.platform_name %> - <%= link_to package.name, package_path(package.id) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @manifests.present? %>
   <h5>
     Dependencies
   </h5>
 
-  <% @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC').each do |manifest| %>
+  <% @manifests.each do |manifest| %>
     <div class="card mb-3">
       <div class="card-header">
         <%= link_to manifest.filepath, manifest.repository_link, target: :_blank %>

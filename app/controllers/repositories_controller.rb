@@ -27,5 +27,6 @@ class RepositoriesController < ApplicationController
 
   def show
     @repository = Repository.find(params[:id])
+    @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
   end
 end
