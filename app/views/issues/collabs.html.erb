@@ -14,6 +14,10 @@
 
         <ul class="list-group list-group-flush">
           <li class="list-group-item pt-2 pb-2">
+            <%= octicon('repo') %> Repositories
+            <small class='text-muted'><%= number_with_delimiter Repository.where(org: collab).count %></small>
+          </li>
+          <li class="list-group-item pt-2 pb-2">
             <%= octicon('issue-opened') %> Issues
             <small class='text-muted'><%= number_with_delimiter @scope.collab(collab).select(:html_url).reject(&:pull_request?).length %></small>
           </li>

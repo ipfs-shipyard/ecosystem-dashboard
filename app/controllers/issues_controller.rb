@@ -14,7 +14,7 @@ class IssuesController < ApplicationController
 
   def collabs
     @scope = Issue.protocol.not_employees.unlocked.where("html_url <> ''")
-    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+    @collabs = Repository.not_protocol.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
   end
 
   def all
