@@ -129,12 +129,10 @@ GEM
     ethon (0.12.0)
       ffi (>= 1.3.0)
     execjs (2.7.0)
-    faraday (0.15.4)
+    faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
-    faraday-http-cache (2.2.0)
-      faraday (>= 0.8)
-    faraday_middleware (0.14.0)
-      faraday (>= 0.7.4, < 1.0)
+    faraday_middleware (1.0.0)
+      faraday (~> 1.0)
     ffi (1.12.2)
     fuzzy_match (2.1.0)
     globalid (0.4.2)
@@ -294,8 +292,7 @@ DEPENDENCIES
   commonmarker
   counter_culture
   dotenv-rails
-  faraday (= 0.15.4)
-  faraday-http-cache
+  faraday
   faraday_middleware
   groupdate
   jquery-rails
