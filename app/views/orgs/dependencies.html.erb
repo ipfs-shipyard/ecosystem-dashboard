@@ -10,6 +10,11 @@
   <% @protocol_packages.each do |package, repository_dependencies| %>
     <div class="card mb-1">
       <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#package-<%= package.id %>">
+        <% if package.repository %>
+          <%= link_to "https://github.com/#{package.repository.org}", title: package.repository.org, target: :_blank, class: 'float-left mr-2' do %>
+            <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20'>
+          <% end %>
+        <% end %>
         <%= package.platform_name %> - <%= link_to package.name, package_path(package.id) %>
         <small class='text-muted'>
         <%= pluralize repository_dependencies.group_by(&:repository).length, 'repository' %>
