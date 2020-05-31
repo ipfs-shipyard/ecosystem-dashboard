@@ -51,7 +51,8 @@ class Repository < ApplicationRecord
 
   def self.import_org(org)
     Repository.download_org_repos(org)
-    Repository.org(org).each(&:download_events)
+    Repository.org(org).update_all(etag: nil)
+    Repository.org(org).each(&:sync_events)
     Repository.org(org).each(&:download_manifests)
   end
 
