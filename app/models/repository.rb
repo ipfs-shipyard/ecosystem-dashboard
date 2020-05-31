@@ -54,6 +54,7 @@ class Repository < ApplicationRecord
     Repository.org(org).update_all(etag: nil)
     Repository.org(org).each(&:sync_events)
     Repository.org(org).each(&:download_manifests)
+    Issue.update_collab_labels
   end
 
   def self.update_from_github(remote_repo)
