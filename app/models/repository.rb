@@ -127,8 +127,10 @@ class Repository < ApplicationRecord
       next unless repo
       e = repo.sync_events
       if e.any?
-        Issue.download(full_name) if Issue::PROTOCOL_ORGS.include?(org)
-        Issue.protocol.where(repo_full_name: full_name).where('updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
+        if Issue::PROTOCOL_ORGS.include?(org)
+          Issue.download(full_name)
+          Issue.protocol.where(repo_full_name: full_name).where('updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
+        end
         Repository.download(full_name) if existing_repo
       end
     end
