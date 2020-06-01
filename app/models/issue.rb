@@ -181,8 +181,9 @@ class Issue < ApplicationRecord
       e = events.first
 
       first_response_at = e.created_at || e.submitted_at
+      response_time = first_response_at - created_at
 
-      update_columns(first_response_at: first_response_at, response_time: first_response_at - created_at)
+      update_columns(first_response_at: first_response_at, response_time: response_time) if response_time > 0
     rescue Octokit::NotFound
       destroy
     end
