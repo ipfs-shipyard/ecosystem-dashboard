@@ -26,7 +26,7 @@ class Issue < ApplicationRecord
                 'nicola', 'hannahhoward', 'renrutnnej', 'marten-seemann', 'cwaring',
                 'AfonsoVReis', 'pkafei', 'jkosem', 'aarshkshah1992', 'thattommyhall',
                 'rafaelramalho19', 'andyschwab', 'parkan', 'yiannisbot', 'Gozala', 'petar',
-                'schomatis']
+                'schomatis', 'gmasgras', 'protocollabsit']
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
