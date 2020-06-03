@@ -2,8 +2,8 @@ class Event < ApplicationRecord
 
   belongs_to :repository
 
-  scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
-  scope :not_protocol, -> { where.not(org: Issue::PROTOCOL_ORGS) }
+  scope :internal, -> { where(org: Issue::INTERNAL_ORGS) }
+  scope :external, -> { where.not(org: Issue::INTERNAL_ORGS) }
   scope :org, ->(org) { where(org: org) }
   scope :user, ->(user) { where(actor: user)}
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
@@ -11,8 +11,8 @@ class Event < ApplicationRecord
 
   scope :humans, -> { where.not(actor: Issue::BOTS + ['ghost']) }
   scope :bots, -> { where(actor: Issue::BOTS) }
-  scope :employees, -> { where(actor: Issue::EMPLOYEES) }
-  scope :not_employees, -> { where.not(actor: Issue::EMPLOYEES + Issue::BOTS) }
+  scope :core, -> { where(actor: Issue::CORE_CONTRIBUTORS) }
+  scope :not_core, -> { where.not(actor: Issue::CORE_CONTRIBUTORS + Issue::BOTS) }
 
   def self.record_event(repository, event_json)
     e = Event.find_or_initialize_by(github_id: event_json.id)

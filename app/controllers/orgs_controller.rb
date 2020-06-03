@@ -1,12 +1,12 @@
 class OrgsController < ApplicationController
-  def protocol
+  def internal
     scope = Issue.all
 
     if params[:range].present?
       scope = scope.where('created_at > ?', params[:range].to_i.days.ago)
     end
 
-    @orgs =Issue::PROTOCOL_ORGS.map do |org|
+    @orgs = Issue::INTERNAL_ORGS.map do |org|
       load_org_data(scope, org)
     end
   end
@@ -28,15 +28,15 @@ class OrgsController < ApplicationController
     @scope = @scope.event_type(params[:event_type]) if params[:event_type].present?
     @pagy, @events = pagy(@scope.order('created_at DESC'))
 
-    @repos = @scope.unscope(where: :repository_full_name).protocol.group(:repository_full_name).count
+    @repos = @scope.unscope(where: :repository_full_name).internal.group(:repository_full_name).count
     @users = @scope.unscope(where: :actor).humans.group(:actor).count
     @event_types = @scope.unscope(where: :event_type).group(:event_type).count
   end
 
   def dependencies
     @repositories = Repository.archived(false).fork(false).where('pushed_at > ?', 1.year.ago).org(params[:id])
-    @dependencies = RepositoryDependency.protocol.where(repository_id: @repositories.pluck(:id)).includes({package: :versions}, :repository, :manifest)
-    @protocol_packages = @dependencies.group_by(&:package).sort_by{|p,rd| [-rd.length, p.name] }
+    @dependencies = RepositoryDependency.internal.where(repository_id: @repositories.pluck(:id)).includes({package: :versions}, :repository, :manifest)
+    @internal_packages = @dependencies.group_by(&:package).sort_by{|p,rd| [-rd.length, p.name] }
   end
 
   private
@@ -51,8 +51,8 @@ class OrgsController < ApplicationController
       open_pull_requests_count: scope.pull_requests.org(org).state('open').count,
       closed_pull_requests_count: scope.pull_requests.org(org).state('closed').count,
       comments: scope.org(org).sum(:comments_count),
-      contributors: scope.org(org).humans.employees.group(:user).count.sort_by(&:last).reverse,
-      community_contributors: scope.org(org).not_employees.group(:user).count.sort_by(&:last).reverse,
+      contributors: scope.org(org).humans.core.group(:user).count.sort_by(&:last).reverse,
+      community_contributors: scope.org(org).not_core.group(:user).count.sort_by(&:last).reverse,
       bots: scope.org(org).bots.group(:user).count.sort_by(&:last).reverse,
       repos: scope.org(org).group(:repo_full_name).count.sort_by(&:last).reverse
     }

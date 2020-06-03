@@ -1,6 +1,6 @@
 class Issue < ApplicationRecord
 
-  PROTOCOL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld', 'ProtoSchool', 'ipfs-cluster', 'ipfs-inactive']
+  INTERNAL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld', 'ProtoSchool', 'ipfs-cluster', 'ipfs-inactive']
   BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
           'greenkeeperio-bot', 'rollbar[bot]', 'guardrails[bot]',
           'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]',
@@ -11,7 +11,7 @@ class Issue < ApplicationRecord
           'welcome[bot]', 'dependency-lockfile-snitch[bot]', 'netlify[bot]', 'renovate[bot]',
           'delete-merged-branch[bot]', 'parity-cla-bot', 'snyk-bot',  'metamaskbot',
           'arabot-1', 'status-im-bot', 'ipfs-helper']
-  EMPLOYEES = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
+  CORE_CONTRIBUTORS = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
                 "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
                 "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
                 "raulk", "olizilla", "satazor", "magik6k", "flyingzumwalt", "kevina",
@@ -30,12 +30,12 @@ class Issue < ApplicationRecord
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
-  scope :protocol, -> { where(org: PROTOCOL_ORGS) }
-  scope :not_protocol, -> { where.not(org: PROTOCOL_ORGS) }
+  scope :internal, -> { where(org: INTERNAL_ORGS) }
+  scope :external, -> { where.not(org: INTERNAL_ORGS) }
   scope :humans, -> { where.not(user: BOTS + ['ghost']) }
   scope :bots, -> { where(user: BOTS) }
-  scope :employees, -> { where(user: EMPLOYEES) }
-  scope :not_employees, -> { where.not(user: EMPLOYEES + BOTS) }
+  scope :core, -> { where(user: CORE_CONTRIBUTORS) }
+  scope :not_core, -> { where.not(user: CORE_CONTRIBUTORS + BOTS) }
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
 
@@ -67,7 +67,7 @@ class Issue < ApplicationRecord
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
   def contributed?
-    !Issue::EMPLOYEES.include?(user)
+    !Issue::CORE_CONTRIBUTORS.include?(user)
   end
 
   def self.download(repo_full_name)
@@ -121,11 +121,11 @@ class Issue < ApplicationRecord
   end
 
   def self.active_repo_names
-    Issue.protocol.unlocked.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
+    Issue.internal.unlocked.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
   end
 
   def self.org_contributor_names(org_name)
-    Issue.org(org_name).not_employees.group(:user).count
+    Issue.org(org_name).not_core.group(:user).count
   end
 
   def self.download_new_repos
@@ -133,7 +133,7 @@ class Issue < ApplicationRecord
   end
 
   def self.new_repo_names
-    PROTOCOL_ORGS.map do |org_name|
+    INTERNAL_ORGS.map do |org_name|
       org_repo_names(org_name) - active_repo_names
     end.flatten
   end
@@ -143,9 +143,9 @@ class Issue < ApplicationRecord
   end
 
   def self.update_collab_labels
-    Issue.unlocked.protocol.where('created_at > ?', 1.month.ago).not_employees.group(:user).count.each do |u, count|
-      collabs = Event.not_protocol.user(u).event_type('PushEvent').group(:org).count.map(&:first)
-      Issue.protocol.unlocked.where(user: u).update_all(collabs: collabs)
+    Issue.unlocked.internal.where('created_at > ?', 1.month.ago).not_core.group(:user).count.each do |u, count|
+      collabs = Event.external.user(u).event_type('PushEvent').group(:org).count.map(&:first)
+      Issue.internal.unlocked.where(user: u).update_all(collabs: collabs)
     end
   end
 
@@ -154,7 +154,7 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_pull_requests(time_range = 1.week.ago)
-    protocol.pull_requests.where('created_at > ?', time_range).where(merged_at: nil).find_each(&:download_pull_request)
+    internal.pull_requests.where('created_at > ?', time_range).where(merged_at: nil).find_each(&:download_pull_request)
   end
 
   def download_pull_request
@@ -173,10 +173,12 @@ class Issue < ApplicationRecord
     return if first_response_at.present?
     begin
       events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview')
-      events = events.select{|e| (e.actor && Issue::EMPLOYEES.include?(e.actor.login)) || (e.user && Issue::EMPLOYEES.include?(e.user.login)) } # filter for events by employees
-      events = events.select{|e| !['subscribed', 'mentioned'].include?(e.event)  } # ignore events where actor isn't who acted
-
-      return if events.empty? # no employee response yet
+      # filter for events by core contributors
+      events = events.select{|e| (e.actor && Issue::CORE_CONTRIBUTORS.include?(e.actor.login)) || (e.user && Issue::CORE_CONTRIBUTORS.include?(e.user.login)) }
+      # ignore events where actor isn't who acted
+      events = events.select{|e| !['subscribed', 'mentioned'].include?(e.event)  }
+      # bail if no core contributor response yet
+      return if events.empty?
 
       e = events.first
 
@@ -190,7 +192,7 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_recent
-    Issue.where('created_at > ?', 9.days.ago).state('open').not_employees.unlocked.where("html_url <> ''").each(&:sync)
+    Issue.where('created_at > ?', 9.days.ago).state('open').not_core.unlocked.where("html_url <> ''").each(&:sync)
   end
 
   def sync

@@ -87,7 +87,7 @@
           <% end %>
 
           <li class="list-group-item pt-2 pb-2">
-            <%= octicon('briefcase') %> PL Contributors
+            <%= octicon('briefcase') %> Core Contributors
             <small class='text-muted'><%= number_with_delimiter org[:contributors].length %></small>
           </li>
           <% org[:contributors].first(5).each do |user, count| %>

@@ -90,8 +90,8 @@ class Package < ApplicationRecord
   scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order(Arel.sql("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC")) }
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 2.weeks.ago)}
 
-  scope :protocol, -> { where(repository_id: Repository.protocol.pluck(:id)) }
-  scope :not_protocol, -> { where.not(repository_id: Repository.protocol.pluck(:id)) }
+  scope :internal, -> { where(repository_id: Repository.internal.pluck(:id)) }
+  scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
 
   after_commit :update_repository, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
@@ -228,7 +228,7 @@ class Package < ApplicationRecord
     return if destroyed?
     new_dependents_count = dependents.joins(:version).pluck(Arel.sql('DISTINCT versions.package_id')).count
     new_dependent_repos_count = dependent_repositories.active.source.count.length
-    new_collab_dependent_repos_count = direct_dependent_repositories.active.source.not_protocol.count.length
+    new_collab_dependent_repos_count = direct_dependent_repositories.active.source.external.count.length
 
     updates = {}
     updates[:dependents_count] = new_dependents_count if read_attribute(:dependents_count) != new_dependents_count
@@ -481,11 +481,11 @@ class Package < ApplicationRecord
   end
 
   def set_outdated_percentage
-    major_versions = repository_dependencies.not_protocol.where(direct: true).active.source.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v }
+    major_versions = repository_dependencies.external.where(direct: true).active.source.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v }
     if major_versions.length > 1
       groups = major_versions
     else
-      groups = repository_dependencies.not_protocol.where(direct: true).active.source.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }
+      groups = repository_dependencies.external.where(direct: true).active.source.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }
     end
     return if groups.empty?
     outdated = groups[0..-2].map(&:last).flatten.length
@@ -494,7 +494,7 @@ class Package < ApplicationRecord
   end
 
   def self.set_outdated_percentage
-    Package.protocol.where('collab_dependent_repos_count > 0').includes(:versions).each(&:set_outdated_percentage)
+    Package.internal.where('collab_dependent_repos_count > 0').includes(:versions).each(&:set_outdated_percentage)
   end
 
   private

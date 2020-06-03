@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get 'orgs/:id/dependencies', to: 'orgs#dependencies', as: :org_dependencies
   get 'orgs/:id/events', to: 'orgs#events', as: :org_events
   get 'orgs/:id', to: 'orgs#show', as: :org
-  get 'orgs', to: 'orgs#protocol'
+  get 'orgs', to: 'orgs#internal'
 
 
   root to: 'issues#index'

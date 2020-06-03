@@ -53,7 +53,7 @@
           <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
         <% end %>
       <% else %>
-        <span class='badge badge-dark'>PL</span>
+        <span class='badge badge-dark'>Core</span>
       <% end %>
       <% issue.labels.first(5).each do |label| %>
         <span class='badge badge-light'>

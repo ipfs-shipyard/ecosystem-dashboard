@@ -13,7 +13,7 @@ class RepositoryDependency < ApplicationRecord
   scope :active, -> { joins(:repository).where(repositories: {archived: false}) }
   scope :source, -> { joins(:repository).where(repositories: {fork: false}) }
 
-  scope :not_protocol, -> { where.not(repository_id: Repository.protocol.pluck(:id)) }
+  scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
 
   before_create :set_package_id
 
@@ -26,8 +26,8 @@ class RepositoryDependency < ApplicationRecord
   delegate :latest_stable_release_number, :latest_release_number, :is_deprecated?, to: :package, allow_nil: true
   delegate :filepath, to: :manifest
 
-  def self.protocol
-    with_package.where(packages: {repository_id: Repository.protocol.pluck(:id)})
+  def self.internal
+    with_package.where(packages: {repository_id: Repository.internal.pluck(:id)})
   end
 
   def find_package_id

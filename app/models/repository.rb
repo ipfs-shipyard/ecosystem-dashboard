@@ -20,8 +20,8 @@ class Repository < ApplicationRecord
   has_many :tags
   has_many :packages
 
-  scope :protocol, -> { where(org: Issue::PROTOCOL_ORGS) }
-  scope :not_protocol, -> { where.not(org: Issue::PROTOCOL_ORGS) }
+  scope :internal, -> { where(org: Issue::INTERNAL_ORGS) }
+  scope :external, -> { where.not(org: Issue::INTERNAL_ORGS) }
   scope :org, ->(org) { where(org: org) }
   scope :language, ->(language) { where(language: language) }
   scope :fork, ->(fork) { where(fork: fork) }
@@ -110,8 +110,8 @@ class Repository < ApplicationRecord
     end
   end
 
-  def self.download_protocol_repos
-    Issue::PROTOCOL_ORGS.each do |org|
+  def self.download_internal_repos
+    Issue::INTERNAL_ORGS.each do |org|
       download_org_repos(org)
     end
   end
@@ -128,17 +128,17 @@ class Repository < ApplicationRecord
       next unless repo
       e = repo.sync_events
       if e.any?
-        if Issue::PROTOCOL_ORGS.include?(org)
+        if Issue::INTERNAL_ORGS.include?(org)
           Issue.download(full_name)
-          Issue.protocol.where(repo_full_name: full_name).where('updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
+          Issue.internal.where(repo_full_name: full_name).where('updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
         end
         Repository.download(full_name) if existing_repo
       end
     end
   end
 
-  def self.sync_recently_active_protocol_repos
-    Issue::PROTOCOL_ORGS.each do |org|
+  def self.sync_recently_active_internal_repos
+    Issue::INTERNAL_ORGS.each do |org|
       sync_recently_active_repos(org)
     end
   end

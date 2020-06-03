@@ -3,11 +3,11 @@
 </h1>
 
 <h5 class='mb-3'>
-  <%= pluralize @protocol_packages.length, 'protocol packages' %> required in <%= pluralize @dependencies.map(&:repository_id).uniq.length, ' active repository' %>
+  <%= pluralize @internal_packages.length, 'internal packages' %> required in <%= pluralize @dependencies.map(&:repository_id).uniq.length, ' active repository' %>
 </h5>
 
 <div class="dependencies">
-  <% @protocol_packages.each do |package, repository_dependencies| %>
+  <% @internal_packages.each do |package, repository_dependencies| %>
     <div class="card mb-1">
       <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#package-<%= package.id %>">
         <% if package.repository %>
