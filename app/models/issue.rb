@@ -66,6 +66,11 @@ class Issue < ApplicationRecord
   scope :exclude_language, ->(language) { where.not('repo_full_name ilike ?', "%/#{language}-%") }
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
+  def slow_response?
+    return false if created_at > 2.days.ago
+    first_response_at.nil? || (first_response_at - created_at) > 2.days
+  end
+
   def contributed?
     !Issue::CORE_CONTRIBUTORS.include?(user)
   end
