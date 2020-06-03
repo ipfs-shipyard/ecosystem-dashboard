@@ -67,6 +67,7 @@ class Issue < ApplicationRecord
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
   def slow_response?
+    return false if draft?
     return false if created_at > 2.days.ago
     first_response_at.nil? || (first_response_at - created_at) > 2.days
   end
