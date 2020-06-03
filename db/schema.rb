@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_18_093851) do
+ActiveRecord::Schema.define(version: 2020_06_03_101333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2020_05_18_093851) do
     t.jsonb "payload", default: "{}", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["actor"], name: "index_events_on_actor"
+    t.index ["github_id"], name: "index_events_on_github_id"
   end
 
   create_table "issues", force: :cascade do |t|
@@ -141,7 +143,7 @@ ActiveRecord::Schema.define(version: 2020_05_18_093851) do
     t.integer "package_id"
     t.integer "manifest_id"
     t.integer "repository_id"
-    t.boolean "optional"
+    t.boolean "optional", default: false
     t.string "package_name"
     t.string "platform"
     t.string "requirements"
