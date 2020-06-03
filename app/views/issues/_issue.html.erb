@@ -39,7 +39,9 @@
       <% if issue.contributed? && issue.first_response_at %>
         - first response took <%= distance_of_time_in_words(issue.created_at, issue.first_response_at) %>
       <% elsif issue.contributed? %>
-        - No response yet
+        <span class='<%= "text-danger" if issue.slow_response? %>'>
+          - No response yet
+        </span>
       <% end %>
       - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
       <% "<br/>" if issue.milestone_name || issue.collabs.any? || issue.labels.any? %>
