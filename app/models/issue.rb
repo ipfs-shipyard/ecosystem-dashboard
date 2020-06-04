@@ -66,6 +66,18 @@ class Issue < ApplicationRecord
   scope :exclude_language, ->(language) { where.not('repo_full_name ilike ?', "%/#{language}-%") }
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
+  def self.median_slow_response_rate
+    arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}
+    sorted = arr.sort_by(&:first).map(&:second)
+    len = sorted.length
+    (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+  end
+
+  def self.mean_slow_response_rate
+    arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}.map(&:second)
+    arr.sum.fdiv(arr.size)
+  end
+
   def slow_response?
     return false if draft?
     return false if created_at > 2.days.ago
