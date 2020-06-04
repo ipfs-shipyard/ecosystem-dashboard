@@ -1,4 +1,4 @@
-IPFS Ecosystem Research
+Ecosystem Dashboard
 ====
 
 A dashboard for discovering issues and pull requests opened by IPFS collaborators.
