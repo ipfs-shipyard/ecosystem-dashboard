@@ -181,7 +181,10 @@ class Issue < ApplicationRecord
 
     begin
       resp = Issue.github_client.pull_request(repo_full_name, number)
-      update_columns(merged_at: resp.merged_at, draft: resp.draft)
+      updates = {}
+      updates[:merged_at] = resp.merged_at if resp.merged_at != merged_at
+      updates[:draft] = resp.draft if resp.draft != draft
+      update_columns(updates) if updates.any?
     rescue Octokit::NotFound
       destroy
     end
