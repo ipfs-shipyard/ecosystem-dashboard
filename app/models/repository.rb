@@ -247,12 +247,12 @@ class Repository < ApplicationRecord
 
   def download_tags(token = nil)
     existing_tag_names = tags.pluck(:name)
-    tags = api_client(token).refs(full_name, 'tags')
+    tags = Issue.github_client.refs(full_name, 'tags')
     Array(tags).each do |tag|
       next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
       download_tag(token, tag, existing_tag_names)
     end
-    projects.find_each(&:forced_save) if tags.present?
+    packages.find_each(&:forced_save) if tags.present?
   rescue *IGNORABLE_EXCEPTIONS
     nil
   end
@@ -263,7 +263,7 @@ class Repository < ApplicationRecord
     name = match[1]
     return if existing_tag_names.include?(name)
 
-    object = api_client(token).get(tag.object.url)
+    object = Issue.github_client.get(tag.object.url)
 
     tag_hash = {
       name: name,

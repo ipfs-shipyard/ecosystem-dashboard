@@ -1,7 +1,7 @@
 class Tag < ApplicationRecord
   include Releaseable
 
-  belongs_to :repository, touch: true
+  belongs_to :repository
   validates_presence_of :name, :sha, :repository
   validates_uniqueness_of :name, scope: :repository_id
 
