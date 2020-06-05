@@ -306,8 +306,7 @@ class Package < ApplicationRecord
       .package_find_names(name)
       .map(&:downcase)
 
-    visible
-      .platform(platform)
+    platform(platform)
       .where("lower(packages.name) in (?)", names)
       .includes(includes.present? ? includes : nil)
       .first!
