@@ -106,12 +106,6 @@ class Package < ApplicationRecord
     name
   end
 
-  def manual_sync
-    async_sync
-    update_repository_async
-    forced_save
-  end
-
   def forced_save
     self.updated_at = Time.zone.now
     save
@@ -302,25 +296,7 @@ class Package < ApplicationRecord
   end
 
   def self.find_best!(platform, name, includes=[])
-    find_exact(platform, name, includes) ||
-      find_lower(platform, name, includes) ||
-      find_with_package_manager!(platform, name, includes)
-  end
-
-  private_class_method def self.find_exact(platform, name, includes=[])
-    visible
-      .platform(platform)
-      .where(name: name)
-      .includes(includes.present? ? includes : nil)
-      .first
-  end
-
-  private_class_method def self.find_lower(platform, name, includes=[])
-    visible
-      .lower_platform(platform)
-      .lower_name(name)
-      .includes(includes.present? ? includes : nil)
-      .first
+    find_with_package_manager!(platform, name, includes)
   end
 
   private_class_method def self.find_with_package_manager!(platform, name, includes=[])
@@ -331,7 +307,7 @@ class Package < ApplicationRecord
       .map(&:downcase)
 
     visible
-      .lower_platform(platform)
+      .platform(platform)
       .where("lower(packages.name) in (?)", names)
       .includes(includes.present? ? includes : nil)
       .first!
