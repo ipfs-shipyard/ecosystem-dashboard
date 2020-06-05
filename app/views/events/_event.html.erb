@@ -12,7 +12,7 @@
 
       <%= event_title(event) %>
 
-      <%= link_to event.repository.full_name, event.repository.html_url, target: :_blank %>
+      <%= link_to event.repository.full_name, event.repository %>
       <small class='text-muted'>
         <%= distance_of_time_in_words_to_now event.created_at %> ago
       </small>
