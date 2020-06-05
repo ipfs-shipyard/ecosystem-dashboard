@@ -229,4 +229,15 @@ class Repository < ApplicationRecord
   rescue *IGNORABLE_EXCEPTIONS
     nil
   end
+
+  def find_npm_packages
+    manifests.platform('npm').where('filepath ilike ?', '%package.json').each do |manifest|
+      file = manifest.repository.get_file_contents(manifest.filepath)
+
+      if file.present? && file[:content].present?
+        json = JSON.parse(file[:content])
+        PackageManager::Npm.update(json['name'])
+      end
+    end
+  end
 end
