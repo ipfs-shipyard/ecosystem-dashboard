@@ -1,6 +1,6 @@
 namespace :packages do
   task sync_internal: :environment do
-    Package.internal.find_each(&:sync)
+    Package.internal.maintained.find_each(&:sync)
   end
 
   task find_missing_npm_packages: :environment do
