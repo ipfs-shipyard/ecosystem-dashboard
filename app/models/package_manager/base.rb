@@ -91,11 +91,11 @@ module PackageManager
       dbpackage = Package.find_or_initialize_by({ name: mapped_package[:name], platform: name.demodulize })
       if dbpackage.new_record?
         dbpackage.assign_attributes(mapped_package.except(:name, :releases, :versions, :version, :dependencies, :properties))
-        dbpackage.save!
+        dbpackage.save! if dbpackage.changed?
       else
         dbpackage.reformat_repository_url
         attrs = mapped_package.except(:name, :releases, :versions, :version, :dependencies, :properties)
-        dbpackage.update_attributes(attrs)
+        dbpackage.update(attrs)
       end
 
       if self::HAS_VERSIONS
