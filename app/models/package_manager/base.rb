@@ -104,7 +104,7 @@ module PackageManager
         end
       end
 
-      save_dependencies(mapped_package) if self::HAS_DEPENDENCIES
+      save_dependencies(dbpackage, mapped_package) if self::HAS_DEPENDENCIES
       dbpackage.reload
       # dbpackage.download_registry_users
       dbpackage.last_synced_at = Time.now
@@ -113,8 +113,8 @@ module PackageManager
     end
 
     def self.update(name)
-      proj = package(name)
-      save(proj) if proj.present?
+      pkg = package(name)
+      save(pkg) if pkg.present?
     rescue SystemExit, Interrupt
       exit 0
     rescue StandardError => e
@@ -162,10 +162,9 @@ module PackageManager
       names - existing_names
     end
 
-    def self.save_dependencies(mapped_package)
+    def self.save_dependencies(package, mapped_package)
       name = mapped_package[:name]
-      proj = Package.find_by(name: name, platform: self.name.demodulize)
-      proj.versions.order('published_at DESC').includes(:dependencies).each do |version|
+      package.versions.order('published_at DESC').includes(:dependencies).each do |version|
         next if version.dependencies.any?
 
         deps = begin
@@ -176,8 +175,6 @@ module PackageManager
         next unless deps&.any? && version.dependencies.empty?
 
         deps.each do |dep|
-          next if dep[:package_name].blank? || version.dependencies.find_by_package_name(dep[:package_name])
-
           named_package_id = Package
             .find_best(self.name.demodulize, dep[:package_name].strip)
             &.id

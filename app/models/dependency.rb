@@ -12,8 +12,6 @@ class Dependency < ApplicationRecord
   scope :kind, ->(kind) { where(kind: kind) }
   scope :platform, ->(platform) { where('lower(dependencies.platform) = ?', platform.try(:downcase)) }
 
-  before_create :set_package_id
-
   alias_attribute :name, :package_name
   alias_attribute :latest_stable, :latest_stable_release_number
   alias_attribute :latest, :latest_release_number

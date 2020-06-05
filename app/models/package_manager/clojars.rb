@@ -22,15 +22,15 @@ module PackageManager
 
     def self.packages
       @packages ||= begin
-        projs = {}
+        pkgs = {}
         get("https://clojars.libraries.io/feed.json").each do |k, v|
-          v.each do |proj|
-            group = proj["group-id"]
+          v.each do |pkg|
+            group = pkg["group-id"]
             key = (group == k ? k : "#{group}/#{k}")
-            projs[key] = proj
+            pkgs[key] = pkg
           end
         end
-        projs
+        pkgs
       end
     end
 
