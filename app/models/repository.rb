@@ -230,6 +230,10 @@ class Repository < ApplicationRecord
     nil
   end
 
+  def self.find_missing_npm_packages
+    internal.language('JavaScript').find_each(&:find_npm_packages)
+  end
+
   def find_npm_packages
     manifests.platform('npm').where('filepath ilike ?', '%package.json').each do |manifest|
       file = manifest.repository.get_file_contents(manifest.filepath)
