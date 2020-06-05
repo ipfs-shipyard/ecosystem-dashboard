@@ -95,7 +95,7 @@ module PackageManager
       else
         dbpackage.reformat_repository_url
         attrs = mapped_package.except(:name, :releases, :versions, :version, :dependencies, :properties)
-        dbpackage.update(attrs)
+        dbpackage.update(attrs) if dbpackage.changed?
       end
 
       if self::HAS_VERSIONS
@@ -164,7 +164,7 @@ module PackageManager
 
     def self.save_dependencies(package, mapped_package)
       name = mapped_package[:name]
-      package.versions.order('published_at DESC').includes(:dependencies).each do |version|
+      package.versions.includes(:dependencies).each do |version|
         next if version.dependencies.any?
 
         deps = begin

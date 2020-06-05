@@ -441,7 +441,7 @@ class Package < ApplicationRecord
 
   def reformat_repository_url
     repository_url = UrlParser.try_all(self.repository_url)
-    update(repository_url: repository_url)
+    update(repository_url: repository_url) if changed?
   end
 
   def github_name_with_owner
