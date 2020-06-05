@@ -231,7 +231,7 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_npm_packages
-    internal.language('JavaScript').find_each(&:find_npm_packages)
+    internal.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
   end
 
   def find_npm_packages
