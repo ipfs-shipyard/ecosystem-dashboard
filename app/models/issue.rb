@@ -68,14 +68,9 @@ class Issue < ApplicationRecord
 
   def self.median_slow_response_rate
     arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}
-    sorted = arr.sort_by(&:first).map(&:second)
+    sorted = arr.map(&:second).sort
     len = sorted.length
     (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
-  end
-
-  def self.mean_slow_response_rate
-    arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}.map(&:second)
-    arr.sum.fdiv(arr.size)
   end
 
   def slow_response?
