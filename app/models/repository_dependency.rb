@@ -52,8 +52,8 @@ class RepositoryDependency < ApplicationRecord
   end
 
   def update_package_id
-    proj_id = find_package_id
-    update_attribute(:package_id, proj_id) if proj_id.present?
+    pkg_id = find_package_id
+    update_attribute(:package_id, pkg_id) if pkg_id.present?
   end
 
   def package_name
