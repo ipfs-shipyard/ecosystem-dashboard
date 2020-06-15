@@ -66,6 +66,8 @@ class Issue < ApplicationRecord
   scope :exclude_language, ->(language) { where.not('repo_full_name ilike ?', "%/#{language}-%") }
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
+  belongs_to :repository, foreign_key: :repo_full_name, primary_key: :full_name, optional: true
+
   def self.median_slow_response_rate
     arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}
     sorted = arr.map(&:second).sort

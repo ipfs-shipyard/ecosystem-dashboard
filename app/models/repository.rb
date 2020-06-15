@@ -19,6 +19,7 @@ class Repository < ApplicationRecord
   has_many :dependencies, through: :manifests, source: :repository_dependencies
   has_many :tags
   has_many :packages
+  has_many :issues, foreign_key: :repo_full_name, primary_key: :full_name
 
   scope :internal, -> { where(org: Issue::INTERNAL_ORGS) }
   scope :external, -> { where.not(org: Issue::INTERNAL_ORGS) }
@@ -76,6 +77,13 @@ class Repository < ApplicationRecord
       repo.subscribers_count = remote_repo.subscribers_count
       repo.default_branch = remote_repo.default_branch
       repo.last_sync_at = Time.now
+      if repo.archived_changed?
+        if repo.archived?
+          repo.archive_all_issues!
+        else
+          repo.unarchive_all_issues!
+        end
+      end
       repo.save
       # repo.download_manifests
       repo
@@ -279,5 +287,13 @@ class Repository < ApplicationRecord
     end
 
     tags.create(tag_hash)
+  end
+
+  def archive_all_issues!
+    issues.update_all(locked: true)
+  end
+
+  def unarchive_all_issues!
+    issues.update_all(locked: false)
   end
 end
