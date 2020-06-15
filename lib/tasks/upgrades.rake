@@ -45,7 +45,7 @@ def search_to_rows(queries)
       repo = i[:repository_url].gsub('https://api.github.com/repos/', '')
       owner = repo.split('/').first
 
-      next if Issue::INTERNAL_ORGS.include?(owner)
+      next if Organization.internal.pluck(:name).include?(owner)
 
       if i[:pull_request].present?
         kind = 'Pull Request'

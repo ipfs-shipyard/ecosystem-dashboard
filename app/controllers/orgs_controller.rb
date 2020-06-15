@@ -10,7 +10,7 @@ class OrgsController < ApplicationController
       scope = scope.where('created_at > ?', params[:range].to_i.days.ago)
     end
 
-    @orgs = Issue::INTERNAL_ORGS.map do |org|
+    @orgs = Organization.internal.pluck(:name).map do |org|
       load_org_data(scope, org)
     end
   end

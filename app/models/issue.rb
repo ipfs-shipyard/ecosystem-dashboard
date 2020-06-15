@@ -1,11 +1,9 @@
 class Issue < ApplicationRecord
 
-  INTERNAL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld', 'ProtoSchool', 'ipfs-cluster', 'ipfs-inactive']
-
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
-  scope :internal, -> { where(org: INTERNAL_ORGS) }
-  scope :external, -> { where.not(org: INTERNAL_ORGS) }
+  scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
+  scope :external, -> { includes(:organization).where(organizations: {internal: false}) }
   scope :humans, -> { core.or(not_core) }
   scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
   scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
@@ -42,6 +40,7 @@ class Issue < ApplicationRecord
 
   belongs_to :repository, foreign_key: :repo_full_name, primary_key: :full_name, optional: true
   belongs_to :contributor, foreign_key: :user, primary_key: :github_username, optional: true
+  belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
 
   def self.median_slow_response_rate
     arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}
@@ -124,7 +123,7 @@ class Issue < ApplicationRecord
   end
 
   def self.new_repo_names
-    INTERNAL_ORGS.map do |org_name|
+    Organization.internal.pluck(:name).map do |org_name|
       org_repo_names(org_name) - active_repo_names
     end.flatten
   end

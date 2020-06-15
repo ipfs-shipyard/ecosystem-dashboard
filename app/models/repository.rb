@@ -21,8 +21,10 @@ class Repository < ApplicationRecord
   has_many :packages
   has_many :issues, foreign_key: :repo_full_name, primary_key: :full_name
 
-  scope :internal, -> { where(org: Issue::INTERNAL_ORGS) }
-  scope :external, -> { where.not(org: Issue::INTERNAL_ORGS) }
+  belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
+
+  scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
+  scope :external, -> { includes(:organization).where(organizations: {internal: false}) }
   scope :org, ->(org) { where(org: org) }
   scope :language, ->(language) { where(language: language) }
   scope :fork, ->(fork) { where(fork: fork) }
@@ -120,7 +122,7 @@ class Repository < ApplicationRecord
   end
 
   def self.download_internal_repos
-    Issue::INTERNAL_ORGS.each do |org|
+    Organization.internal.pluck(:name).each do |org|
       download_org_repos(org)
     end
   end
@@ -137,7 +139,7 @@ class Repository < ApplicationRecord
       next unless repo
       e = repo.sync_events
       if e.any?
-        if Issue::INTERNAL_ORGS.include?(org)
+        if Organization.internal.pluck(:name).include?(org)
           Issue.download(full_name)
           Issue.internal.where(repo_full_name: full_name).where('updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
         end
@@ -147,7 +149,7 @@ class Repository < ApplicationRecord
   end
 
   def self.sync_recently_active_internal_repos
-    Issue::INTERNAL_ORGS.each do |org|
+    Organization.internal.pluck(:name).each do |org|
       sync_recently_active_repos(org)
     end
   end

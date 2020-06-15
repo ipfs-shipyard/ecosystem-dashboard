@@ -2,9 +2,10 @@ class Event < ApplicationRecord
 
   belongs_to :repository
   belongs_to :contributor, foreign_key: :actor, primary_key: :github_username, optional: true
+  belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
 
-  scope :internal, -> { where(org: Issue::INTERNAL_ORGS) }
-  scope :external, -> { where.not(org: Issue::INTERNAL_ORGS) }
+  scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
+  scope :external, -> { includes(:organization).where(organizations: {internal: false}) }
   scope :org, ->(org) { where(org: org) }
   scope :user, ->(user) { where(actor: user)}
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
