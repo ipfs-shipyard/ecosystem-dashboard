@@ -132,4 +132,9 @@ module ApplicationHelper
       CommonMarker.render_html(str, :UNSAFE, [:tagfilter, :autolink, :table, :strikethrough]).html_safe
     end
   end
+
+  def brand_icon_url
+    return unless ENV['DEFAULT_ORG'].present?
+    "https://github.com/#{ENV['DEFAULT_ORG']}.png"
+  end
 end

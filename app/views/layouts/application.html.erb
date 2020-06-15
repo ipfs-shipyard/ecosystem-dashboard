@@ -12,6 +12,11 @@
   <body class='d-flex flex-column h-100'>
     <header>
       <nav class="navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-md">
+        <% if brand_icon_url %>
+          <a class="navbar-brand" href="/">
+            <img src="<%= brand_icon_url %>" width="30" height="30" alt="">
+          </a>
+        <% end %>
         <a class="navbar-brand" href="/">Ecosystem Dashboard</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +40,7 @@
               <%= link_to 'Events', events_path, class: 'nav-link' %>
             </li>
             <li class="nav-item">
-              <%= link_to 'Packages', outdated_packages_path, class: 'nav-link' %>
+              <%= link_to 'Packages', packages_path, class: 'nav-link' %>
             </li>
           </ul>
         </div>
