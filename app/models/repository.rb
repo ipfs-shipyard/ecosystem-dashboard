@@ -255,19 +255,19 @@ class Repository < ApplicationRecord
     end
   end
 
-  def download_tags(token = nil)
+  def download_tags
     existing_tag_names = tags.pluck(:name)
     tags = Issue.github_client.refs(full_name, 'tags')
     Array(tags).each do |tag|
       next unless tag && tag.is_a?(Sawyer::Resource) && tag['ref']
-      download_tag(token, tag, existing_tag_names)
+      download_tag(tag, existing_tag_names)
     end
     packages.find_each(&:forced_save) if tags.present?
   rescue *IGNORABLE_EXCEPTIONS
     nil
   end
 
-  def download_tag(token, tag, existing_tag_names)
+  def download_tag(tag, existing_tag_names)
     match = tag.ref.match(/refs\/tags\/(.*)/)
     return unless match
     name = match[1]
