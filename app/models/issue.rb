@@ -1,41 +1,15 @@
 class Issue < ApplicationRecord
 
   INTERNAL_ORGS = ['ipfs', 'libp2p', 'ipfs-shipyard', 'multiformats', 'ipld', 'ProtoSchool', 'ipfs-cluster', 'ipfs-inactive']
-  BOTS = ['dependabot[bot]', 'dependabot-preview[bot]', 'greenkeeper[bot]',
-          'greenkeeperio-bot', 'rollbar[bot]', 'guardrails[bot]',
-          'waffle-iron', 'imgbot[bot]', 'codetriage-readme-bot', 'whitesource-bolt-for-github[bot]',
-          'gitter-badger', 'weekly-digest[bot]', 'todo[bot]', 'auto-comment[bot]',
-          'github-actions[bot]', 'codecov[bot]', 'auto-comment[bot]', 'gitcoinbot',
-          'reminders[bot]', 'stale[bot]', 'sonarcloud[bot]', 'status-github-bot[bot]',
-          'release-drafter[bot]', 'allcontributors[bot]', 'now[bot]', 'move[bot]',
-          'welcome[bot]', 'dependency-lockfile-snitch[bot]', 'netlify[bot]', 'renovate[bot]',
-          'delete-merged-branch[bot]', 'parity-cla-bot', 'snyk-bot',  'metamaskbot',
-          'arabot-1', 'status-im-bot', 'ipfs-helper']
-  CORE_CONTRIBUTORS = ["Stebalien", "daviddias", "whyrusleeping", "RichardLitt", "hsanjuan",
-                "alanshaw", "jbenet", "lidel", "tomaka", "hacdias", "lgierth", "dignifiedquire",
-                "victorb", "Kubuxu", "vmx", "achingbrain", "vasco-santos", "jacobheun",
-                "raulk", "olizilla", "satazor", "magik6k", "flyingzumwalt", "kevina",
-                "satazor", "vyzo", "pgte", "PedroMiguelSS", "chriscool", "hugomrdias",
-                "jessicaschilling", 'aschmahmann', 'dirkmc', 'ericronne', 'andrew',
-                "Mr0grog", 'rvagg', 'lanzafame', 'mikeal', 'warpfork', 'terichadbourne',
-                'mburns', 'nonsense', 'twittner', 'momack2', 'creationix', 'djdv',
-                'jimpick', 'meiqimichelle', 'mgoelzer', 'kishansagathiya', 'dryajov',
-                'autonome', 'bigs', 'jesseclay', 'yusefnapora', 'paulobmarcos', 'ribasushi',
-                'willscott', 'johnnymatthews', 'coryschwartz', 'fsdiogo', 'zebateira',
-                'dominguesgm', 'catiatpereira', 'andreforsousa', 'travisperson', 'krl',
-                'nicola', 'hannahhoward', 'renrutnnej', 'marten-seemann', 'cwaring',
-                'AfonsoVReis', 'pkafei', 'jkosem', 'aarshkshah1992', 'thattommyhall',
-                'rafaelramalho19', 'andyschwab', 'parkan', 'yiannisbot', 'Gozala', 'petar',
-                'schomatis', 'gmasgras', 'protocollabsit']
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
   scope :internal, -> { where(org: INTERNAL_ORGS) }
   scope :external, -> { where.not(org: INTERNAL_ORGS) }
-  scope :humans, -> { where.not(user: BOTS + ['ghost']) }
-  scope :bots, -> { where(user: BOTS) }
-  scope :core, -> { where(user: CORE_CONTRIBUTORS) }
-  scope :not_core, -> { where.not(user: CORE_CONTRIBUTORS + BOTS) }
+  scope :humans, -> { core.or(not_core) }
+  scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
+  scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
+  scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
 
@@ -67,6 +41,7 @@ class Issue < ApplicationRecord
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
   belongs_to :repository, foreign_key: :repo_full_name, primary_key: :full_name, optional: true
+  belongs_to :contributor, foreign_key: :user, primary_key: :github_username, optional: true
 
   def self.median_slow_response_rate
     arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}
@@ -82,7 +57,8 @@ class Issue < ApplicationRecord
   end
 
   def contributed?
-    !Issue::CORE_CONTRIBUTORS.include?(user)
+    return true unless contributor.present?
+    !contributor.core?
   end
 
   def self.download(repo_full_name)
@@ -192,7 +168,7 @@ class Issue < ApplicationRecord
     begin
       events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview')
       # filter for events by core contributors
-      events = events.select{|e| (e.actor && Issue::CORE_CONTRIBUTORS.include?(e.actor.login)) || (e.user && Issue::CORE_CONTRIBUTORS.include?(e.user.login)) }
+      events = events.select{|e| (e.actor && Contributor.core.pluck(:github_username).include?(e.actor.login)) || (e.user && Contributor.core.pluck(:github_username).include?(e.user.login)) }
       # ignore events where actor isn't who acted
       events = events.select{|e| !['subscribed', 'mentioned'].include?(e.event)  }
       # bail if no core contributor response yet

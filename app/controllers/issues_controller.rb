@@ -1,6 +1,6 @@
 class IssuesController < ApplicationController
   def index
-    @scope = Issue.internal.not_core.unlocked.humans.where("html_url <> ''")
+    @scope = Issue.internal.not_core.unlocked.humans.includes(:contributor).where("html_url <> ''")
 
     if params[:collab].present?
       @scope = @scope.collab(params[:collab])
@@ -13,22 +13,22 @@ class IssuesController < ApplicationController
   end
 
   def collabs
-    @scope = Issue.internal.not_core.unlocked.where("html_url <> ''")
+    @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
     @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
   end
 
   def all
-    @scope = Issue.internal.humans.unlocked.where("html_url <> ''")
+    @scope = Issue.internal.humans.unlocked.includes(:contributor).where("html_url <> ''")
     @scope = @scope.not_core if params[:exclude_core]
 
     apply_filters
   end
 
   def weekly
-    @scope = Issue.internal.not_core.unlocked.where("html_url <> ''").all_collabs.not_draft.where('closed_at > ? OR created_at > ?', 1.week.ago, 1.week.ago)
+    @scope = Issue.internal.not_core.unlocked.where("html_url <> ''").includes(:contributor).all_collabs.not_draft.where('issues.closed_at > ? OR issues.created_at > ?', 1.week.ago, 1.week.ago)
     apply_filters
-    @opened = @scope.where('created_at > ?', 1.week.ago)
-    @closed = @scope.where('closed_at > ?', 1.week.ago)
+    @opened = @scope.where('issues.created_at > ?', 1.week.ago)
+    @closed = @scope.where('issues.closed_at > ?', 1.week.ago)
     sort = params[:sort] || 'created_at'
     order = params[:order] || 'desc'
 
@@ -39,8 +39,8 @@ class IssuesController < ApplicationController
 
   def slow_response
     @date_range = 9
-    @orginal_scope = Issue.internal.not_core.unlocked.where("html_url <> ''").not_draft
-    @scope = @orginal_scope.where('created_at > ?', @date_range.days.ago).where('created_at < ?', 2.days.ago)
+    @orginal_scope = Issue.internal.not_core.unlocked.where("html_url <> ''").not_draft.includes(:contributor)
+    @scope = @orginal_scope.where('issues.created_at > ?', @date_range.days.ago).where('issues.created_at < ?', 2.days.ago)
     apply_filters
 
     @orginal_scope = @orginal_scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
@@ -51,7 +51,7 @@ class IssuesController < ApplicationController
     @response_times = [
       {
         name: name,
-        data: @orginal_scope.where.not(response_time: nil).where('created_at > ?', 1.year.ago).group_by_week('created_at').average(:response_time).map do |k,v|
+        data: @orginal_scope.where.not(response_time: nil).where('issues.created_at > ?', 1.year.ago).group_by_week('issues.created_at').average(:response_time).map do |k,v|
           if v
             [k,(v/60/60).round(1)]
           else
@@ -63,7 +63,7 @@ class IssuesController < ApplicationController
 
     @slow = @scope.slow_response
 
-    sort = params[:sort] || 'created_at'
+    sort = params[:sort] || 'issues.created_at'
     order = params[:order] || 'desc'
 
     @pagy, @issues = pagy(@slow.order(sort => order))
@@ -83,7 +83,7 @@ class IssuesController < ApplicationController
 
     @scope = @scope.where(comments_count: 0) if params[:uncommented].present?
 
-    @scope = @scope.where('created_at > ?', 1.month.ago) if params[:recent].present?
+    @scope = @scope.where('issues.created_at > ?', 1.month.ago) if params[:recent].present?
 
     @scope = @scope.no_milestone if params[:no_milestone].present?
 
@@ -114,7 +114,7 @@ class IssuesController < ApplicationController
       end
     end
 
-    sort = params[:sort] || 'created_at'
+    sort = params[:sort] || 'issues.created_at'
     order = params[:order] || 'desc'
 
     @pagy, @issues = pagy(@scope.order(sort => order))

@@ -1,6 +1,7 @@
 class Event < ApplicationRecord
 
   belongs_to :repository
+  belongs_to :contributor, foreign_key: :actor, primary_key: :github_username, optional: true
 
   scope :internal, -> { where(org: Issue::INTERNAL_ORGS) }
   scope :external, -> { where.not(org: Issue::INTERNAL_ORGS) }
@@ -9,10 +10,10 @@ class Event < ApplicationRecord
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
   scope :event_type, ->(event_type) { where(event_type: event_type)}
 
-  scope :humans, -> { where.not(actor: Issue::BOTS + ['ghost']) }
-  scope :bots, -> { where(actor: Issue::BOTS) }
-  scope :core, -> { where(actor: Issue::CORE_CONTRIBUTORS) }
-  scope :not_core, -> { where.not(actor: Issue::CORE_CONTRIBUTORS + Issue::BOTS) }
+  scope :humans, -> { core.or(not_core) }
+  scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
+  scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
+  scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
 
   def self.record_event(repository, event_json)
     e = Event.find_or_initialize_by(github_id: event_json.id)
