@@ -60,9 +60,9 @@ class Issue < ApplicationRecord
     !contributor.core?
   end
 
-  def self.download(repo_full_name)
+  def self.download(repo_full_name, since = 1.week.ago)
     begin
-      remote_issues = github_client.issues(repo_full_name, state: 'all', since: 1.week.ago)
+      remote_issues = github_client.issues(repo_full_name, state: 'all', since: since)
       remote_issues.each do |remote_issue|
         update_from_github(repo_full_name, remote_issue)
       end

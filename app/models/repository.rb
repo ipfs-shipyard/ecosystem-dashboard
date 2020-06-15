@@ -55,8 +55,7 @@ class Repository < ApplicationRecord
   def self.import_org(org)
     Repository.download_org_repos(org)
     Repository.org(org).update_all(etag: nil)
-    Repository.org(org).each(&:sync_events)
-    Repository.org(org).each(&:download_manifests)
+    Repository.org(org).each{|r| r.sync_events(true) }
     Issue.update_collab_labels
   end
 
@@ -104,19 +103,19 @@ class Repository < ApplicationRecord
     "#{html_url}/blob/#{sha}/"
   end
 
-  def download_events
+  def download_events(auto_paginate = false)
     client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
-    events = client.repository_events(full_name, auto_paginate: false, headers: {'If-None-Match' => etag})
+    events = client.repository_events(full_name, auto_paginate: auto_paginate, headers: {'If-None-Match' => etag})
     return [] if events == ''
     new_etag = client.last_response.headers['etag']
-    if new_etag && new_etag != etag
+    if !auto_paginate && new_etag && new_etag != etag
       update_column(:etag, new_etag)
     end
     events
   end
 
-  def sync_events
-    download_events.each do |e|
+  def sync_events(auto_paginate = false)
+    download_events(auto_paginate).each do |e|
       Event.record_event(self, e)
     end
   end
