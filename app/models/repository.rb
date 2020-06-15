@@ -140,7 +140,7 @@ class Repository < ApplicationRecord
       if e.any?
         if Organization.internal.pluck(:name).include?(org)
           Issue.download(full_name)
-          Issue.internal.where(repo_full_name: full_name).where('updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
+          Issue.internal.where(repo_full_name: full_name).where('issues.updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
         end
         Repository.download(full_name) if existing_repo
       end
