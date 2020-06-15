@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2020_06_15_133314) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "contributors", force: :cascade do |t|
@@ -180,21 +179,6 @@ ActiveRecord::Schema.define(version: 2020_06_15_133314) do
     t.string "sha"
     t.string "kind"
     t.datetime "published_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "topics", force: :cascade do |t|
-    t.integer "remote_id"
-    t.string "title"
-    t.integer "posts_count"
-    t.boolean "closed"
-    t.integer "views"
-    t.boolean "has_accepted_answer"
-    t.integer "like_count"
-    t.string "username"
-    t.integer "category_id"
-    t.string "category_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
