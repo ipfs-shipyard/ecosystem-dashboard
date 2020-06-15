@@ -85,7 +85,7 @@ class Repository < ApplicationRecord
         end
       end
       repo.save
-      # repo.download_manifests
+      repo.download_manifests
       repo
     rescue ArgumentError, Octokit::Error
       # derp
@@ -159,7 +159,6 @@ class Repository < ApplicationRecord
     file_list = get_file_list
     return if file_list.blank?
     new_manifests = parse_manifests(file_list)
-    # sync_metadata(file_list)
 
     return if new_manifests.blank?
 
