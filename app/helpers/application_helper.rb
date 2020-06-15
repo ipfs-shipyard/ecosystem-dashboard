@@ -133,8 +133,16 @@ module ApplicationHelper
     end
   end
 
+  def page_title
+    "#{default_org_name} Ecosystem Dashboard"
+  end
+
   def brand_icon_url
-    return unless ENV['DEFAULT_ORG'].present?
-    "https://github.com/#{ENV['DEFAULT_ORG']}.png"
+    return unless default_org_name.present?
+    "https://github.com/#{default_org_name}.png"
+  end
+
+  def default_org_name
+    ENV['DEFAULT_ORG'] || Organization.internal.first.try(:name)
   end
 end
