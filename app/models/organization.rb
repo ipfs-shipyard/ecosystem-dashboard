@@ -10,6 +10,7 @@ class Organization < ApplicationRecord
 
   def import
     Repository.import_org(name)
+    # TODO sync all imported issues
     first_repo_date = Repository.org(name).order('created_at DESC').first.created_at
     Repository.archived(false).org(name).each{|r| Issue.download(r.full_name, first_repo_date) }
     Repository.archived(false).org(name).find_missing_npm_packages
