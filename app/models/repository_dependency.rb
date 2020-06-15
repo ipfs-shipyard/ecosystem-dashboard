@@ -53,7 +53,7 @@ class RepositoryDependency < ApplicationRecord
 
   def update_package_id
     pkg_id = find_package_id
-    update_attribute(:package_id, pkg_id) if pkg_id.present?
+    update_column(:package_id, pkg_id) if pkg_id.present?
   end
 
   def package_name

@@ -108,7 +108,7 @@ class Repository < ApplicationRecord
     return [] if events == ''
     new_etag = client.last_response.headers['etag']
     if new_etag && new_etag != etag
-      update_attribute(:etag, new_etag)
+      update_column(:etag, new_etag)
     end
     events
   end

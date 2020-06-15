@@ -125,7 +125,7 @@ class Package < ApplicationRecord
   end
 
   def set_last_synced_at
-    update_attribute(:last_synced_at, Time.zone.now)
+    update_column(:last_synced_at, Time.zone.now)
   end
 
   def async_sync
@@ -388,17 +388,17 @@ class Package < ApplicationRecord
     return if url.blank?
     response = Typhoeus.head(url)
     if platform.downcase == 'packagist' && response.response_code == 302
-      update_attribute(:status, 'Removed')
+      update_column(:status, 'Removed')
     elsif platform.downcase != 'packagist' && [400, 404].include?(response.response_code)
-      update_attribute(:status, 'Removed')
+      update_column(:status, 'Removed')
     elsif can_have_entire_package_deprecated?
       result = platform_class.deprecation_info(name)
       if result[:is_deprecated]
-        update_attribute(:status, 'Deprecated')
-        update_attribute(:deprecation_reason, result[:message])
+        update_column(:status, 'Deprecated')
+        update_column(:deprecation_reason, result[:message])
       end
     elsif removed
-      update_attribute(:status, nil)
+      update_column(:status, nil)
     end
   end
 
@@ -465,7 +465,7 @@ class Package < ApplicationRecord
     return if groups.empty?
     outdated = groups[0..-2].map(&:last).flatten.length
     outdated_percentage = (outdated.to_f/groups.sum(&:last).length*100).round(1)
-    update_attribute(:outdated, outdated_percentage)
+    update_column(:outdated, outdated_percentage)
   end
 
   def self.set_outdated_percentage

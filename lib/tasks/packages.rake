@@ -8,6 +8,6 @@ namespace :packages do
   end
 
   task sync: :environment do
-    Package.order('last_synced_at ASC nulls first').limit(100).each(&:sync)
+    Package.order('last_synced_at ASC nulls first').limit(100).find_each(&:sync)
   end
 end

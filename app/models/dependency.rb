@@ -49,6 +49,6 @@ class Dependency < ApplicationRecord
 
   def update_package_id
     pack_id = find_package_id
-    update_attribute(:package_id, pack_id) if pack_id.present?
+    update_column(:package_id, pack_id) if pack_id.present?
   end
 end
