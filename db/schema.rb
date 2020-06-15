@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_15_115133) do
+ActiveRecord::Schema.define(version: 2020_06_15_133314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -95,6 +95,15 @@ ActiveRecord::Schema.define(version: 2020_06_15_115133) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["repository_id"], name: "index_manifests_on_repository_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.integer "github_id"
+    t.boolean "internal", default: false
+    t.boolean "collaborator", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "packages", force: :cascade do |t|
