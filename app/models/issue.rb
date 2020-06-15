@@ -111,7 +111,7 @@ class Issue < ApplicationRecord
   end
 
   def self.active_repo_names
-    Issue.internal.unlocked.where('created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
+    Issue.internal.unlocked.where('issues.created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
   end
 
   def self.org_contributor_names(org_name)
@@ -133,7 +133,7 @@ class Issue < ApplicationRecord
   end
 
   def self.update_collab_labels
-    Issue.unlocked.internal.where('created_at > ?', 1.month.ago).not_core.group(:user).count.each do |u, count|
+    Issue.unlocked.internal.where('issues.created_at > ?', 1.month.ago).not_core.group(:user).count.each do |u, count|
       collabs = Event.external.user(u).event_type('PushEvent').group(:org).count.map(&:first)
       Issue.internal.unlocked.where(user: u).update_all(collabs: collabs)
     end
@@ -144,7 +144,7 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_pull_requests(time_range = 1.week.ago)
-    internal.pull_requests.where('created_at > ?', time_range).where(merged_at: nil).find_each(&:download_pull_request)
+    internal.pull_requests.where('issues.created_at > ?', time_range).where(merged_at: nil).find_each(&:download_pull_request)
   end
 
   def download_pull_request
@@ -185,7 +185,7 @@ class Issue < ApplicationRecord
   end
 
   def self.sync_recent
-    Issue.where('created_at > ?', 9.days.ago).state('open').not_core.unlocked.where("html_url <> ''").each(&:sync)
+    Issue.where('issues.created_at > ?', 9.days.ago).state('open').not_core.unlocked.where("html_url <> ''").each(&:sync)
   end
 
   def sync

@@ -7,7 +7,7 @@ class OrgsController < ApplicationController
     scope = Issue.all
 
     if params[:range].present?
-      scope = scope.where('created_at > ?', params[:range].to_i.days.ago)
+      scope = scope.where('issues.created_at > ?', params[:range].to_i.days.ago)
     end
 
     @orgs = Organization.internal.pluck(:name).map do |org|
@@ -19,18 +19,18 @@ class OrgsController < ApplicationController
     scope = Issue.all
 
     if params[:range].present?
-      scope = scope.where('created_at > ?', params[:range].to_i.days.ago)
+      scope = scope.where('issues.created_at > ?', params[:range].to_i.days.ago)
     end
 
     @orgs = [load_org_data(scope, params[:id])]
   end
 
   def events
-    @scope = Event.org(params[:id]).includes(:repository).where('created_at > ?', 1.month.ago).humans
+    @scope = Event.org(params[:id]).includes(:repository).where('events.created_at > ?', 1.month.ago).humans
     @scope = @scope.user(params[:user]) if params[:user].present?
     @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?
     @scope = @scope.event_type(params[:event_type]) if params[:event_type].present?
-    @pagy, @events = pagy(@scope.order('created_at DESC'))
+    @pagy, @events = pagy(@scope.order('events.created_at DESC'))
 
     @repos = @scope.unscope(where: :repository_full_name).internal.group(:repository_full_name).count
     @users = @scope.unscope(where: :actor).humans.group(:actor).count
