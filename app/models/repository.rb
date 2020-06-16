@@ -243,6 +243,7 @@ class Repository < ApplicationRecord
     internal.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
 
     # update dependencies
+    # TODO speed this up
     RepositoryDependency.platform('npm').without_package_id.find_each(&:update_package_id)
     Dependency.platform('npm').without_package_id.find_each(&:update_package_id)
   end
@@ -251,6 +252,7 @@ class Repository < ApplicationRecord
     internal.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
 
     # update dependencies
+    # TODO speed this up
     RepositoryDependency.platform('cargo').without_package_id.find_each(&:update_package_id)
     Dependency.platform('cargo').without_package_id.find_each(&:update_package_id)
   end
