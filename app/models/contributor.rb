@@ -34,13 +34,13 @@ class Contributor < ApplicationRecord
     possible_collabs.values.flatten.uniq - Organization.all.pluck(:name)
   end
 
-  def self.filter_possible_collabs(search = ENV['DEFAULT_ORG'])
+  def self.filter_possible_collabs(query = ENV['DEFAULT_ORG'])
     orgs = find_possible_collabs
     searches = {}
     orgs.each do |org|
       sleep 5
       begin
-        search = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN']).search_code("org:#{org} #{search}", per_page: 1)
+        search = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN']).search_code("org:#{org} #{query}", per_page: 1)
         searches[org] = search.total_count
       rescue Octokit::UnprocessableEntity
         searches[org] = 0
