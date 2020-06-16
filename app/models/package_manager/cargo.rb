@@ -50,6 +50,7 @@ module PackageManager
     end
 
     def self.mapping(package)
+      return false unless package["versions"].present?
       latest_version = package["versions"].to_a.first
       {
         name: package["crate"]["id"],

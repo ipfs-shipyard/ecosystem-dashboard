@@ -243,6 +243,10 @@ class Repository < ApplicationRecord
     internal.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
   end
 
+  def self.find_missing_cargo_packages
+    internal.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
+  end
+
   def find_npm_packages
     manifests.platform('npm').where('filepath ilike ?', '%package.json').each do |manifest|
       file = manifest.repository.get_file_contents(manifest.filepath)
@@ -250,6 +254,17 @@ class Repository < ApplicationRecord
       if file.present? && file[:content].present?
         json = JSON.parse(file[:content])
         PackageManager::Npm.update(json['name'])
+      end
+    end
+  end
+
+  def find_cargo_packages
+    manifests.platform('cargo').where('filepath ilike ?', '%Cargo.toml').each do |manifest|
+      file = manifest.repository.get_file_contents(manifest.filepath)
+
+      if file.present? && file[:content].present?
+        toml = TomlRB.parse(file[:content])
+        PackageManager::Cargo.update(toml['package']['name'])
       end
     end
   end

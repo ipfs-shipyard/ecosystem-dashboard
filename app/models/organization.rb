@@ -14,9 +14,9 @@ class Organization < ApplicationRecord
     Repository.archived(false).org(name).each{|r| Issue.download(r.full_name, first_repo_date) }
     # TODO sync all imported issues
     Repository.archived(false).org(name).find_missing_npm_packages
+    Repository.archived(false).org(name).find_missing_cargo_packages
     # TODO find missing go packages
-    # TODO find missing rust packages
-    # TODO Repository.archived(false).org(name).find_each(&:download_tags) 
+    # TODO Repository.archived(false).org(name).find_each(&:download_tags)
     guess_core_contributors
     guess_bots
     # TODO find and import collabs
