@@ -241,10 +241,18 @@ class Repository < ApplicationRecord
 
   def self.find_missing_npm_packages
     internal.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
+
+    # update dependencies
+    RepositoryDependency.platform('npm').without_package_id.find_each(&:update_package_id)
+    Dependency.platform('npm').without_package_id.find_each(&:update_package_id)
   end
 
   def self.find_missing_cargo_packages
     internal.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
+
+    # update dependencies
+    RepositoryDependency.platform('cargo').without_package_id.find_each(&:update_package_id)
+    Dependency.platform('cargo').without_package_id.find_each(&:update_package_id)
   end
 
   def find_npm_packages
