@@ -253,7 +253,7 @@ class Repository < ApplicationRecord
 
       if file.present? && file[:content].present?
         json = JSON.parse(file[:content])
-        PackageManager::Npm.update(json['name'])
+        PackageManager::Npm.update(json['name']) if json['name']
       end
     end
   end
@@ -264,7 +264,7 @@ class Repository < ApplicationRecord
 
       if file.present? && file[:content].present?
         toml = TomlRB.parse(file[:content])
-        PackageManager::Cargo.update(toml['package']['name'])
+        PackageManager::Cargo.update(toml['package']['name']) if toml['package']
       end
     end
   end
