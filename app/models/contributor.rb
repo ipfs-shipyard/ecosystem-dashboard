@@ -14,17 +14,16 @@ class Contributor < ApplicationRecord
     orgs = pushes.map(&:org).compact.map(&:login).uniq
   end
 
-  def self.find_top_external_contributors
+  def self.top_external_contributors
     external_contributors = Issue.not_core.group(:user).count
     top_external_contributors = external_contributors.sort_by{|k,v| -v}.first(external_contributors.length/20).map(&:first)
   end
 
   def self.find_possible_collabs
     possible_collabs = {}
-    find_top_external_contributors.each do |github_username|
+    top_external_contributors.each do |github_username|
       begin
         orgs = suggest_orgs(github_username)
-        orgs = pushes.map(&:org).compact.map(&:login).uniq
         if orgs.any?
           possible_collabs[github_username] = orgs
         end
@@ -38,7 +37,7 @@ class Contributor < ApplicationRecord
   def self.filter_possible_collabs(search = ENV['DEFAULT_ORG'])
     orgs = find_possible_collabs
     searches = {}
-    orgs[127..-1].each do |org|
+    orgs.each do |org|
       sleep 5
       begin
         search = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN']).search_code("org:#{org} #{search}", per_page: 1)
