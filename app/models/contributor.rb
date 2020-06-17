@@ -19,9 +19,9 @@ class Contributor < ApplicationRecord
     top_external_contributors = external_contributors.sort_by{|k,v| -v}.first(external_contributors.length/20).map(&:first)
   end
 
-  def self.find_possible_collabs
+  def self.find_possible_collabs(contributors)
     possible_collabs = {}
-    top_external_contributors.each do |github_username|
+    contributors.each do |github_username|
       begin
         orgs = suggest_orgs(github_username)
         if orgs.any?
@@ -34,8 +34,7 @@ class Contributor < ApplicationRecord
     possible_collabs.values.flatten.uniq - Organization.all.pluck(:name)
   end
 
-  def self.filter_possible_collabs(query = ENV['DEFAULT_ORG'])
-    orgs = find_possible_collabs
+  def self.filter_possible_collabs(orgs, query = ENV['DEFAULT_ORG'])
     searches = {}
     orgs.each do |org|
       sleep 5
