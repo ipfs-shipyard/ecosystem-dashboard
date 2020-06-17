@@ -38,6 +38,9 @@ class Issue < ApplicationRecord
   scope :exclude_language, ->(language) { where.not('repo_full_name ilike ?', "%/#{language}-%") }
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
+  scope :this_week, -> { where('issues.created_at > ?', 1.week.ago) }
+  scope :last_week, -> { where('issues.created_at > ?', 2.week.ago).where('issues.created_at < ?', 1.week.ago) }
+
   belongs_to :repository, foreign_key: :repo_full_name, primary_key: :full_name, optional: true
   belongs_to :contributor, foreign_key: :user, primary_key: :github_username, optional: true
   belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true

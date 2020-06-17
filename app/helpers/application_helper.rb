@@ -29,6 +29,10 @@ module ApplicationHelper
     'repo'
   end
 
+  def diff_class(count)
+    count > 0 ? 'text-success' : 'text-danger'
+  end
+
   def event_icon(event)
     case event.event_type
     when 'WatchEvent'

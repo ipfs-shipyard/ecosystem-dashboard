@@ -1,8 +1,4 @@
 class OrgsController < ApplicationController
-  def index
-    @packages = Package.internal.order('latest_release_published_at DESC').limit(5)
-  end
-
   def internal
     scope = Issue.all
 

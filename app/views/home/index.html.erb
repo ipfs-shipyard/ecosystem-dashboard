@@ -1,0 +1,190 @@
+
+<div class="container">
+  <h2>In the past seven days</h2>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'issue-opened', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human @new_issues %>
+
+                  <% new_issue_diff = @new_issues - @new_issues_last_week %>
+                  <% unless new_issue_diff.zero?  %>
+                    <small class='<%= diff_class(new_issue_diff) %>' title='<%= @new_issues_last_week %> issues last week'><%= new_issue_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Issues</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'git-pull-request', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human @new_prs %>
+
+                  <% new_pr_diff = @new_prs - @new_prs_last_week %>
+                  <% unless new_pr_diff.zero? %>
+                    <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> pull requests last week'><%= new_pr_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Pull Requests</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'squirrel', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human @releases %>
+                </h3>
+                <span>Releases</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'clock', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= @response_time %>
+                  <% response_time_diff = @response_time - @response_time_last_week %>
+                  <% unless response_time_diff.zero? %>
+                    <small class='<%= diff_class(-response_time_diff) %>' title='<%= @response_time_last_week %> hrs last week'> <%= '+' if response_time_diff > 0 %><%= response_time_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Avg Resp Time <small class='text-muted'>hrs</small></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'star', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human @stars %>
+                  <% stars_diff = @stars - @stars_last_week %>
+                  <% unless stars_diff.zero? %>
+                    <small class='<%= diff_class(stars_diff) %>' title='<%= @stars_last_week %> stars last week'> <%= '+' if stars_diff > 0 %><%= stars_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Stars</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'repo-forked', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human @forks %>
+                  <% forks_diff = @forks - @forks_last_week %>
+                  <% unless forks_diff.zero? %>
+                    <small class='<%= diff_class(forks_diff) %>' title='<%= @forks_last_week %> forks last week'> <%= '+' if forks_diff > 0 %><%= forks_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Forks</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'comment', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human @comments %>
+                  <% comments_diff = @comments - @comments_last_week %>
+                  <% unless comments_diff.zero? %>
+                    <small class='<%= diff_class(comments_diff) %>' title='<%= @comments_last_week %> comments last week'> <%= '+' if comments_diff > 0 %><%= comments_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Comments</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'question', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= @slow_responses %>
+                  <% slow_response_diff = @slow_responses - @slow_responses_last_week %>
+                  <% unless slow_response_diff.zero? %>
+                    <small class='<%= diff_class(-slow_response_diff) %>' title='<%= @slow_responses_last_week %> slow responses last week'> <%= '+' if slow_response_diff > 0 %><%= slow_response_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Slow Responses</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

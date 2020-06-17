@@ -16,6 +16,9 @@ class Event < ApplicationRecord
   scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
   scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
 
+  scope :this_week, -> { where('events.created_at > ?', 1.week.ago) }
+  scope :last_week, -> { where('events.created_at > ?', 2.week.ago).where('events.created_at < ?', 1.week.ago) }
+
   def self.record_event(repository, event_json)
     e = Event.find_or_initialize_by(github_id: event_json.id)
 

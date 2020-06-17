@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get 'orgs/:id/events', to: 'orgs#events', as: :org_events
   get 'orgs/:id', to: 'orgs#show', as: :org
   get 'orgs', to: 'orgs#internal'
-  get 'home', to: 'orgs#index'
+  get 'home', to: 'home#index'
 
   root to: 'issues#index'
 end

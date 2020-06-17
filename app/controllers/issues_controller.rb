@@ -27,7 +27,7 @@ class IssuesController < ApplicationController
   def weekly
     @scope = Issue.internal.not_core.unlocked.where("html_url <> ''").includes(:contributor).all_collabs.not_draft.where('issues.closed_at > ? OR issues.created_at > ?', 1.week.ago, 1.week.ago)
     apply_filters
-    @opened = @scope.where('issues.created_at > ?', 1.week.ago)
+    @opened = @scope.this_week
     @closed = @scope.where('issues.closed_at > ?', 1.week.ago)
     sort = params[:sort] || 'created_at'
     order = params[:order] || 'desc'
