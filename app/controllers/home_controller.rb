@@ -12,11 +12,11 @@ class HomeController < ApplicationController
 
     @releases = Event.internal.this_week.event_type('ReleaseEvent').count
 
-    @stars = Event.internal.this_week.event_type('WatchEvent').count
-    @stars_last_week = Event.internal.last_week.event_type('WatchEvent').count
+    @stars = Event.internal.this_week.not_core.event_type('WatchEvent').count
+    @stars_last_week = Event.internal.last_week.not_core.event_type('WatchEvent').count
 
-    @forks = Event.internal.this_week.event_type('ForkEvent').count
-    @forks_last_week = Event.internal.last_week.event_type('ForkEvent').count
+    @forks = Event.internal.this_week.not_core.event_type('ForkEvent').count
+    @forks_last_week = Event.internal.not_core.last_week.event_type('ForkEvent').count
 
     @comments = Event.internal.this_week.not_core.event_type('IssueCommentEvent').count
     @comments_last_week = Event.internal.last_week.not_core.event_type('IssueCommentEvent').count
