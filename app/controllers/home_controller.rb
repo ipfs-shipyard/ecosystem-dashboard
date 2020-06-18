@@ -7,6 +7,9 @@ class HomeController < ApplicationController
     @new_prs = Issue.internal.this_week.not_core.pull_requests.count
     @new_prs_last_week = Issue.internal.last_week.not_core.pull_requests.count
 
+    @merged_prs = Issue.internal.where('issues.merged_at > ?', 1.week.ago).not_core.pull_requests.count
+    @merged_prs_last_week = Issue.internal.where('issues.merged_at > ?', 2.week.ago).where('issues.merged_at < ?', 1.week.ago).not_core.pull_requests.count
+
     @releases = Event.internal.this_week.event_type('ReleaseEvent').count
 
     @stars = Event.internal.this_week.event_type('WatchEvent').count

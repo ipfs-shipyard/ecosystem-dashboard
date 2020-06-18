@@ -19,7 +19,7 @@
                     <small class='<%= diff_class(new_issue_diff) %>' title='<%= @new_issues_last_week %> issues last week'><%= new_issue_diff %></small>
                   <% end %>
                 </h3>
-                <span>Issues</span>
+                <span>New Issues</span>
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@
                     <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> pull requests last week'><%= '+' if new_pr_diff > 0 %><%= new_pr_diff %></small>
                   <% end %>
                 </h3>
-                <span>Pull Requests</span>
+                <span>New Pull Requests</span>
               </div>
             </div>
           </div>
@@ -228,6 +228,30 @@
                   <% end %>
                 </h3>
                 <span>New Contributors</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'git-merge', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human @merged_prs %>
+
+                  <% merged_prs_diff = @merged_prs - @merged_prs_last_week %>
+                  <% unless merged_prs_diff.zero? %>
+                    <small class='<%= diff_class(merged_prs_diff) %>' title='<%= @merged_prs_last_week %> pull requests merged last week'><%= '+' if merged_prs_diff > 0 %><%= merged_prs_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Merged PRs</span>
               </div>
             </div>
           </div>
