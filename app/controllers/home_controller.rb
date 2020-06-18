@@ -23,5 +23,11 @@ class HomeController < ApplicationController
 
     @slow_responses = Issue.internal.this_week.not_core.unlocked.where("html_url <> ''").not_draft.slow_response.count
     @slow_responses_last_week = Issue.internal.last_week.not_core.unlocked.where("html_url <> ''").not_draft.slow_response.count
+
+    @contributors = Issue.internal.this_week.not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys.length
+    @contributors_last_week = Issue.internal.last_week.not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys.length
+
+    @first_time_contributors = (Issue.internal.this_week.not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys - Issue.internal.where('issues.created_at < ?', 1.week.ago).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys).length
+    @first_time_contributors_last_week = (Issue.internal.last_week.not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys - Issue.internal.where('issues.created_at < ?', 2.weeks.ago).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys).length
   end
 end

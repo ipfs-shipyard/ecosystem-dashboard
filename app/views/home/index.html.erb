@@ -187,4 +187,52 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'person', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= @contributors %>
+                  <% contributors_diff = @contributors - @contributors_last_week %>
+                  <% unless contributors_diff.zero? %>
+                    <small class='<%= diff_class(contributors_diff) %>' title='<%= @contributors_last_week %> slow responses last week'> <%= '+' if contributors_diff > 0 %><%= contributors_diff %></small>
+                  <% end %>
+                </h3>
+                <span>Contributors</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'person', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= @first_time_contributors %>
+                  <% first_time_contributors_diff = @first_time_contributors - @first_time_contributors_last_week %>
+                  <% unless first_time_contributors_diff.zero? %>
+                    <small class='<%= diff_class(first_time_contributors_diff) %>' title='<%= @first_time_contributors_last_week %> slow responses last week'> <%= '+' if first_time_contributors_diff > 0 %><%= first_time_contributors_diff %></small>
+                  <% end %>
+                </h3>
+                <span>New Contributors</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
