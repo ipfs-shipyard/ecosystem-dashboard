@@ -1,6 +1,6 @@
 
 <div class="container">
-  <h2>In the past seven days</h2>
+  <h4>Community activity in the past seven days</h4>
   <div class="row">
     <div class="col-md-3">
       <div class="card shadow-sm mb-3">
@@ -40,7 +40,7 @@
 
                   <% new_pr_diff = @new_prs - @new_prs_last_week %>
                   <% unless new_pr_diff.zero? %>
-                    <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> pull requests last week'><%= new_pr_diff %></small>
+                    <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> pull requests last week'><%= '+' if new_pr_diff > 0 %><%= new_pr_diff %></small>
                   <% end %>
                 </h3>
                 <span>Pull Requests</span>
@@ -217,7 +217,7 @@
           <div class="card-body">
             <div class="media d-flex">
               <div class="align-self-center">
-                <%= octicon 'person', height: 50 %>
+                <%= octicon 'telescope', height: 50 %>
               </div>
               <div class="media-body text-right">
                 <h3>
