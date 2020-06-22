@@ -96,6 +96,8 @@ module ApplicationHelper
       'forked'
     when 'MemberEvent'
       "#{event.action} #{event.payload['member']['login']} to"
+    when 'GollumEvent'
+      "#{event.payload['pages'].first['action']} a wiki page on"
     end
   end
 
@@ -127,6 +129,10 @@ module ApplicationHelper
       'Forked'
     when 'MemberEvent'
       'Member'
+    when 'GollumEvent'
+      'Wiki update'
+    else
+      "*#{event_type}*"
     end
   end
 
