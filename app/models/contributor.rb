@@ -19,6 +19,10 @@ class Contributor < ApplicationRecord
     top_external_contributors = external_contributors.sort_by{|k,v| -v}.first(external_contributors.length/20).map(&:first)
   end
 
+  def self.recent_external_contributors
+    Issue.internal.this_week.not_core.group(:user).count.keys
+  end
+
   def self.find_possible_collabs(contributors)
     possible_collabs = {}
     contributors.each do |github_username|
