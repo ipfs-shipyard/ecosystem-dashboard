@@ -32,6 +32,7 @@ class RepositoriesController < ApplicationController
 
   def collab_events
     @scope = Event.includes(:repository).external.where('events.created_at > ?', 1.month.ago).humans
+    @scope = @scope.search(params[:query]) if params[:query].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.user(params[:user]) if params[:user].present?
     @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?

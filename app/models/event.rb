@@ -19,6 +19,8 @@ class Event < ApplicationRecord
   scope :this_week, -> { where('events.created_at > ?', 1.week.ago) }
   scope :last_week, -> { where('events.created_at > ?', 2.week.ago).where('events.created_at < ?', 1.week.ago) }
 
+  scope :search, ->(query) { where('payload::text ilike ?', "%#{query}%") }
+
   def self.record_event(repository, event_json)
     e = Event.find_or_initialize_by(github_id: event_json.id)
 
