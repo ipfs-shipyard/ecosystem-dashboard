@@ -6,7 +6,7 @@ namespace :issues do
   end
 
   task sync_collabs: :environment do
-    Issue.external.group(:org).count.each do |org, _count|
+    Organization.collaborator.pluck(:name).each do |org|
       Repository.sync_recently_active_repos(org)
     end
   end
