@@ -1,6 +1,6 @@
 # Ecosystem Dashboard
 
-A dashboard for monitoring the ecosystem around an open source project.
+A [dashboard](https://ecosystem-research.herokuapp.com/) for monitoring the ecosystem around an open source project.
 
 ## Features
 
