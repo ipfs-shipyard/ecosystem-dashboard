@@ -44,4 +44,16 @@ class RepositoriesController < ApplicationController
     @users = @scope.unscope(where: :actor).humans.group(:actor).count
     @event_types = @scope.unscope(where: :event_type).group(:event_type).count
   end
+
+  def collab_repositories
+    @scope = Repository.external
+    @scope = @scope.org(params[:org]) if params[:org].present?
+    @scope = @scope.language(params[:language]) if params[:language].present?
+    @scope = @scope.fork(params[:fork]) if params[:fork].present?
+    @scope = @scope.archived(params[:archived]) if params[:archived].present?
+    @pagy, @repositories = pagy(@scope.order('repositories.pushed_at DESC'))
+
+    @orgs = @scope.unscope(where: :org).external.group(:org).count
+    @languages = @scope.unscope(where: :language).group(:language).count
+  end
 end

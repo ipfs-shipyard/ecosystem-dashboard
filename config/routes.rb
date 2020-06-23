@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
   resources :repositories
 
+  get 'collabs/repositories', to: 'repositories#collab_repositories', as: :collab_repositories
   get 'collabs/events', to: 'repositories#collab_events', as: :collab_events
   get 'events', to: 'repositories#events'
   get 'slow_response', to: 'issues#slow_response'
