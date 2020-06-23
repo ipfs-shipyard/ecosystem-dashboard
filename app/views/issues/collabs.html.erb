@@ -14,8 +14,10 @@
 
         <ul class="list-group list-group-flush">
           <li class="list-group-item pt-2 pb-2">
-            <%= octicon('repo') %> Repositories
-            <small class='text-muted'><%= number_with_delimiter Repository.where(org: collab).count %></small>
+            <%= link_to collab_repositories_path(org: collab) do %>
+              <%= octicon('repo') %> Repositories
+              <small class='text-muted'><%= number_with_delimiter Repository.where(org: collab).count %></small>
+            <% end %>
           </li>
           <li class="list-group-item pt-2 pb-2">
             <%= octicon('issue-opened') %> Issues

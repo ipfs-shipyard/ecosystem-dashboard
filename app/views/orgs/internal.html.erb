@@ -73,8 +73,10 @@
           <% end %>
 
           <li class="list-group-item pt-2 pb-2">
-            <%= octicon('repo-clone') %> Repos
-            <small class='text-muted'><%= number_with_delimiter org[:repos].length %></small>
+            <%= link_to repositories_path(org: org[:name]) do %>
+              <%= octicon('repo-clone') %> Repositories
+              <small class='text-muted'><%= number_with_delimiter org[:repos].length %></small>
+            <% end %>
           </li>
           <% org[:repos].first(5).each do |repo, count| %>
             <li class="list-group-item pt-2 pl-5 pb-2">
