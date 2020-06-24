@@ -93,7 +93,7 @@ class Package < ApplicationRecord
   scope :hacker_news, -> { with_repo.where('repositories.stargazers_count > 0').order(Arel.sql("((repositories.stargazers_count-1)/POW((EXTRACT(EPOCH FROM current_timestamp-repositories.created_at)/3600)+2,1.8)) DESC")) }
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 2.weeks.ago)}
 
-  scope :internal, -> { where(repository_id: Repository.internal.pluck(:id)) }
+  scope :internal, -> { joins(:organization).where('organizations.internal = ?', true) }
   scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
 
   scope :exclude_org, ->(org) { joins(:organization).where('organizations.name != ?', org) }

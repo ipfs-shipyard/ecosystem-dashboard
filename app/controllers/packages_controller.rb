@@ -1,6 +1,6 @@
 class PackagesController < ApplicationController
   def index
-    @scope = Package.where(repository_id: Repository.internal.pluck(:id)).includes(:repository)
+    @scope = Package.internal.includes(:repository)
 
     @scope = @scope.exclude_platform(params[:exclude_platform]) if params[:exclude_platform].present?
     @scope = @scope.platform(params[:platform]) if params[:platform].present?
