@@ -244,6 +244,27 @@ For each package it shows:
 
 It also has a basic package search function.
 
+Packages are filterable by:
+- Organization
+- Platform (package manager)
+
+### [Collab Packages](https://ecosystem-research.herokuapp.com/collabs/packages)
+
+The [Packages](https://ecosystem-research.herokuapp.com/collabs/packages) view is a list of all packages owned by collaborator that have been published from collaborator repositories.
+
+For each package it shows:
+- name
+- platform (package manager)
+- description
+- latest release number
+- Dependent collab repositories
+- org icon
+
+It also has a basic package search function.
+
+Packages are filterable by:
+- Organization
+- Platform (package manager)
 
 ## Data model
 
