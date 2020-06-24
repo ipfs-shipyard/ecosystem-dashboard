@@ -50,6 +50,7 @@ This view is also filterable by the standard set of issue and pull request filte
 - Org (internal github organizations)
 - Language (repository programming language)
 - Collaborator (external collaborator github organizations)
+- Label
 - No Core Contributors response
 - Uncommented
 - No milestone
@@ -74,6 +75,7 @@ This view is also filterable by the standard set of issue and pull request filte
 - Org (internal github organizations)
 - Language (repository programming language)
 - Collaborator (external collaborator github organizations)
+- Label
 - Uncommented
 - No milestone
 - Unlabelled
@@ -99,6 +101,7 @@ This view is also filterable by the standard set of issue and pull request filte
 - Repository
 - Org (internal github organizations)
 - Language (repository programming language)
+- Label
 - No Core Contributors response
 - Uncommented
 - No milestone
@@ -129,6 +132,7 @@ This view is also filterable by the standard set of issue and pull request filte
 - Repository
 - Org (internal github organizations)
 - Language (repository programming language)
+- Label
 - Uncommented
 - No milestone
 - Unlabelled
