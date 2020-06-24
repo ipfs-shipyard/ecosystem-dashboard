@@ -109,30 +109,8 @@ class Issue < ApplicationRecord
     @client ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'], auto_paginate: true)
   end
 
-  def self.org_repo_names(org_name)
-    github_client.org_repos(org_name).map(&:full_name)
-  end
-
-  def self.download_org_repos(org_name)
-    org_repo_names(org_name).each{|repo_full_name| download(repo_full_name) }
-  end
-
   def self.active_repo_names
     Issue.internal.unlocked.where('issues.created_at > ?', 6.months.ago).pluck(:repo_full_name).uniq
-  end
-
-  def self.org_contributor_names(org_name)
-    Issue.org(org_name).not_core.group(:user).count
-  end
-
-  def self.download_new_repos
-    new_repo_names.each{|repo_full_name| download(repo_full_name) }
-  end
-
-  def self.new_repo_names
-    Organization.internal.pluck(:name).map do |org_name|
-      org_repo_names(org_name) - active_repo_names
-    end.flatten
   end
 
   def self.download_active_repos
