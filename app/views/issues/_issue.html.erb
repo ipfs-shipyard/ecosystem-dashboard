@@ -58,9 +58,7 @@
         <span class='badge badge-dark'>Core</span>
       <% end %>
       <% issue.labels.first(5).each do |label| %>
-        <span class='badge badge-light'>
-          <%= label %>
-        </span>
+        <%= link_to label, url_for(request.params.merge(label: label, page: nil)), class: "badge badge-light" %>
       <% end %>
     </small>
     <br>

@@ -69,6 +69,7 @@ class IssuesController < ApplicationController
     @pagy, @issues = pagy(@slow.order(sort => order))
 
     @collabs = @slow.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+    @labels = @slow.unscope(where: :labels).pluck(:labels).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
     @users = @slow.group(:user).count
   end
 
@@ -80,6 +81,7 @@ class IssuesController < ApplicationController
     @scope = @scope.exclude_org(params[:exclude_org]) if params[:exclude_org].present?
     @scope = @scope.exclude_language(params[:exclude_language]) if params[:exclude_language].present?
     @scope = @scope.exclude_collab(params[:exclude_collab]) if params[:exclude_collab].present?
+    @scope = @scope.exclude_label(params[:exclude_label]) if params[:exclude_label].present?
 
     @scope = @scope.where(comments_count: 0) if params[:uncommented].present?
 
@@ -88,6 +90,7 @@ class IssuesController < ApplicationController
     @scope = @scope.no_milestone if params[:no_milestone].present?
 
     @scope = @scope.unlabelled if params[:unlabelled].present?
+    @scope = @scope.label(params[:label]) if params[:label].present?
 
     @scope = @scope.where(user: params[:user]) if params[:user].present?
     @scope = @scope.where(state: params[:state]) if params[:state].present?
@@ -123,5 +126,6 @@ class IssuesController < ApplicationController
     @states = @scope.unscope(where: :state).group(:state).count
     @repos = @scope.unscope(where: :repo_full_name).group(:repo_full_name).count
     @orgs = @scope.unscope(where: :org).internal.group(:org).count
+    @labels = @scope.unscope(where: :labels).pluck(:labels).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
   end
 end

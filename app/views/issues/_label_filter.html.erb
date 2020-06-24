@@ -1,0 +1,26 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle <%= 'active' if (params[:label].present? || params[:exclude_label].present?) %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Labels</a>
+  <div class="dropdown-menu">
+    <% if params[:label].present? %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, label: nil)) %>">
+        <%= params[:label] %>
+      </a>
+    <% end %>
+    <% if params[:exclude_label].present? %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, exclude_label: nil)) %>">
+        Excluding: <%= params[:exclude_label] %>
+      </a>
+    <% end %>
+    <% @labels.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |label,count| %>
+      <% unless label == params[:label] %>
+        <a class="dropdown-item" data-alt="<%= url_for(request.params.merge(page: nil, exclude_label: label)) %>" href="<%= url_for(request.params.merge(page: nil, label: label)) %>"
+          title="cmd+click to exclude <%= label %>">
+          <%= label %>
+          <small class='text-muted'>
+            <%= number_with_delimiter count %>
+          </small>
+        </a>
+      <% end %>
+    <% end %>
+  </div>
+</li>

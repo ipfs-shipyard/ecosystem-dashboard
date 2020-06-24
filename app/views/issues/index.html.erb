@@ -8,6 +8,7 @@
       <%= render 'org_filter' %>
       <%= render 'language_filter' %>
       <%= render 'collab_filter' %>
+      <%= render 'label_filter' %>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:no_response].present? || params[:uncommented].present? || params[:recent].present? || params[:no_milestone].present? || params[:unlabelled].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
         <div class="dropdown-menu">
