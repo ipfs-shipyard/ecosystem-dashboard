@@ -16,6 +16,8 @@ class Event < ApplicationRecord
   scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
   scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
 
+  scope :this_period, ->(period) { where('events.created_at > ?', period.days.ago) }
+  scope :last_period, ->(period) { where('events.created_at > ?', (period*2).days.ago).where('events.created_at < ?', period.days.ago) }
   scope :this_week, -> { where('events.created_at > ?', 1.week.ago) }
   scope :last_week, -> { where('events.created_at > ?', 2.week.ago).where('events.created_at < ?', 1.week.ago) }
 

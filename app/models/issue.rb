@@ -38,6 +38,8 @@ class Issue < ApplicationRecord
   scope :exclude_language, ->(language) { where.not('repo_full_name ilike ?', "%/#{language}-%") }
   scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
 
+  scope :this_period, ->(period) { where('issues.created_at > ?', period.days.ago) }
+  scope :last_period, ->(period) { where('issues.created_at > ?', (period*2).days.ago).where('issues.created_at < ?', period.days.ago) }
   scope :this_week, -> { where('issues.created_at > ?', 1.week.ago) }
   scope :last_week, -> { where('issues.created_at > ?', 2.week.ago).where('issues.created_at < ?', 1.week.ago) }
 
