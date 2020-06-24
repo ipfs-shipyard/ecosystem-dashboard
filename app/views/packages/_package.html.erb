@@ -10,9 +10,12 @@
       <small class='text-muted'><%= package.latest_release_number %></small>
     </h5>
 
+    <% if package.description.present? %>
       <%= package.description %>
-    <br/>
+      <br/>
+    <% end %>
     <small class='text-muted'>
+      Versions: <%= package.versions_count %><br/>
       Dependent collab repositories: <%= package.collab_dependent_repos_count || 0 %>
     </small>
   </div>

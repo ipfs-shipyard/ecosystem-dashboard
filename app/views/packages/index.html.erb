@@ -1,4 +1,13 @@
 <h1>Internal Packages</h1>
 
+<div class="row mt-3 mb-3">
+  <div class="col-md-12">
+    <ul class="nav nav-pills d-flex">
+      <%= render 'issues/org_filter' %>
+      <%= render 'platforms_filter' %>
+    </ul>
+  </div>
+</div>
+
 <%= render @packages %>
 <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>

@@ -22,6 +22,7 @@ class Package < ApplicationRecord
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true
 
   belongs_to :repository, optional: true
+  has_one :organization, through: :repository
   has_many :versions
   has_many :dependencies, -> { group 'package_name' }, through: :versions
   # has_many :contributions, through: :repository
@@ -38,6 +39,8 @@ class Package < ApplicationRecord
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
   scope :lower_platform, ->(platform) { where('lower(packages.platform) = ?', platform.try(:downcase)) }
   scope :lower_name, ->(name) { where('lower(packages.name) = ?', name.try(:downcase)) }
+
+  scope :exclude_platform, ->(platform) { where.not(platform: PackageManager::Base.format_name(platform)) }
 
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }
@@ -92,6 +95,9 @@ class Package < ApplicationRecord
 
   scope :internal, -> { where(repository_id: Repository.internal.pluck(:id)) }
   scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
+
+  scope :exclude_org, ->(org) { joins(:organization).where('organizations.name != ?', org) }
+  scope :org, ->(org) { joins(:organization).where('organizations.name = ?', org) }
 
   after_commit :update_repository, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
