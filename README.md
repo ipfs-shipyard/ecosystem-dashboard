@@ -273,32 +273,53 @@ Currently there are no repositories stored that do not belong to either internal
 
 ### Events
 
+TODO
+
 ### Issues
+
+TODO
 
 ### Core Contributors and Bots
 
+TODO
+
 ### Packages, Versions and Dependencies
+
+TODO
 
 ### Manifests and Repository Dependencies
 
-
+TODO
 
 
 
 ## Setup instructions
 
+TODO
+
 ### Deployment
+
+TODO
 
 ### Cron
 
+TODO
+
 ### Configuring organizations
+
+TODO
 
 ### Configuring collabs
 
+TODO
+
 ### Configuring core contributors
+
+TODO
 
 ### Configuring bots
 
+TODO
 
 ## License
 
