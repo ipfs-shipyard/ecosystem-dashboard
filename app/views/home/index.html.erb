@@ -12,26 +12,28 @@
         <a class="nav-link" href=" <%= url_for(request.params.merge(range: 7)) %>">Last 7 days</a>
       </li>
     </ul>
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown <%= 'active' if params[:org].present? %>">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Filter by Organization
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <% if params[:org].present? %>
-            <a class="dropdown-item active" title='Click to remove org filter' href="<%= url_for(request.params.merge(org: nil)) %>">
-              <%= params[:org] %>
-            </a>
-          <% end %>
-          <% Organization.internal.all.each do |org| %>
-            <% next if params[:org] == org.name %>
-            <a class="dropdown-item" href="<%= url_for(request.params.merge(org: org.name)) %>">
-              <%= org.name %>
-            </a>
-          <% end %>
-        </div>
-      </li>
-    </ul>
+    <% if Organization.internal.count > 1 %>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown <%= 'active' if params[:org].present? %>">
+          <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filter by Organization
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <% if params[:org].present? %>
+              <a class="dropdown-item active" title='Click to remove org filter' href="<%= url_for(request.params.merge(org: nil)) %>">
+                <%= params[:org] %>
+              </a>
+            <% end %>
+            <% Organization.internal.all.each do |org| %>
+              <% next if params[:org] == org.name %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(org: org.name)) %>">
+                <%= org.name %>
+              </a>
+            <% end %>
+          </div>
+        </li>
+      </ul>
+    <% end %>
   </div>
 </nav>
 
