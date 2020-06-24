@@ -240,6 +240,62 @@ For each package it shows:
 
 It also has a basic package search function.
 
+
+## Data model
+
+The core data model of the dashboard is organized around a number of key entities, these can be sliced and diced to produce various dashboards, reports and other useful tools for investigating the ecosystem around an open source project.
+
+### Organizations
+
+The dashboard is configured primarily around one or more github organizations that host the main open source project. For example, IPFS and related projects are hosted in a number of github orgs: [IPFS](https://github.com/ipfs), [IPFS Shipyard](https://github.com/ipfs-shipyard) and others. In general the internal organizations will be configured in initial setup and won't change regularly.
+
+These organizations are called "Internal Organizations" in the dashboard schema, where `internal` is `true`. In code they can be loaded with the `internal` scope, for example: `Organization.internal.all`.
+
+Collaborator organizations are the primary way of configuring contributors and projects that are closely related to the primary open source project.
+
+Collaborator organizations are stored in the database with `collaborator` set to `true`. In code they can be loaded with the `collaborator` scope, for example: `Organization.collaborator.all`.
+
+It's expected that new collaborator orgs will be added on a regular basis, and possibly even having some removed.
+
+### Repositories
+
+Organizations have many repositories, the dashboard will attempt to download all public repositories for each org and them monitor them for new activity and updates.
+
+Repositories that belong to internal organizations can be found with the `internal` scope: `Repository.internal.all`
+
+Repositories that belong to collaborator organizations can be found with the `external` scope: `Repository.external.all`
+
+Currently there are no repositories stored that do not belong to either internal or collaborator orgs.
+
+### Events
+
+### Issues
+
+### Core Contributors and Bots
+
+### Packages, Versions and Dependencies
+
+### Manifests and Repository Dependencies
+
+
+
+
+
+## Setup instructions
+
+### Deployment
+
+### Cron
+
+### Configuring organizations
+
+### Configuring collabs
+
+### Configuring core contributors
+
+### Configuring bots
+
+
 ## License
 
 Copyright (c) Protocol Labs, Inc.
