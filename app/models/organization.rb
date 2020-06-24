@@ -15,7 +15,7 @@ class Organization < ApplicationRecord
     # TODO sync all imported issues
     Repository.archived(false).org(name).find_missing_npm_packages
     Repository.archived(false).org(name).find_missing_cargo_packages
-    # TODO find missing go packages
+    Repository.archived(false).org(name).find_missing_go_packages
     # TODO Repository.archived(false).org(name).find_each(&:download_tags)
     guess_core_contributors
     guess_bots

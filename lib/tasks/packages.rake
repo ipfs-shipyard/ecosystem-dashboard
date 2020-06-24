@@ -6,6 +6,7 @@ namespace :packages do
   task find_missing_npm_packages: :environment do
     Repository.find_missing_npm_packages
     Repository.find_missing_cargo_packages
+    Repository.find_missing_go_packages
   end
 
   task sync: :environment do

@@ -246,19 +246,31 @@ class Repository < ApplicationRecord
   def self.find_missing_npm_packages
     internal.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
 
-    # update dependencies
-    # TODO speed this up
-    RepositoryDependency.platform('npm').without_package_id.find_each(&:update_package_id)
-    Dependency.platform('npm').without_package_id.find_each(&:update_package_id)
+    Package.internal.platform('npm').each do |package|
+      RepositoryDependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      Dependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      package.save
+    end
   end
 
   def self.find_missing_cargo_packages
     internal.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
 
-    # update dependencies
-    # TODO speed this up
-    RepositoryDependency.platform('cargo').without_package_id.find_each(&:update_package_id)
-    Dependency.platform('cargo').without_package_id.find_each(&:update_package_id)
+    Package.internal.platform('cargo').each do |package|
+      RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      Dependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      package.save
+    end
+  end
+
+  def self.find_missing_go_packages
+    internal.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
+
+    Package.internal.platform('go').each do |package|
+      RepositoryDependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      Dependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      package.save
+    end
   end
 
   def find_npm_packages
@@ -279,6 +291,17 @@ class Repository < ApplicationRecord
       if file.present? && file[:content].present?
         toml = TomlRB.parse(file[:content])
         PackageManager::Cargo.update(toml['package']['name']) if toml['package']
+      end
+    end
+  end
+
+  def find_go_packages
+    manifests.platform('go').where('filepath ilike ?', '%go.mod').each do |manifest|
+      file = manifest.repository.get_file_contents(manifest.filepath)
+
+      if file.present? && file[:content].present?
+        module_line = file[:content].lines.map(&:strip).map{|line| line.match(/^(module\s+)?(.+)\s+(.+)$/) }.compact.first
+        PackageManager::Go.update(module_line[3].strip) if module_line && module_line[3].strip
       end
     end
   end
