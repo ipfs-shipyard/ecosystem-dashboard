@@ -478,6 +478,10 @@ class Package < ApplicationRecord
     Package.internal.where('collab_dependent_repos_count > 0').includes(:versions).each(&:set_outdated_percentage)
   end
 
+  def internal?
+    organization.try(:internal?)
+  end
+
   private
 
   def spdx_license

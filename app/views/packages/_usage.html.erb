@@ -1,0 +1,23 @@
+<% major_versions = @repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major } %>
+<% if major_versions.length > 1 %>
+  <% groups = @repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v } %>
+<% else %>
+  <% groups = @repository_dependencies.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v } %>
+<% end %>
+
+<% if groups.length > 1 %>
+  <table class='table'>
+    <tr>
+      <th>Version range</th>
+      <th>Usage Percentage</th>
+    </tr>
+    <% groups.each do |version, repository_dependencies| %>
+      <tr>
+        <td>
+          <%= Array(version).join('.') %>.x
+        </td>
+        <td title='<%= repository_dependencies.length %> repos'><%= (repository_dependencies.length.to_f/@repository_dependencies.length*100).round(1) %>%</td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
