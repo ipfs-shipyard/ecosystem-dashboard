@@ -93,9 +93,9 @@ module PackageManager
         dbpackage.assign_attributes(mapped_package.except(:name, :releases, :versions, :version, :dependencies, :properties))
         dbpackage.save! if dbpackage.changed?
       else
-        # dbpackage.reformat_repository_url
+        dbpackage.reformat_repository_url
         attrs = mapped_package.except(:name, :releases, :versions, :version, :dependencies, :properties)
-        dbpackage.update(attrs) if dbpackage.changed?
+        dbpackage.update(attrs)
       end
 
       if self::HAS_VERSIONS
