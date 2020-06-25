@@ -99,7 +99,8 @@ module PackageManager
     end
 
     def self.get_repository_url(package_name)
-      request("https://#{package_name}").to_hash[:url].to_s
+      res = request("https://#{package_name}")
+      res.env.url.to_s if res.success?
     end
 
     def self.get_version(package_name, version)
