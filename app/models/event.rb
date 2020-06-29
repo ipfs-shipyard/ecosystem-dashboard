@@ -23,6 +23,11 @@ class Event < ApplicationRecord
 
   scope :search, ->(query) { where('payload::text ilike ?', "%#{query}%") }
 
+  def contributed?
+    return true unless contributor.present?
+    !contributor.core?
+  end
+
   def self.record_event(repository, event_json)
     e = Event.find_or_initialize_by(github_id: event_json.id)
 

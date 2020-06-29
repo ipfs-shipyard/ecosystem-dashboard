@@ -16,6 +16,15 @@
       <small class='text-muted'>
         <%= distance_of_time_in_words_to_now event.created_at %> ago
       </small>
+      <small>
+        <% if event.contributed? %>
+          <% Contributor.collabs_for(event.actor).each do |collab| %>
+            <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+          <% end %>
+        <% else %>
+          <span class='badge badge-dark'>Core</span>
+        <% end %>
+      </small>
     </h5>
     <div class="ml-4">
       <%= render partial: "events/#{event.event_type.underscore}", locals: {event: event}  %>
