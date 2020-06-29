@@ -29,23 +29,53 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <%= link_to 'Collab Issues+PRs', collab_issues_path, class: 'nav-link' %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Collaborators
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="<%= collabs_path %>">
+                  Organizations
+                </a>
+                <a class="dropdown-item" href="<%= collab_issues_path %>">
+                  Issues and Pull Requests
+                </a>
+                <a class="dropdown-item" href="<%= collab_events_path %>">
+                  Events
+                </a>
+                <a class="dropdown-item" href="<%= collab_packages_path %>">
+                  Packages
+                </a>
+                <a class="dropdown-item" href="<%= collab_repositories_path %>">
+                  Repositories
+                </a>
+              </div>
             </li>
-            <li class="nav-item">
-              <%= link_to 'All Issues+PRs', all_path, class: 'nav-link' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Slow Responses', slow_response_path, class: 'nav-link' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Repositories', repositories_path, class: 'nav-link' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Events', events_path, class: 'nav-link' %>
-            </li>
-            <li class="nav-item">
-              <%= link_to 'Packages', packages_path, class: 'nav-link' %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Internal
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <% if Organization.internal.count > 1 %>
+                  <a class="dropdown-item" href="<%= orgs_path %>">
+                    Organizations
+                  </a>
+                <% end %>
+                <a class="dropdown-item" href="<%= all_issues_path %>">
+                  Issues and Pull Requests
+                </a>
+                <a class="dropdown-item" href="<%= events_path %>">
+                  Events
+                </a>
+                <a class="dropdown-item" href="<%= packages_path %>">
+                  Packages
+                </a>
+                <a class="dropdown-item" href="<%= repositories_path %>">
+                  Repositories
+                </a>
+                <%= link_to 'Slow Responses', slow_response_path, class: 'dropdown-item' %>
+                <%= link_to 'Outdated Packages', outdated_packages_path, class: 'dropdown-item' %>
+              </div>
             </li>
           </ul>
         </div>

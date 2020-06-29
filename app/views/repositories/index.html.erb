@@ -48,24 +48,24 @@
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle <%= 'active' if params[:fork].present? || params[:archived].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:fork].present? || params[:archived].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
         <div class="dropdown-menu">
           <% if params[:fork].present? && params[:fork] == 'false' %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, fork: nil)) %>">
-              Sources
+              Source
             </a>
           <% else %>
             <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, fork: 'false')) %>">
-              Sources
+              Source
             </a>
           <% end %>
           <% if params[:fork].present? && params[:fork] == 'true' %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, fork: nil)) %>">
-              Forks
+              Fork
             </a>
           <% else %>
             <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, fork: 'true')) %>">
-              Forks
+              Fork
             </a>
           <% end %>
           <% if params[:archived].present? && params[:archived] == 'false' %>

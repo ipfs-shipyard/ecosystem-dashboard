@@ -14,11 +14,6 @@ class IssuesController < ApplicationController
     @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
   end
 
-  def collabs
-    @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
-    @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
-  end
-
   def all
     @range = (params[:range].presence || 30).to_i
 
@@ -63,6 +58,12 @@ class IssuesController < ApplicationController
     @collabs = @slow.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
     @labels = @slow.unscope(where: :labels).pluck(:labels).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
     @users = @slow.group(:user).count
+  end
+
+  # TODO move this to orgs controller
+  def collabs
+    @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
+    @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
   end
 
   private

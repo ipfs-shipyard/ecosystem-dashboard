@@ -165,7 +165,7 @@ Repositories are also filterable by:
 
 ### [Events](https://ipfs.ecosystem-dashboard.com/events)
 
-The [Events](https://ipfs.ecosystem-dashboard.com/events) view is a list of all types of github activities across all internal organizations, including:
+The [Events](https://ipfs.ecosystem-dashboard.com/events) view is a list of all types of public github activities across all internal organizations, including:
 
 - Issue Comments
 - Pushes
@@ -188,9 +188,9 @@ Events are also filterable by:
 - User
 - Type
 
-### [Collab Events](https://ipfs.ecosystem-dashboard.com/collabs/events)
+### [Collabs Events](https://ipfs.ecosystem-dashboard.com/collabs/events)
 
-The [Events](https://ipfs.ecosystem-dashboard.com/events) view is a list of all types of github activities across all internal organizations, including:
+The [Collabs Events](https://ipfs.ecosystem-dashboard.com/collabs/events) view is a list of all types of public github activities across all collaborator organizations, including:
 
 - Issue Comments
 - Pushes
@@ -231,7 +231,7 @@ Packages are filterable by:
 - Organization
 - Platform (package manager)
 
-### [Collab Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages)
+### [Collabs Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages)
 
 The [Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages) view is a list of all packages owned by collaborator that have been published from collaborator repositories.
 
