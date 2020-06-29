@@ -20,6 +20,9 @@ class HomeController < ApplicationController
     @merged_prs = @issues_scope.where('issues.merged_at > ?', @period.days.ago).not_core.pull_requests.count
     @merged_prs_last_week = @issues_scope.where('issues.merged_at > ?', (@period*2).days.ago).where('issues.merged_at < ?', @period.days.ago).not_core.pull_requests.count
 
+    @new_collab_contribs = @issues_scope.this_period(@period).all_collabs.count
+    @new_collab_contribs_last_week = @issues_scope.last_period(@period).all_collabs.count
+
     @releases = @event_scope.this_period(@period).event_type('ReleaseEvent').count
 
     @stars = @event_scope.this_period(@period).not_core.event_type('WatchEvent').count

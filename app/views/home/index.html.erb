@@ -95,14 +95,19 @@
           <div class="card-body">
             <div class="media d-flex">
               <div class="align-self-center">
-                <%= octicon 'rocket', height: 50 %>
+                <%= octicon 'briefcase', height: 50 %>
               </div>
               <div class="media-body text-right">
-                <span class='info' title='Releases published by anyone in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                <span class='info' title='Pull Requests opened by non-core human contributors in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
                 <h3>
-                  <%= number_to_human @releases %>
+                  <%= number_to_human @new_collab_contribs %>
+
+                  <% new_collab_contribs_diff = @new_collab_contribs - @new_collab_contribs_last_week %>
+                  <% unless new_collab_contribs_diff.zero? %>
+                    <small class='<%= diff_class(new_collab_contribs_diff) %>' title='<%= @new_collab_contribs_last_week %> pull requests last week'><%= '+' if new_collab_contribs_diff > 0 %><%= number_to_human new_collab_contribs_diff %></small>
+                  <% end %>
                 </h3>
-                <span>Releases</span>
+                <span>Collab Contributions</span>
               </div>
             </div>
           </div>
@@ -141,7 +146,7 @@
           <div class="card-body">
             <div class="media d-flex">
               <div class="align-self-center">
-                <%= octicon 'star', height: 50 %>
+                <%= octicon 'star-fill', height: 50 %>
               </div>
               <div class="media-body text-right">
                 <span class='info' title='Stars on internal repositories by non-core humans in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
@@ -239,7 +244,7 @@
           <div class="card-body">
             <div class="media d-flex">
               <div class="align-self-center">
-                <%= octicon 'person', height: 50 %>
+                <%= octicon 'people', height: 50 %>
               </div>
               <div class="media-body text-right">
                 <span class='info' title='Unique non-core human contributors that opened an issue or pull request in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
@@ -300,6 +305,26 @@
                   <% end %>
                 </h3>
                 <span>Merged PRs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'rocket', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <span class='info' title='Releases published by anyone in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                <h3>
+                  <%= number_to_human @releases %>
+                </h3>
+                <span>Releases</span>
               </div>
             </div>
           </div>
