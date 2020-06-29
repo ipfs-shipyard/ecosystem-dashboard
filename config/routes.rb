@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     end
   end
   resources :repositories
+  resources :contributors
 
   get 'collabs/packages', to: 'packages#collabs', as: :collab_packages
   get 'collabs/repositories', to: 'repositories#collab_repositories', as: :collab_repositories

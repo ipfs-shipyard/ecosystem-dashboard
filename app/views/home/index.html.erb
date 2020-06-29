@@ -255,52 +255,56 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <div class="card shadow-sm mb-3">
-        <div class="card-content">
-          <div class="card-body">
-            <div class="media d-flex">
-              <div class="align-self-center">
-                <%= octicon 'people', height: 50 %>
-              </div>
-              <div class="media-body text-right">
-                <span class='info' title='Unique non-core human contributors that opened an issue or pull request in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
-                <h3>
-                  <%= number_to_human @contributors %>
-                  <% contributors_diff = @contributors - @contributors_last_week %>
-                  <% unless contributors_diff.zero? %>
-                    <small class='<%= diff_class(contributors_diff) %>' title='<%= @contributors_last_week %> slow responses last week'> <%= '+' if contributors_diff > 0 %><%= number_to_human contributors_diff %></small>
-                  <% end %>
-                </h3>
-                <span>Contributors</span>
+      <a href="<%= contributors_path(range: @period) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'people', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='Unique non-core human contributors that opened an issue or pull request in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @contributors %>
+                    <% contributors_diff = @contributors - @contributors_last_week %>
+                    <% unless contributors_diff.zero? %>
+                      <small class='<%= diff_class(contributors_diff) %>' title='<%= @contributors_last_week %> slow responses last week'> <%= '+' if contributors_diff > 0 %><%= number_to_human contributors_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>Contributors</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </a>
     </div>
     <div class="col-md-3">
-      <div class="card shadow-sm mb-3">
-        <div class="card-content">
-          <div class="card-body">
-            <div class="media d-flex">
-              <div class="align-self-center">
-                <%= octicon 'telescope', height: 50 %>
-              </div>
-              <div class="media-body text-right">
-                <span class='info' title='New unique non-core human contributors that opened an issue or pull request in the past <%= @period %> days that had never opened an issue or pull requests here before'><%= octicon 'info', height: 14 %></span>
-                <h3>
-                  <%= number_to_human @first_time_contributors %>
-                  <% first_time_contributors_diff = @first_time_contributors - @first_time_contributors_last_week %>
-                  <% unless first_time_contributors_diff.zero? %>
-                    <small class='<%= diff_class(first_time_contributors_diff) %>' title='<%= @first_time_contributors_last_week %> slow responses last week'> <%= '+' if first_time_contributors_diff > 0 %><%= number_to_human first_time_contributors_diff %></small>
-                  <% end %>
-                </h3>
-                <span>New Contributors</span>
+      <a href="<%= new_contributor_path(range: @period) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'telescope', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='New unique non-core human contributors that opened an issue or pull request in the past <%= @period %> days that had never opened an issue or pull requests here before'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @first_time_contributors %>
+                    <% first_time_contributors_diff = @first_time_contributors - @first_time_contributors_last_week %>
+                    <% unless first_time_contributors_diff.zero? %>
+                      <small class='<%= diff_class(first_time_contributors_diff) %>' title='<%= @first_time_contributors_last_week %> slow responses last week'> <%= '+' if first_time_contributors_diff > 0 %><%= number_to_human first_time_contributors_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>New Contributors</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </a>
     </div>
     <div class="col-md-3">
       <div class="card shadow-sm mb-3">
