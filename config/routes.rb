@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get 'collabs/packages', to: 'packages#collabs', as: :collab_packages
   get 'collabs/repositories', to: 'repositories#collab_repositories', as: :collab_repositories
   get 'collabs/events', to: 'repositories#collab_events', as: :collab_events
+  get 'collab_issues', to: 'issues#index', as: :collab_issues
   get 'events', to: 'repositories#events'
   get 'slow_response', to: 'issues#slow_response'
   get 'weekly', to: redirect('/?range=7')
@@ -24,5 +25,5 @@ Rails.application.routes.draw do
   get 'orgs', to: 'orgs#internal'
   get 'home', to: 'home#index'
 
-  root to: 'issues#index'
+  root to: 'home#index'
 end
