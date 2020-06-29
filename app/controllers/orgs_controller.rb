@@ -21,18 +21,6 @@ class OrgsController < ApplicationController
     @orgs = [load_org_data(scope, params[:id])]
   end
 
-  def events
-    @scope = Event.org(params[:id]).includes(:repository).where('events.created_at > ?', 1.month.ago).humans
-    @scope = @scope.user(params[:user]) if params[:user].present?
-    @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?
-    @scope = @scope.event_type(params[:event_type]) if params[:event_type].present?
-    @pagy, @events = pagy(@scope.order('events.created_at DESC'))
-
-    @repos = @scope.unscope(where: :repository_full_name).internal.group(:repository_full_name).count
-    @users = @scope.unscope(where: :actor).humans.group(:actor).count
-    @event_types = @scope.unscope(where: :event_type).group(:event_type).count
-  end
-
   def dependencies
     @repositories = Repository.archived(false).fork(false).where('pushed_at > ?', 1.year.ago).org(params[:id])
     @dependencies = RepositoryDependency.internal.where(repository_id: @repositories.pluck(:id)).includes({package: :versions}, :repository, :manifest)

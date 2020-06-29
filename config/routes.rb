@@ -20,7 +20,6 @@ Rails.application.routes.draw do
   get 'collabs', to: 'issues#collabs'
   get 'all', to: 'issues#all', as: :all_issues
   get 'orgs/:id/dependencies', to: 'orgs#dependencies', as: :org_dependencies
-  get 'orgs/:id/events', to: 'orgs#events', as: :org_events
   get 'orgs/:id', to: 'orgs#show', as: :org
   get 'orgs', to: 'orgs#internal'
   get 'home', to: 'home#index'
