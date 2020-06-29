@@ -32,7 +32,7 @@ class ContributorsController < ApplicationController
     @collabs = @issues_scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
     @issues_scope = @issues_scope.collab(params[:collab]) if params[:collab].present?
 
-    @scope = @issues_scope..group(:user).count.sort_by{|k,v| -v}
+    @scope = @issues_scope.group(:user).count.sort_by{|k,v| -v}
     @pagy, @contributors = pagy_array(@scope)
   end
 end
