@@ -1,0 +1,10 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Date</a>
+  <div class="dropdown-menu">
+    <% [7, 14, 30, 90, 365].each do |range| %>
+      <a class="dropdown-item <%= 'active' if range == @range %>" href="<%= url_for(request.params.merge(page: nil, range: range)) %>">
+        Last <%= range %> days
+      </a>
+    <% end %>
+  </div>
+</li>

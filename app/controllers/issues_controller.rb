@@ -1,6 +1,8 @@
 class IssuesController < ApplicationController
   def index
-    @scope = Issue.internal.not_core.unlocked.humans.includes(:contributor).where("html_url <> ''")
+    @range = (params[:range].presence || 30).to_i
+
+    @scope = Issue.internal.not_core.this_period(@range).unlocked.humans.includes(:contributor).where("html_url <> ''")
 
     if params[:collab].present?
       @scope = @scope.collab(params[:collab])
@@ -18,27 +20,17 @@ class IssuesController < ApplicationController
   end
 
   def all
-    @scope = Issue.internal.humans.unlocked.includes(:contributor).where("html_url <> ''")
+    @range = (params[:range].presence || 30).to_i
+
+    @scope = Issue.internal.humans.unlocked.this_period(@range).includes(:contributor).where("html_url <> ''")
     @scope = @scope.not_core if params[:exclude_core]
 
     apply_filters
   end
 
-  def weekly
-    @scope = Issue.internal.not_core.unlocked.where("html_url <> ''").includes(:contributor).all_collabs.not_draft.where('issues.closed_at > ? OR issues.created_at > ?', 1.week.ago, 1.week.ago)
-    apply_filters
-    @opened = @scope.this_week
-    @closed = @scope.where('issues.closed_at > ?', 1.week.ago)
-    sort = params[:sort] || 'created_at'
-    order = params[:order] || 'desc'
-
-    @pagy, @issues = pagy(@scope.order(sort => order))
-    @collabs = @scope.all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
-    @users = @scope.group(:user).count
-  end
-
   def slow_response
-    @date_range = 9
+    @range = (params[:range].presence || 7).to_i
+    @date_range = @range + 2
     @orginal_scope = Issue.internal.not_core.unlocked.where("html_url <> ''").not_draft.includes(:contributor)
     @scope = @orginal_scope.where('issues.created_at > ?', @date_range.days.ago).where('issues.created_at < ?', 2.days.ago)
     apply_filters
@@ -84,8 +76,6 @@ class IssuesController < ApplicationController
     @scope = @scope.exclude_label(params[:exclude_label]) if params[:exclude_label].present?
 
     @scope = @scope.where(comments_count: 0) if params[:uncommented].present?
-
-    @scope = @scope.where('issues.created_at > ?', 1.month.ago) if params[:recent].present?
 
     @scope = @scope.no_milestone if params[:no_milestone].present?
 

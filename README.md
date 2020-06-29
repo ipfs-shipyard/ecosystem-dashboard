@@ -55,35 +55,12 @@ This view is also filterable by the standard set of issue and pull request filte
 - Uncommented
 - No milestone
 - Unlabelled
-- Recent (past 30 days)
+- Date range
 - Sort (newest, oldest, recently updated, least recently updated)
 
-### [This week in Collabs](https://ecosystem-research.herokuapp.com/weekly)
+### [All Issues + PRs](https://ecosystem-research.herokuapp.com/all)
 
-The "[This week in Collabs](https://ecosystem-research.herokuapp.com/weekly)" view gives an overview of the activity on internal repositories from collaborator contributors. It shows all the issues and pull requests opened by contributors from any of the configured collaborator github organizations in the past week.
-
-It also includes a graph of how many new issues and pull requests were opened throughout the week as well as how many existing collaborator issues and pull requests were closed or merged in the past seven days.
-
-The most active collabs and collab contributors are also shown.
-
-This view is also filterable by the standard set of issue and pull request filters:
-
-- Author
-- State (open/closed)
-- Type (issue/pull request)
-- Repository
-- Org (internal github organizations)
-- Language (repository programming language)
-- Collaborator (external collaborator github organizations)
-- Label
-- Uncommented
-- No milestone
-- Unlabelled
-- Sort (newest, oldest, recently updated, least recently updated)
-
-### [All Issues + PRs](https://ecosystem-research.herokuapp.com/all?recent=true)
-
-[All Issues + PRs](https://ecosystem-research.herokuapp.com/all?recent=true) shows all issues and pull requests that have been opened by everyone (excluding bots), by default filtered to the last 30 days.
+[All Issues + PRs](https://ecosystem-research.herokuapp.com/all) shows all issues and pull requests that have been opened by everyone (excluding bots), by default filtered to the last 30 days.
 
 It's helpful to give an overview of all new issues and pull requests across all internal organizations for triage.
 
@@ -107,7 +84,7 @@ This view is also filterable by the standard set of issue and pull request filte
 - No milestone
 - Unlabelled
 - Exclude core contributors
-- Recent (past 30 days)
+- Date range
 - Sort (newest, oldest, recently updated, least recently updated)
 
 ### [Slow Responses](https://ecosystem-research.herokuapp.com/slow_response)
@@ -136,7 +113,7 @@ This view is also filterable by the standard set of issue and pull request filte
 - Uncommented
 - No milestone
 - Unlabelled
-- Recent (past 30 days)
+- Date range
 - Sort (newest, oldest, recently updated, least recently updated)
 
 ### [Repositories](https://ecosystem-research.herokuapp.com/repositories)

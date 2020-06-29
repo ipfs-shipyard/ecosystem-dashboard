@@ -14,7 +14,7 @@
       <%= render partial: 'excludable_filter', locals: {filter_name: 'collab', filter_label: 'Collab', filter_collection: @collabs} %>
       <%= render partial: 'excludable_filter', locals: {filter_name: 'label', filter_label: 'Label', filter_collection: @labels} %>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle <%= 'active' if params[:uncommented].present? || params[:recent].present? || params[:no_milestone].present? || params[:unlabelled].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:uncommented].present? || params[:no_milestone].present? || params[:unlabelled].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
         <div class="dropdown-menu">
           <% if params[:uncommented].present? %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, uncommented: nil)) %>">
@@ -43,17 +43,9 @@
               Unlabelled
             </a>
           <% end %>
-          <% if params[:recent].present? %>
-            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, recent: nil)) %>">
-              Recent
-            </a>
-          <% else %>
-            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, recent: 'true')) %>">
-              Recent
-            </a>
-          <% end %>
         </div>
       </li>
+      <%= render 'range_filter' %>
     </ul>
     <ul class="navbar-nav ml-auto">
       <%= render 'sort_filter' %>
@@ -64,10 +56,17 @@
 <div class="row mb-3">
   <div class="col-md-12">
     <% range = @date_range.days.ago.midnight..2.days.ago %>
+    <% if @range > 30 %>
     <%= line_chart [
-        {name: 'Slow Responses', data: @slow.group_by_day(:created_at, range: range).count },
-        {name: 'New Issues + PRs', data: @scope.group_by_day(:created_at, range: range).count }
+        {name: 'Slow Responses', data: @slow.group_by_week(:created_at, range: range).count },
+        {name: 'New Issues + PRs', data: @scope.group_by_week(:created_at, range: range).count }
       ], ytitle: 'Slow Responses' %>
+    <% else %>
+      <%= line_chart [
+          {name: 'Slow Responses', data: @slow.group_by_day(:created_at, range: range).count },
+          {name: 'New Issues + PRs', data: @scope.group_by_day(:created_at, range: range).count }
+        ], ytitle: 'Slow Responses' %>
+    <% end %>
 
     <%= line_chart @response_times, label: "Hours", ytitle: 'Avg Response Time (hrs)' %>
   </div>
@@ -86,7 +85,7 @@
         <%= language_title(params[:language]) if params[:language] %>
         <%= params[:state].capitalize if params[:state] %>
         Issues+PRs
-        <%= 'in the last month' if params[:recent] %>
+        in the last <%= @range %> days
         <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
         <%= "in #{params[:org]}" if params[:org] %>
         with slow response times:
