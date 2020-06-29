@@ -8,7 +8,9 @@
     </h5>
 
     <small class='text-muted'>
-      Contributions in the past <%= @range %> days: <%= count %>
+      <%= link_to all_issues_path(user: contributor, range: @range) do %>
+         <%= pluralize count, 'contribution' %> in the past <%= @range %> days
+      <% end %>
     </small>
   </div>
 </div>
