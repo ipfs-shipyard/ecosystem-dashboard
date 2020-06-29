@@ -1,12 +1,12 @@
 # Ecosystem Dashboard
 
-A [dashboard](https://ecosystem-research.herokuapp.com/) for monitoring the ecosystem around an open source project.
+A [dashboard](https://ipfs.ecosystem-dashboard.com/) for monitoring the ecosystem around an open source project.
 
 ## Features
 
 ### Organizations
 
-Monitor activity across multiple organizations, both internal to your project and from external collaborators as well. For the IPFS project that means monitoring activity [internal orgs](https://ecosystem-research.herokuapp.com/orgs) from:
+Monitor activity across multiple organizations, both internal to your project and from external collaborators as well. For the IPFS project that means monitoring activity [internal orgs](https://ipfs.ecosystem-dashboard.com/orgs) from:
 
 - https://github.com/ipfs
 - https://github.com/libp2p
@@ -16,7 +16,7 @@ Monitor activity across multiple organizations, both internal to your project an
 - https://github.com/protoschool
 - https://github.com/ipfs-cluster
 
-and [collaborator organizations](https://ecosystem-research.herokuapp.com/collabs) such as:
+and [collaborator organizations](https://ipfs.ecosystem-dashboard.com/collabs) such as:
 
 - https://github.com/orbitdb
 - https://github.com/qri-io
@@ -25,13 +25,19 @@ and [collaborator organizations](https://ecosystem-research.herokuapp.com/collab
 - https://github.com/ethereum
 - and many more.
 
-### [Collaborators](https://ecosystem-research.herokuapp.com/collabs)
+### [Collaborators](https://ipfs.ecosystem-dashboard.com/collabs)
 
-[Collaborators](https://ecosystem-research.herokuapp.com/collabs) are a key feature of the ecosystem dashboard, many large open source projects have more incoming issues and pull requests than they can possibly handle and so being able to visualize and prioritise activity by people from organizations that have an existing relationship with the project is essential to keeping those collaborations running smoothly.
+[Collaborators](https://ipfs.ecosystem-dashboard.com/collabs) are a key feature of the ecosystem dashboard, many large open source projects have more incoming issues and pull requests than they can possibly handle and so being able to visualize and prioritise activity by people from organizations that have an existing relationship with the project is essential to keeping those collaborations running smoothly.
 
 You can highlight any github organization as a collaborator and then any activity by members of that organization will be added to the various collaborator dashboard views. The public activity within collaborator organizations will also be monitored for discovering new contributors, package usage and searching for relevant issues and pull requests.
 
-### [Collaborator Issues](https://ecosystem-research.herokuapp.com)
+### [Stats Overview](https://ipfs.ecosystem-dashboard.com/)
+
+A high level overview of recent community metrics across all internal organizations, compared to the previous period.
+
+Filterable by date range and internal organization.
+
+### [Collaborator Issues](https://ipfs.ecosystem-dashboard.com/collab_issues)
 
 The default homepage view shows issues and pull requests that have been opened by contributors from any of the configured collaborator github organizations.
 
@@ -58,9 +64,9 @@ This view is also filterable by the standard set of issue and pull request filte
 - Date range
 - Sort (newest, oldest, recently updated, least recently updated)
 
-### [All Issues + PRs](https://ecosystem-research.herokuapp.com/all)
+### [All Issues + PRs](https://ipfs.ecosystem-dashboard.com/all)
 
-[All Issues + PRs](https://ecosystem-research.herokuapp.com/all) shows all issues and pull requests that have been opened by everyone (excluding bots), by default filtered to the last 30 days.
+[All Issues + PRs](https://ipfs.ecosystem-dashboard.com/all) shows all issues and pull requests that have been opened by everyone (excluding bots), by default filtered to the last 30 days.
 
 It's helpful to give an overview of all new issues and pull requests across all internal organizations for triage.
 
@@ -87,9 +93,9 @@ This view is also filterable by the standard set of issue and pull request filte
 - Date range
 - Sort (newest, oldest, recently updated, least recently updated)
 
-### [Slow Responses](https://ecosystem-research.herokuapp.com/slow_response)
+### [Slow Responses](https://ipfs.ecosystem-dashboard.com/slow_response)
 
-The [Slow Responses](https://ecosystem-research.herokuapp.com/slow_response) page shows every internal issue and pull request that has not had a response from a core contributor within a reasonable time frame, which by default is 48 hours, over the past 7 days (plus the slow response window, so last 9 days by default).
+The [Slow Responses](https://ipfs.ecosystem-dashboard.com/slow_response) page shows every internal issue and pull request that has not had a response from a core contributor within a reasonable time frame, which by default is 48 hours, over the past 7 days (plus the slow response window, so last 9 days by default).
 
 It is helpful to give a view of all the issues and pull requests that have not been triaged by a core team member yet. Note that this does not mean all issues are expected to be fixed within 48 hours, but should have at least received some kind of response such as a comment, review or label.
 
@@ -116,29 +122,9 @@ This view is also filterable by the standard set of issue and pull request filte
 - Date range
 - Sort (newest, oldest, recently updated, least recently updated)
 
-### [Repositories](https://ecosystem-research.herokuapp.com/repositories)
+### [Repositories](https://ipfs.ecosystem-dashboard.com/repositories)
 
-[Repositories](https://ecosystem-research.herokuapp.com/repositories) gives a filterable view of all active repositories across all your internal organizations, ordered by which have been pushed to most recently.
-
-It shows highlevel information such as:
-- name
-- description
-- organization
-- last pushed date and time
-- repo size
-- number of dependencies
-
-Repositories are also filterable by:
-- Organization
-- Main language
-- Source (not forked)
-- Forks
-- Active (not archived)
-- Archived
-
-### [Collab Repositories](https://ecosystem-research.herokuapp.com/collabs/repositories)
-
-[Collab Repositories](https://ecosystem-research.herokuapp.com/collabs/repositories) gives a filterable view of all active repositories across all your collaborators organizations, ordered by which have been pushed to most recently.
+[Repositories](https://ipfs.ecosystem-dashboard.com/repositories) gives a filterable view of all active repositories across all your internal organizations, ordered by which have been pushed to most recently.
 
 It shows highlevel information such as:
 - name
@@ -156,10 +142,30 @@ Repositories are also filterable by:
 - Active (not archived)
 - Archived
 
+### [Collab Repositories](https://ipfs.ecosystem-dashboard.com/collabs/repositories)
 
-### [Events](https://ecosystem-research.herokuapp.com/events)
+[Collab Repositories](https://ipfs.ecosystem-dashboard.com/collabs/repositories) gives a filterable view of all active repositories across all your collaborators organizations, ordered by which have been pushed to most recently.
 
-The [Events](https://ecosystem-research.herokuapp.com/events) view is a list of all types of github activities across all internal organizations, including:
+It shows highlevel information such as:
+- name
+- description
+- organization
+- last pushed date and time
+- repo size
+- number of dependencies
+
+Repositories are also filterable by:
+- Organization
+- Main language
+- Source (not forked)
+- Forks
+- Active (not archived)
+- Archived
+
+
+### [Events](https://ipfs.ecosystem-dashboard.com/events)
+
+The [Events](https://ipfs.ecosystem-dashboard.com/events) view is a list of all types of github activities across all internal organizations, including:
 
 - Issue Comments
 - Pushes
@@ -182,9 +188,9 @@ Events are also filterable by:
 - User
 - Type
 
-### [Collab Events](https://ecosystem-research.herokuapp.com/collabs/events)
+### [Collab Events](https://ipfs.ecosystem-dashboard.com/collabs/events)
 
-The [Events](https://ecosystem-research.herokuapp.com/events) view is a list of all types of github activities across all internal organizations, including:
+The [Events](https://ipfs.ecosystem-dashboard.com/events) view is a list of all types of github activities across all internal organizations, including:
 
 - Issue Comments
 - Pushes
@@ -207,9 +213,9 @@ Events are also filterable by:
 - User
 - Type
 
-### [Packages](https://ecosystem-research.herokuapp.com/packages)
+### [Packages](https://ipfs.ecosystem-dashboard.com/packages)
 
-The [Packages](https://ecosystem-research.herokuapp.com/packages) view is a list of all internal packages that have been published from internal repositories.
+The [Packages](https://ipfs.ecosystem-dashboard.com/packages) view is a list of all internal packages that have been published from internal repositories.
 
 For each package it shows:
 - name
@@ -225,9 +231,9 @@ Packages are filterable by:
 - Organization
 - Platform (package manager)
 
-### [Collab Packages](https://ecosystem-research.herokuapp.com/collabs/packages)
+### [Collab Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages)
 
-The [Packages](https://ecosystem-research.herokuapp.com/collabs/packages) view is a list of all packages owned by collaborator that have been published from collaborator repositories.
+The [Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages) view is a list of all packages owned by collaborator that have been published from collaborator repositories.
 
 For each package it shows:
 - name
