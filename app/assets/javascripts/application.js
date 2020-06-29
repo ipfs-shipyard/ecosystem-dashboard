@@ -11,7 +11,7 @@ document.addEventListener("turbolinks:load", function() {
     if ($(this).data()["alt"]) {
       if(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey){
         e.preventDefault();
-        window.location = $(this).data().alt
+        Turbolinks.visit($(this).data().alt)
       }
     }
   });
