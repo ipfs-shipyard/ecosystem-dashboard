@@ -83,11 +83,11 @@
       <h5 class='mb-2'>
         <%= 'Uncommented' if params[:uncommented] %>
         <%= language_title(params[:language]) if params[:language] %>
-        <%= params[:state].capitalize if params[:state] %>
-        Issues+PRs
+        <%= params[:state] ? params[:state].capitalize : 'All' %>
+        <%= params[:type] ? params[:type].humanize : 'Issues and PRs' %>
         in the last <%= @range %> days
         <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
-        <%= "in #{params[:org]}" if params[:org] %>
+        <%= "in #{params[:org]}" if params[:org] && params[:repo_full_name].blank? %>
         with slow response times:
         <%= @pagy.count %> out of <%= @scope.count %>
         <small class='text-muted'>

@@ -82,17 +82,18 @@
       <h5 class='mb-2'>
         <%= 'Uncommented' if params[:uncommented] %>
         <%= language_title(params[:language]) if params[:language] %>
-        <%= params[:state].capitalize if params[:state] %>
-        Issues+PRs
+        <%= params[:state] ? params[:state].capitalize : 'All' %>
+        <%= params[:type] ? params[:type].humanize : 'Issues and PRs' %>
+
         in the last <%= @range %> days
         created by
         <% if params[:user].present? %>
           <%= params[:user] %>
         <% else %>
-          all <%= collab_title %> contributors
+          <%= collab_title %> contributors
         <% end %>
         <%= "on #{params[:repo_full_name]}" if params[:repo_full_name] %>
-        <%= "in #{params[:org]}" if params[:org] %>
+        <%= "in #{params[:org]}" if params[:org] && params[:repo_full_name].blank? %>
         <small class='text-muted'>
           <%= @pagy.count %>
         </small>
