@@ -144,7 +144,7 @@ module ApplicationHelper
   end
 
   def page_title
-    "#{default_org_name} Ecosystem Dashboard"
+    "#{display_name} Ecosystem Dashboard"
   end
 
   def brand_icon_url
@@ -153,6 +153,10 @@ module ApplicationHelper
   end
 
   def default_org_name
-    ENV['DEFAULT_ORG'] || Organization.internal.first.try(:name)
+    ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
+  end
+
+  def display_name
+    ENV['DISPLAY_NAME'].presence || default_org_name
   end
 end
