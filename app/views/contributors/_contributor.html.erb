@@ -5,6 +5,11 @@
       <% end %>
     <h5 class="card-title mb-0">
       <%= link_to contributor, "https://github.com/#{contributor}", target: :_blank %>
+      <small>
+        <% Contributor.collabs_for(contributor).each do |collab| %>
+          <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+        <% end %>
+      </small>
     </h5>
 
     <small class='text-muted'>

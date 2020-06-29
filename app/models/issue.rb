@@ -119,8 +119,7 @@ class Issue < ApplicationRecord
 
   def self.update_collab_labels
     Issue.unlocked.internal.where('issues.created_at > ?', 1.month.ago).not_core.group(:user).count.each do |u, count|
-      collabs = Event.external.user(u).event_type('PushEvent').group(:org).count.map(&:first)
-      Issue.internal.unlocked.where(user: u).update_all(collabs: collabs)
+      Issue.internal.unlocked.where(user: u).update_all(collabs: Contributor.collabs_for(u))
     end
   end
 

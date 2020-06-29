@@ -8,6 +8,10 @@ class Contributor < ApplicationRecord
   scope :bot,  -> { where(bot: true) }
   scope :core_or_bot, -> { core.or(bot) }
 
+  def self.collabs_for(username)
+    Event.external.user(username).event_type('PushEvent').group(:org).count.map(&:first)
+  end
+
   def self.suggest_orgs(github_username)
     events = Issue.github_client.user_public_events(github_username)
     pushes = events.select{|e| e[:type] == 'PushEvent'}
