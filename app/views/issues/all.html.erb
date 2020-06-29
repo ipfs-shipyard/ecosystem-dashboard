@@ -1,13 +1,17 @@
-<div class="row mt-3 mb-3">
-  <div class="col-md-12">
-    <ul class="nav nav-pills d-flex">
-      <%= render 'user_filter' %>
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong>All Issues</strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <%= render partial: 'excludable_filter', locals: {filter_name: 'user', filter_label: 'User', filter_collection: @users} %>
       <%= render 'state_filter' %>
       <%= render 'type_filter' %>
-      <%= render 'repo_filter' %>
-      <%= render 'org_filter' %>
-      <%= render 'language_filter' %>
-      <%= render 'label_filter' %>
+      <%= render partial: 'excludable_filter', locals: {filter_name: 'repo_full_name', filter_label: 'Repository', filter_collection: @repos} %>
+      <%= render partial: 'excludable_filter', locals: {filter_name: 'org', filter_label: 'Organisation', filter_collection: @orgs} if Organization.internal.count > 1 %>
+      <%= render partial: 'excludable_filter', locals: {filter_name: 'language', filter_label: 'Language', filter_collection: @languages} %>
+      <%= render partial: 'excludable_filter', locals: {filter_name: 'label', filter_label: 'Label', filter_collection: @labels} %>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:no_response].present? || params[:uncommented].present? || params[:recent].present? || params[:no_milestone].present? || params[:unlabelled].present? || params[:exclude_core].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
         <div class="dropdown-menu">
@@ -67,10 +71,12 @@
           <% end %>
         </div>
       </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
       <%= render 'sort_filter' %>
     </ul>
   </div>
-</div>
+</nav>
 
 <% if @issues.any? %>
   <div class="row mb-3">

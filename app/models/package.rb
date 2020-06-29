@@ -1,7 +1,4 @@
 class Package < ApplicationRecord
-  # include PackageSearch
-  # include SourceRank
-  # include Status
   include Releases
 
   include PgSearch::Model
@@ -16,8 +13,6 @@ class Package < ApplicationRecord
                     }
                   }
 
-  # include GithubPackage
-
   validates_presence_of :name, :platform
   validates_uniqueness_of :name, scope: :platform, case_sensitive: true
 
@@ -25,8 +20,7 @@ class Package < ApplicationRecord
   has_one :organization, through: :repository
   has_many :versions
   has_many :dependencies, -> { group 'package_name' }, through: :versions
-  # has_many :contributions, through: :repository
-  # has_many :contributors, through: :contributions, source: :repository_user
+
   has_many :tags, through: :repository
   has_many :published_tags, -> { where('published_at IS NOT NULL') }, through: :repository, class_name: 'Tag'
   has_many :dependents, class_name: 'Dependency'
@@ -40,7 +34,7 @@ class Package < ApplicationRecord
   scope :lower_platform, ->(platform) { where('lower(packages.platform) = ?', platform.try(:downcase)) }
   scope :lower_name, ->(name) { where('lower(packages.name) = ?', name.try(:downcase)) }
 
-  scope :exclude_platform, ->(platform) { where.not(platform: PackageManager::Base.format_name(platform)) }
+  scope :exclude_platform, ->(platforms) { where.not(platform: platforms.map{|p|PackageManager::Base.format_name(p)}) }
 
   scope :with_homepage, -> { where("homepage <> ''") }
   scope :with_repository_url, -> { where("repository_url <> ''") }

@@ -1,6 +1,6 @@
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle <%= 'active' if (params[:sort].present? || params[:order].present?) %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort</a>
-  <div class="dropdown-menu">
+  <div class="dropdown-menu dropdown-menu-right text-right">
     <% if params[:sort] != 'updated_at' && params[:order] != 'asc' %>
       <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
         Newest

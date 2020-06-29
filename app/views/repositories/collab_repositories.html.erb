@@ -1,8 +1,10 @@
-<h1>Collab Repositories</h1>
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong>Collab Repositories</strong>
+  </span>
 
-<div class="row mt-3 mb-3">
-  <div class="col-md-12">
-    <ul class="nav nav-pills d-flex">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
         <div class="dropdown-menu">
@@ -86,7 +88,7 @@
       </li>
     </ul>
   </div>
-</div>
+</nav>
 
 <%= render @repositories %>
 <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>

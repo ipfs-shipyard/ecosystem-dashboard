@@ -1,6 +1,10 @@
-<div class="row mt-3">
-  <div class="col-md-12">
-    <ul class="nav nav-pills d-flex">
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong>Internal Events</strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
       <% if Organization.internal.count > 1 %>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
@@ -85,7 +89,7 @@
       </li>
     </ul>
   </div>
-</div>
+</nav>
 
 <div class="mb-3">
   <%= line_chart @scope.group_by_day(:created_at).count, colors: ['#bbb'], height: "80px", library: { scales: { yAxes: [{ display: false }], xAxes: [{ display: false }] }}, points: false %>

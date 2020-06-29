@@ -77,7 +77,7 @@ class IssuesController < ApplicationController
 
   def apply_filters
     @scope = @scope.exclude_user(params[:exclude_user]) if params[:exclude_user].present?
-    @scope = @scope.exclude_repo(params[:exclude_repo]) if params[:exclude_repo].present?
+    @scope = @scope.exclude_repo(params[:exclude_repo_full_name]) if params[:exclude_repo_full_name].present?
     @scope = @scope.exclude_org(params[:exclude_org]) if params[:exclude_org].present?
     @scope = @scope.exclude_language(params[:exclude_language]) if params[:exclude_language].present?
     @scope = @scope.exclude_collab(params[:exclude_collab]) if params[:exclude_collab].present?
