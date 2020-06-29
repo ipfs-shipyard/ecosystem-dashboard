@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get 'collabs/events', to: 'repositories#collab_events', as: :collab_events
   get 'collab_issues', to: 'issues#index', as: :collab_issues
   get 'events', to: 'repositories#events'
-  get 'slow_response', to: 'issues#slow_response'
+  get 'slow_response', to: 'issues#slow_response', as: :slow_response
   get 'weekly', to: redirect('/collab_issues?range=7')
   get 'collabs', to: 'issues#collabs'
   get 'all', to: 'issues#all', as: :all_issues

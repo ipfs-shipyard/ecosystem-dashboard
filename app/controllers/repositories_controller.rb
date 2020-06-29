@@ -12,7 +12,8 @@ class RepositoriesController < ApplicationController
   end
 
   def events
-    @scope = Event.includes(:repository).internal.where('events.created_at > ?', 1.month.ago).humans
+    @range = (params[:range].presence || 30).to_i
+    @scope = Event.includes(:repository).internal.this_period(@range).humans
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.user(params[:user]) if params[:user].present?
     @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?
@@ -31,7 +32,8 @@ class RepositoriesController < ApplicationController
   end
 
   def collab_events
-    @scope = Event.includes(:repository).external.where('events.created_at > ?', 1.month.ago).humans
+    @range = (params[:range].presence || 30).to_i
+    @scope = Event.includes(:repository).external.this_period(@range).humans
     @scope = @scope.search(params[:query]) if params[:query].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.user(params[:user]) if params[:user].present?
