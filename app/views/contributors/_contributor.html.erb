@@ -4,7 +4,7 @@
         <img src="https://github.com/<%= contributor %>.png" class="rounded" height='40'>
       <% end %>
     <h5 class="card-title mb-0">
-      <%= link_to contributor, "https://github.com/#{contributor}", target: :_blank %>
+      <%= link_to contributor, contributor_path(contributor), target: :_blank %>
       <small>
         <% Contributor.collabs_for(contributor).each do |collab| %>
           <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>

@@ -35,4 +35,10 @@ class ContributorsController < ApplicationController
     @scope = @issues_scope.group(:user).count.sort_by{|k,v| -v}
     @pagy, @contributors = pagy_array(@scope)
   end
+
+  def show
+    @contributor = params[:id]
+    @events = Event.internal.user(@contributor).limit(10).order('events.created_at desc')
+    @issues = Issue.internal.user(@contributor).limit(10).order('issues.created_at desc')
+  end
 end

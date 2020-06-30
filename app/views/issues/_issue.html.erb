@@ -1,6 +1,6 @@
 <div class="card mb-3">
   <div class="card-body">
-    <%= link_to "https://github.com/#{issue.user.gsub('[bot]', '')}", target: :_blank, class: 'float-right' do %>
+    <%= link_to contributor_path(issue.user), target: :_blank, class: 'float-right' do %>
       <img src="https://github.com/<%= issue.user.gsub('[bot]', '') %>.png" class="rounded" height='40'>
     <% end %>
     <h5 class="card-title mb-0">
