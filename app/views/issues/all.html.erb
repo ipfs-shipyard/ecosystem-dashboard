@@ -11,6 +11,7 @@
       <%= render partial: 'excludable_filter', locals: {filter_name: 'repo_full_name', filter_label: 'Repo', filter_collection: @repos} %>
       <%= render partial: 'excludable_filter', locals: {filter_name: 'org', filter_label: 'Org', filter_collection: @orgs} if Organization.internal.count > 1 %>
       <%= render partial: 'excludable_filter', locals: {filter_name: 'language', filter_label: 'Language', filter_collection: @languages} %>
+      <%= render partial: 'excludable_filter', locals: {filter_name: 'collab', filter_label: 'Collab', filter_collection: @collabs} %>
       <%= render partial: 'excludable_filter', locals: {filter_name: 'label', filter_label: 'Label', filter_collection: @labels} %>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:no_response].present? || params[:uncommented].present? || params[:no_milestone].present? || params[:unlabelled].present? || params[:exclude_core].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>

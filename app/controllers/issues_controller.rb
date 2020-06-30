@@ -20,7 +20,10 @@ class IssuesController < ApplicationController
     @scope = Issue.internal.humans.unlocked.this_period(@range).includes(:contributor).where("html_url <> ''")
     @scope = @scope.not_core if params[:exclude_core]
 
+    @scope = @scope.collab(params[:collab]) if params[:collab].present?
+
     apply_filters
+    @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
   end
 
   def slow_response
