@@ -43,6 +43,7 @@ module PackageManager
       json = get("https://hub.docker.com/api/build/v1/source/?image=#{name}")
       return unless json['objects']
       o = json['objects'].first
+      return unless o
       return unless o['provider'] == 'Github'
       "https://github.com/#{o['owner']}/#{o['repository']}"
     end
