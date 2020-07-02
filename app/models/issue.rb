@@ -100,7 +100,8 @@ class Issue < ApplicationRecord
       issue.milestone_name = remote_issue.milestone.try(:title)
       issue.milestone_id = remote_issue.milestone.try(:number)
       issue.labels = remote_issue.labels.map(&:name)
-      issue.save if issue.changed?
+      issue.last_synced_at = Time.zone.now
+      issue.save
     rescue ArgumentError, Octokit::Error
       # derp
     end
@@ -126,10 +127,6 @@ class Issue < ApplicationRecord
 
   def pull_request?
     html_url && html_url.match?(/\/pull\//i)
-  end
-
-  def self.sync_pull_requests(time_range = 1.week.ago)
-    internal.pull_requests.where('issues.created_at > ?', time_range).where(merged_at: nil).find_each(&:download_pull_request)
   end
 
   def download_pull_request
@@ -179,6 +176,7 @@ class Issue < ApplicationRecord
       remote_issue = Issue.github_client.issue(repo_full_name, number)
       Issue.update_from_github(repo_full_name, remote_issue)
       update_extra_attributes
+      update_column(:last_synced_at, Time.zone.now)
     rescue Octokit::NotFound
       destroy
     end

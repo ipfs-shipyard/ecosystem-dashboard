@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_15_133314) do
+ActiveRecord::Schema.define(version: 2020_07_02_145622) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "contributors", force: :cascade do |t|
@@ -76,6 +77,7 @@ ActiveRecord::Schema.define(version: 2020_06_15_133314) do
     t.datetime "first_response_at"
     t.integer "response_time"
     t.bigint "github_id"
+    t.datetime "last_synced_at"
     t.index ["collabs"], name: "index_issues_on_collabs", using: :gin
     t.index ["created_at"], name: "index_issues_on_created_at"
     t.index ["org"], name: "index_issues_on_org"
