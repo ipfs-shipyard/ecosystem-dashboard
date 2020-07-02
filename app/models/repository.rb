@@ -135,19 +135,23 @@ class Repository < ApplicationRecord
   end
 
   def self.sync_recently_active_repos(org)
-    repo_names = download_org_events(org).map(&:repo).map(&:name).uniq
-    repo_names.each do |full_name|
-      repo = existing_repo = Repository.find_by_full_name(full_name)
-      repo = Repository.download(full_name) if existing_repo.nil?
-      next unless repo
-      e = repo.sync_events
-      if e.any?
-        if Organization.internal.pluck(:name).include?(org)
-          Issue.download(full_name)
-          Issue.internal.where(repo_full_name: full_name).where('issues.updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
+    begin
+      repo_names = download_org_events(org).map(&:repo).map(&:name).uniq
+      repo_names.each do |full_name|
+        repo = existing_repo = Repository.find_by_full_name(full_name)
+        repo = Repository.download(full_name) if existing_repo.nil?
+        next unless repo
+        e = repo.sync_events
+        if e.any?
+          if Organization.internal.pluck(:name).include?(org)
+            Issue.download(full_name)
+            Issue.internal.where(repo_full_name: full_name).where('issues.updated_at > ?', 1.hour.ago).each(&:update_extra_attributes)
+          end
+          Repository.download(full_name) if existing_repo
         end
-        Repository.download(full_name) if existing_repo
       end
+    rescue Octokit::NotFound
+      # org deleted
     end
   end
 
