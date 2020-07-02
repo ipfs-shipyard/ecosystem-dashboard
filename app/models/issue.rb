@@ -38,8 +38,8 @@ class Issue < ApplicationRecord
   scope :exclude_repo, ->(repo_full_name) { where.not(repo_full_name: repo_full_name) }
   scope :exclude_org, ->(org) { where.not(org: org) }
   scope :exclude_language, ->(languages) { where('repo_full_name NOT ilike ALL(ARRAY[?])', Array(languages).map{|l| "%/#{l}-%" }) }
-  scope :exclude_collab, ->(collab) { where.not("collabs @> ARRAY[?]::varchar[]", collab)  }
-  scope :exclude_label, ->(label) { where.not("labels @> ARRAY[?]::varchar[]", label)  }
+  scope :exclude_collab, ->(collab) { where.not("collabs && ARRAY[?]::varchar[]", collab)  }
+  scope :exclude_label, ->(label) { where.not("labels && ARRAY[?]::varchar[]", label)  }
 
   scope :this_period, ->(period) { where('issues.created_at > ?', period.days.ago) }
   scope :last_period, ->(period) { where('issues.created_at > ?', (period*2).days.ago).where('issues.created_at < ?', period.days.ago) }
