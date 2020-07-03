@@ -64,13 +64,6 @@
                 (optional)
               <% end %>
               </small>
-              <% if dependency.outdated? %>
-                <% if dependency.latest_resolvable_version && dependency.latest_resolvable_version.semantic_version.major < dependency.package.latest_stable_release.semantic_version.major %>
-                  <span class='badge badge-danger' title='Latest stable version is <%= dependency.package.latest_stable_release_number %>' >Outdated</span>
-                <% else %>
-                  <span class='badge badge-warning' title='Latest stable version is <%= dependency.package.latest_stable_release_number %>' >Outdated</span>
-                <% end %>
-              <% end %>
             </li>
           <% end %>
         <% end %>
