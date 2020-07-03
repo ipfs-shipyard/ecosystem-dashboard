@@ -26,11 +26,17 @@ module PackageManager
     end
 
     def self.versions(package, _name)
-      # TODO pagination
-      tags = get("https://hub.docker.com/v2/repositories/#{_name}/tags")
-      p tags['results']
-      tags['results'].map do |version|
-        p version
+      page = 1
+      tags = []
+      while page < 100
+        r = get("https://hub.docker.com/v2/repositories/#{_name}/tags?page=#{page}")
+        break if r['results'] == []
+
+        tags += r['results']
+        page += 1
+      end
+
+      tags.map do |version|
         next if version["name"].match?(/latest/)
         {
           number: version["name"],
