@@ -7,6 +7,7 @@ namespace :packages do
     Repository.find_missing_npm_packages
     Repository.find_missing_cargo_packages
     Repository.find_missing_go_packages
+    Organization.where('docker_hub_org is not null').each(&:sync_docker_packages)
   end
 
   task sync: :environment do

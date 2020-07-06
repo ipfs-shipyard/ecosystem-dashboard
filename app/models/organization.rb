@@ -39,4 +39,13 @@ class Organization < ApplicationRecord
       Contributor.find_or_create_by(github_username: name, bot: true)
     end
   end
+
+  def sync_docker_packages
+    docker_image_names.each{|name| PackageManager::Docker.update(name) }
+  end
+
+  def docker_image_names
+    return [] unless docker_hub_org.present?
+    PackageManager::Docker.org_package_names(docker_hub_org)
+  end
 end

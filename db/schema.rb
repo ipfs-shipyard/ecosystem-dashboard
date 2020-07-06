@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_02_145622) do
+ActiveRecord::Schema.define(version: 2020_07_06_105811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 2020_07_02_145622) do
     t.boolean "collaborator", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "docker_hub_org"
   end
 
   create_table "packages", force: :cascade do |t|

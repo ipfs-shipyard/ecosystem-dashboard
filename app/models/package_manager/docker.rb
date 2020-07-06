@@ -16,6 +16,19 @@ module PackageManager
       get("https://hub.docker.com/v2/repositories/#{name}/")
     end
 
+    def self.org_package_names(name)
+      page = 1
+      images = []
+      while page < 100
+        r = get("https://hub.docker.com/v2/repositories/#{name}/?page=#{page}")
+        break if r['results'].nil? || r['results'] == []
+
+        images += r['results']
+        page += 1
+      end
+      images.map{|i| "#{i["namespace"]}/#{i["name"]}" }
+    end
+
     def self.mapping(package)
       package_name = "#{package["namespace"]}/#{package["name"]}"
       {
@@ -25,11 +38,11 @@ module PackageManager
       }
     end
 
-    def self.versions(package, _name)
+    def self.versions(package, name)
       page = 1
       tags = []
       while page < 100
-        r = get("https://hub.docker.com/v2/repositories/#{_name}/tags?page=#{page}")
+        r = get("https://hub.docker.com/v2/repositories/#{name}/tags?page=#{page}")
         break if r['results'] == []
 
         tags += r['results']
