@@ -64,6 +64,21 @@ module ApplicationHelper
     end
   end
 
+  def search_result_icon(kind)
+    case kind
+    when 'code'
+      'code-square'
+    when 'repositories'
+      'repo'
+    when 'issues'
+      'issue-opened'
+    when 'commits'
+      'commit'
+    else
+      'code-square'
+    end
+  end
+
   def event_title(event)
     case event.event_type
     when 'WatchEvent'

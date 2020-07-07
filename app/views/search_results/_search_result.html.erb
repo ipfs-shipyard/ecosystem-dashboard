@@ -1,0 +1,29 @@
+<div class="mb-3 pb-2 border-bottom">
+  <h5>
+    <%= octicon search_result_icon(search_result.kind), class: 'mr-1' %>
+    <%= link_to truncate(search_result.title, length: 100), search_result.html_url, target: :_blank %>
+  </h5>
+
+  <% if search_result.text_matches.any? %>
+
+    <% search_result.text_matches.each do |text_match| %>
+      <% next if text_match['property'] == 'path' %>
+      <pre class='border p-2'><code><%= highlight text_match['fragment'], text_match['matches'].map{|m| m['text']}  %></code></pre>
+    <% end %>
+
+  <% end %>
+
+  <p>
+    <small class='text-muted'>
+      <% unless search_result.kind == 'repositories' %>
+        <%= link_to search_result.repository_url, target: :_blank, class: 'mr-1' do %>
+          <img src="<%= search_result.icon_url %>" class="rounded" height='20'>
+        <% end %>
+        <%= link_to search_result.repository_full_name, search_result.repository_url, target: :_blank %> -
+      <% end %>
+      <%= link_to search_result.search_query.html_url, target: :_blank do %>
+        <%= distance_of_time_in_words_to_now search_result.created_at %> ago
+      <% end %>
+    </small>
+  </p>
+</div>

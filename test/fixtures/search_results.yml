@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  search_query_id: 1
+  github_id: 
+  kind: MyString
+  payload: 
+  repository_full_name: MyString
+  html_url: MyString
+
+two:
+  search_query_id: 1
+  github_id: 
+  kind: MyString
+  payload: 
+  repository_full_name: MyString
+  html_url: MyString

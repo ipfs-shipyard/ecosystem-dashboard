@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_06_105811) do
+ActiveRecord::Schema.define(version: 2020_07_07_083613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -174,6 +174,27 @@ ActiveRecord::Schema.define(version: 2020_07_06_105811) do
     t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
     t.index ["package_id"], name: "index_repository_dependencies_on_package_id"
     t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
+  end
+
+  create_table "search_queries", force: :cascade do |t|
+    t.string "query"
+    t.string "kind"
+    t.string "sort"
+    t.string "order"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "search_results", force: :cascade do |t|
+    t.integer "search_query_id"
+    t.string "kind"
+    t.string "repository_full_name"
+    t.string "org"
+    t.string "title"
+    t.string "html_url"
+    t.jsonb "text_matches", default: "{}", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "tags", force: :cascade do |t|

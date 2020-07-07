@@ -1,0 +1,22 @@
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong>Tracked Searches</strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'repository_full_name', filter_label: 'Repository', filter_collection: @repos} %>
+      <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'org', filter_label: 'Owner', filter_collection: @orgs} %>
+      <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'kind', filter_label: 'Result Type', filter_collection: @kinds} %>
+      <%= render 'issues/range_filter' %>
+    </ul>
+  </div>
+</nav>
+
+
+<% if @search_results.any? %>
+  <%= render @search_results %>
+<% else %>
+  <p>No results found.</p>
+<% end %>
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
