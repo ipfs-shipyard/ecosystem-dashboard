@@ -34,8 +34,9 @@ class SearchQuery < ApplicationRecord
 
   def save_results(query_results)
     query_results.each do |result|
-      search_result = search_results.find_or_initialize_by(html_url: result.html_url)
+      search_result = SearchResult.find_or_initialize_by(html_url: result.html_url)
       if search_result.new_record?
+        search_result.search_query = self
         search_result.kind = kind
         search_result.repository_full_name = case kind
         when 'repositories'
