@@ -25,7 +25,7 @@
           <li>
             <%= link_to repository_full_name.split('/').last, "https://github.com/#{repository_full_name}", target: :_blank %>
             <small class='text-muted'>
-              <%= link_to pluralize(repo_results.length, 'search results'), search_path(repository_full_name: repository_full_name) %>
+              <%= link_to pluralize(repo_results.length, 'search results'), search_path(repository_full_name: repository_full_name, kind: params[:kind], range: params[:range]) %>
             </small>
           </li>
         <% end %>
