@@ -23,7 +23,7 @@ class SearchController < ApplicationController
     @known_orgs = Organization.all.pluck(:name)
     @known_contributors = Contributor.all.pluck(:github_username)
     @known_owners = @known_orgs + @known_contributors
-    @orgs = @scope.group_by(&:org).reject{|k,v| v.length < 2}.reject{|k,v| @known_owners.include?(k) }.sort_by{|k,v| -v.length}
+    @orgs = @scope.group_by(&:org).reject{|k,v| v.length < 2}.reject{|k,v| @known_owners.include?(k) }.sort_by{|k,v| -v.group_by(&:repository_full_name).length }
 
     @kinds = @scope.unscope(where: :kind).group(:kind).count
   end
