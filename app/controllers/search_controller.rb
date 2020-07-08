@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   def index
-    @range = (params[:range].presence || 30).to_i
+    @range = (params[:range].presence || 7).to_i
     @scope = SearchResult.this_period(@range).includes(:search_query)
 
     @scope = @scope.where(repository_full_name: params[:repository_full_name]) if params[:repository_full_name].present?
