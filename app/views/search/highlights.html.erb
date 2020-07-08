@@ -1,0 +1,35 @@
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong>Search Highlights</strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'kind', filter_label: 'Result Type', filter_collection: @kinds} %>
+      <%= render 'issues/range_filter' %>
+    </ul>
+  </div>
+</nav>
+
+<% @orgs.each do |org, results| %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <%= link_to "https://github.com/#{org}", target: :_blank, class: 'float-right' do %>
+        <img src="https://github.com/<%= org %>.png" class="rounded" height='40'>
+      <% end %>
+      <h5 class="card-title">
+        <%= link_to org, "https://github.com/#{org}" %>
+      </h5>
+      <ul class='mb-0'>
+        <% results.group_by(&:repository_full_name).sort_by{|k,v| -v.length}.each do |repository_full_name, repo_results| %>
+          <li>
+            <%= link_to repository_full_name.split('/').last, "https://github.com/#{repository_full_name}" %>
+            <small>
+              <%= pluralize(repo_results.length, 'search results') %>
+            </small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
