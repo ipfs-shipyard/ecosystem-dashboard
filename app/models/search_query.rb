@@ -34,7 +34,7 @@ class SearchQuery < ApplicationRecord
 
   def group_and_filter(query_results)
     internal_org_names = Organization.internal.pluck(:name)
-    query_results.select do |result|
+    results = query_results.select do |result|
       repository_full_name = case kind
       when 'repositories'
         result.full_name
@@ -47,6 +47,11 @@ class SearchQuery < ApplicationRecord
       # exclude internal orgs
       !internal_org_names.include?(org)
     end
+    if ['code', 'commits'].include?(kind)
+      # Only return one code/commit result per repo
+      results = results.group_by{|r| r.repository.full_name }.map{|k,v| v.first}
+    end
+    results
   end
 
   def save_results(query_results)
