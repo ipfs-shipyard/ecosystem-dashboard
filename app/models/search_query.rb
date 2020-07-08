@@ -32,8 +32,25 @@ class SearchQuery < ApplicationRecord
                                           accept: 'application/vnd.github.cloak-preview+json,application/vnd.github.v3.text-match+json')
   end
 
+  def group_and_filter(query_results)
+    internal_org_names = Organization.internal.pluck(:name)
+    query_results.select do |result|
+      repository_full_name = case kind
+      when 'repositories'
+        result.full_name
+      when 'issues'
+        result.repository_url.gsub('https://api.github.com/repos/', '')
+      else
+        result.repository.full_name
+      end
+      org = repository_full_name.split('/').first
+      # exclude internal orgs
+      !internal_org_names.include?(org)
+    end
+  end
+
   def save_results(query_results)
-    query_results.each do |result|
+    group_and_filter(query_results).each do |result|
       search_result = SearchResult.find_or_initialize_by(html_url: result.html_url)
       if search_result.new_record?
         search_result.search_query = self
