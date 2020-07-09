@@ -1,5 +1,6 @@
 class SearchController < ApplicationController
   def index
+    @page_title = "Tracked Searches"
     @range = (params[:range].presence || 7).to_i
     @scope = SearchResult.this_period(@range).includes(:search_query)
 
@@ -9,9 +10,17 @@ class SearchController < ApplicationController
 
     @pagy, @search_results = pagy(@scope.order('created_at desc'))
 
-    @repos = @scope.unscope(where: :repository_full_name).group(:repository_full_name).count
-    @kinds = @scope.unscope(where: :kind).group(:kind).count
-    @orgs = @scope.unscope(where: :org).group(:org).count
+    respond_to do |format|
+      format.html do
+        @repos = @scope.unscope(where: :repository_full_name).group(:repository_full_name).count
+        @kinds = @scope.unscope(where: :kind).group(:kind).count
+        @orgs = @scope.unscope(where: :org).group(:org).count
+      end
+      format.rss do
+
+        render 'index', :layout => false
+      end
+    end
   end
 
   def highlights
