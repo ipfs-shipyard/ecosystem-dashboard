@@ -7,7 +7,11 @@ class EventsController < ApplicationController
     @scope = @scope.user(params[:user]) if params[:user].present?
     @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?
     @scope = @scope.event_type(params[:event_type]) if params[:event_type].present?
-    @pagy, @events = pagy(@scope.order('events.created_at DESC'))
+
+    sort = params[:sort] || 'events.created_at'
+    order = params[:order] || 'desc'
+
+    @pagy, @events = pagy(@scope.order(sort => order))
 
     @orgs = @scope.unscope(where: :org).internal.group(:org).count
     @repos = @scope.unscope(where: :repository_full_name).internal.group(:repository_full_name).count
@@ -39,7 +43,11 @@ class EventsController < ApplicationController
     @scope = @scope.user(params[:user]) if params[:user].present?
     @scope = @scope.repo(params[:repo_full_name]) if params[:repo_full_name].present?
     @scope = @scope.event_type(params[:event_type]) if params[:event_type].present?
-    @pagy, @events = pagy(@scope.order('events.created_at DESC'))
+    
+    sort = params[:sort] || 'events.created_at'
+    order = params[:order] || 'desc'
+
+    @pagy, @events = pagy(@scope.order(sort => order))
 
     respond_to do |format|
       format.html do
