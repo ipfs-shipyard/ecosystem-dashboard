@@ -1,0 +1,50 @@
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle <%= 'active' if (params[:sort].present? || params[:order].present?) %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort</a>
+  <div class="dropdown-menu dropdown-menu-right text-right">
+    <% if @sort == 'pushed_at' && @order == 'desc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Recently Pushed
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'pushed_at', order: 'desc')) %>">
+        Recently Pushed
+      </a>
+    <% end %>
+    <% if params[:sort] == 'created_at' && params[:order] == 'desc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Newest
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'created_at', order: 'desc')) %>">
+        Newest
+      </a>
+    <% end %>
+    <% if params[:sort] == 'created_at' && params[:order] == 'asc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Oldest
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'created_at', order: 'asc')) %>">
+        Oldest
+      </a>
+    <% end %>
+    <% if params[:sort] == 'updated_at' && params[:order] == 'desc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Recently updated
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'updated_at', order: 'desc')) %>">
+        Recently updated
+      </a>
+    <% end %>
+    <% if params[:sort] == 'updated_at' && params[:order] == 'asc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Least recently updated
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'updated_at', order: 'asc')) %>">
+        Least recently updated
+      </a>
+    <% end %>
+  </div>
+</li>
