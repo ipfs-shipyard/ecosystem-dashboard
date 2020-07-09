@@ -1,14 +1,24 @@
 class RepositoriesController < ApplicationController
   def index
+    @page_title = 'Internal Repositories'
     @scope = Repository.internal
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
-    @pagy, @repositories = pagy(@scope.order('repositories.pushed_at DESC'))
 
-    @orgs = @scope.unscope(where: :org).internal.group(:org).count
-    @languages = @scope.unscope(where: :language).group(:language).count
+    respond_to do |format|
+      format.html do
+        @pagy, @repositories = pagy(@scope.order('repositories.pushed_at DESC'))
+
+        @orgs = @scope.unscope(where: :org).internal.group(:org).count
+        @languages = @scope.unscope(where: :language).group(:language).count
+      end
+      format.rss do
+        @pagy, @repositories = pagy(@scope.order('repositories.id DESC'))
+        render 'index', :layout => false
+      end
+    end
   end
 
   def show
@@ -17,14 +27,24 @@ class RepositoriesController < ApplicationController
   end
 
   def collab_repositories
+    @page_title = 'Collaborator Repositories'
     @scope = Repository.external
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
-    @pagy, @repositories = pagy(@scope.order('repositories.pushed_at DESC'))
 
-    @orgs = @scope.unscope(where: :org).external.group(:org).count
-    @languages = @scope.unscope(where: :language).group(:language).count
+    respond_to do |format|
+      format.html do
+        @pagy, @repositories = pagy(@scope.order('repositories.pushed_at DESC'))
+
+        @orgs = @scope.unscope(where: :org).internal.group(:org).count
+        @languages = @scope.unscope(where: :language).group(:language).count
+      end
+      format.rss do
+        @pagy, @repositories = pagy(@scope.order('repositories.id DESC'))
+        render 'index', :layout => false
+      end
+    end
   end
 end
