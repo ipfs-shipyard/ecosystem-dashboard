@@ -56,6 +56,15 @@
               Unlabelled
             </a>
           <% end %>
+          <% if params[:include_drafts].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, include_drafts: nil)) %>">
+              Include Draft PRs
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, include_drafts: 'true')) %>">
+              Include Draft PRs
+            </a>
+          <% end %>
           <% if params[:exclude_core].present? %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, exclude_core: nil)) %>">
               Exclude Core Contributors
