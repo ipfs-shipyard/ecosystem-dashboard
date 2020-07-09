@@ -1,5 +1,6 @@
 class OrgsController < ApplicationController
   def internal
+    @page_title = 'Internal Organizations'
     respond_to do |format|
       format.html do
         scope = Issue.all
@@ -21,6 +22,7 @@ class OrgsController < ApplicationController
   end
 
   def collabs
+    @page_title = 'Collaborator Organizations'
     respond_to do |format|
       format.html do
         @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
