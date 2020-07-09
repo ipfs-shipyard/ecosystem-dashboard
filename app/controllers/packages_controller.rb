@@ -10,22 +10,21 @@ class PackagesController < ApplicationController
     @scope = @scope.exclude_org(params[:exclude_org]) if params[:exclude_org].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
 
-    @pagy, @packages = pagy(@scope.order('collab_dependent_repos_count DESC, dependent_repos_count DESC, created_at DESC'))
-    @platforms = @scope.unscope(where: :platform).group(:platform).count
-    @orgs = @orgs_scope.joins(:organization).group('organizations.name').count
+    @sort = params[:sort] || 'collab_dependent_repos_count'
+    @order = params[:order] || 'desc'
 
     respond_to do |format|
       format.html do
-        @pagy, @packages = pagy(@scope.order('collab_dependent_repos_count DESC, dependent_repos_count DESC, created_at DESC'))
+        @pagy, @packages = pagy(@scope.order(@sort => @order))
         @platforms = @scope.unscope(where: :platform).group(:platform).count
         @orgs = @orgs_scope.joins(:organization).group('organizations.name').count
       end
       format.rss do
-        @pagy, @packages = pagy(@scope.order('created_at DESC'))
+        @pagy, @packages = pagy(@scope.order(@sort => @order))
         render 'index', :layout => false
       end
       format.json do
-        @pagy, @packages = pagy(@scope.order('created_at DESC'))
+        @pagy, @packages = pagy(@scope.order(@sort => @order))
         render json: @packages
       end
     end
@@ -42,18 +41,21 @@ class PackagesController < ApplicationController
     @scope = @scope.exclude_org(params[:exclude_org]) if params[:exclude_org].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
 
+    @sort = params[:sort] || 'collab_dependent_repos_count'
+    @order = params[:order] || 'desc'
+
     respond_to do |format|
       format.html do
-        @pagy, @packages = pagy(@scope.order('collab_dependent_repos_count DESC, dependent_repos_count DESC, created_at DESC'))
+        @pagy, @packages = pagy(@scope.order(@sort => @order))
         @platforms = @scope.unscope(where: :platform).group(:platform).count
         @orgs = @orgs_scope.joins(:organization).group('organizations.name').count
       end
       format.rss do
-        @pagy, @packages = pagy(@scope.order('created_at DESC'))
+        @pagy, @packages = pagy(@scope.order(@sort => @order))
         render 'index', :layout => false
       end
       format.json do
-        @pagy, @packages = pagy(@scope.order('created_at DESC'))
+        @pagy, @packages = pagy(@scope.order(@sort => @order))
         render json: @packages
       end
     end
