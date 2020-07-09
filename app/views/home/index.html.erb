@@ -361,7 +361,7 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <a href="<%= repositories_path %>">
+      <a href="<%= repositories_path(order: 'desc', sort: 'created_at') %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -388,7 +388,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= packages_path %>">
+      <a href="<%= packages_path(order: 'desc', sort: 'created_at') %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
