@@ -35,6 +35,9 @@ class Repository < ApplicationRecord
   scope :with_manifests, -> { joins(:manifests) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
 
+  scope :this_period, ->(period) { where('repositories.created_at > ?', period.days.ago) }
+  scope :last_period, ->(period) { where('repositories.created_at > ?', (period*2).days.ago).where('repositories.created_at < ?', period.days.ago) }
+
   def self.download_org_repos(org)
     remote_repos = Issue.github_client.org_repos(org, type: 'public')
     remote_repos.each do |remote_repo|

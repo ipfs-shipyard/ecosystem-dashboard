@@ -3,10 +3,15 @@ class HomeController < ApplicationController
 
     @event_scope = Event.internal
     @issues_scope = Issue.internal
+    @repos_scope = Repository.internal
+    @packages_scope = Package.internal
+    @search_results_scope = SearchResult.all
 
     if params[:org].present?
       @event_scope = @event_scope.org(params[:org])
       @issues_scope = @issues_scope.org(params[:org])
+      @repos_scope = @repos_scope.org(params[:org])
+      @packages_scope = @packages_scope.org(params[:org])
     end
 
     @period = (params[:range].presence || 7).to_i
@@ -45,5 +50,14 @@ class HomeController < ApplicationController
 
     @first_time_contributors = (@issues_scope.this_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys - @issues_scope.where('issues.created_at < ?', @period.days.ago).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys).length
     @first_time_contributors_last_week = (@issues_scope.last_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys - @issues_scope.where('issues.created_at < ?', (@period*2).days.ago).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys).length
+
+    @new_repositories = @repos_scope.this_period(@period).internal.count
+    @new_repositories_last_week = @repos_scope.last_period(@period).internal.count
+
+    @new_packages = @packages_scope.this_period(@period).internal.count
+    @new_packages_last_week = @packages_scope.last_period(@period).internal.count
+
+    @new_search_results = @search_results_scope.this_period(@period).count
+    @new_search_results_last_week = @search_results_scope.last_period(@period).count
   end
 end

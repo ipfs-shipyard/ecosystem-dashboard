@@ -93,6 +93,9 @@ class Package < ApplicationRecord
   scope :exclude_org, ->(org) { joins(:organization).where('organizations.name != ?', org) }
   scope :org, ->(org) { joins(:organization).where('organizations.name = ?', org) }
 
+  scope :this_period, ->(period) { where('packages.created_at > ?', period.days.ago) }
+  scope :last_period, ->(period) { where('packages.created_at > ?', (period*2).days.ago).where('packages.created_at < ?', period.days.ago) }
+
   after_commit :update_repository, on: :create
   after_commit :set_dependents_count, on: [:create, :update]
   before_save  :update_details

@@ -354,4 +354,88 @@
       </a>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-3">
+      <a href="<%= repositories_path %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'repo', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='New internal repositories that have been created in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @new_repositories %>
+
+                    <% new_repositories_diff = @new_repositories - @new_repositories_last_week %>
+                    <% unless new_repositories_diff.zero? %>
+                      <small class='<%= diff_class(new_repositories_diff) %>' title='<%= @new_repositories_last_week %> pull requests merged last week'><%= '+' if new_repositories_diff > 0 %><%= number_to_human new_repositories_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>New Repositories</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="<%= packages_path %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'package', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='New internal packages that have been created in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @new_packages %>
+
+                    <% new_packages_diff = @new_packages - @new_packages_last_week %>
+                    <% unless new_packages_diff.zero? %>
+                      <small class='<%= diff_class(new_packages_diff) %>' title='<%= @new_packages_last_week %> pull requests merged last week'><%= '+' if new_packages_diff > 0 %><%= number_to_human new_packages_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>New Packages</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="<%= search_path %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'search', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='New search results that have been found in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @new_search_results %>
+
+                    <% new_search_results_diff = @new_search_results - @new_search_results_last_week %>
+                    <% unless new_search_results_diff.zero? %>
+                      <small class='<%= diff_class(new_search_results_diff) %>' title='<%= @new_search_results_last_week %> pull requests merged last week'><%= '+' if new_search_results_diff > 0 %><%= number_to_human new_search_results_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>Search Results</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
 </div>
