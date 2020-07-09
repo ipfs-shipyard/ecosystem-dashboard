@@ -137,6 +137,20 @@ class IssuesController < ApplicationController
 
         render 'all', :layout => false
       end
+      format.json do
+        @scope = @scope.language(params[:language]) if params[:language].present?
+
+        if params[:type].present?
+          if params[:type] == 'issues'
+            @scope = @scope.issues
+          else
+            @scope = @scope.pull_requests
+          end
+        end
+
+        @pagy, @issues = pagy(@scope.order(sort => order))
+        render json: @issues
+      end
     end
   end
 end

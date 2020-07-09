@@ -24,6 +24,9 @@ class EventsController < ApplicationController
       format.rss do
         render 'index', :layout => false
       end
+      format.json do
+        render json: @events
+      end
     end
   end
 
@@ -47,6 +50,9 @@ class EventsController < ApplicationController
       end
       format.rss do
         render 'index', :layout => false
+      end
+      format.json do
+        render json: @events
       end
     end
   end

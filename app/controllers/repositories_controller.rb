@@ -18,6 +18,10 @@ class RepositoriesController < ApplicationController
         @pagy, @repositories = pagy(@scope.order('repositories.id DESC'))
         render 'index', :layout => false
       end
+      format.json do
+        @pagy, @repositories = pagy(@scope.order('repositories.id DESC'))
+        render json: @repositories
+      end
     end
   end
 
@@ -44,6 +48,10 @@ class RepositoriesController < ApplicationController
       format.rss do
         @pagy, @repositories = pagy(@scope.order('repositories.id DESC'))
         render 'index', :layout => false
+      end
+      format.json do
+        @pagy, @repositories = pagy(@scope.order('repositories.id DESC'))
+        render json: @repositories
       end
     end
   end

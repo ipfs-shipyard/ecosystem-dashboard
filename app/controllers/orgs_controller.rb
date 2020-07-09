@@ -18,6 +18,11 @@ class OrgsController < ApplicationController
         @pagy, @orgs = pagy(@scope)
         render 'index', :layout => false
       end
+      format.json do
+        @scope = Organization.internal.order('organizations.created_at DESC')
+        @pagy, @orgs = pagy(@scope)
+        render json: @orgs
+      end
     end
   end
 
@@ -32,6 +37,11 @@ class OrgsController < ApplicationController
         @scope = Organization.collaborator.order('organizations.created_at DESC')
         @pagy, @orgs = pagy(@scope)
         render 'index', :layout => false
+      end
+      format.json do
+        @scope = Organization.collaborator.order('organizations.created_at DESC')
+        @pagy, @orgs = pagy(@scope)
+        render json: @orgs
       end
     end
   end

@@ -24,6 +24,10 @@ class PackagesController < ApplicationController
         @pagy, @packages = pagy(@scope.order('created_at DESC'))
         render 'index', :layout => false
       end
+      format.json do
+        @pagy, @packages = pagy(@scope.order('created_at DESC'))
+        render json: @packages
+      end
     end
   end
 
@@ -47,6 +51,10 @@ class PackagesController < ApplicationController
       format.rss do
         @pagy, @packages = pagy(@scope.order('created_at DESC'))
         render 'index', :layout => false
+      end
+      format.json do
+        @pagy, @packages = pagy(@scope.order('created_at DESC'))
+        render json: @packages
       end
     end
   end

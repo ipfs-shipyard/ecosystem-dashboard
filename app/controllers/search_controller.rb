@@ -17,8 +17,10 @@ class SearchController < ApplicationController
         @orgs = @scope.unscope(where: :org).group(:org).count
       end
       format.rss do
-
         render 'index', :layout => false
+      end
+      format.json do
+        render json: @search_results
       end
     end
   end
