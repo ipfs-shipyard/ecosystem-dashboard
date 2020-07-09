@@ -64,12 +64,6 @@ class IssuesController < ApplicationController
     @users = @slow.group(:user).count
   end
 
-  # TODO move this to orgs controller
-  def collabs
-    @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
-    @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
-  end
-
   private
 
   def apply_filters

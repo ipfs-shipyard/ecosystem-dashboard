@@ -11,6 +11,11 @@ class OrgsController < ApplicationController
     end
   end
 
+  def collabs
+    @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
+    @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+  end
+
   def show
     scope = Issue.all
 
