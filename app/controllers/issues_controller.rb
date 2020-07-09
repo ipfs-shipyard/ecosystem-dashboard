@@ -1,5 +1,6 @@
 class IssuesController < ApplicationController
   def index
+    @page_title = "Collabs Issues and PRs"
     @range = (params[:range].presence || 30).to_i
 
     @scope = Issue.internal.not_core.this_period(@range).unlocked.humans.includes(:contributor).where("html_url <> ''")
@@ -11,10 +12,10 @@ class IssuesController < ApplicationController
     end
 
     apply_filters
-    @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
   end
 
   def all
+    @page_title = "All Issues and Pull Requests"
     @range = (params[:range].presence || 30).to_i
 
     @scope = Issue.internal.humans.unlocked.this_period(@range).includes(:contributor).where("html_url <> ''")
@@ -23,10 +24,10 @@ class IssuesController < ApplicationController
     @scope = @scope.collab(params[:collab]) if params[:collab].present?
 
     apply_filters
-    @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
   end
 
   def slow_response
+    @page_title = "Slow Responses"
     @range = (params[:range].presence || 7).to_i
     @date_range = @range + 2
     @orginal_scope = Issue.internal.not_core.unlocked.where("html_url <> ''").not_draft.includes(:contributor)
@@ -92,34 +93,56 @@ class IssuesController < ApplicationController
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.no_response if params[:no_response].present?
 
-    @types = {
-      'issues' => @scope.issues.count,
-      'pull_requests' => @scope.pull_requests.count
-    }
-
-    @languages = Issue::LANGUAGES.to_h do |language|
-      [language, @scope.language(language).count]
-    end
-
-    @scope = @scope.language(params[:language]) if params[:language].present?
-
-    if params[:type].present?
-      if params[:type] == 'issues'
-        @scope = @scope.issues
-      else
-        @scope = @scope.pull_requests
-      end
-    end
-
     sort = params[:sort] || 'issues.created_at'
     order = params[:order] || 'desc'
 
-    @pagy, @issues = pagy(@scope.order(sort => order))
+    respond_to do |format|
+      format.html do
 
-    @users = @scope.group(:user).count
-    @states = @scope.unscope(where: :state).group(:state).count
-    @repos = @scope.unscope(where: :repo_full_name).group(:repo_full_name).count
-    @orgs = @scope.unscope(where: :org).internal.group(:org).count
-    @labels = @scope.unscope(where: :labels).pluck(:labels).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
+        @types = {
+          'issues' => @scope.issues.count,
+          'pull_requests' => @scope.pull_requests.count
+        }
+
+        @languages = Issue::LANGUAGES.to_h do |language|
+          [language, @scope.language(language).count]
+        end
+
+        @scope = @scope.language(params[:language]) if params[:language].present?
+
+        if params[:type].present?
+          if params[:type] == 'issues'
+            @scope = @scope.issues
+          else
+            @scope = @scope.pull_requests
+          end
+        end
+
+        @pagy, @issues = pagy(@scope.order(sort => order))
+
+        @users = @scope.group(:user).count
+        @states = @scope.unscope(where: :state).group(:state).count
+        @repos = @scope.unscope(where: :repo_full_name).group(:repo_full_name).count
+        @orgs = @scope.unscope(where: :org).internal.group(:org).count
+        @labels = @scope.unscope(where: :labels).pluck(:labels).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
+        @collabs = @scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
+
+      end
+      format.rss do
+        @scope = @scope.language(params[:language]) if params[:language].present?
+
+        if params[:type].present?
+          if params[:type] == 'issues'
+            @scope = @scope.issues
+          else
+            @scope = @scope.pull_requests
+          end
+        end
+
+        @pagy, @issues = pagy(@scope.order(sort => order))
+
+        render 'all', :layout => false
+      end
+    end
   end
 end

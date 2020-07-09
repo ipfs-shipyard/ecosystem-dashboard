@@ -29,6 +29,34 @@ module ApplicationHelper
     'repo'
   end
 
+  def issues_title
+    words = []
+
+    words << 'Uncommented' if params[:uncommented].present?
+    words << language_title(params[:language]) if params[:language]
+    words << (params[:state].present? ? params[:state].capitalize : 'All')
+    words << (params[:type].present? ? params[:type].humanize : 'Issues and PRs')
+    words << "labelled \"#{params[:label]}\"" if params[:label]
+    words << "in the last #{@range} days created by"
+
+    if params[:user].present?
+      words << params[:user]
+    elsif params[:collab]
+      words << "#{params[:collab]} contributors"
+    else
+      if params[:exclude_core].present?
+        words << "non-core contributors"
+      else
+        words << "all contributors"
+      end
+    end
+
+    words << "on #{params[:repo_full_name]}" if params[:repo_full_name].present?
+    words << "in #{params[:org]}" if params[:org] && params[:repo_full_name].blank?
+
+    words.compact.join(' ')
+  end
+
   def diff_class(count)
     count > 0 ? 'text-success' : 'text-danger'
   end
