@@ -1,6 +1,10 @@
 class OrgsController < ApplicationController
   def internal
     @page_title = 'Internal Organizations'
+
+    sort = params[:sort] || 'organizations.created_at'
+    order = params[:order] || 'desc'
+
     respond_to do |format|
       format.html do
         scope = Issue.all
@@ -14,12 +18,12 @@ class OrgsController < ApplicationController
         end
       end
       format.rss do
-        @scope = Organization.internal.order('organizations.created_at DESC')
+        @scope = Organization.internal.order(sort => order)
         @pagy, @orgs = pagy(@scope)
         render 'index', :layout => false
       end
       format.json do
-        @scope = Organization.internal.order('organizations.created_at DESC')
+        @scope = Organization.internal.order(sort => order)
         @pagy, @orgs = pagy(@scope)
         render json: @orgs
       end
@@ -28,18 +32,22 @@ class OrgsController < ApplicationController
 
   def collabs
     @page_title = 'Collaborator Organizations'
+
+    sort = params[:sort] || 'organizations.created_at'
+    order = params[:order] || 'desc'
+
     respond_to do |format|
       format.html do
         @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
         @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
       end
       format.rss do
-        @scope = Organization.collaborator.order('organizations.created_at DESC')
+        @scope = Organization.collaborator.order(sort => order)
         @pagy, @orgs = pagy(@scope)
         render 'index', :layout => false
       end
       format.json do
-        @scope = Organization.collaborator.order('organizations.created_at DESC')
+        @scope = Organization.collaborator.order(sort => order)
         @pagy, @orgs = pagy(@scope)
         render json: @orgs
       end
