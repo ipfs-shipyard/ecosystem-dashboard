@@ -9,6 +9,15 @@ class ContributorsController < ApplicationController
 
     @scope = @issues_scope.group(:user).count.sort_by{|k,v| -v}
     @pagy, @contributors = pagy_array(@scope)
+
+    respond_to do |format|
+      format.html do
+
+      end
+      format.json do
+        render json: @contributors
+      end
+    end
   end
 
   def new
@@ -22,6 +31,15 @@ class ContributorsController < ApplicationController
     first_timers = (@issues_scope.this_period(@range).group(:user).count.keys - @issues_scope.where('issues.created_at < ?', @range.days.ago).group(:user).count.keys)
     @scope = @issues_scope.where(user: first_timers).group(:user).count.sort_by{|k,v| -v}
     @pagy, @contributors = pagy_array(@scope)
+
+    respond_to do |format|
+      format.html do
+
+      end
+      format.json do
+        render json: @contributors
+      end
+    end
   end
 
   def collabs
@@ -34,11 +52,32 @@ class ContributorsController < ApplicationController
 
     @scope = @issues_scope.group(:user).count.sort_by{|k,v| -v}
     @pagy, @contributors = pagy_array(@scope)
+
+    respond_to do |format|
+      format.html do
+
+      end
+      format.json do
+        render json: @contributors
+      end
+    end
   end
 
   def show
     @contributor = params[:id]
     @events = Event.internal.user(@contributor).limit(10).order('events.created_at desc')
     @issues = Issue.internal.user(@contributor).limit(10).order('issues.created_at desc')
+
+    respond_to do |format|
+      format.html do
+
+      end
+      format.json do
+        render json: {
+          events: @events,
+          issues: @issues
+        }
+      end
+    end
   end
 end
