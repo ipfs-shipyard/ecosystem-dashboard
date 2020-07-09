@@ -55,7 +55,7 @@
 
                     <% new_issue_diff = @new_issues - @new_issues_last_week %>
                     <% unless new_issue_diff.zero?  %>
-                      <small class='<%= diff_class(new_issue_diff) %>' title='<%= @new_issues_last_week %> issues last week'><%= '+' if new_issue_diff > 0 %><%= number_to_human new_issue_diff %></small>
+                      <small class='<%= diff_class(new_issue_diff) %>' title='<%= @new_issues_last_week %> new issues in the previous <%= @period %> days'><%= '+' if new_issue_diff > 0 %><%= number_to_human new_issue_diff %></small>
                     <% end %>
                   </h3>
                   <span>New Issues</span>
@@ -82,7 +82,7 @@
 
                     <% new_pr_diff = @new_prs - @new_prs_last_week %>
                     <% unless new_pr_diff.zero? %>
-                      <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> pull requests last week'><%= '+' if new_pr_diff > 0 %><%= number_to_human new_pr_diff %></small>
+                      <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> new pull requests in the previous <%= @period %> days'><%= '+' if new_pr_diff > 0 %><%= number_to_human new_pr_diff %></small>
                     <% end %>
                   </h3>
                   <span>New Pull Requests</span>
@@ -109,7 +109,7 @@
 
                     <% new_collab_contribs_diff = @new_collab_contribs - @new_collab_contribs_last_week %>
                     <% unless new_collab_contribs_diff.zero? %>
-                      <small class='<%= diff_class(new_collab_contribs_diff) %>' title='<%= @new_collab_contribs_last_week %> pull requests last week'><%= '+' if new_collab_contribs_diff > 0 %><%= number_to_human new_collab_contribs_diff %></small>
+                      <small class='<%= diff_class(new_collab_contribs_diff) %>' title='<%= @new_collab_contribs_last_week %> collab contributions in the previous <%= @period %> days'><%= '+' if new_collab_contribs_diff > 0 %><%= number_to_human new_collab_contribs_diff %></small>
                     <% end %>
                   </h3>
                   <span>Collab Contributions</span>
@@ -135,7 +135,7 @@
                     <%= @response_time %>
                     <% response_time_diff = @response_time - @response_time_last_week %>
                     <% unless response_time_diff.zero? %>
-                      <small class='<%= diff_class(-response_time_diff) %>' title='<%= @response_time_last_week %> hrs last week'> <%= '+' if response_time_diff > 0 %><%= number_to_human response_time_diff %></small>
+                      <small class='<%= diff_class(-response_time_diff) %>' title='<%= @response_time_last_week %> hrs in the previous <%= @period %> days'> <%= '+' if response_time_diff > 0 %><%= number_to_human response_time_diff %></small>
                     <% end %>
                   </h3>
                   <span>Avg Resp Time <small class='text-muted'>hrs</small></span>
@@ -163,7 +163,7 @@
                     <%= number_to_human @stars %>
                     <% stars_diff = @stars - @stars_last_week %>
                     <% unless stars_diff.zero? %>
-                      <small class='<%= diff_class(stars_diff) %>' title='<%= @stars_last_week %> stars last week'> <%= '+' if stars_diff > 0 %><%= number_to_human stars_diff %></small>
+                      <small class='<%= diff_class(stars_diff) %>' title='<%= @stars_last_week %> stars in the previous <%= @period %> days'> <%= '+' if stars_diff > 0 %><%= number_to_human stars_diff %></small>
                     <% end %>
                   </h3>
                   <span>Stars</span>
@@ -189,7 +189,7 @@
                     <%= number_to_human @forks %>
                     <% forks_diff = @forks - @forks_last_week %>
                     <% unless forks_diff.zero? %>
-                      <small class='<%= diff_class(forks_diff) %>' title='<%= @forks_last_week %> forks last week'> <%= '+' if forks_diff > 0 %><%= number_to_human forks_diff %></small>
+                      <small class='<%= diff_class(forks_diff) %>' title='<%= @forks_last_week %> forks in the previous <%= @period %> days'> <%= '+' if forks_diff > 0 %><%= number_to_human forks_diff %></small>
                     <% end %>
                   </h3>
                   <span>Forks</span>
@@ -215,7 +215,7 @@
                     <%= number_to_human @comments %>
                     <% comments_diff = @comments - @comments_last_week %>
                     <% unless comments_diff.zero? %>
-                      <small class='<%= diff_class(comments_diff) %>' title='<%= @comments_last_week %> comments last week'> <%= '+' if comments_diff > 0 %><%= number_to_human comments_diff %></small>
+                      <small class='<%= diff_class(comments_diff) %>' title='<%= @comments_last_week %> comments in the previous <%= @period %> days'> <%= '+' if comments_diff > 0 %><%= number_to_human comments_diff %></small>
                     <% end %>
                   </h3>
                   <span>Comments</span>
@@ -241,7 +241,7 @@
                     <%= number_to_human @slow_responses %>
                     <% slow_response_diff = @slow_responses - @slow_responses_last_week %>
                     <% unless slow_response_diff.zero? %>
-                      <small class='<%= diff_class(-slow_response_diff) %>' title='<%= @slow_responses_last_week %> slow responses last week'> <%= '+' if slow_response_diff > 0 %><%= number_to_human slow_response_diff %></small>
+                      <small class='<%= diff_class(-slow_response_diff) %>' title='<%= @slow_responses_last_week %> slow responses in the previous <%= @period %> days'> <%= '+' if slow_response_diff > 0 %><%= number_to_human slow_response_diff %></small>
                     <% end %>
                   </h3>
                   <span>Slow Responses</span>
@@ -269,7 +269,7 @@
                     <%= number_to_human @contributors %>
                     <% contributors_diff = @contributors - @contributors_last_week %>
                     <% unless contributors_diff.zero? %>
-                      <small class='<%= diff_class(contributors_diff) %>' title='<%= @contributors_last_week %> slow responses last week'> <%= '+' if contributors_diff > 0 %><%= number_to_human contributors_diff %></small>
+                      <small class='<%= diff_class(contributors_diff) %>' title='<%= @contributors_last_week %> contributors in the previous <%= @period %> days'> <%= '+' if contributors_diff > 0 %><%= number_to_human contributors_diff %></small>
                     <% end %>
                   </h3>
                   <span>Contributors</span>
@@ -295,7 +295,7 @@
                     <%= number_to_human @first_time_contributors %>
                     <% first_time_contributors_diff = @first_time_contributors - @first_time_contributors_last_week %>
                     <% unless first_time_contributors_diff.zero? %>
-                      <small class='<%= diff_class(first_time_contributors_diff) %>' title='<%= @first_time_contributors_last_week %> slow responses last week'> <%= '+' if first_time_contributors_diff > 0 %><%= number_to_human first_time_contributors_diff %></small>
+                      <small class='<%= diff_class(first_time_contributors_diff) %>' title='<%= @first_time_contributors_last_week %> first time contributors in the previous <%= @period %> days'> <%= '+' if first_time_contributors_diff > 0 %><%= number_to_human first_time_contributors_diff %></small>
                     <% end %>
                   </h3>
                   <span>New Contributors</span>
@@ -321,7 +321,7 @@
 
                   <% merged_prs_diff = @merged_prs - @merged_prs_last_week %>
                   <% unless merged_prs_diff.zero? %>
-                    <small class='<%= diff_class(merged_prs_diff) %>' title='<%= @merged_prs_last_week %> pull requests merged last week'><%= '+' if merged_prs_diff > 0 %><%= number_to_human merged_prs_diff %></small>
+                    <small class='<%= diff_class(merged_prs_diff) %>' title='<%= @merged_prs_last_week %> pull requests merged in the previous <%= @period %> days'><%= '+' if merged_prs_diff > 0 %><%= number_to_human merged_prs_diff %></small>
                   <% end %>
                 </h3>
                 <span>Merged PRs</span>
@@ -347,7 +347,7 @@
 
                     <% releases_diff = @releases - @releases_last_week %>
                     <% unless releases_diff.zero? %>
-                      <small class='<%= diff_class(releases_diff) %>' title='<%= @releases_last_week %> pull requests merged last week'><%= '+' if releases_diff > 0 %><%= number_to_human releases_diff %></small>
+                      <small class='<%= diff_class(releases_diff) %>' title='<%= @releases_last_week %> releases published in the previous <%= @period %> days'><%= '+' if releases_diff > 0 %><%= number_to_human releases_diff %></small>
                     <% end %>
                   </h3>
                   <span>Releases</span>
@@ -376,7 +376,7 @@
 
                     <% new_repositories_diff = @new_repositories - @new_repositories_last_week %>
                     <% unless new_repositories_diff.zero? %>
-                      <small class='<%= diff_class(new_repositories_diff) %>' title='<%= @new_repositories_last_week %> pull requests merged last week'><%= '+' if new_repositories_diff > 0 %><%= number_to_human new_repositories_diff %></small>
+                      <small class='<%= diff_class(new_repositories_diff) %>' title='<%= @new_repositories_last_week %> new repositories created in the previous <%= @period %> days'><%= '+' if new_repositories_diff > 0 %><%= number_to_human new_repositories_diff %></small>
                     <% end %>
                   </h3>
                   <span>New Repositories</span>
@@ -403,7 +403,7 @@
 
                     <% new_packages_diff = @new_packages - @new_packages_last_week %>
                     <% unless new_packages_diff.zero? %>
-                      <small class='<%= diff_class(new_packages_diff) %>' title='<%= @new_packages_last_week %> pull requests merged last week'><%= '+' if new_packages_diff > 0 %><%= number_to_human new_packages_diff %></small>
+                      <small class='<%= diff_class(new_packages_diff) %>' title='<%= @new_packages_last_week %> packages created in the previous <%= @period %> days'><%= '+' if new_packages_diff > 0 %><%= number_to_human new_packages_diff %></small>
                     <% end %>
                   </h3>
                   <span>New Packages</span>
@@ -430,7 +430,7 @@
 
                     <% new_search_results_diff = @new_search_results - @new_search_results_last_week %>
                     <% unless new_search_results_diff.zero? %>
-                      <small class='<%= diff_class(new_search_results_diff) %>' title='<%= @new_search_results_last_week %> pull requests merged last week'><%= '+' if new_search_results_diff > 0 %><%= number_to_human new_search_results_diff %></small>
+                      <small class='<%= diff_class(new_search_results_diff) %>' title='<%= @new_search_results_last_week %> search results found in the previous <%= @period %> days'><%= '+' if new_search_results_diff > 0 %><%= number_to_human new_search_results_diff %></small>
                     <% end %>
                   </h3>
                   <span>Search Results</span>
