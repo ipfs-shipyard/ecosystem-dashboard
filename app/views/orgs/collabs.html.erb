@@ -1,3 +1,7 @@
+<% content_for :rss do %>
+  <%= auto_discovery_link_tag :rss, url_for(request.params.merge(page: nil, format: :rss, only_path: false)) %>
+<% end %>
+
 <h1 class='mt-2 mb-2'>Collabs</h1>
 
 <% @collabs.in_groups_of(3, false).each do |group| %>
@@ -75,3 +79,9 @@
     <% end %>
   </div>
 <% end %>
+
+<p>
+  <small class='text-muted'>
+    RSS feed for this page: <%= link_to url_for(request.params.merge(page: nil, format: :rss, only_path: false)) %>
+  </small>
+</p>

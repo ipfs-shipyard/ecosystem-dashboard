@@ -1,19 +1,37 @@
 class OrgsController < ApplicationController
   def internal
-    scope = Issue.all
+    respond_to do |format|
+      format.html do
+        scope = Issue.all
 
-    if params[:range].present?
-      scope = scope.where('issues.created_at > ?', params[:range].to_i.days.ago)
-    end
+        if params[:range].present?
+          scope = scope.where('issues.created_at > ?', params[:range].to_i.days.ago)
+        end
 
-    @orgs = Organization.internal.pluck(:name).map do |org|
-      load_org_data(scope, org)
+        @orgs = Organization.internal.pluck(:name).map do |org|
+          load_org_data(scope, org)
+        end
+      end
+      format.rss do
+        @scope = Organization.internal.order('organizations.created_at DESC')
+        @pagy, @orgs = pagy(@scope)
+        render 'index', :layout => false
+      end
     end
   end
 
   def collabs
-    @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
-    @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+    respond_to do |format|
+      format.html do
+        @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
+        @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+      end
+      format.rss do
+        @scope = Organization.collaborator.order('organizations.created_at DESC')
+        @pagy, @orgs = pagy(@scope)
+        render 'index', :layout => false
+      end
+    end
   end
 
   def show
