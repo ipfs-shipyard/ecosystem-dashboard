@@ -10,7 +10,7 @@
 
       <%= link_to event.actor, "https://github.com/#{event.actor.gsub('[bot]', '')}", target: :_blank %>
 
-      <%= event_title(event) %>
+      <%= event.action_text %>
 
       <%= link_to event.repository.full_name, event.repository %>
       <small class='text-muted'>

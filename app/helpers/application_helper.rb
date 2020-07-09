@@ -107,43 +107,6 @@ module ApplicationHelper
     end
   end
 
-  def event_title(event)
-    case event.event_type
-    when 'WatchEvent'
-      'starred'
-    when "CreateEvent"
-      "created a #{event.payload['ref_type']} on"
-    when "CommitCommentEvent"
-      'commented on a commit on'
-    when "ReleaseEvent"
-      "#{event.action} a release on"
-    when "IssuesEvent"
-      "#{event.action} an issue on"
-    when "DeleteEvent"
-      "deleted a #{event.payload['ref_type']}"
-    when "IssueCommentEvent"
-      if event.payload['issue']['pull_request'].present?
-        "#{event.action} a comment on a pull request on"
-      else
-        "#{event.action} a comment on an issue on"
-      end
-    when "PublicEvent"
-      'open sourced'
-    when "PushEvent"
-      "pushed #{pluralize(event.payload['size'], 'commit')} to #{event.payload['ref'].gsub("refs/heads/", '')}"
-    when "PullRequestReviewCommentEvent"
-      "#{event.action} a review comment on an pull request on"
-    when "PullRequestEvent"
-      "#{event.action} an pull request on"
-    when "ForkEvent"
-      'forked'
-    when 'MemberEvent'
-      "#{event.action} #{event.payload['member']['login']} to"
-    when 'GollumEvent'
-      "#{event.payload['pages'].first['action']} a wiki page on"
-    end
-  end
-
   def event_name(event_type)
     case event_type
     when 'WatchEvent'
