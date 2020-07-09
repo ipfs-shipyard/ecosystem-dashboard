@@ -344,6 +344,11 @@
                   <span class='info' title='Releases published by anyone in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
                   <h3>
                     <%= number_to_human @releases %>
+
+                    <% releases_diff = @releases - @releases_last_week %>
+                    <% unless releases_diff.zero? %>
+                      <small class='<%= diff_class(releases_diff) %>' title='<%= @releases_last_week %> pull requests merged last week'><%= '+' if releases_diff > 0 %><%= number_to_human releases_diff %></small>
+                    <% end %>
                   </h3>
                   <span>Releases</span>
                 </div>
