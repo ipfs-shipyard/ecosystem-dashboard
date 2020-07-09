@@ -184,7 +184,7 @@ GEM
     pg_search (2.3.2)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
-    pghero (2.5.1)
+    pghero (2.6.0)
       activerecord (>= 5)
     polyglot (0.3.5)
     popper_js (1.16.0)
