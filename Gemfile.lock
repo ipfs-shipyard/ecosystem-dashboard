@@ -28,9 +28,9 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/spdx
-  revision: 99cdcd8654bc5f2aca5ee615ab3bda20e6f72e75
+  revision: b590cd084f5fdf89339c2feaafaf1d9903fe8912
   specs:
-    spdx (2.0.11)
+    spdx (2.0.12)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
 
