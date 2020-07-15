@@ -28,9 +28,9 @@ GIT
 
 GIT
   remote: https://github.com/librariesio/spdx
-  revision: 99cdcd8654bc5f2aca5ee615ab3bda20e6f72e75
+  revision: b590cd084f5fdf89339c2feaafaf1d9903fe8912
   specs:
-    spdx (2.0.11)
+    spdx (2.0.12)
       fuzzy_match (~> 2.1)
       treetop (~> 1.6)
 
@@ -97,7 +97,7 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    autoprefixer-rails (9.8.4)
+    autoprefixer-rails (9.8.5)
       execjs
     bindex (0.8.1)
     bootsnap (1.4.6)
@@ -120,10 +120,10 @@ GEM
       after_commit_action (~> 1.0)
     crass (1.0.6)
     deb_control (0.0.1)
-    dotenv (2.7.5)
-    dotenv-rails (2.7.5)
-      dotenv (= 2.7.5)
-      railties (>= 3.2, < 6.1)
+    dotenv (2.7.6)
+    dotenv-rails (2.7.6)
+      dotenv (= 2.7.6)
+      railties (>= 3.2)
     erubi (1.9.0)
     escape_utils (1.2.1)
     ethon (0.12.0)
@@ -176,7 +176,7 @@ GEM
     octokit (4.18.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oj (3.10.6)
+    oj (3.10.7)
     ox (2.13.2)
     pagy (3.8.2)
     pg (1.2.3)
@@ -271,15 +271,15 @@ GEM
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
     unicode_utils (1.4.0)
-    web-console (4.0.3)
+    web-console (4.0.4)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    websocket-driver (0.7.2)
+    websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
