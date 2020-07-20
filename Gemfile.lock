@@ -137,6 +137,8 @@ GEM
       faraday (~> 1.0)
     ffi (1.13.1)
     fuzzy_match (2.1.0)
+    get_process_mem (0.2.5)
+      ffi (~> 1.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     groupdate (5.0.0)
@@ -153,6 +155,11 @@ GEM
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    lograge (0.11.2)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
     loofah (2.6.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -193,6 +200,9 @@ GEM
     public_suffix (4.0.5)
     puma (4.3.5)
       nio4r (~> 2.0)
+    puma_worker_killer (0.1.1)
+      get_process_mem (~> 0.2)
+      puma (>= 2.7, < 5)
     rack (2.2.3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -226,6 +236,8 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    request_store (1.5.0)
+      rack (>= 1.4)
     ruby-enum (0.8.0)
       i18n
     sassc (2.4.0)
@@ -302,6 +314,7 @@ DEPENDENCIES
   languages!
   license-compatibility
   listen
+  lograge
   octicons_helper
   octokit
   oj
@@ -312,6 +325,7 @@ DEPENDENCIES
   pg_search
   pghero
   puma
+  puma_worker_killer
   rails
   sassc-rails
   semantic!

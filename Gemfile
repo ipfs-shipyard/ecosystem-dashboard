@@ -44,3 +44,8 @@ group :development do
   gem 'spring-watcher-listen'
   gem 'dotenv-rails'
 end
+
+group :production do
+  gem 'lograge'
+  gem 'puma_worker_killer'
+end
