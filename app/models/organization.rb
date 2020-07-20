@@ -23,8 +23,7 @@ class Organization < ApplicationRecord
   end
 
   def guess_core_contributors
-    names = Event.internal.where(event_type: 'PushEvent').group(:actor).count.keys
-    core = names.select{|n| Event.internal.where(event_type: 'PushEvent').user(n).group(:repository_full_name).count.length > 1 }
+    core = pushing_contributor_names.select{|n| Event.internal.where(event_type: 'PushEvent').user(n).group(:repository_full_name).count.length > 1 }
                 .reject{|n| n.match(/-bot$/i) || n.match(/\[bot\]$/i) }
 
     core.each do |name|
@@ -47,5 +46,9 @@ class Organization < ApplicationRecord
   def docker_image_names
     return [] unless docker_hub_org.present?
     PackageManager::Docker.org_package_names(docker_hub_org)
+  end
+
+  def pushing_contributor_names
+    events.where(event_type: 'PushEvent').group(:actor).count.keys
   end
 end

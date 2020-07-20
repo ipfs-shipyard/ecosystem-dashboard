@@ -1,131 +1,160 @@
-<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
-  <span class="navbar-brand" >
-    <strong>
-      <%= params[:id] %> org stats
-    </strong>
-  </span>
+<%= link_to "https://github.com/#{@organization.name}", target: :_blank, class: 'float-left mr-3 mt-2' do %>
+  <img src="https://github.com/<%= @organization.name %>.png" class="rounded" height='40'>
+<% end %>
+<h1>
+  <%= link_to @organization.name, "https://github.com/#{@organization.name}", target: :_blank %>
+</h1>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item <%= 'active bg-light' if params[:range].blank? %>">
-        <a class="nav-link" href="<%= orgs_path %>">All time</a>
+<div class="container home mt-3">
+  <div class="row">
+    <div class="col-md-3">
+      <a href="<%= all_issues_path(range: @period, type: 'issues', collab: @organization.name) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'issue-opened', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='Issues on internal repos opened by <%= @organization.name %> contributors in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @new_issues %>
+
+                    <% new_issue_diff = @new_issues - @new_issues_last_week %>
+                    <% unless new_issue_diff.zero?  %>
+                      <small class='<%= diff_class(new_issue_diff) %>' title='<%= @new_issues_last_week %> new issues in the previous <%= @period %> days'><%= '+' if new_issue_diff > 0 %><%= number_to_human new_issue_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>New Issues</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="<%= all_issues_path(range: @period, type: 'pull_requests', collab: @organization.name) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'git-pull-request', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='Pull Requests on internal repos opened by <%= @organization.name %> contributors in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @new_prs %>
+
+                    <% new_pr_diff = @new_prs - @new_prs_last_week %>
+                    <% unless new_pr_diff.zero? %>
+                      <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> new pull requests in the previous <%= @period %> days'><%= '+' if new_pr_diff > 0 %><%= number_to_human new_pr_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>New Pull Requests</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="<%= slow_response_path(range: @period, collab: @organization.name) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'clock', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='Average time to first response by a core contributor on issues and pull requests opened by <%= @organization.name %> contributors on internal repos in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= @response_time %>
+                    <% response_time_diff = @response_time - @response_time_last_week %>
+                    <% unless response_time_diff.zero? %>
+                      <small class='<%= diff_class(-response_time_diff) %>' title='<%= @response_time_last_week %> hrs in the previous <%= @period %> days'> <%= '+' if response_time_diff > 0 %><%= number_to_human response_time_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>Avg Resp Time <small class='text-muted'>hrs</small></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="<%= slow_response_path(range: @period, collab: @organization.name) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'question', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='<%= @organization.name %> contributed issues and pull requests opened on internal repos in the past <%= @period %> days that had no response or a response time of 48 hours or more from a core contributor'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @slow_responses %>
+                    <% slow_response_diff = @slow_responses - @slow_responses_last_week %>
+                    <% unless slow_response_diff.zero? %>
+                      <small class='<%= diff_class(-slow_response_diff) %>' title='<%= @slow_responses_last_week %> slow responses in the previous <%= @period %> days'> <%= '+' if slow_response_diff > 0 %><%= number_to_human slow_response_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>Slow Responses</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="row p-3">
+  <div class="col-md-9">
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Activity</a>
       </li>
-      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 365 %>">
-        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 365)) %>">Last Year</a>
-      </li>
-      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 90 %>">
-        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 90)) %>">Last Quarter</a>
-      </li>
-      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 30 %>">
-        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 30)) %>">Last 30 days</a>
+      <li class="nav-item">
+        <a class="nav-link " href="#">Other stuff</a>
       </li>
     </ul>
+
+    <% if @events.any? %>
+      <%= render @events %>
+    <% else %>
+      <p>No events found.</p>
+    <% end %>
+    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+
+    
   </div>
-</nav>
-
-<% @orgs.in_groups_of(3, false).each do |group| %>
-  <div class="card-deck mb-4">
-    <% group.each do |org, count| %>
-      <div class="card" >
-        <div class="card-header">
-          <h3 class=m-0>
-            <img src="https://github.com/<%= org[:name] %>.png" class="rounded" height='30'>
-            <%= org[:name] %>
-            <%= link_to octicon('mark-github'), "https://github.com/"+org[:name], target: :_blank %>
-          </h3>
-        </div>
-
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item pt-2 pb-2">
-            <%= octicon('issue-opened') %> Issues
-            <small class='text-muted'><%= number_with_delimiter org[:issues_count] %></small>
-          </li>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <span class='text-success'><%= octicon('issue-opened') %></span>
-              Open
-              <small class='text-muted'><%= number_with_delimiter org[:open_issues_count] %></small>
-            </li>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <span class='text-danger'><%= octicon('issue-closed') %></span>
-              Closed
-              <small class='text-muted'><%= number_with_delimiter org[:closed_issues_count] %></small>
-            </li>
-
-
-          <li class="list-group-item pt-2 pb-2">
-            <%= octicon('git-pull-request') %> Pull Requests
-            <small class='text-muted'><%= number_with_delimiter org[:pull_requests_count] %></small>
-          </li>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <span class='text-success'><%= octicon('git-pull-request') %></span>
-              Open
-              <small class='text-muted'><%= number_with_delimiter org[:open_pull_requests_count] %></small>
-            </li>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <span class='text-danger'><%= octicon('git-pull-request') %></span>
-              Closed/Merged
-              <small class='text-muted'><%= number_with_delimiter org[:closed_pull_requests_count] %></small>
-            </li>
-
-          <% if params[:range].blank? %>
-            <li class="list-group-item pt-2 pb-2">
-              <%= octicon('comment') %> Comments
-              <small class='text-muted'><%= number_with_delimiter org[:comments] %></small>
-            </li>
-          <% end %>
-
-          <li class="list-group-item pt-2 pb-2">
-            <%= link_to repositories_path(org: org[:name]) do %>
-              <%= octicon('repo-clone') %> Repos
-              <small class='text-muted'><%= number_with_delimiter org[:repos].length %></small>
-            <% end %>
-          </li>
-          <% org[:repos].first(5).each do |repo, count| %>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <%= octicon('repo') %>
-              <%= repo.split('/').last %>
-              <small class='text-muted'><%= number_with_delimiter count %></small>
-            </li>
-          <% end %>
-
-          <li class="list-group-item pt-2 pb-2">
-            <%= octicon('briefcase') %> Core Contributors
-            <small class='text-muted'><%= number_with_delimiter org[:contributors].length %></small>
-          </li>
-          <% org[:contributors].first(5).each do |user, count| %>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <img src="https://github.com/<%= user %>.png" class="rounded" height='20'>
-              <%= user %>
-              <small class='text-muted'><%= number_with_delimiter count %></small>
-            </li>
-          <% end %>
-
-          <li class="list-group-item pt-2 pb-2">
-            <%= octicon('organization') %> Community Contributors
-            <small class='text-muted'><%= number_with_delimiter org[:community_contributors].length %></small>
-          </li>
-          <% org[:community_contributors].first(5).each do |user, count| %>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <img src="https://github.com/<%= user %>.png" class="rounded" height='20'>
-              <%= user %>
-              <small class='text-muted'><%= number_with_delimiter count %></small>
-            </li>
-          <% end %>
-
-          <li class="list-group-item pt-2 pb-2">
-            <%= octicon('hubot') %> Bots
-            <small class='text-muted'><%= number_with_delimiter org[:bots].length %></small>
-          </li>
-          <% org[:bots].first(3).each do |user, count| %>
-            <li class="list-group-item pt-2 pl-5 pb-2">
-              <img src="https://github.com/<%= user.gsub('[bot]', '') %>.png" class="rounded" height='20'>
-              <%= user.gsub('[bot]', '') %>
-              <small class='text-muted'><%= number_with_delimiter count %></small>
-            </li>
-          <% end %>
-
-        </ul>
-      </div>
+  <div class="col-md-3">
+    <h5>Contributors</h5>
+    <% @organization.pushing_contributor_names.each do |username| %>
+      <%= link_to "https://github.com/#{username}", target: :_blank, class: 'float-left mr-1 mt-1' do %>
+        <img src="https://github.com/<%= username %>.png" class="rounded" height='40'>
+      <% end %>
     <% end %>
   </div>
-<% end %>
+</div>
+
+
+
+<!--
+internal events requests created by org contributors
+internal issues+pull requests created by org contributors
+org events
+org contributors
+org repositories
+org usage of internal packages
+org packages
+org search results
+ -->

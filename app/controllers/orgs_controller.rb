@@ -55,13 +55,28 @@ class OrgsController < ApplicationController
   end
 
   def show
-    scope = Issue.all
+    @organization = Organization.find_by_name(params[:id])
+    @period = (params[:range].presence || 365).to_i
 
-    if params[:range].present?
-      scope = scope.where('issues.created_at > ?', params[:range].to_i.days.ago)
-    end
+    sort = params[:sort] || 'events.created_at'
+    order = params[:order] || 'desc'
 
-    @orgs = [load_org_data(scope, params[:id])]
+    @event_scope = Event.internal.user(@organization.pushing_contributor_names)
+    @issues_scope = Issue.internal.user(@organization.pushing_contributor_names)
+
+    @new_issues = @issues_scope.this_period(@period).issues.count
+    @new_issues_last_week = @issues_scope.last_period(@period).issues.count
+
+    @new_prs = @issues_scope.this_period(@period).pull_requests.count
+    @new_prs_last_week = @issues_scope.last_period(@period).pull_requests.count
+
+    @response_time = (@issues_scope.this_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
+    @response_time_last_week = (@issues_scope.last_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
+
+    @slow_responses = @issues_scope.this_period(@period).unlocked.where("html_url <> ''").not_draft.slow_response.count
+    @slow_responses_last_week = @issues_scope.last_period(@period).unlocked.where("html_url <> ''").not_draft.slow_response.count
+
+    @pagy, @events = pagy(@event_scope.order(sort => order))
   end
 
   def dependencies
