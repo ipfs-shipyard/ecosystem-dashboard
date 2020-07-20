@@ -145,6 +145,13 @@
         <img src="https://github.com/<%= username %>.png" class="rounded" height='40'>
       <% end %>
     <% end %>
+
+    <div class="clearfix"></div>
+    <p>
+      <small class='text-muted'>
+        Last activity: <%= time_ago_in_words @organization.events.last.created_at %>
+      </small>
+    </p>
   </div>
 </div>
 
