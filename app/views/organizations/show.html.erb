@@ -8,6 +8,29 @@
 <div class="container home mt-3">
   <div class="row">
     <div class="col-md-3">
+      <a href="<%= collab_repositories_path(order: 'desc', sort: 'created_at', org: @organization.name) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'repo', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='Total active, non-forked repositories in this organization'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @repos_count %>
+                  </h3>
+                  <span>Repositories</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-md-3">
       <a href="<%= all_issues_path(range: @period, type: 'issues', collab: @organization.name) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
@@ -26,7 +49,7 @@
                       <small class='<%= diff_class(new_issue_diff) %>' title='<%= @new_issues_last_week %> new issues in the previous <%= @period %> days'><%= '+' if new_issue_diff > 0 %><%= number_to_human new_issue_diff %></small>
                     <% end %>
                   </h3>
-                  <span>New Issues</span>
+                  <span>Issues</span>
                 </div>
               </div>
             </div>
@@ -53,7 +76,7 @@
                       <small class='<%= diff_class(new_pr_diff) %>' title='<%= @new_prs_last_week %> new pull requests in the previous <%= @period %> days'><%= '+' if new_pr_diff > 0 %><%= number_to_human new_pr_diff %></small>
                     <% end %>
                   </h3>
-                  <span>New Pull Requests</span>
+                  <span>Pull Requests</span>
                 </div>
               </div>
             </div>
@@ -80,32 +103,6 @@
                     <% end %>
                   </h3>
                   <span>Avg Resp Time <small class='text-muted'>hrs</small></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-md-3">
-      <a href="<%= slow_response_path(range: @period, collab: @organization.name) %>">
-        <div class="card shadow-sm mb-3">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center">
-                  <%= octicon 'question', height: 50 %>
-                </div>
-                <div class="media-body text-right">
-                  <span class='info' title='<%= @organization.name %> contributed issues and pull requests opened on internal repos in the past <%= @period %> days that had no response or a response time of 48 hours or more from a core contributor'><%= octicon 'info', height: 14 %></span>
-                  <h3>
-                    <%= number_to_human @slow_responses %>
-                    <% slow_response_diff = @slow_responses - @slow_responses_last_week %>
-                    <% unless slow_response_diff.zero? %>
-                      <small class='<%= diff_class(-slow_response_diff) %>' title='<%= @slow_responses_last_week %> slow responses in the previous <%= @period %> days'> <%= '+' if slow_response_diff > 0 %><%= number_to_human slow_response_diff %></small>
-                    <% end %>
-                  </h3>
-                  <span>Slow Responses</span>
                 </div>
               </div>
             </div>

@@ -74,11 +74,9 @@ class OrganizationsController < ApplicationController
     @response_time = (@issues_scope.this_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
     @response_time_last_week = (@issues_scope.last_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
 
-    @slow_responses = @issues_scope.this_period(@period).unlocked.where("html_url <> ''").not_draft.slow_response.count
-    @slow_responses_last_week = @issues_scope.last_period(@period).unlocked.where("html_url <> ''").not_draft.slow_response.count
-
     @event_scope = @event_scope.this_period(@period)
     @search_scope = @search_scope.this_period(@period)
+    @repos_count = Repository.org(@organization.name).active.source.count
 
     case params[:tab]
     when 'search'
