@@ -8,6 +8,7 @@ namespace :issues do
   task sync_recent: :environment do
     Repository.sync_recently_active_internal_repos
     Issue.update_collab_labels
+    Issue.internal.state('open').where('last_synced_at < ? or last_synced_at is null', 1.hour.ago).where('issues.created_at > ?', 1.week.ago).limit(1000).order('issues.last_synced_at asc nulls first, issues.updated_at asc').each(&:sync)
   end
 
   task sync_daily: :environment do
