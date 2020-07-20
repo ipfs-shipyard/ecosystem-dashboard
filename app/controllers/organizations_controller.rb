@@ -33,7 +33,7 @@ class OrganizationsController < ApplicationController
   def collabs
     @page_title = 'Collaborator Organizations'
 
-    sort = params[:sort] || 'organizations.created_at'
+    sort = params[:sort] || 'events_count'
     order = params[:order] || 'desc'
 
     respond_to do |format|
