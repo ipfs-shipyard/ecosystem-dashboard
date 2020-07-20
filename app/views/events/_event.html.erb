@@ -18,7 +18,7 @@
       </small>
       <small>
         <% if event.contributed? %>
-          <% Contributor.collabs_for(event.actor).each do |collab| %>
+          <% Contributor.collabs_for(event.actor).limit(5).each do |collab| %>
             <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
           <% end %>
         <% else %>
