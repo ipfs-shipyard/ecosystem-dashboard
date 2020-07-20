@@ -2,7 +2,7 @@
   <div class="card mb-3">
     <div class="card-body">
         <%= link_to "https://github.com/#{organization.name}", target: :_blank, class: 'float-left mr-3' do %>
-          <img src="https://github.com/<%= organization.name %>.png" class="rounded" height='40'>
+          <img src="https://github.com/<%= organization.name %>.png" class="rounded" height='40' width='40'>
         <% end %>
       <h5 class="card-title mb-0">
         <%= link_to organization.name, org_path(organization.name) %>

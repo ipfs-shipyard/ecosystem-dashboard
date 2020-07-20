@@ -1,7 +1,7 @@
 <div class="card mb-3">
   <div class="card-body">
     <%= link_to "https://github.com/#{repository.org}", target: :_blank, class: 'float-right' do %>
-      <img src="https://github.com/<%= repository.org %>.png" class="rounded" height='40'>
+      <img src="https://github.com/<%= repository.org %>.png" class="rounded" height='40' width='40'>
     <% end %>
     <h5 class="card-title mb-0">
       <span class='mr-1' style='color: <%= repository.color %>;' title='<%= repository.language %>'>

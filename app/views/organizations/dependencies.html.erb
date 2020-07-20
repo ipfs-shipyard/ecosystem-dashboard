@@ -12,7 +12,7 @@
       <div class="card-header p-2 pl-3 pr-3 collapsed" title='Click to expand/collapse' data-toggle="collapse" href="#package-<%= package.id %>">
         <% if package.repository %>
           <%= link_to "https://github.com/#{package.repository.org}", title: package.repository.org, target: :_blank, class: 'float-left mr-2' do %>
-            <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20'>
+            <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20' width='20'>
           <% end %>
         <% end %>
         <%= package.platform_name %> - <%= link_to package.name, package_path(package.id) %>

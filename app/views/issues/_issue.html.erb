@@ -1,7 +1,7 @@
 <div class="card mb-3">
   <div class="card-body">
     <%= link_to contributor_path(issue.user), target: :_blank, class: 'float-right' do %>
-      <img src="https://github.com/<%= issue.user.gsub('[bot]', '') %>.png" class="rounded" height='40'>
+      <img src="https://github.com/<%= issue.user.gsub('[bot]', '') %>.png" class="rounded" height='40' width='40'>
     <% end %>
     <h5 class="card-title mb-0">
       <span class='mr-1 text-<%= issue_colour(issue) %>'>

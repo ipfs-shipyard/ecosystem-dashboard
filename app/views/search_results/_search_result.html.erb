@@ -17,7 +17,7 @@
     <small class='text-muted'>
       <% unless search_result.kind == 'repositories' %>
         <%= link_to search_result.repository_url, target: :_blank, class: 'mr-1' do %>
-          <img src="<%= search_result.icon_url %>" class="rounded" height='20'>
+          <img src="<%= search_result.icon_url %>" class="rounded" height='20' width='20'>
         <% end %>
         <%= link_to search_result.repository_full_name, search_result.repository_url, target: :_blank %> -
       <% end %>

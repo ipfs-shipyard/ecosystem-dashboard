@@ -2,7 +2,7 @@
   <div class="card mb-3">
     <div class="card-header p-2 pl-3 pr-3">
       <%= link_to "https://github.com/#{repo.full_name}", target: :_blank, class: 'mr-1' do %>
-        <img src="https://github.com/<%= repo.org %>.png" class="rounded" height='18'>
+        <img src="https://github.com/<%= repo.org %>.png" class="rounded" height='18' width='18'>
       <% end %>
       <%= link_to repo.full_name, repository_path(repo) %>
     </div>
@@ -11,7 +11,7 @@
         <% next unless package && package.internal? %>
         <li class="list-group-item">
           <% dep = dependencies.sort_by(&:requirements).first %>
-            <img src="https://github.com/<%= package.organization.name %>.png" class="rounded" height='20'>
+            <img src="https://github.com/<%= package.organization.name %>.png" class="rounded" height='20' width='20'>
 
             <%= link_to "#{package.platform_name}/#{package.name}", package %>
 

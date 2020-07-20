@@ -96,7 +96,7 @@
           </li>
           <% org[:contributors].first(5).each do |user, count| %>
             <li class="list-group-item pt-2 pl-5 pb-2">
-              <img src="https://github.com/<%= user %>.png" class="rounded" height='20'>
+              <img src="https://github.com/<%= user %>.png" class="rounded" height='20' width='20'>
               <%= user %>
               <small class='text-muted'><%= number_with_delimiter count %></small>
             </li>
@@ -108,7 +108,7 @@
           </li>
           <% org[:community_contributors].first(5).each do |user, count| %>
             <li class="list-group-item pt-2 pl-5 pb-2">
-              <img src="https://github.com/<%= user %>.png" class="rounded" height='20'>
+              <img src="https://github.com/<%= user %>.png" class="rounded" height='20' width='20'>
               <%= user %>
               <small class='text-muted'><%= number_with_delimiter count %></small>
             </li>
@@ -120,7 +120,7 @@
           </li>
           <% org[:bots].first(3).each do |user, count| %>
             <li class="list-group-item pt-2 pl-5 pb-2">
-              <img src="https://github.com/<%= user.gsub('[bot]', '') %>.png" class="rounded" height='20'>
+              <img src="https://github.com/<%= user.gsub('[bot]', '') %>.png" class="rounded" height='20' width='20'>
               <%= user.gsub('[bot]', '') %>
               <small class='text-muted'><%= number_with_delimiter count %></small>
             </li>

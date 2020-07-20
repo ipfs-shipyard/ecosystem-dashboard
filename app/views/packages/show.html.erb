@@ -31,7 +31,7 @@
     <div class="card mb-3">
       <div class="card-header p-2 pl-3 pr-3" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
         <%= link_to "https://github.com/#{org}", target: :_blank, class: 'mr-1' do %>
-          <img src="https://github.com/<%= org %>.png" class="rounded" height='18'>
+          <img src="https://github.com/<%= org %>.png" class="rounded" height='18' width='18'>
         <% end %>
         <%= link_to org, org_dependencies_path(org) %>
       </div>

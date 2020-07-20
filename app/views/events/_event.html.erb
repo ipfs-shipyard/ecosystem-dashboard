@@ -1,7 +1,7 @@
 <div class="card mb-3 event">
   <div class="card-body pb-1">
     <%= link_to "https://github.com/#{event.actor.gsub('[bot]', '')}", target: :_blank, class: 'float-right' do %>
-      <img src="https://github.com/<%= event.actor.gsub('[bot]', '') %>.png" class="rounded" height='40'>
+      <img src="https://github.com/<%= event.actor.gsub('[bot]', '') %>.png" class="rounded" height='40' width='40'>
     <% end %>
     <h5 class="card-title">
       <span class='mr-1'>
