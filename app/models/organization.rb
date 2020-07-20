@@ -24,7 +24,6 @@ class Organization < ApplicationRecord
 
   def guess_core_contributors
     core = pushing_contributor_names.select{|n| Event.internal.where(event_type: 'PushEvent').user(n).group(:repository_full_name).count.length > 1 }
-                .reject{|n| n.match(/-bot$/i) || n.match(/\[bot\]$/i) }
 
     core.each do |name|
       Contributor.find_or_create_by(github_username: name, core: true)
@@ -49,6 +48,6 @@ class Organization < ApplicationRecord
   end
 
   def pushing_contributor_names
-    events.where(event_type: 'PushEvent').group(:actor).count.keys
+    events.where(event_type: 'PushEvent').group(:actor).count.reject{|n| n.match(/-bot$/i) || n.match(/\[bot\]$/i) }.keys
   end
 end
