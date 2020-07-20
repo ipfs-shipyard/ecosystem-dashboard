@@ -120,20 +120,25 @@
   <div class="col-md-9">
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Activity</a>
+        <a class="nav-link <%= 'active' if params[:tab].blank? || params[:tab] == 'events' %>" href="<%= url_for(request.params.merge(tab: nil)) %>">
+          Activity
+          <span class='badge badge-secondary'><%= @event_scope.count %></span>
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link " href="#">Other stuff</a>
+        <a class="nav-link <%= 'active' if params[:tab] == 'search' %>" href="<%= url_for(request.params.merge(tab: 'search')) %>">
+          Search results
+          <span class='badge badge-secondary'><%= @search_scope.count %></span>
+        </a>
       </li>
     </ul>
 
-    <% if @events.any? %>
-      <%= render @events %>
-    <% else %>
-      <p>No events found.</p>
-    <% end %>
-    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
-
+    <%= case params[:tab]
+    when 'search'
+      render 'search'
+    else
+      render 'events'
+    end %>
 
   </div>
   <div class="col-md-3">

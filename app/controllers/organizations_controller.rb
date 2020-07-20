@@ -58,11 +58,12 @@ class OrganizationsController < ApplicationController
     @organization = Organization.find_by_name!(params[:id])
     @period = (params[:range].presence || 30).to_i
 
-    sort = params[:sort] || 'events.created_at'
+    sort = params[:sort] || 'created_at'
     order = params[:order] || 'desc'
 
     @event_scope = Event.internal.user(@organization.pushing_contributor_names)
     @issues_scope = Issue.internal.user(@organization.pushing_contributor_names)
+    @search_scope = SearchResult.includes(:search_query).where(org: @organization.name)
 
     @new_issues = @issues_scope.this_period(@period).issues.count
     @new_issues_last_week = @issues_scope.last_period(@period).issues.count
@@ -76,7 +77,15 @@ class OrganizationsController < ApplicationController
     @slow_responses = @issues_scope.this_period(@period).unlocked.where("html_url <> ''").not_draft.slow_response.count
     @slow_responses_last_week = @issues_scope.last_period(@period).unlocked.where("html_url <> ''").not_draft.slow_response.count
 
-    @pagy, @events = pagy(@event_scope.order(sort => order))
+    @event_scope = @event_scope.this_period(@period)
+    @search_scope = @search_scope.this_period(@period)
+
+    case params[:tab]
+    when 'search'
+      @pagy, @results = pagy(@search_scope.order(sort => order))
+    else
+      @pagy, @events = pagy(@event_scope.order(sort => order))
+    end
   end
 
   def dependencies

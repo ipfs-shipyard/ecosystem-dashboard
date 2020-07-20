@@ -1,0 +1,6 @@
+<% if @results.any? %>
+  <%= render @results %>
+<% else %>
+  <p>No search results found.</p>
+<% end %>
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
