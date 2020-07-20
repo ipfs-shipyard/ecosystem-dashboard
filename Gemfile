@@ -35,6 +35,8 @@ gem "faraday_middleware"
 gem "counter_culture"
 gem "spdx", git: "https://github.com/librariesio/spdx"
 
+gem 'bugsnag'
+
 group :development do
   gem 'web-console'
   gem 'listen'
