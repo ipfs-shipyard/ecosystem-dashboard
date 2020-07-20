@@ -1,6 +1,15 @@
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle <%= 'active' if (params[:sort].present? || params[:order].present?) %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Sort</a>
   <div class="dropdown-menu dropdown-menu-right text-right">
+    <% if params[:sort] == 'activity' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Activity
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'events_count', order: 'desc')) %>">
+        Activity
+      </a>
+    <% end %>
     <% if params[:sort] == 'name' %>
       <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
         Name

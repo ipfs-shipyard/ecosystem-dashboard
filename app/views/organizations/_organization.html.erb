@@ -7,6 +7,9 @@
       <h5 class="card-title mb-0">
         <%= link_to organization.name, org_path(organization.name) %>
       </h5>
+      <small class='text-muted'>
+        30 day activity: <%= organization.events_count %>
+      </small>
     </div>
   </div>
 </div>

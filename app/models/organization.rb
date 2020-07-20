@@ -51,4 +51,10 @@ class Organization < ApplicationRecord
   def pushing_contributor_names
     events.where(event_type: 'PushEvent').group(:actor).count.reject{|n| n.match(/-bot$/i) || n.match(/\[bot\]$/i) }.keys
   end
+
+  def update_counts
+    self.events_count = Event.internal.user(pushing_contributor_names).this_period(30).count
+    self.search_results_count = SearchResult.where(org: name).this_period(30).count
+    save
+  end
 end
