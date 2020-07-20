@@ -61,8 +61,8 @@ class OrganizationsController < ApplicationController
     sort = params[:sort] || 'created_at'
     order = params[:order] || 'desc'
 
-    @event_scope = Event.internal.user(@organization.pushing_contributor_names)
-    @issues_scope = Issue.internal.user(@organization.pushing_contributor_names)
+    @event_scope = Event.internal.user(@organization.pushing_contributor_names).not_core
+    @issues_scope = Issue.internal.user(@organization.pushing_contributor_names).not_core
     @search_scope = SearchResult.includes(:search_query).where(org: @organization.name)
 
     @new_issues = @issues_scope.this_period(@period).issues.count
