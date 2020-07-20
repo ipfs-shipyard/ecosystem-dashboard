@@ -39,7 +39,7 @@ class OrganizationsController < ApplicationController
     respond_to do |format|
       format.html do
         @scope = Organization.collaborator.order(sort => order)
-        @pagy, @orgs = pagy(@scope)
+        @pagy, @orgs = pagy(@scope, items: 100)
       end
       format.rss do
         @scope = Organization.collaborator.order(sort => order)

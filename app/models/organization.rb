@@ -1,5 +1,6 @@
 class Organization < ApplicationRecord
   validates_presence_of :name
+  validates_uniqueness_of :name
 
   scope :internal, -> { where(internal: true) }
   scope :collaborator, -> { where(collaborator: true) }
