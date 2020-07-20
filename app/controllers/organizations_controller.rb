@@ -1,4 +1,4 @@
-class OrgsController < ApplicationController
+class OrganizationsController < ApplicationController
   def internal
     @page_title = 'Internal Organizations'
 
@@ -38,8 +38,8 @@ class OrgsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @scope = Issue.internal.not_core.unlocked.includes(:contributor).where("html_url <> ''")
-        @collabs = Repository.external.pluck(:org).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }.sort_by{|k,v| -v }
+        @scope = Organization.collaborator.order(sort => order)
+        @pagy, @orgs = pagy(@scope)
       end
       format.rss do
         @scope = Organization.collaborator.order(sort => order)
@@ -55,8 +55,8 @@ class OrgsController < ApplicationController
   end
 
   def show
-    @organization = Organization.find_by_name(params[:id])
-    @period = (params[:range].presence || 365).to_i
+    @organization = Organization.find_by_name!(params[:id])
+    @period = (params[:range].presence || 30).to_i
 
     sort = params[:sort] || 'events.created_at'
     order = params[:order] || 'desc'
