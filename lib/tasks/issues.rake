@@ -11,7 +11,7 @@ namespace :issues do
   end
 
   task sync_daily: :environment do
-    ids = Issue.internal.state('open').where('last_synced_at < ? or last_synced_at is null', 1.day.ago).limit(1000).order('issues.last_synced_at asc nulls first, issues.updated asc').pluck(:id)
+    ids = Issue.internal.state('open').where('last_synced_at < ? or last_synced_at is null', 1.day.ago).limit(1000).order('issues.last_synced_at asc nulls first, issues.updated_at asc').pluck(:id)
     Issue.where(id: ids).find_each(&:sync)
   end
 end
