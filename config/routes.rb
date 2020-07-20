@@ -23,9 +23,9 @@ Rails.application.routes.draw do
   get 'weekly', to: redirect('/collab_issues?range=7')
   get 'collabs', to: 'organizations#collabs'
   get 'all', to: 'issues#all', as: :all_issues
-  get 'organizations/:id/dependencies', to: 'organizations#dependencies', as: :org_dependencies
-  get 'organizations/:id', to: 'organizations#show', as: :org
-  get 'organizations', to: 'organizations#internal', as: :orgs
+  get 'orgs/:id/dependencies', to: 'organizations#dependencies', as: :org_dependencies
+  get 'orgs/:id', to: 'organizations#show', as: :org
+  get 'orgs', to: 'organizations#internal', as: :orgs
   get 'home', to: 'home#index'
 
   root to: 'home#index'
