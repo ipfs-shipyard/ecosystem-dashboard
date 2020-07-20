@@ -8,6 +8,7 @@ class Organization < ApplicationRecord
   has_many :events, foreign_key: :org, primary_key: :name
   has_many :issues, foreign_key: :org, primary_key: :name
   has_many :repositories, foreign_key: :org, primary_key: :name
+  has_many :repository_dependencies, through: :repositories
 
   def import
     Repository.import_org(name)

@@ -128,11 +128,19 @@
           <span class='badge badge-secondary'><%= @search_scope.count %></span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link <%= 'active' if params[:tab] == 'packages' %>" href="<%= url_for(request.params.merge(tab: 'packages')) %>">
+          Package Usage
+          <span class='badge badge-secondary'><%= @repository_dependencies.group_by{|rd| [rd.package,rd.repository] }.length %></span>
+        </a>
+      </li>
     </ul>
 
     <%= case params[:tab]
     when 'search'
       render 'search'
+    when 'packages'
+      render 'packages'
     else
       render 'events'
     end %>
