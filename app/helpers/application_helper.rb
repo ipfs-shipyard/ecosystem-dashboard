@@ -41,7 +41,9 @@ module ApplicationHelper
 
     if params[:user].present?
       words << params[:user]
-    elsif params[:collab]
+    elsif params[:only_collabs].present?
+      words << 'all collabs'
+    elsif params[:collab].present?
       words << "#{params[:collab]} contributors"
     else
       if params[:exclude_core].present?

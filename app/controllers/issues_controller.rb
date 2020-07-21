@@ -19,9 +19,6 @@ class IssuesController < ApplicationController
     @range = (params[:range].presence || 30).to_i
 
     @scope = Issue.internal.humans.unlocked.this_period(@range).includes(:contributor).where("html_url <> ''")
-    @scope = @scope.not_core if params[:exclude_core]
-
-    @scope = @scope.collab(params[:collab]) if params[:collab].present?
 
     apply_filters
   end
@@ -73,6 +70,7 @@ class IssuesController < ApplicationController
     @scope = @scope.exclude_language(params[:exclude_language]) if params[:exclude_language].present?
     @scope = @scope.exclude_collab(params[:exclude_collab]) if params[:exclude_collab].present?
     @scope = @scope.exclude_label(params[:exclude_label]) if params[:exclude_label].present?
+    @scope = @scope.not_core if params[:exclude_core].present?
 
     @scope = @scope.not_draft unless params[:include_drafts].present?
 
@@ -88,6 +86,9 @@ class IssuesController < ApplicationController
     @scope = @scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.no_response if params[:no_response].present?
+    @scope = @scope.collab(params[:collab]) if params[:collab].present?
+    @scope = @scope.all_collabs if params[:only_collabs].present?
+
 
     sort = params[:sort] || 'issues.created_at'
     order = params[:order] || 'desc'
