@@ -4,12 +4,12 @@
   </span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="nav nav-pills mr-auto">
       <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'collab', filter_label: 'Collab', filter_collection: @collabs} %>
       <%= render 'issues/range_filter' %>
     </ul>
     <% if Organization.internal.count > 1 %>
-      <ul class="navbar-nav ml-auto">
+      <ul class="nav nav-pills ml-auto">
         <li class="nav-item dropdown <%= 'active' if params[:org].present? %>">
           <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Filter by Organization

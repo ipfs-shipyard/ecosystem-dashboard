@@ -8,11 +8,11 @@
   </span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="nav nav-pills mr-auto">
       <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'org', filter_label: 'Org', filter_collection: @orgs} if Organization.internal.count > 1 %>
       <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'platform', filter_label: 'Platform', filter_collection: @platforms} %>
     </ul>
-    <ul class="navbar-nav ml-auto">
+    <ul class="nav nav-pills ml-auto">
       <%= render 'sort_filter' %>
     </ul>
   </div>

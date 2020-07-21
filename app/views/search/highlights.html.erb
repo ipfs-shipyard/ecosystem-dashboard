@@ -4,7 +4,7 @@
   </span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="nav nav-pills mr-auto">
       <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'kind', filter_label: 'Result Type', filter_collection: @kinds} %>
       <%= render 'issues/range_filter' %>
     </ul>

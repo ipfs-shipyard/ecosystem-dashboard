@@ -4,7 +4,7 @@
   </span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="nav nav-pills mr-auto">
       <%= render partial: 'excludable_filter', locals: {filter_name: 'user', filter_label: 'User', filter_collection: @users} %>
       <%= render 'state_filter' %>
       <%= render 'type_filter' %>
@@ -47,7 +47,7 @@
       </li>
       <%= render 'range_filter' %>
     </ul>
-    <ul class="navbar-nav ml-auto">
+    <ul class="nav nav-pills ml-auto">
       <%= render 'sort_filter' %>
     </ul>
   </div>

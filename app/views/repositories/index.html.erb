@@ -8,7 +8,7 @@
   </span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="nav nav-pills mr-auto">
       <% if Organization.internal.count > 1 %>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
@@ -93,7 +93,7 @@
         </div>
       </li>
     </ul>
-    <ul class="navbar-nav ml-auto">
+    <ul class="nav nav-pills ml-auto">
       <%= render 'sort_filter' %>
     </ul>
   </div>
