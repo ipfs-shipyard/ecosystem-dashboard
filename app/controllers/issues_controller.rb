@@ -15,7 +15,7 @@ class IssuesController < ApplicationController
   end
 
   def all
-    @page_title = "All Issues and Pull Requests"
+    @page_title = "Issues and Pull Requests"
     @range = (params[:range].presence || 30).to_i
 
     @scope = Issue.internal.humans.unlocked.this_period(@range).includes(:contributor).where("html_url <> ''")
