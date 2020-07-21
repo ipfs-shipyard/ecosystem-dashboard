@@ -8,6 +8,10 @@ class SearchController < ApplicationController
     @scope = @scope.where(kind: params[:kind]) if params[:kind].present?
     @scope = @scope.where(org: params[:org]) if params[:org].present?
 
+    @scope = @scope.where.not(repository_full_name: params[:exclude_repository_full_name]) if params[:exclude_repository_full_name].present?
+    @scope = @scope.where.not(kind: params[:exclude_kind]) if params[:exclude_kind].present?
+    @scope = @scope.where.not(org: params[:exclude_org]) if params[:exclude_org].present?
+
     @pagy, @search_results = pagy(@scope.order('created_at desc'))
 
     respond_to do |format|
@@ -30,6 +34,7 @@ class SearchController < ApplicationController
     @scope = SearchResult.this_period(@range).includes(:search_query)
 
     @scope = @scope.where(kind: params[:kind]) if params[:kind].present?
+    @scope = @scope.where.not(kind: params[:exclude_kind]) if params[:exclude_kind].present?
 
     @known_orgs = Organization.all.pluck(:name)
     @known_contributors = Contributor.all.pluck(:github_username)
