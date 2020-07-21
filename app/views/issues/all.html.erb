@@ -132,6 +132,7 @@
   </div>
   <% if @issues.any? %>
     <div class="col-md-3">
+      <%= render 'collabs' %>
       <%= render 'contributors' %>
     </div>
   <% end %>
