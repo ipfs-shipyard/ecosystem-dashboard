@@ -33,30 +33,7 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Collaborators
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="<%= collabs_path %>">
-                  Organizations
-                </a>
-                <a class="dropdown-item" href="<%= collab_issues_path %>">
-                  Issues and Pull Requests
-                </a>
-                <a class="dropdown-item" href="<%= collab_events_path %>">
-                  Events
-                </a>
-                <a class="dropdown-item" href="<%= collab_packages_path %>">
-                  Packages
-                </a>
-                <a class="dropdown-item" href="<%= collab_repositories_path %>">
-                  Repositories
-                </a>
-                <%= link_to 'Contributors', collab_contributors_path, class: 'dropdown-item' %>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Internal
+                Core
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <% if Organization.internal.count > 1 %>
@@ -81,6 +58,29 @@
                 <%= link_to 'Outdated Packages', outdated_packages_path, class: 'dropdown-item' %>
                 <%= link_to 'Tracked Searches', search_path, class: 'dropdown-item' %>
                 <%= link_to 'Search Highlights', highlights_path, class: 'dropdown-item' %>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle " href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Collaborators
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="<%= collabs_path %>">
+                  Organizations
+                </a>
+                <a class="dropdown-item" href="<%= collab_issues_path %>">
+                  Issues and Pull Requests
+                </a>
+                <a class="dropdown-item" href="<%= collab_events_path %>">
+                  Events
+                </a>
+                <a class="dropdown-item" href="<%= collab_packages_path %>">
+                  Packages
+                </a>
+                <a class="dropdown-item" href="<%= collab_repositories_path %>">
+                  Repositories
+                </a>
+                <%= link_to 'Contributors', collab_contributors_path, class: 'dropdown-item' %>
               </div>
             </li>
           </ul>
