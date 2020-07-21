@@ -1,17 +1,6 @@
 class IssuesController < ApplicationController
   def index
-    @page_title = "Collabs Issues and PRs"
-    @range = (params[:range].presence || 30).to_i
-
-    @scope = Issue.internal.not_core.this_period(@range).unlocked.humans.includes(:contributor).where("html_url <> ''")
-
-    if params[:collab].present?
-      @scope = @scope.collab(params[:collab])
-    else
-      @scope = @scope.all_collabs
-    end
-
-    apply_filters
+    redirect_to url_for(request.params.merge(only_collabs: true, action: :all))
   end
 
   def all
