@@ -1,7 +1,7 @@
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle <%= 'active' if params[:type].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
   <div class="dropdown-menu">
-    <% @types.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |type,count| %>
+    <% @types.sort_by(&:last).reverse.reject{|r| r[0].blank? || r[1].zero? }.each do |type,count| %>
       <% if params[:type].present? && type == params[:type] %>
       <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, type: nil)) %>">
         <%= type.humanize %>
