@@ -63,7 +63,7 @@ class SearchController < ApplicationController
       format.html do
         @repos = @scope.unscope(where: :repository_full_name).group(:repository_full_name).count
         @kinds = @scope.unscope(where: :kind).group(:kind).count
-        @orgs = @scope.unscope(where: :org).group(:org).count
+        @orgs = @scope.unscope(where: :org).where(org: Organization.collaborator.pluck(:name)).group(:org).count
         render 'index'
       end
       format.rss do
