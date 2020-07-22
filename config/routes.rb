@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :repositories
   resources :contributors
 
+  get 'search/collabs', to: 'search#collabs', as: :collabs_search
   get 'search/highlights', to: 'search#highlights', as: :highlights
   get 'search', to: 'search#index', as: :search
   get 'collabs/contributors', to: 'contributors#collabs', as: :collab_contributors
