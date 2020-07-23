@@ -132,13 +132,17 @@
                 <div class="media-body text-right">
                   <span class='info' title='Average time to first response by a core contributor on issues and pull requests opened by non-core human contributors in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
                   <h3>
-                    <%= @response_time %>
+                    <% if @response_time.zero? %>
+                      N/A
+                    <% else %>
+                      <%= @response_time %><small class='text-muted'>hrs</small>
+                    <% end %>
                     <% response_time_diff = @response_time - @response_time_last_week %>
                     <% unless response_time_diff.zero? %>
                       <small class='<%= diff_class(-response_time_diff) %>' title='<%= @response_time_last_week %> hrs in the previous <%= @period %> days'> <%= '+' if response_time_diff > 0 %><%= number_to_human response_time_diff %></small>
                     <% end %>
                   </h3>
-                  <span>Avg Resp Time <small class='text-muted'>hrs</small></span>
+                  <span>Avg Resp Time</span>
                 </div>
               </div>
             </div>
