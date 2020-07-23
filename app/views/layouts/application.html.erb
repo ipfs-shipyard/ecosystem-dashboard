@@ -65,8 +65,9 @@
                 Collaborators
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link_to 'Active Collabs', active_collabs_path, class: 'dropdown-item' %>
                 <a class="dropdown-item" href="<%= collabs_path %>">
-                  Organizations
+                  All Collabs
                 </a>
                 <a class="dropdown-item" href="<%= collab_issues_path %>">
                   Issues and Pull Requests
