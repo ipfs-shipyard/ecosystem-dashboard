@@ -78,7 +78,7 @@ class IssuesController < ApplicationController
             name: name,
             data: @orginal_scope.where.not(response_time: nil).where('issues.created_at > ?', 1.year.ago).group_by_week('issues.created_at').average(:response_time).map do |k,v|
               if v
-                [k,(v/60/60).round(1)]
+                [k,(v/60.0/60.0).round(1)]
               else
                 [k,nil]
               end

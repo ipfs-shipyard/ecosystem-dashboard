@@ -81,7 +81,7 @@
   <div class="col-md-9">
     <% responded = @scope.where.not(response_time: nil) %>
     <% if responded.count > 0 %>
-    <h5>Avg first response time for <%= responded.count %> issues+prs this week: <%= (responded.average(:response_time)/60/60).round(1) %> hours</h5>
+    <h5>Avg first response time for <%= responded.count %> issues+prs this week: <%= (responded.average(:response_time)/60.0/60.0).round(1) %> hours</h5>
     <% end %>
 
     <% if @issues.any? %>

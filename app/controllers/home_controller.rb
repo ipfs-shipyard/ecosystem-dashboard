@@ -43,8 +43,8 @@ class HomeController < ApplicationController
     @comments = @event_scope.this_period(@period).not_core.event_type('IssueCommentEvent').count
     @comments_last_week = @event_scope.last_period(@period).not_core.event_type('IssueCommentEvent').count
 
-    @response_time = (@issues_scope.this_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
-    @response_time_last_week = (@issues_scope.last_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
+    @response_time = (@issues_scope.this_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60.0/60.0).round(1)
+    @response_time_last_week = (@issues_scope.last_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60.0/60.0).round(1)
 
     @slow_responses = @issues_scope.this_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.slow_response.count
     @slow_responses_last_week = @issues_scope.last_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.slow_response.count

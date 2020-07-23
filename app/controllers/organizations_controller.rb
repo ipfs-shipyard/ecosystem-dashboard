@@ -97,8 +97,8 @@ class OrganizationsController < ApplicationController
     @new_prs = @issues_scope.this_period(@period).pull_requests.count
     @new_prs_last_week = @issues_scope.last_period(@period).pull_requests.count
 
-    @response_time = (@issues_scope.this_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
-    @response_time_last_week = (@issues_scope.last_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60/60).round(1)
+    @response_time = (@issues_scope.this_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60.0/60.0).round(1)
+    @response_time_last_week = (@issues_scope.last_period(@period).unlocked.where("html_url <> ''").not_draft.where.not(response_time: nil).average(:response_time).to_i/60.0/60.0).round(1)
 
     @event_scope = @event_scope.this_period(@period)
     @search_scope = @search_scope.this_period(@period)
