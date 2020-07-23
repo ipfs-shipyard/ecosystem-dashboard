@@ -19,8 +19,10 @@
   </div>
 </nav>
 
-
 <% if @search_results.any? %>
+  <div class="mb-3">
+    <%= line_chart @scope.group_by_day(:created_at).count, colors: ['#bbb'], height: "80px", library: { scales: { yAxes: [{ display: false }], xAxes: [{ display: false }] }}, points: false %>
+  </div>
   <%= render @search_results %>
 <% else %>
   <p>No results found.</p>
