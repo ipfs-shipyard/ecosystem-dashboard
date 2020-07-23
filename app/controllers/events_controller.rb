@@ -20,8 +20,8 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @orgs = @scope.unscope(where: :org).external.group(:org).count
-        @repos = @scope.unscope(where: :repository_full_name).external.group(:repository_full_name).count
+        @orgs = @scope.unscope(where: :org).group(:org).count
+        @repos = @scope.unscope(where: :repository_full_name).group(:repository_full_name).count
         @users = @scope.unscope(where: :actor).humans.group(:actor).count
         @event_types = @scope.unscope(where: :event_type).group(:event_type).count
       end
