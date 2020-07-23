@@ -103,5 +103,18 @@ module PackageManager
     def self.registry_user_url(login)
       "https://crates.io/users/#{login}"
     end
+
+    def self.dependents(name)
+      page = 1
+      packages = []
+      loop do
+        r = get("https://crates.io/api/v1/crates/#{name}/reverse_dependencies?page=#{page}&per_page=100")["versions"]
+        break if r == []
+
+        packages += r
+        page += 1
+      end
+      packages.map { |package| package["crate"] }
+    end
   end
 end

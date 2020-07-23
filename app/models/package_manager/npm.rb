@@ -109,5 +109,25 @@ module PackageManager
         map_dependencies(vers.fetch("devDependencies", {}), "Development") +
         map_dependencies(vers.fetch("optionalDependencies", {}), "Optional", true)
     end
+
+    def self.dependents(name)
+      dependents = []
+      offset = 0
+      per_page = 36
+      url = "https://www.npmjs.com/browse/depended/#{name}"
+      while offset < 5000 do
+        page = get_html(url+"?offset=#{offset}")
+
+        names = page.css('.mb4.bt.b--black-10 section h3').map(&:text)
+
+        break if names.blank?
+
+        dependents += names
+
+        offset += per_page
+      end
+
+      return dependents
+    end
   end
 end

@@ -237,6 +237,10 @@ module PackageManager
       { is_deprecated: false, message: nil }
     end
 
+    def self.dependents(name)
+      []
+    end
+
     private_class_method def self.get(url, options = {})
       Oj.load(get_raw(url, options))
     end
