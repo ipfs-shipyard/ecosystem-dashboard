@@ -100,7 +100,7 @@ GEM
     autoprefixer-rails (9.8.5)
       execjs
     bindex (0.8.1)
-    bootsnap (1.4.6)
+    bootsnap (1.4.7)
       msgpack (~> 1.0)
     bootstrap (4.5.0)
       autoprefixer-rails (>= 9.1.0)
@@ -187,7 +187,7 @@ GEM
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.10.7)
     ox (2.13.2)
-    pagy (3.8.2)
+    pagy (3.8.3)
     pg (1.2.3)
     pg_query (1.2.0)
     pg_search (2.3.2)
