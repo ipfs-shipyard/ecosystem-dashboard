@@ -31,7 +31,7 @@ class SearchController < ApplicationController
 
   def highlights
     @range = (params[:range].presence || 7).to_i
-    @scope = SearchResult.this_period(@range).includes(:search_query)
+    @scope = SearchResult.this_period(@range).where.not(kind: 'code').includes(:search_query)
 
     @scope = @scope.where(kind: params[:kind]) if params[:kind].present?
     @scope = @scope.where.not(kind: params[:exclude_kind]) if params[:exclude_kind].present?
