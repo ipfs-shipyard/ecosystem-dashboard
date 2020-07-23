@@ -28,6 +28,9 @@ class HomeController < ApplicationController
     @new_collab_contribs = @issues_scope.this_period(@period).all_collabs.count
     @new_collab_contribs_last_week = @issues_scope.last_period(@period).all_collabs.count
 
+    @active_collabs = Organization.active_collabs(@event_scope.this_period(@period)).length
+    @active_collabs_last_week = Organization.active_collabs(@event_scope.last_period(@period)).length
+
     @releases = @event_scope.this_period(@period).event_type('ReleaseEvent').count
     @releases_last_week = @event_scope.last_period(@period).event_type('ReleaseEvent').count
 

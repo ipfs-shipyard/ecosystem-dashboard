@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get 'collabs/packages', to: 'packages#collabs', as: :collab_packages
   get 'collabs/repositories', to: 'repositories#collab_repositories', as: :collab_repositories
   get 'collabs/events', to: 'events#collabs', as: :collab_events
+  get 'collabs/active', to: 'organizations#active_collabs', as: :active_collabs
   get 'collab_issues', to: 'issues#index', as: :collab_issues
   get 'events', to: 'events#index'
   get 'slow_response', to: 'issues#slow_response', as: :slow_response

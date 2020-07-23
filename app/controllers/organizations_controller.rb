@@ -54,6 +54,32 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def active_collabs
+    @page_title = 'Active Collaborators'
+
+    sort = params[:sort] || 'events_count'
+    order = params[:order] || 'desc'
+
+    @period = (params[:range].presence || 7).to_i
+
+    @active_collab_names = Organization.active_collabs(Event.internal.this_period(@period))
+
+    @scope = Organization.where(name: @active_collab_names).order(sort => order)
+    @pagy, @orgs = pagy(@scope, items: 100)
+
+    respond_to do |format|
+      format.html do
+        render 'collabs'
+      end
+      format.rss do
+        render 'index', :layout => false
+      end
+      format.json do
+        render json: @orgs
+      end
+    end
+  end
+
   def show
     @organization = Organization.find_by_name!(params[:id])
     @period = (params[:range].presence || 30).to_i

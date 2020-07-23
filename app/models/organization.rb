@@ -58,4 +58,9 @@ class Organization < ApplicationRecord
     self.search_results_count = SearchResult.where(org: name).this_period(30).count
     save
   end
+
+  def self.active_collabs(event_scope)
+    external_users = event_scope.not_core.pluck(:actor).uniq
+    active_collab_names = Event.external.user(external_users).event_type('PushEvent').group(:org).count.map(&:first)
+  end
 end
