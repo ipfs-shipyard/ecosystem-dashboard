@@ -89,6 +89,7 @@ class Package < ApplicationRecord
 
   scope :internal, -> { joins(:organization).where('organizations.internal = ?', true) }
   scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
+  scope :collabs, -> { joins(:organization).where('organizations.name IN (?)', Organization.collaborator.pluck(:name)) }
 
   scope :exclude_org, ->(org) { joins(:organization).where('organizations.name != ?', org) }
   scope :org, ->(org) { joins(:organization).where('organizations.name = ?', org) }

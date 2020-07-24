@@ -32,7 +32,7 @@ class PackagesController < ApplicationController
 
   def collabs
     @page_title = 'Collaborator Packages'
-    @scope = Package.external.includes(:repository)
+    @scope = Package.collabs.includes(:repository)
 
     @scope = @scope.exclude_platform(params[:exclude_platform]) if params[:exclude_platform].present?
     @scope = @scope.platform(params[:platform]) if params[:platform].present?
@@ -49,6 +49,7 @@ class PackagesController < ApplicationController
         @pagy, @packages = pagy(@scope.order(@sort => @order))
         @platforms = @scope.unscope(where: :platform).group(:platform).count
         @orgs = @orgs_scope.joins(:organization).group('organizations.name').count
+        render 'index'
       end
       format.rss do
         @pagy, @packages = pagy(@scope.order(@sort => @order))
