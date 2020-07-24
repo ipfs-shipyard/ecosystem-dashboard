@@ -108,7 +108,7 @@ module PackageManager
     end
 
     def self.dependents(name)
-      url = "https://pkg.go.dev/#{project.name}?tab=importedby"
+      url = "https://pkg.go.dev/#{name}?tab=importedby"
       page = get_html(url)
       page.css('.Details-indent a').map(&:text)
     end
