@@ -19,37 +19,67 @@
 
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] != 'false' %>" href="<%= url_for(request.params.merge(direct: true)) %>">Direct Dependent Repositories</a>
+    <a class="nav-link <%= 'active' if params[:direct] != 'false' && params[:dependencies].blank? %>" href="<%= url_for(request.params.merge(direct: true, dependencies: nil)) %>">Direct Dependent Collab Repos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false)) %>">Transitive Dependent Repositories</a>
+    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil)) %>">Transitive Dependent Collab Repos</a>
   </li>
+  <% if @dependencies.any? %>
+    <li class="nav-item">
+      <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true)) %>">Internal Dependencies</a>
+    </li>
+  <% end %>
 </ul>
 
-<div class="dependencies">
-  <% @repository_dependencies.group_by{|rd| rd.repository.org }.sort_by{|o,rd| o }.each do |org, repository_dependencies| %>
-    <div class="card mb-3">
-      <div class="card-header p-2 pl-3 pr-3" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
-        <%= link_to "https://github.com/#{org}", target: :_blank, class: 'mr-1' do %>
-          <img src="https://github.com/<%= org %>.png" class="rounded" height='18' width='18'>
-        <% end %>
-        <%= link_to org, org_dependencies_path(org) %>
+<% if params[:dependencies].present? %>
+  <div class="dependencies">
+    <ul class="list-group list-group-flush">
+      <% @dependencies.each do |package,dependencies| %>
+        <li class="list-group-item">
+          <% if package.repository %>
+            <%= link_to "https://github.com/#{package.repository.org}", title: package.repository.org, target: :_blank, class: 'float-left mr-2' do %>
+              <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20' width='20'>
+            <% end %>
+          <% end %>
+          <%= package.platform_name %> - <%= link_to package.name, package_path(package.id) %>
+
+          <small class='text-muted'>
+            <% kinds = dependencies.map(&:kind).uniq.reject{|k| k == 'runtime' } %>
+            <% if kinds.length > 0 %>
+             (<%= kinds.join(', ') %>)
+            <% end %>
+             - <%= compressed_list dependencies.map{|d| d.version.number }.sort %>
+          </small>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <div class="dependencies">
+    <% @repository_dependencies.group_by{|rd| rd.repository.org }.sort_by{|o,rd| o }.each do |org, repository_dependencies| %>
+      <div class="card mb-3">
+        <div class="card-header p-2 pl-3 pr-3" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
+          <%= link_to "https://github.com/#{org}", target: :_blank, class: 'mr-1' do %>
+            <img src="https://github.com/<%= org %>.png" class="rounded" height='18' width='18'>
+          <% end %>
+          <%= link_to org, org_dependencies_path(org) %>
+        </div>
+        <ul id='org-<%= org %>' class="list-group list-group-flush">
+          <% repository_dependencies.group_by(&:repository).sort_by{|r,d| d.any?(&:direct?) ? 0 : 1 }.each do |repository, dependencies| %>
+            <li class="list-group-item">
+              <%= octicon(repo_icon(repository)) %>
+              <%= link_to repository.full_name, repository %>
+              <small class='text-muted'>
+                <% dep = dependencies.sort_by(&:requirements).first %>
+                <%= dependencies.map(&:requirements).uniq.sort.join(', ') %>
+                <% if dependencies.none?(&:direct?) %>
+                  <span class='badge badge-info' title='Pulled in by another dependency' >Transitive</span>
+                <% end %>
+              </small>
+            </li>
+          <% end %>
+        </ul>
       </div>
-      <ul id='org-<%= org %>' class="list-group list-group-flush">
-        <% repository_dependencies.group_by(&:repository).sort_by{|r,d| d.any?(&:direct?) ? 0 : 1 }.each do |repository, dependencies| %>
-          <li class="list-group-item">
-            <%= octicon(repo_icon(repository)) %>
-            <%= link_to repository.full_name, repository %>
-            <small class='text-muted'>
-              <% dep = dependencies.sort_by(&:requirements).first %>
-              <%= dependencies.map(&:requirements).uniq.sort.join(', ') %>
-              <% if dependencies.none?(&:direct?) %>
-                <span class='badge badge-info' title='Pulled in by another dependency' >Transitive</span>
-              <% end %>
-            </small>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
+<% end %>

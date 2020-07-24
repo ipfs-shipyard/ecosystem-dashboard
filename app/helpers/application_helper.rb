@@ -167,4 +167,9 @@ module ApplicationHelper
   def display_name
     ENV['DISPLAY_NAME'].presence || default_org_name
   end
+
+  def compressed_list(array)
+    return array.join(', ') if array.length < 8
+    array[0..2].join(', ') + ' ... ' + array[-3..-1].join(', ')
+  end
 end
