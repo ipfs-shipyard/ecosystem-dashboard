@@ -15,7 +15,10 @@
       <br/>
     <% end %>
     <small class='text-muted'>
-      Versions: <%= package.versions_count %><br/>
+      <% if package.repository_url.present? %>
+        Repository: <%= link_to package.repository_url, package.repository_url, target: :_blank %><br/>
+      <% end %>
+      Latest release: <%= time_ago_in_words package.latest_release_published_at %><br/>
       Dependent collab repositories: <%= package.collab_dependent_repos_count || 0 %>
     </small>
   </div>
