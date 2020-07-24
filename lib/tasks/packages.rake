@@ -4,6 +4,7 @@ namespace :packages do
   end
 
   task find_missing_npm_packages: :environment do
+    Package.download_internal_dependent_packages
     Repository.find_missing_npm_packages
     Repository.find_missing_cargo_packages
     Repository.find_missing_go_packages

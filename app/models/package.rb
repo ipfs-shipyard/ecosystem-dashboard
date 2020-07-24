@@ -483,6 +483,14 @@ class Package < ApplicationRecord
     organization.try(:internal?)
   end
 
+  def self.download_internal_dependent_packages
+    Package.internal.each do |package|
+      package.platform_class.dependents(package.name).each do |name|
+        package.platform_class.update(name)
+      end
+    end
+  end
+
   private
 
   def spdx_license
