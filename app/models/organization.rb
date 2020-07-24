@@ -4,6 +4,7 @@ class Organization < ApplicationRecord
 
   scope :internal, -> { where(internal: true) }
   scope :collaborator, -> { where(collaborator: true) }
+  scope :not_community, -> { internal.or(collaborator) }
 
   has_many :events, foreign_key: :org, primary_key: :name
   has_many :issues, foreign_key: :org, primary_key: :name

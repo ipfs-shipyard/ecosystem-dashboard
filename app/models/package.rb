@@ -90,6 +90,9 @@ class Package < ApplicationRecord
   scope :internal, -> { joins(:organization).where('organizations.internal = ?', true) }
   scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
   scope :collabs, -> { joins(:organization).where('organizations.name IN (?)', Organization.collaborator.pluck(:name)) }
+  scope :community, -> { without_repo.or(where('repository_id NOT IN (?)', Repository.where(org: Organization.not_community.pluck(:name)).pluck(:id))) }
+
+  scope :depends_upon_internal, -> { joins(:dependencies).where('dependencies.package_id in (?)', Package.internal.pluck(:id)).group(:id) }
 
   scope :exclude_org, ->(org) { joins(:organization).where('organizations.name != ?', org) }
   scope :org, ->(org) { joins(:organization).where('organizations.name = ?', org) }
