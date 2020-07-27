@@ -61,7 +61,7 @@
         <strong><%= Issue.internal.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %></strong>
       </td>
       <td>
-        <strong><%= Issue.internal.issues.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).group(:user).count.keys.length %></strong>
+        <strong><%= Issue.internal.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).group(:user).count.keys.length %></strong>
       </td>
       <td>
         <strong><%= Event.internal.where('events.created_at > ? AND events.created_at < ?', @start_date, @end_date).event_type('ReleaseEvent').count %></strong>
