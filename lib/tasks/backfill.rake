@@ -36,23 +36,27 @@ namespace :backfill do
             (0..23).each do |hour|
               puts "#{day}/#{month}/#{year}/#{hour}"
 
-              gz =  URI.open("http://data.gharchive.org/#{year}-#{month}-#{day}-#{hour}.json.gz")
-              js = Zlib::GzipReader.new(gz).read
+              begin
+                gz =  URI.open("http://data.gharchive.org/#{year}-#{month}-#{day}-#{hour}.json.gz")
+                js = Zlib::GzipReader.new(gz).read
 
-              Oj.load(js) do |event|
-                repo_name = event['repo']['name']
-                org = repo_name.split('/').first
-                if org_names.include?(org)
+                Oj.load(js) do |event|
+                  repo_name = event['repo']['name']
+                  org = repo_name.split('/').first
+                  if org_names.include?(org)
 
-                  repository = Repository.find_by_full_name(repo_name)
-                  if repository
-                    ret = Event.record_event(repository, event)
-                    if ret
-                      puts "#{repo_name} - #{event['type']}"
+                    repository = Repository.find_by_full_name(repo_name)
+                    if repository
+                      ret = Event.record_event(repository, event)
+                      if ret
+                        puts "#{repo_name} - #{event['type']}"
+                      end
                     end
-                  end
 
+                  end
                 end
+              rescue
+                # failed to download
               end
             end
           end
