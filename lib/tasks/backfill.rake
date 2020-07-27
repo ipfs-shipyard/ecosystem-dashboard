@@ -5,9 +5,21 @@ namespace :backfill do
   task all: :environment do
 
     org_names = Organization.internal.pluck(:name)
-    start_year = 2020 #Repository.internal.order('repositories.created_at asc').first.created_at.year
+    if ENV['START_DATE'].present?
+      start_date = Time.parse(ENV['START_DATE'])
+    else
+      start_date = Repository.internal.order('repositories.created_at asc').first.created_at
+
+    end
+    start_year = start_date.year
     start_year = 2015 if start_year < 2015
-    end_date = Event.internal.order('events.created_at asc').first.created_at
+
+    if ENV['END_DATE'].present?
+      end_date = Date.parse(ENV['END_DATE'])
+    else
+      end_date = Date.today
+    end
+
     end_year = end_date.year
 
     (start_year..end_year).each do |year|
@@ -19,25 +31,28 @@ namespace :backfill do
           day = day.to_s.rjust(2, "0")
           break if Date.parse("#{day}/#{month}/#{year}") > end_date
 
-          (0..23).each do |hour|
-            puts "#{day}/#{month}/#{year}/#{hour}"
+          if Date.parse("#{day}/#{month}/#{year}") > start_date
 
-            gz =  URI.open("http://data.gharchive.org/#{year}-#{month}-#{day}-#{hour}.json.gz")
-            js = Zlib::GzipReader.new(gz).read
+            (0..23).each do |hour|
+              puts "#{day}/#{month}/#{year}/#{hour}"
 
-            Oj.load(js) do |event|
-              repo_name = event['repo']['name']
-              org = repo_name.split('/').first
-              if org_names.include?(org)
+              gz =  URI.open("http://data.gharchive.org/#{year}-#{month}-#{day}-#{hour}.json.gz")
+              js = Zlib::GzipReader.new(gz).read
 
-                repository = Repository.find_by_full_name(repo_name)
-                if repository
-                  ret = Event.record_event(repository, event)
-                  if ret
-                    puts "#{repo_name} - #{event['type']}"
+              Oj.load(js) do |event|
+                repo_name = event['repo']['name']
+                org = repo_name.split('/').first
+                if org_names.include?(org)
+
+                  repository = Repository.find_by_full_name(repo_name)
+                  if repository
+                    ret = Event.record_event(repository, event)
+                    if ret
+                      puts "#{repo_name} - #{event['type']}"
+                    end
                   end
-                end
 
+                end
               end
             end
           end
