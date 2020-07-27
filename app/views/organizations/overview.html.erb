@@ -24,6 +24,7 @@
       <th scope="col">Non-Core Issues</th>
       <th scope="col">Non-Core Pull Requests</th>
       <th scope="col">Non-Core Issues and PRs</th>
+      <th scope="col">Non-Core Contributors</th>
       <th scope="col">Releases</th>
     </tr>
   </thead>
@@ -41,6 +42,9 @@
           <%= org.issues.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %>
         </td>
         <td>
+          <%= org.issues.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).group(:user).count.keys.length %>
+        </td>
+        <td>
           <%= org.events.where('events.created_at > ? AND events.created_at < ?', @start_date, @end_date).event_type('ReleaseEvent').count %>
         </td>
       </tr>
@@ -55,6 +59,9 @@
       </td>
       <td>
         <strong><%= Issue.internal.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %></strong>
+      </td>
+      <td>
+        <strong><%= Issue.internal.issues.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).group(:user).count.keys.length %></strong>
       </td>
       <td>
         <strong><%= Event.internal.where('events.created_at > ? AND events.created_at < ?', @start_date, @end_date).event_type('ReleaseEvent').count %></strong>
