@@ -36,6 +36,7 @@ gem "counter_culture"
 gem "spdx", git: "https://github.com/librariesio/spdx"
 
 gem 'bugsnag'
+gem 'zlib'
 
 group :development do
   gem 'web-console'

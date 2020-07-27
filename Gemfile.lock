@@ -294,6 +294,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     zeitwerk (2.4.0)
+    zlib (1.1.0)
 
 PLATFORMS
   ruby
@@ -336,6 +337,7 @@ DEPENDENCIES
   sprockets-rails
   turbolinks
   web-console
+  zlib
 
 RUBY VERSION
    ruby 2.7.1p83
