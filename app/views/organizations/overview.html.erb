@@ -1,0 +1,64 @@
+
+
+
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong>Overview</strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav nav-pills mr-auto">
+      <% Repository.internal.group_by_year(:created_at).count.keys.map(&:year).each do |year| %>
+        <li class="nav-item <%= 'active bg-light' if @start_date.year == year %>">
+          <a class="nav-link" href=" <%= url_for(request.params.merge(year: year)) %>"><%= year %></a>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</nav>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Organization</th>
+      <th scope="col">Non-Core Issues</th>
+      <th scope="col">Non-Core Pull Requests</th>
+      <th scope="col">Non-Core Issues and PRs</th>
+      <th scope="col">Releases</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @organizations.each do |org| %>
+      <tr>
+        <th scope="row"><%= org.name %></th>
+        <td>
+          <%= org.issues.not_core.issues.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %>
+        </td>
+        <td>
+          <%= org.issues.not_core.pull_requests.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %>
+        </td>
+        <td>
+          <%= org.issues.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %>
+        </td>
+        <td>
+          <%= org.events.where('events.created_at > ? AND events.created_at < ?', @start_date, @end_date).event_type('ReleaseEvent').count %>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <th scope='row'>Total</th>
+      <td>
+        <strong><%= Issue.internal.not_core.issues.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %></strong>
+      </td>
+      <td>
+        <strong><%= Issue.internal.not_core.pull_requests.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %></strong>
+      </td>
+      <td>
+        <strong><%= Issue.internal.not_core.where('issues.created_at > ? AND issues.created_at < ?', @start_date, @end_date).count %></strong>
+      </td>
+      <td>
+        <strong><%= Event.internal.where('events.created_at > ? AND events.created_at < ?', @start_date, @end_date).event_type('ReleaseEvent').count %></strong>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -80,6 +80,17 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def overview
+    @organizations = Organization.internal.all.order('lower(name) asc')
+    @year = params[:year].presence || Date.today.year
+    @start_date = Time.parse("01/01/#{@year}")
+    if Date.today.year == @year
+      @end_date = Time.now
+    else
+      @end_date = @start_date.end_of_year
+    end
+  end
+
   def show
     @organization = Organization.find_by_name!(params[:id])
     @period = (params[:range].presence || 30).to_i
