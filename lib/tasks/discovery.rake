@@ -105,4 +105,79 @@ namespace :discovery do
     end
     # puts names.length
   end
+
+  task big_orgs: :environment do
+    # rows = []
+    orgs = {}
+    CSV.foreach("data/all_repos.csv") do |row, i|
+      # rows << row
+      org = row.gsub('https://github.com/', '').split('/').first
+      if orgs[org]
+        orgs[org] += 1
+      else
+        orgs[org] = 1
+      end
+    end
+
+    known_orgs = Organization.all.pluck(:name)
+    known_users = Contributor.all.pluck(:github_username)
+
+    pp orgs.reject{|k,v| known_orgs.include?(k) || known_users.include?(k) }.sort_by{|k,v| -v }
+
+    # p rows.length
+  end
+
+  task check_status: :environment do
+    valid_rows = []
+    CSV.foreach("data/all_repos.csv") do |row,i|
+      resp = Faraday.head row
+      if resp.status == 200
+        # p row
+        valid_rows << row
+      elsif resp.status == 301
+        # moved
+        valid_rows << resp.headers['location']
+        puts "#{row} -> #{resp.headers['location']}"
+      elsif resp.status == 404
+        puts "#{row} -> DELETED"
+        # deleted
+      else
+        puts "#{row} - #{resp.status}"
+      end
+
+      sleep 3
+    end
+
+    p valid_rows.sort.uniq
+
+    p valid_rows.length
+    p valid_rows.uniq.length
+  end
+
+  task ranking: :environment do
+    # Is it a fork?                         (fork)
+    # Is it archived?                       (archived)
+    # How many stars?                       (stargazers_count)
+    # How many forks?                       (forks_count)
+    # How many watchers?                    (subscribers_count)
+    # How long has it existed?              (created_at)
+    # When was it last updated?             (updated_at)
+    # When was it last committed to?        (pushed_at)
+    #
+    # Is it owned by an internal org?       (owner)
+    # Is it owned by a collab org?          (owner)
+    # Is it owned by a collab contributor?  (owner)
+    # Is it owned by a core contributor?    (owner)
+    #
+    # Is it owned by an org?
+    # Is it published on a package manager?
+    # How many issues?
+    # How many pull requests?
+    # How many contributors?
+    #
+    # Does it use go-ipfs as a library?
+    # Does it use js-ipfs as a library?
+    # Does it use go-ipfs via docker?
+
+  end
 end
