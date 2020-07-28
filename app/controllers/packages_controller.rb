@@ -98,7 +98,7 @@ class PackagesController < ApplicationController
     @package = Package.find(params[:id])
     direct = params[:direct] == 'false' ? false : true
 
-    @dependencies = Dependency.where(version_id: @package.version_ids).where(package_id: Package.internal.pluck(:id)).includes(:version).group_by(&:package)
+    @dependencies = Dependency.where(version_id: @package.version_ids).where(package_id: Package.internal.pluck(:id)).includes(:version, :package).group_by(&:package)
     @repository_dependencies = @package.repository_dependencies.external.where(direct: direct).active.source.includes(:repository, :manifest)
   end
 
