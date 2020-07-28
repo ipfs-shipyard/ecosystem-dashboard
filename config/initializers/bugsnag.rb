@@ -3,5 +3,6 @@ if ENV['BUGSNAG_API_KEY'].present?
     config.api_key = ENV['BUGSNAG_API_KEY']
     config.release_stage = ENV["RAILS_ENV"]
     config.app_version = ENV['HEROKU_RELEASE_VERSION']
+    config.auto_capture_sessions = false
   end
 end
