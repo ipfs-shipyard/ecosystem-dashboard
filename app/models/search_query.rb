@@ -17,7 +17,10 @@ class SearchQuery < ApplicationRecord
   end
 
   def self.run_all
-    all.each(&:run)
+    all.each do |sq|
+      sq.run
+      sleep(5)
+    end
   end
 
   def run
