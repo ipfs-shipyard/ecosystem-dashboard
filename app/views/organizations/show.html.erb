@@ -161,7 +161,7 @@
     <div class="clearfix"></div>
     <p>
       <small class='text-muted'>
-        Last activity: <%= time_ago_in_words @organization.events.last.try(:created_at) || 'Never' %>
+        Last activity: <%= @organization.events.last ? time_ago_in_words(@organization.events.last.created_at) : 'Never' %>
       </small>
     </p>
   </div>
