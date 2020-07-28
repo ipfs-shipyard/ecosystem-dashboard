@@ -11,6 +11,10 @@ class Organization < ApplicationRecord
   has_many :repositories, foreign_key: :org, primary_key: :name
   has_many :repository_dependencies, through: :repositories
 
+  def to_param
+    name
+  end
+
   def import
     Repository.import_org(name)
     first_repo_date = Repository.org(name).order('created_at ASC').first.created_at
