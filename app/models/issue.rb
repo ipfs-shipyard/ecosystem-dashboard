@@ -179,6 +179,8 @@ class Issue < ApplicationRecord
       update_column(:last_synced_at, Time.zone.now)
     rescue Octokit::NotFound
       destroy
+    rescue ActiveRecord::ActiveRecordError
+      # already deleted
     end
   end
 

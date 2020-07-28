@@ -285,8 +285,12 @@ class Repository < ApplicationRecord
       file = manifest.repository.get_file_contents(manifest.filepath)
 
       if file.present? && file[:content].present?
-        json = JSON.parse(file[:content])
-        PackageManager::Npm.update(json['name']) if json['name']
+        begin
+          json = JSON.parse(file[:content])
+          PackageManager::Npm.update(json['name']) if json['name']
+        rescue JSON::ParserError
+          # invalid manifest
+        end
       end
     end
   end
