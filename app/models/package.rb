@@ -486,7 +486,7 @@ class Package < ApplicationRecord
   def self.download_internal_dependent_packages
     Package.internal.each do |package|
       package.platform_class.dependents(package.name).each do |name|
-        unless Package.platform(platform).find_by_name(name)
+        unless Package.platform(package.platform).find_by_name(name)
           package.platform_class.update(name)
         end
       end
