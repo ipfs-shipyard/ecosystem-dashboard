@@ -48,7 +48,7 @@ class RepositoriesController < ApplicationController
       format.html do
         @pagy, @repositories = pagy(@scope.order(@sort => @order))
 
-        @orgs = @scope.unscope(where: :org).group(:org).count
+        @orgs = @scope.unscope(where: :org).external.group(:org).count
         @languages = @scope.unscope(where: :language).group(:language).count
       end
       format.rss do
@@ -77,7 +77,7 @@ class RepositoriesController < ApplicationController
       format.html do
         @pagy, @repositories = pagy(@scope.order(@sort => @order))
 
-        @orgs = @scope.unscope(where: :org).group(:org).count
+        @orgs = @scope.unscope(where: :org).community.group(:org).count
         @languages = @scope.unscope(where: :language).group(:language).count
         render :collab_repositories
       end
