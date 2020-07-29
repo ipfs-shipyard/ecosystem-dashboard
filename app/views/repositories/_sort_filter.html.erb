@@ -10,6 +10,24 @@
         Recently Pushed
       </a>
     <% end %>
+    <% if params[:sort] == 'stargazers_count' && params[:order] == 'desc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Most stars
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'stargazers_count', order: 'desc')) %>">
+        Most stars
+      </a>
+    <% end %>
+    <% if params[:sort] == 'forks_count' && params[:order] == 'desc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Most forks
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'forks_count', order: 'desc')) %>">
+        Most forks
+      </a>
+    <% end %>
     <% if params[:sort] == 'created_at' && params[:order] == 'desc' %>
       <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
         Newest
