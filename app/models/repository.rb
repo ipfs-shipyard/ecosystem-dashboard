@@ -361,4 +361,42 @@ class Repository < ApplicationRecord
   def unarchive_all_issues!
     issues.update_all(locked: false)
   end
+
+  def calculate_score
+    new_score = 0
+    # Is it a fork?
+    new_score += -10 if fork?
+    # Is it archived?
+    new_score += -10 if archived?
+    # How many stars?
+    new_score += Math.log(stargazers_count, 10) if stargazers_count && stargazers_count > 0
+    # How many forks?
+    new_score += Math.log(forks_count, 10) if forks_count && forks_count > 0
+    # How many watchers?
+    new_score += Math.log(subscribers_count, 10) if subscribers_count && subscribers_count > 0
+    # How long has it existed?
+    new_score += Math.log((Date.today-created_at.to_date).to_i, 10) if (Date.today-created_at.to_date).to_i > 0
+    # When was it last updated?
+    new_score += -Math.log((Date.today-updated_at.to_date).to_i, 10) if (Date.today-updated_at.to_date).to_i > 0
+    # When was it last committed to?
+    new_score += -Math.log((Date.today-pushed_at.to_date).to_i, 10) if pushed_at && (Date.today-pushed_at.to_date).to_i > 0
+
+    # Is it owned by an internal org?       (owner)
+    # Is it owned by a collab org?          (owner)
+    # Is it owned by a collab contributor?  (owner)
+    # Is it owned by a core contributor?    (owner)
+    # Is it owned by a community contributor?  (owner)
+
+    # does it have search results?
+
+    # Does it use go-ipfs as a library?
+    # Does it use js-ipfs as a library?
+    # Does it use go-ipfs via docker?
+
+    new_score
+  end
+
+  def update_score
+    update_column(:score, calculate_score)
+  end
 end

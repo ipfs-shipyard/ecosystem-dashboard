@@ -14,7 +14,9 @@
   Language: <%= @repository.language %><br/>
   Last pushed: <%= distance_of_time_in_words_to_now @repository.pushed_at %> ago<br/>
   Size: <%= number_to_human_size @repository.size*1000 %><br/>
-  Dependencies: <%= number_with_delimiter @manifests.map(&:repository_dependencies).flatten.length %>
+  Dependencies: <%= number_with_delimiter @manifests.map(&:repository_dependencies).flatten.length %><br/>
+  Created: <%= distance_of_time_in_words_to_now @repository.created_at %> ago<br/>
+  Updated: <%= distance_of_time_in_words_to_now @repository.updated_at %> ago<br/>
 </small>
 </p>
 

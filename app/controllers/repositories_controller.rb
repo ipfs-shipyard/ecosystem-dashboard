@@ -35,7 +35,7 @@ class RepositoriesController < ApplicationController
 
   def collab_repositories
     @page_title = 'Collaborator Repositories'
-    @scope = Repository.external
+    @scope = Repository.external.where('score >= 0')
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
@@ -64,7 +64,7 @@ class RepositoriesController < ApplicationController
 
   def community
     @page_title = 'Community Repositories'
-    @scope = Repository.community
+    @scope = Repository.community.where('score >= 0')
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
     @scope = @scope.fork(params[:fork]) if params[:fork].present?

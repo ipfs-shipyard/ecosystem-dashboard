@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_23_123556) do
+ActiveRecord::Schema.define(version: 2020_07_29_125520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_123556) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "etag"
+    t.integer "score", default: 0
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
