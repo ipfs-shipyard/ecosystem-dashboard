@@ -13,7 +13,7 @@
           <% dep = dependencies.sort_by(&:requirements).first %>
             <img src="https://github.com/<%= package.organization.name %>.png" class="rounded" height='20' width='20'>
 
-            <%= link_to "#{package.platform_name}/#{package.name}", package %>
+            <%= link_to "#{package.platform_name}/#{package.name}", package_path(package.id) %>
 
           <small class='text-muted'>
             <% reqs = dependencies.map(&:requirements).uniq.sort %>

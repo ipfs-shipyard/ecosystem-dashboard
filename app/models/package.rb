@@ -105,10 +105,6 @@ class Package < ApplicationRecord
   before_save  :update_details
   before_destroy :destroy_versions
 
-  def to_param
-    { name: name, platform: platform.downcase }
-  end
-
   def to_s
     name
   end
