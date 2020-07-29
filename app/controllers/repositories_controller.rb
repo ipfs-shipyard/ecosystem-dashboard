@@ -61,4 +61,34 @@ class RepositoriesController < ApplicationController
       end
     end
   end
+
+  def community
+    @page_title = 'Community Repositories'
+    @scope = Repository.community
+    @scope = @scope.org(params[:org]) if params[:org].present?
+    @scope = @scope.language(params[:language]) if params[:language].present?
+    @scope = @scope.fork(params[:fork]) if params[:fork].present?
+    @scope = @scope.archived(params[:archived]) if params[:archived].present?
+
+    @sort = params[:sort] || 'pushed_at'
+    @order = params[:order] || 'desc'
+
+    respond_to do |format|
+      format.html do
+        @pagy, @repositories = pagy(@scope.order(@sort => @order))
+
+        @orgs = @scope.unscope(where: :org).group(:org).count
+        @languages = @scope.unscope(where: :language).group(:language).count
+        render :collab_repositories
+      end
+      format.rss do
+        @pagy, @repositories = pagy(@scope.order(@sort => @order))
+        render 'index', :layout => false
+      end
+      format.json do
+        @pagy, @repositories = pagy(@scope.order(@sort => @order))
+        render json: @repositories
+      end
+    end
+  end
 end

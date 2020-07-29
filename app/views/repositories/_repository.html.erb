@@ -13,8 +13,7 @@
     <small class='text-muted'>
       <%= repository.description %><br/>
       Last pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago<br/>
-      Size: <%= number_to_human_size repository.size*1000 %><br/>
-      Dependencies: <%= number_with_delimiter repository.dependencies.count %>
+      Size: <%= number_to_human_size repository.size*1000 %>
     </small>
   </div>
 </div>

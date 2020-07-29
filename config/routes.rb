@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :contributors
 
   get 'community/packages', to: 'packages#community', as: :community_packages
+  get 'community/repositories', to: 'repositories#community', as: :community_repositories
 
   get 'search/collabs', to: 'search#collabs', as: :collabs_search
   get 'search/highlights', to: 'search#highlights', as: :highlights
