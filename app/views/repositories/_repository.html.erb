@@ -11,12 +11,21 @@
       <%= link_to repository.full_name, repository %>
     </h5>
     <small class='text-muted'>
-      <%= repository.description %><br/>
-      Last pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago<br/>
-      Size: <%= number_to_human_size repository.size*1000 %><br/>
-      Stars: <%= repository.stargazers_count %><br/>
-      Forks: <%= repository.forks_count %><br/>
-      Score: <%= repository.score %>
+      <%= repository.description %>
+      <div class="row">
+        <div class="col-md-3">
+          Last pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago
+        </div>
+        <div class="col-md-3">
+          Stars: <%= number_to_human repository.stargazers_count %>
+        </div>
+        <div class="col-md-3">
+          Forks: <%= number_to_human repository.forks_count %>
+        </div>
+        <div class="col-md-3">
+          Score: <%= repository.score %>
+        </div>
+      </div>
     </small>
   </div>
 </div>
