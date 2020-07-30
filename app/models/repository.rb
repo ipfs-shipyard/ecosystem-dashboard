@@ -370,7 +370,8 @@ class Repository < ApplicationRecord
     # Is it archived?
     new_score += -10 if archived?
     # How many stars?
-    new_score += Math.log(stargazers_count, 10) if stargazers_count && stargazers_count > 0
+    new_score += 1 if stargazers_count && stargazers_count > 0
+    new_score += 1 if stargazers_count && stargazers_count > 100
     # How many forks?
     new_score += 1 if forks_count && forks_count > 0
     # How many watchers?
