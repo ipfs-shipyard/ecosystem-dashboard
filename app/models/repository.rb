@@ -20,6 +20,7 @@ class Repository < ApplicationRecord
   has_many :tags
   has_many :packages
   has_many :issues, foreign_key: :repo_full_name, primary_key: :full_name
+  has_many :search_results, foreign_key: :repository_full_name, primary_key: :full_name
 
   belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
 
@@ -388,6 +389,8 @@ class Repository < ApplicationRecord
     # Is it owned by a community contributor?  (owner)
 
     # does it have search results?
+    search_results_length = search_results.length
+    new_score += Math.log(search_results_length, 10) if search_results_length > 0
 
     # Does it use go-ipfs as a library?
     # Does it use js-ipfs as a library?
