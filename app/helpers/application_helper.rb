@@ -152,7 +152,9 @@ module ApplicationHelper
   end
 
   def page_title
-    "#{display_name} Ecosystem Dashboard"
+    title = ""
+    title += "#{@page_title} - "
+    title += "#{display_name} Ecosystem Dashboard"
   end
 
   def brand_icon_url
