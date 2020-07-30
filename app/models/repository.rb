@@ -92,7 +92,7 @@ class Repository < ApplicationRecord
       end
       sync_manifests = repo.pushed_at_changed?
       repo.save
-      repo.download_manifests if sync_manifests
+      repo.download_manifests if !repo.fork? && !repo.archived? && sync_manifests 
       repo
     rescue ArgumentError, Octokit::Error
       # derp
