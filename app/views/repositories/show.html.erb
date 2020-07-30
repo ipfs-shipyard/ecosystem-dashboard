@@ -20,6 +20,14 @@
 </small>
 </p>
 
+<% if @results.any? %>
+  <hr>
+  <h5>Recent tracked searches</h5>
+  <%= render @results %>
+
+<% end %>
+
+
 <% if @repository.packages.present? %>
   <h5>Packages</h5>
 
