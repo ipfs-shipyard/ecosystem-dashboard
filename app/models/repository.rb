@@ -382,6 +382,11 @@ class Repository < ApplicationRecord
     # When was it last committed to?
     new_score += -Math.log((Date.today-pushed_at.to_date).to_i, 10) if pushed_at && (Date.today-pushed_at.to_date).to_i > 0
 
+    display_name = ENV['DISPLAY_NAME'].presence || ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
+
+    # does name or description mention search term?
+    new_score += 1 if (full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i))
+
     # Is it owned by an internal org?       (owner)
     # Is it owned by a collab org?          (owner)
     # Is it owned by a collab contributor?  (owner)
