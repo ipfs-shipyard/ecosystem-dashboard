@@ -28,6 +28,15 @@
         Most forks
       </a>
     <% end %>
+    <% if params[:sort] == 'score' && params[:order] == 'desc' %>
+      <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
+        Score
+      </a>
+    <% else %>
+      <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, sort: 'score', order: 'desc')) %>">
+        Score
+      </a>
+    <% end %>
     <% if params[:sort] == 'created_at' && params[:order] == 'desc' %>
       <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, sort: nil, order: nil)) %>">
         Newest
