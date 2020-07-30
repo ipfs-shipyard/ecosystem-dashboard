@@ -411,6 +411,6 @@ class Repository < ApplicationRecord
   end
 
   def update_score
-    update_column(:score, calculate_score)
+    update_column(:score, calculate_score) if calculate_score != score
   end
 end
