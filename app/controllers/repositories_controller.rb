@@ -7,7 +7,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
 
-    @sort = params[:sort] || 'pushed_at'
+    @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
 
     respond_to do |format|
@@ -42,7 +42,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
 
-    @sort = params[:sort] || 'pushed_at'
+    @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
 
     respond_to do |format|
@@ -71,7 +71,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
 
-    @sort = params[:sort] || 'pushed_at'
+    @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
 
     respond_to do |format|
