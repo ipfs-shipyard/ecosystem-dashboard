@@ -396,7 +396,7 @@ class Repository < ApplicationRecord
     # Does it use js-ipfs as a library?
     # Does it use go-ipfs via docker?
 
-    new_score
+    new_score.round
   end
 
   def update_score
