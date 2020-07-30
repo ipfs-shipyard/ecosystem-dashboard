@@ -59,7 +59,7 @@ class Repository < ApplicationRecord
   def self.import_org(org)
     Repository.download_org_repos(org)
     Repository.org(org).update_all(etag: nil)
-    Repository.org(org).each{|r| r.sync_events(true) }
+    Repository.org(org).active.source.each{|r| r.sync_events(true) }
     Issue.update_collab_labels
   end
 
@@ -252,7 +252,7 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_npm_packages
-    joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
+    active.source.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
 
     Package.platform('npm').each do |package|
       RepositoryDependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
@@ -262,7 +262,7 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_cargo_packages
-    joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
+    active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
 
     Package.platform('cargo').each do |package|
       RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
@@ -272,7 +272,7 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_go_packages
-    joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
+    active.source.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
 
     Package.platform('go').each do |package|
       RepositoryDependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
