@@ -401,6 +401,10 @@ class Repository < ApplicationRecord
     # Does it use js-ipfs as a library?
     # Does it use go-ipfs via docker?
 
+    # does it have any known packages as dependencies
+    known_package_dependencies = repository_dependencies.where.not(package_id: nil).count
+    new_score += Math.log(known_package_dependencies, 10) if known_package_dependencies > 0
+
     new_score.round
   end
 
