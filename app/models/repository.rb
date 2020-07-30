@@ -377,7 +377,7 @@ class Repository < ApplicationRecord
     # How many watchers?
     new_score += 1 if subscribers_count && subscribers_count > 1
     # How long has it existed?
-    new_score += Math.log((Date.today-created_at.to_date).to_i, 10) if (Date.today-created_at.to_date).to_i > 0
+    new_score += Math.log((Date.today-created_at.to_date).to_i, 10)/2 if (Date.today-created_at.to_date).to_i > 0
     # When was it last updated?
     new_score += -Math.log((Date.today-updated_at.to_date).to_i, 10) if (Date.today-updated_at.to_date).to_i > 0
     # When was it last committed to?
