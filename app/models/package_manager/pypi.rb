@@ -8,6 +8,7 @@ module PackageManager
     SECURITY_PLANNED = true
     URL = "https://pypi.org/"
     COLOR = "#3572A5"
+    GITHUB_PACKAGE_SUPPORT = true
 
     def self.package_link(package, version = nil)
       "https://pypi.org/package/#{package.name}/#{version}"

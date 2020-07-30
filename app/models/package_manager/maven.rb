@@ -15,6 +15,7 @@ module PackageManager
       "http://www.eclipse.org/legal/epl-v10" => "Eclipse Public License (EPL), Version 1.0",
       "http://www.eclipse.org/org/documents/edl-v10" => "Eclipse Distribution License (EDL), Version 1.0",
     }.freeze
+    GITHUB_PACKAGE_SUPPORT = true
 
     def self.package_link(package, version = nil)
       MavenUrl.from_name(package.name).search(version)

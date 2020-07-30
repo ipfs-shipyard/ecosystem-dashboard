@@ -9,6 +9,7 @@ module PackageManager
     HIDDEN = false
     HAS_OWNERS = false
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = false
+    GITHUB_PACKAGE_SUPPORT = false
 
     def self.platforms
       @platforms ||= begin

@@ -9,6 +9,7 @@ module PackageManager
     SECURITY_PLANNED = true
     URL = "https://rubygems.org"
     COLOR = "#701516"
+    GITHUB_PACKAGE_SUPPORT = true
 
     def self.package_link(package, version = nil)
       "https://rubygems.org/gems/#{package.name}" + (version ? "/versions/#{version}" : "")

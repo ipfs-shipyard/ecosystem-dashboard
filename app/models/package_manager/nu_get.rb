@@ -7,6 +7,7 @@ module PackageManager
     BIBLIOTHECARY_SUPPORT = true
     URL = "https://www.nuget.org"
     COLOR = "#178600"
+    GITHUB_PACKAGE_SUPPORT = true
 
     def self.package_link(package, version = nil)
       "https://www.nuget.org/packages/#{package.name}/#{version}"

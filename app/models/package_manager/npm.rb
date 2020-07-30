@@ -9,6 +9,7 @@ module PackageManager
     URL = "https://www.npmjs.com"
     COLOR = "#f1e05a"
     ENTIRE_PACKAGE_CAN_BE_DEPRECATED = true
+    GITHUB_PACKAGE_SUPPORT = true
 
     def self.package_link(package, _version = nil)
       "https://www.npmjs.com/package/#{package.name}"
