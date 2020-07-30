@@ -396,7 +396,7 @@ class Repository < ApplicationRecord
     # Is it owned by a community contributor?  (owner)
 
     # does it have search results?
-    search_results_length = search_results.length
+    search_results_length = search_results.select{|sr| sr.kind != 'code'}.length
     new_score += Math.log(search_results_length, 10) if search_results_length > 0
 
     # Does it use go-ipfs as a library?
