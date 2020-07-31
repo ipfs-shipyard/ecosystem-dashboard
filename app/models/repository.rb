@@ -92,7 +92,7 @@ class Repository < ApplicationRecord
       end
       sync_manifests = repo.pushed_at_changed?
       repo.save
-      repo.download_manifests if !repo.fork? && !repo.archived? && sync_manifests 
+      repo.download_manifests if !repo.fork? && !repo.archived? && sync_manifests
       repo
     rescue ArgumentError, Octokit::Error
       # derp
@@ -403,9 +403,9 @@ class Repository < ApplicationRecord
     # Does it use js-ipfs as a library?
     # Does it use go-ipfs via docker?
 
-    # does it have any known packages as dependencies
-    known_package_dependencies = repository_dependencies.where.not(package_id: nil).count
-    new_score += Math.log(known_package_dependencies, 10) if known_package_dependencies > 0
+    # does it have any internal packages as dependencies
+    internal_package_dependencies = repository_dependencies.where(package_id: Package.internal.pluck(:id)).count
+    new_score += Math.log(internal_package_dependencies, 10) if internal_package_dependencies > 0
 
     new_score.round
   end
