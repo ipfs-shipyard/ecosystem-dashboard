@@ -490,22 +490,7 @@ class Package < ApplicationRecord
   end
 
   def find_dependent_github_repos
-    return unless repository_url.present? && repository_url.match(/github\.com/i)
-    return unless platform_class::GITHUB_PACKAGE_SUPPORT
-    dependents_url = "#{repository_url}/network/dependents?dependent_type=REPOSITORY"
-    new_dependent_repos = []
-    while dependents_url.present? do
-      begin
-        page_contents = PackageManager::Base.send :get_html, dependents_url
-        names = page_contents.css('#dependents .Box-row .f5.text-gray-light').map{|node| node.text.squish.gsub(' ', '') }
-        new_dependent_repos += names
-        dependents_url = page_contents.css('.paginate-container .btn.btn-outline.BtnGroup-item').select{|n| n.text == 'Next'}.first.try(:attr, 'href')
-        sleep 2
-      rescue Faraday::ConnectionFailed
-        dependents_url = nil
-      end
-    end
-    new_dependent_repos.each do |name|
+    find_dependent_github_repo_names.each do |name|
       r = Repository.where('full_name ilike ?', name).first
       unless r
         begin
@@ -520,6 +505,25 @@ class Package < ApplicationRecord
         end
       end
     end
+  end
+
+  def find_dependent_github_repo_names
+    return [] unless repository_url.present? && repository_url.match(/github\.com/i)
+    return [] unless platform_class::GITHUB_PACKAGE_SUPPORT
+    dependents_url = "#{repository_url}/network/dependents?dependent_type=REPOSITORY"
+    new_dependent_repos = []
+    while dependents_url.present? do
+      begin
+        page_contents = PackageManager::Base.send :get_html, dependents_url
+        names = page_contents.css('#dependents .Box-row .f5.text-gray-light').map{|node| node.text.squish.gsub(' ', '') }
+        new_dependent_repos += names
+        dependents_url = page_contents.css('.paginate-container .btn.btn-outline.BtnGroup-item').select{|n| n.text == 'Next'}.first.try(:attr, 'href')
+        sleep 2
+      rescue Faraday::ConnectionFailed
+        dependents_url = nil
+      end
+    end
+    new_dependent_repos
   end
 
   private
