@@ -153,7 +153,7 @@ module ApplicationHelper
 
   def page_title
     title = ""
-    title += "#{@page_title} - "
+    title += "#{@page_title} - " if @page_title.present?
     title += "#{display_name} Ecosystem Dashboard"
   end
 
