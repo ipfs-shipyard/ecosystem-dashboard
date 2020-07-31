@@ -13,25 +13,30 @@
 </small>
 </p>
 
-<%= render 'usage' if @package.internal? %>
-
 <h5>Dependent Repositories</h5>
 
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] != 'false' && params[:dependencies].blank? %>" href="<%= url_for(request.params.merge(direct: true, dependencies: nil)) %>">Direct Dependent Collab Repos</a>
+    <a class="nav-link <%= 'active' if params[:direct] != 'false' && params[:dependencies].blank? && params[:usage].blank? %>" href="<%= url_for(request.params.merge(direct: true, dependencies: nil, usage: nil)) %>">Direct Dependent Collab Repos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil)) %>">Transitive Dependent Collab Repos</a>
+    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil, usage: nil)) %>">Transitive Dependent Collab Repos</a>
   </li>
   <% if @dependencies.any? %>
     <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true)) %>">Internal Dependencies</a>
+      <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil)) %>">Internal Dependencies</a>
+    </li>
+  <% end %>
+  <% if @package.internal? %>
+    <li class="nav-item">
+      <a class="nav-link <%= 'active' if params[:usage].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: nil, usage: true)) %>">Usage Breakdown</a>
     </li>
   <% end %>
 </ul>
 
-<% if params[:dependencies].present? %>
+<% if params[:usage].present? %>
+  <%= render 'usage' if @package.internal? %>
+<% elsif params[:dependencies].present? %>
   <div class="dependencies">
     <ul class="list-group list-group-flush">
       <% @dependencies.each do |package,dependencies| %>
