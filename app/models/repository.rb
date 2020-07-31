@@ -57,6 +57,22 @@ class Repository < ApplicationRecord
     end
   end
 
+  def self.download_if_missing_and_active(full_name)
+    r = Repository.where('full_name ilike ?', name).first
+    unless r
+      begin
+        remote_repo = Issue.github_client.repo(name)
+        if remote_repo.fork || remote_repo.archived
+          puts "SKIPPING #{name} - fork:#{remote_repo.fork} archived:#{remote_repo.archived}"
+        else
+          Repository.update_from_github(remote_repo)
+        end
+      rescue Octokit::NotFound
+        # not found
+      end
+    end
+  end
+
   def self.import_org(org)
     Repository.download_org_repos(org)
     Repository.org(org).update_all(etag: nil)
@@ -96,6 +112,15 @@ class Repository < ApplicationRecord
       repo
     rescue ArgumentError, Octokit::Error
       # derp
+    end
+  end
+
+  def self.discover_from_search_results
+    repos_from_search = SearchResult.where.not(kind: 'code').group(:repository_full_name).count.keys
+    existing = Repository.where(full_name: repos_from_search).pluck(:full_name)
+    missing = repos_from_search - existing
+    missing.each do |name|
+      Repository.download_if_missing_and_active(name)
     end
   end
 
@@ -412,5 +437,10 @@ class Repository < ApplicationRecord
 
   def update_score(internal_package_ids = Package.internal.pluck(:id))
     update_column(:score, calculate_score(internal_package_ids)) if calculate_score != score
+  end
+
+  def self.recalculate_scores
+    internal_package_ids = Package.internal.pluck(:id)
+    includes(:search_results).find_each{|r| r.update_score(internal_package_ids) }
   end
 end

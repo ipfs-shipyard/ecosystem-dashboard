@@ -489,21 +489,26 @@ class Package < ApplicationRecord
     end
   end
 
+  def self.find_missing_package_repos
+    missing = Package.with_github_url.where(repository_id:nil).map(&:known_repository_host_name)
+    missing.each do |name|
+      Repository.download_if_missing_and_active(name)
+    end
+  end
+
+  def self.find_dependent_github_repos_names
+    Package.internal.includes(:repository).uniq(&:repository).map(&:find_dependent_github_repo_names).uniq
+  end
+
+  def self.find_dependent_github_repos
+    find_dependent_github_repo_names.each do |name|
+      Repository.download_if_missing_and_active(name)
+    end
+  end
+
   def find_dependent_github_repos
     find_dependent_github_repo_names.each do |name|
-      r = Repository.where('full_name ilike ?', name).first
-      unless r
-        begin
-          remote_repo = Issue.github_client.repo(name)
-          if remote_repo.fork || remote_repo.archived
-            puts "SKIPPING #{name} - fork:#{remote_repo.fork} archived:#{remote_repo.archived}"
-          else
-            Repository.update_from_github(remote_repo)
-          end
-        rescue Octokit::NotFound
-          # not found
-        end
-      end
+      Repository.download_if_missing_and_active(name)
     end
   end
 
