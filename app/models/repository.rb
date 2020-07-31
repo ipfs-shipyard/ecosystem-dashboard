@@ -363,7 +363,7 @@ class Repository < ApplicationRecord
     issues.update_all(locked: false)
   end
 
-  def calculate_score
+  def calculate_score(internal_package_ids = Package.internal.pluck(:id))
     new_score = 0
     # Is it a fork?
     new_score += -10 if fork?
@@ -404,13 +404,13 @@ class Repository < ApplicationRecord
     # Does it use go-ipfs via docker?
 
     # does it have any internal packages as dependencies
-    internal_package_dependencies = repository_dependencies.where(package_id: Package.internal.pluck(:id)).count
+    internal_package_dependencies = repository_dependencies.where(package_id: internal_package_ids).count
     new_score += Math.log(internal_package_dependencies, 10) if internal_package_dependencies > 0
 
     new_score.round
   end
 
-  def update_score
-    update_column(:score, calculate_score) if calculate_score != score
+  def update_score(internal_package_ids = Package.internal.pluck(:id))
+    update_column(:score, calculate_score(internal_package_ids)) if calculate_score != score
   end
 end
