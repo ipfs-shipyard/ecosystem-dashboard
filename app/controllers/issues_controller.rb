@@ -1,6 +1,6 @@
 class IssuesController < ApplicationController
   def index
-    redirect_to url_for(request.params.merge(only_collabs: true, action: :all))
+    redirect_to url_for(request.params.merge(only_collabs: true, action: :all, exclude_core: true))
   end
 
   def all
