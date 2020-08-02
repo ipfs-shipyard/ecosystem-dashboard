@@ -10,6 +10,7 @@ class Issue < ApplicationRecord
   scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
+  scope :community, -> { not_core.where("collabs = '{}'") }
 
   scope :locked, -> { where(locked: true) }
   scope :unlocked, -> { where(locked: [false, nil]) }

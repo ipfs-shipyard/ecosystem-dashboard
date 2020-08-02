@@ -48,6 +48,8 @@ module ApplicationHelper
     else
       if params[:exclude_core].present?
         words << "non-core contributors"
+      elsif params[:community].present?
+        words << "community contributors"
       else
         words << "all contributors"
       end

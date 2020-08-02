@@ -18,15 +18,24 @@
       <%= render partial: 'excludable_filter', locals: {filter_name: 'collab', filter_label: 'Collab', filter_collection: @collabs} %>
       <%= render partial: 'excludable_filter', locals: {filter_name: 'label', filter_label: 'Label', filter_collection: @labels} %>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle <%= 'active' if params[:no_response].present? || params[:uncommented].present? || params[:no_milestone].present? || params[:unlabelled].present? || params[:exclude_core].present? || params[:only_collabs].present? || params[:include_drafts].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:no_response].present? || params[:community].present? || params[:uncommented].present? || params[:no_milestone].present? || params[:unlabelled].present? || params[:exclude_core].present? || params[:only_collabs].present? || params[:include_drafts].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Extras</a>
         <div class="dropdown-menu">
           <% if params[:only_collabs].present? %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, only_collabs: nil)) %>">
               Collab issues
             </a>
           <% else %>
-            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, only_collabs: 'true')) %>">
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, only_collabs: 'true', community: nil)) %>">
               Collab issues
+            </a>
+          <% end %>
+          <% if params[:community].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, community: nil)) %>">
+              Community issues
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, community: 'true',only_collabs: nil)) %>">
+              Community issues
             </a>
           <% end %>
           <% if params[:no_response].present? %>

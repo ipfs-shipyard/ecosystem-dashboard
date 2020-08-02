@@ -139,6 +139,7 @@ class IssuesController < ApplicationController
     @scope = @scope.no_response if params[:no_response].present?
     @scope = @scope.collab(params[:collab]) if params[:collab].present?
     @scope = @scope.all_collabs if params[:only_collabs].present?
+    @scope = @scope.community if params[:community].present?
 
     @scope = @scope.language(params[:language]) if params[:language].present?
 

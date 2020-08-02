@@ -90,6 +90,7 @@
                 Community
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link_to 'Issues and Pull Requests', all_issues_path(community: true), class: 'dropdown-item' %>
                 <%= link_to 'Packages', community_packages_path, class: 'dropdown-item' %>
                 <%= link_to 'Repositories', community_repositories_path, class: 'dropdown-item' %>
               </div>
