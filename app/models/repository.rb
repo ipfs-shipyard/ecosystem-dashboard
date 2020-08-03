@@ -34,7 +34,7 @@ class Repository < ApplicationRecord
   scope :active, -> { archived(false) }
   scope :source, -> { fork(false) }
 
-  scope :with_manifests, -> { joins(:manifests) }
+  scope :with_manifests, -> { joins(:manifests).group(:id) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
 
   scope :this_period, ->(period) { where('repositories.created_at > ?', period.days.ago) }
