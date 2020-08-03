@@ -399,8 +399,6 @@ class Repository < ApplicationRecord
     new_score += 1 if stargazers_count && stargazers_count > 100
     # How many forks?
     new_score += 1 if forks_count && forks_count > 0
-    # How many watchers?
-    new_score += 1 if subscribers_count && subscribers_count > 1
     # How long has it existed?
     new_score += Math.log((Date.today-created_at.to_date).to_i, 10)/2 if (Date.today-created_at.to_date).to_i > 0
     # When was it last updated?
