@@ -57,7 +57,7 @@ class Repository < ApplicationRecord
     end
   end
 
-  def self.download_if_missing_and_active(full_name)
+  def self.download_if_missing_and_active(name)
     r = Repository.where('full_name ilike ?', name).first
     unless r
       begin
