@@ -490,10 +490,16 @@ class Package < ApplicationRecord
   end
 
   def self.find_missing_package_repos
-    missing = Package.with_github_url.where(repository_id:nil).map(&:known_repository_host_name)
-    missing.each do |name|
-      Repository.download_if_missing_and_active(name)
-    end
+    Package.with_github_url.where(repository_id:nil).each(&:find_missing_package_repo)
+  end
+
+  def find_missing_package_repo
+    return unless known_repository_host_name
+    return unless repository.nil?
+
+    repo = Repository.download(known_repository_host_name)
+    self.repository = repo if repo.present?
+    save
   end
 
   def self.find_dependent_github_repos_names
