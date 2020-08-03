@@ -55,11 +55,20 @@ class HomeController < ApplicationController
     @first_time_contributors = (@issues_scope.this_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys - @issues_scope.where('issues.created_at < ?', @period.days.ago).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys).length
     @first_time_contributors_last_week = (@issues_scope.last_period(@period).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys - @issues_scope.where('issues.created_at < ?', (@period*2).days.ago).not_core.unlocked.where("html_url <> ''").not_draft.group(:user).count.keys).length
 
-    @new_repositories = @repos_scope.this_period(@period).internal.count
-    @new_repositories_last_week = @repos_scope.last_period(@period).internal.count
+    @new_repositories = @repos_scope.this_period(@period).count
+    @new_repositories_last_week = @repos_scope.last_period(@period).count
 
-    @new_packages = @packages_scope.this_period(@period).internal.count
-    @new_packages_last_week = @packages_scope.last_period(@period).internal.count
+    repo_ids = RepositoryDependency.where(package_id: @packages_scope.pluck(:id)).group(:repository_id).count.keys
+    @community_repo_scope = Repository.community.where(id: repo_ids)
+    @new_community_repositories = @community_repo_scope.this_period(@period).count
+    @new_community_repositories_last_week = @community_repo_scope.last_period(@period).count
+
+    @new_packages = @packages_scope.this_period(@period).count
+    @new_packages_last_week = @packages_scope.last_period(@period).count
+
+    @community_package_scope = Package.joins(:dependencies).where('dependencies.package_id in (?)', @packages_scope.pluck(:id)).group(:id).community
+    @new_community_packages = @community_package_scope.this_period(@period).count.keys.length
+    @new_community_packages_last_week = @community_package_scope.last_period(@period).count.keys.length
 
     @new_search_results = @search_results_scope.this_period(@period).count
     @new_search_results_last_week = @search_results_scope.last_period(@period).count

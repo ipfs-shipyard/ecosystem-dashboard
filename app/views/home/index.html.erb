@@ -407,10 +407,10 @@
 
                     <% new_repositories_diff = @new_repositories - @new_repositories_last_week %>
                     <% unless new_repositories_diff.zero? %>
-                      <small class='<%= diff_class(new_repositories_diff) %>' title='<%= @new_repositories_last_week %> new repositories created in the previous <%= @period %> days'><%= '+' if new_repositories_diff > 0 %><%= number_to_human new_repositories_diff %></small>
+                      <small class='<%= diff_class(new_repositories_diff) %>' title='<%= @new_repositories_last_week %> new internal repositories created in the previous <%= @period %> days'><%= '+' if new_repositories_diff > 0 %><%= number_to_human new_repositories_diff %></small>
                     <% end %>
                   </h3>
-                  <span>New Repositories</span>
+                  <span>Internal Repos</span>
                 </div>
               </div>
             </div>
@@ -434,10 +434,10 @@
 
                     <% new_packages_diff = @new_packages - @new_packages_last_week %>
                     <% unless new_packages_diff.zero? %>
-                      <small class='<%= diff_class(new_packages_diff) %>' title='<%= @new_packages_last_week %> packages created in the previous <%= @period %> days'><%= '+' if new_packages_diff > 0 %><%= number_to_human new_packages_diff %></small>
+                      <small class='<%= diff_class(new_packages_diff) %>' title='<%= @new_packages_last_week %> new internal packages created in the previous <%= @period %> days'><%= '+' if new_packages_diff > 0 %><%= number_to_human new_packages_diff %></small>
                     <% end %>
                   </h3>
-                  <span>New Packages</span>
+                  <span>Internal Packages</span>
                 </div>
               </div>
             </div>
@@ -465,6 +465,62 @@
                     <% end %>
                   </h3>
                   <span>Search Results</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <a href="<%= community_repositories_path(order: 'desc', sort: 'created_at', range: @period) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'heart', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='New community repositories that have been created in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @new_community_repositories %>
+
+                    <% new_community_repositories_diff = @new_community_repositories - @new_community_repositories_last_week %>
+                    <% unless new_community_repositories_diff.zero? %>
+                      <small class='<%= diff_class(new_community_repositories_diff) %>' title='<%= @new_community_repositories_last_week %> new community repositories created in the previous <%= @period %> days'><%= '+' if new_community_repositories_diff > 0 %><%= number_to_human new_community_repositories_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>Community Repos</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
+      <a href="<%= community_packages_path(order: 'desc', sort: 'created_at', range: @period) %>">
+        <div class="card shadow-sm mb-3">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <%= octicon 'smiley', height: 50 %>
+                </div>
+                <div class="media-body text-right">
+                  <span class='info' title='New community packages that have been found in the past <%= @period %> days'><%= octicon 'info', height: 14 %></span>
+                  <h3>
+                    <%= number_to_human @new_community_packages %>
+
+                    <% new_community_packages_diff = @new_community_packages - @new_community_packages_last_week %>
+                    <% unless new_community_packages_diff.zero? %>
+                      <small class='<%= diff_class(new_community_packages_diff) %>' title='<%= @new_community_packages_last_week %> new community packages found in the previous <%= @period %> days'><%= '+' if new_community_packages_diff > 0 %><%= number_to_human new_community_packages_diff %></small>
+                    <% end %>
+                  </h3>
+                  <span>Community Pkgs</span>
                 </div>
               </div>
             </div>
