@@ -15,7 +15,9 @@
       <br/>
     <% end %>
     <small class='text-muted'>
-      <% if package.repository_url.present? %>
+      <% if package.repository %>
+        Repository: <%= link_to package.repository.html_url, package.repository.html_url, target: :_blank %><br/>
+      <% elsif package.repository_url.present? %>
         Repository: <%= link_to package.repository_url, package.repository_url, target: :_blank %><br/>
       <% end %>
       Latest release: <%= time_ago_in_words package.latest_release_published_at %><br/>
