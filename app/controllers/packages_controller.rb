@@ -3,6 +3,8 @@ class PackagesController < ApplicationController
     @page_title = 'Internal Packages'
     @scope = Package.internal.includes(:repository)
 
+    @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
+
     @scope = @scope.exclude_platform(params[:exclude_platform]) if params[:exclude_platform].present?
     @scope = @scope.platform(params[:platform]) if params[:platform].present?
 
@@ -34,6 +36,7 @@ class PackagesController < ApplicationController
     @page_title = 'Collaborator Packages'
     @scope = Package.collabs.includes(:repository)
 
+    @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
     @scope = @scope.exclude_platform(params[:exclude_platform]) if params[:exclude_platform].present?
     @scope = @scope.platform(params[:platform]) if params[:platform].present?
 
@@ -66,6 +69,7 @@ class PackagesController < ApplicationController
     @page_title = 'Community Packages'
     @scope = Package.depends_upon_internal.community
 
+    @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
     @scope = @scope.exclude_platform(params[:exclude_platform]) if params[:exclude_platform].present?
     @scope = @scope.platform(params[:platform]) if params[:platform].present?
 

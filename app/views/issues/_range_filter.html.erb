@@ -1,8 +1,14 @@
+<% ranges = [7, 14, 30, 90, 365] %>
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle <%= 'active' if params[:range].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Date</a>
   <div class="dropdown-menu">
-    <% [7, 14, 30, 90, 365].each do |range| %>
-      <a class="dropdown-item <%= 'active' if range == @range %>" href="<%= url_for(request.params.merge(page: nil, range: range)) %>">
+    <% if params[:range].present? && !ranges.include?(params[:range].to_i) %>
+    <a class="dropdown-item active" href="<%= url_for(request.params.merge(page: nil, range: nil)) %>">
+      Last <%= params[:range] %> days
+    </a>
+    <% end %>
+    <% ranges.each do |range| %>
+      <a class="dropdown-item <%= 'active' if range == @range || range == params[:range].to_i %>" href="<%= url_for(request.params.merge(page: nil, range: (params[:range].to_i == range ? nil : range))) %>">
         Last <%= range %> days
       </a>
     <% end %>
