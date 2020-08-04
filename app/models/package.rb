@@ -496,7 +496,7 @@ class Package < ApplicationRecord
   def find_missing_package_repo
     return unless known_repository_host_name
     return unless repository.nil?
-
+    # TODO ignore bits after optional second slash
     repo = Repository.download(known_repository_host_name)
     self.repository = repo if repo.present?
     save
