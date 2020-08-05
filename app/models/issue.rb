@@ -182,6 +182,8 @@ class Issue < ApplicationRecord
       destroy
     rescue ActiveRecord::ActiveRecordError
       # already deleted
+    rescue Octokit::ClientError
+      # issues disabled
     end
   end
 
