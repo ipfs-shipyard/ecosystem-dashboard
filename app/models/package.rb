@@ -131,10 +131,6 @@ class Package < ApplicationRecord
     update_column(:last_synced_at, Time.zone.now)
   end
 
-  def async_sync
-    # PackageManagerDownloadWorker.perform_async(platform, name)
-  end
-
   def recently_synced?
     last_synced_at && last_synced_at > 1.day.ago
   end
@@ -337,10 +333,6 @@ class Package < ApplicationRecord
 
         end
       end
-  end
-
-  def update_repository_async
-    #RepositoryPackageWorker.perform_async(self.id) if known_repository_host_name.present?
   end
 
   def known_repository_host_name

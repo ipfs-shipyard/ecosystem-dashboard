@@ -126,18 +126,6 @@ module PackageManager
       end
     end
 
-    def self.import_async
-      download_async(package_names)
-    end
-
-    def self.import_recent_async
-      download_async(recent_names)
-    end
-
-    def self.import_new_async
-      download_async(new_names)
-    end
-
     def self.import
       return if ENV["READ_ONLY"].present?
 
@@ -272,10 +260,6 @@ module PackageManager
 
     private_class_method def self.get_json(url)
       get(url, headers: { "Accept" => "application/json" })
-    end
-
-    private_class_method def self.download_async(names)
-      names.each { |name| PackageManagerDownloadWorker.perform_async(self.name.demodulize, name) }
     end
   end
 end

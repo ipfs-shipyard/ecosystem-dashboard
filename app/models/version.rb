@@ -12,14 +12,12 @@ class Version < ApplicationRecord
   has_many :runtime_dependencies, -> { where kind: %w[runtime normal] }, class_name: "Dependency"
 
   before_save :update_spdx_expression
-  after_commit :update_repository_async, on: :create
   after_commit :save_package, on: :create
 
   scope :newest_first, -> { order("versions.published_at DESC") }
 
   def save_package
     package.try(:forced_save)
-    package.try(:update_repository_async)
   end
 
   def update_spdx_expression
@@ -33,12 +31,6 @@ class Version < ApplicationRecord
 
   def platform
     package.try(:platform)
-  end
-
-  def update_repository_async
-    return unless package.repository_id.present?
-
-    #RepositoryDownloadWorker.perform_async(package.repository_id)
   end
 
   def published_at
