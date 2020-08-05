@@ -14,4 +14,12 @@ namespace :packages do
   task sync: :environment do
     Package.order('last_synced_at ASC nulls first').limit(100).find_each(&:sync)
   end
+
+  task find_missing_package_repos: :environment do
+    Package.find_missing_package_repos
+  end
+
+  task find_dependent_github_repos: :environment do
+    Package.find_dependent_github_repos
+  end
 end
