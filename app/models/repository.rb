@@ -111,7 +111,7 @@ class Repository < ApplicationRecord
       repo.download_manifests if !repo.fork? && !repo.archived? && sync_manifests
       repo
     rescue ArgumentError, Octokit::Error
-      # derp
+      repo.update_column(:last_synced_at, Time.zone.now) if repo
     end
   end
 
