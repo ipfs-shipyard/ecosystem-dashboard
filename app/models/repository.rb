@@ -228,24 +228,33 @@ class Repository < ApplicationRecord
     args = {platform: m[:platform], kind: m[:kind], filepath: m[:path], sha: m[:sha]}
 
     unless manifests.find_by(args)
+      return unless m[:dependencies].present? && m[:dependencies].any?
       manifest = manifests.create(args)
-      return unless m[:dependencies].present?
       dependencies = m[:dependencies].map(&:with_indifferent_access).uniq{|dep| [dep[:name].try(:strip), dep[:requirement], dep[:type]]}
-      dependencies.each do |dep|
+
+      packages = Package.platform(manifest.platform).where(name: dependencies.map{|d| d[:name]})
+
+      deps = dependencies.map do |dep|
         platform = manifest.platform
         next unless dep.is_a?(Hash)
-        package = nil # Package.platform(platform).find_by_name(dep[:name])
 
-        manifest.repository_dependencies.create({
+        package = packages.select{|p| p.name == dep[:name] }.first
+
+        {
+          manifest_id: manifest.id,
           package_id: package.try(:id),
           package_name: dep[:name].try(:strip),
           platform: platform,
           requirements: dep[:requirement],
           kind: dep[:type],
           repository_id: self.id,
-          direct: manifest.kind == 'manifest'
-        })
-      end
+          direct: manifest.kind == 'manifest',
+          created_at: Time.now,
+          updated_at: Time.now
+        }
+      end.compact
+
+      RepositoryDependency.insert_all(deps)
     end
   end
 
