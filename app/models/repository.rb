@@ -177,7 +177,7 @@ class Repository < ApplicationRecord
             Issue.download(full_name)
             Issue.internal.where(repo_full_name: full_name).where('issues.updated_at > ?', 1.hour.ago).each(&:sync)
           end
-          Repository.download(full_name) if existing_repo
+          existing_repo.try(:sync)
         end
       end
     rescue Octokit::NotFound
