@@ -388,6 +388,11 @@ class Repository < ApplicationRecord
     issues.update_all(locked: false)
   end
 
+  def sync
+    Repository.download(full_name)
+    update_score
+  end
+
   def calculate_score(internal_package_ids = Package.internal.pluck(:id))
     new_score = 0
     # Is it a fork?
