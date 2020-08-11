@@ -33,7 +33,7 @@ gem 'ox'
 gem 'faraday'
 gem "faraday_middleware"
 gem "counter_culture"
-gem "spdx", git: "https://github.com/librariesio/spdx"
+gem "spdx", git: "https://github.com/librariesio/spdx", ref: 'b590cd0'
 
 gem 'bugsnag'
 gem 'zlib'
