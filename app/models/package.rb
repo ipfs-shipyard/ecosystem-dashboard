@@ -499,7 +499,7 @@ class Package < ApplicationRecord
   end
 
   def self.find_dependent_github_repos
-    find_dependent_github_repo_names.each do |name|
+    find_dependent_github_repos_names.each do |name|
       Repository.download_if_missing_and_active(name)
     end
   end
