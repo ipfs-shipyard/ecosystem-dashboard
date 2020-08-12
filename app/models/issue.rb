@@ -51,6 +51,10 @@ class Issue < ApplicationRecord
   belongs_to :contributor, foreign_key: :user, primary_key: :github_username, optional: true
   belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
 
+  def events
+    Event.where(repository_full_name: repo_full_name).where("payload @> ?", {number: number}.to_json)
+  end
+
   def self.median_slow_response_rate
     arr = all.group_by{|i| i.created_at.to_date }.map{|date, issues| [date, issues.select(&:slow_response?).length]}
     sorted = arr.map(&:second).sort
