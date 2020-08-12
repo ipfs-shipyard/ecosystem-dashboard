@@ -54,6 +54,8 @@ class Repository < ApplicationRecord
       update_from_github(remote_repo)
     rescue Octokit::NotFound
       Repository.find_by_full_name(full_name).try(:destroy)
+    rescue Octokit::InvalidRepository
+      # full_name isn't a proper repo name
     end
   end
 
@@ -67,8 +69,8 @@ class Repository < ApplicationRecord
         else
           Repository.update_from_github(remote_repo)
         end
-      rescue Octokit::NotFound
-        # not found
+      rescue Octokit::NotFound, Octokit::InvalidRepository
+        # not found or invalid
       end
     end
   end
