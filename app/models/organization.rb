@@ -15,6 +15,42 @@ class Organization < ApplicationRecord
     name
   end
 
+  def download_events(auto_paginate = false)
+    client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+    begin Octokit::NotFound
+      events = client.organization_public_events(name, auto_paginate: auto_paginate, headers: {'If-None-Match' => etag})
+      return [] if events == ''
+      new_etag = client.last_response.headers['etag']
+      if !auto_paginate && new_etag && new_etag != etag
+        update_column(:etag, new_etag)
+      end
+      events
+    rescue
+      []
+    end
+  end
+
+  def sync_recently_active_repos
+    begin
+      repo_names = download_events.map(&:repo).map(&:name).uniq
+      repo_names.each do |full_name|
+        repo = existing_repo = Repository.find_by_full_name(full_name)
+        repo = Repository.download(full_name) if existing_repo.nil?
+        next unless repo
+        e = repo.sync_events
+        if e.any?
+          if internal?
+            Issue.download(full_name)
+            Issue.internal.where(repo_full_name: full_name).where('issues.updated_at > ?', 1.hour.ago).each(&:sync)
+          end
+          existing_repo.try(:sync)
+        end
+      end
+    rescue Octokit::NotFound
+      # org deleted
+    end
+  end
+
   def import
     Repository.import_org(name)
     first_repo_date = Repository.org(name).order('created_at ASC').first.created_at

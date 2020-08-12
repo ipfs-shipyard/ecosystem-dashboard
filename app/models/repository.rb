@@ -166,31 +166,9 @@ class Repository < ApplicationRecord
     Issue.github_client.organization_public_events(org)
   end
 
-  def self.sync_recently_active_repos(org)
-    begin
-      repo_names = download_org_events(org).map(&:repo).map(&:name).uniq
-      repo_names.each do |full_name|
-        repo = existing_repo = Repository.find_by_full_name(full_name)
-        repo = Repository.download(full_name) if existing_repo.nil?
-        next unless repo
-        e = repo.sync_events
-        if e.any?
-          if Organization.internal.pluck(:name).include?(org)
-            Issue.download(full_name)
-            Issue.internal.where(repo_full_name: full_name).where('issues.updated_at > ?', 1.hour.ago).each(&:sync)
-          end
-          existing_repo.try(:sync)
-        end
-      end
-    rescue Octokit::NotFound
-      # org deleted
-    end
-  end
 
   def self.sync_recently_active_internal_repos
-    Organization.internal.pluck(:name).each do |org|
-      sync_recently_active_repos(org)
-    end
+    Organization.internal.each(&:sync_recently_active_repos)
   end
 
   def color

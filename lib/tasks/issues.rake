@@ -1,8 +1,6 @@
 namespace :issues do
   task sync_collabs: :environment do
-    Organization.collaborator.pluck(:name).each do |org|
-      Repository.sync_recently_active_repos(org)
-    end
+    Organization.collaborator.each(&:sync_recently_active_repos)
   end
 
   task sync_recent: :environment do
