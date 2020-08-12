@@ -5,17 +5,20 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="nav nav-pills mr-auto">
-      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 30 %>">
-        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 30)) %>">Last 30 days</a>
+      <li class="nav-item ">
+        <a class="nav-link <%= 'active' if params[:range].to_i == 7 || params[:range].blank? %>" href=" <%= url_for(request.params.merge(range: 7)) %>">Last 7 days</a>
       </li>
-      <li class="nav-item <%= 'active bg-light' if params[:range].to_i == 7 || params[:range].blank? %>">
-        <a class="nav-link" href=" <%= url_for(request.params.merge(range: 7)) %>">Last 7 days</a>
+      <li class="nav-item">
+        <a class="nav-link <%= 'active' if params[:range].to_i == 30 %>" href=" <%= url_for(request.params.merge(range: 30)) %>">Last 30 days</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <%= 'active' if params[:range].to_i == 90 %>" href=" <%= url_for(request.params.merge(range: 90)) %>">Last 90 days</a>
       </li>
     </ul>
     <% if Organization.internal.count > 1 %>
       <ul class="nav nav-pills ml-auto">
-        <li class="nav-item dropdown <%= 'active' if params[:org].present? %>">
-          <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Filter by Organization
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
