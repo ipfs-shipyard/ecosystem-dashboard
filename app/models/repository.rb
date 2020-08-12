@@ -326,7 +326,7 @@ class Repository < ApplicationRecord
         begin
           json = JSON.parse(file[:content])
           PackageManager::Npm.update(json['name']) if json['name']
-        rescue JSON::ParserError
+        rescue JSON::ParserError, TypeError
           # invalid manifest
         end
       end
