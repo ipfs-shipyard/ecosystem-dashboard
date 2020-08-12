@@ -50,7 +50,7 @@ class Repository < ApplicationRecord
 
   def self.download(full_name)
     begin
-      remote_repo = Issue.github_client.repo(full_name)
+      remote_repo = Issue.github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')
       update_from_github(remote_repo)
     rescue Octokit::NotFound
       Repository.find_by_full_name(full_name).try(:destroy)
@@ -100,6 +100,7 @@ class Repository < ApplicationRecord
       repo.forks_count = remote_repo.forks_count
       repo.subscribers_count = remote_repo.subscribers_count
       repo.default_branch = remote_repo.default_branch
+      repo.topics = remote_repo.topics
       repo.last_sync_at = Time.now
       if repo.archived_changed?
         if repo.archived?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_12_101306) do
+ActiveRecord::Schema.define(version: 2020_08_12_152608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 2020_08_12_101306) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "etag"
     t.integer "score", default: 0
+    t.string "topics", default: [], array: true
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
