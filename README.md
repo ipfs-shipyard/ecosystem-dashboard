@@ -37,36 +37,9 @@ A high level overview of recent community metrics across all internal organizati
 
 Filterable by date range and internal organization.
 
-### [Collaborator Issues](https://ipfs.ecosystem-dashboard.com/collab_issues)
+### [Issues + PRs](https://ipfs.ecosystem-dashboard.com/all)
 
-The default homepage view shows issues and pull requests that have been opened by contributors from any of the configured collaborator github organizations.
-
-It's helpful to give an triage of all new issues and pull requests from collaborators that should be high priority to triage.
-
-It also includes a graph of how many new issues and pull requests were opened each month since the project began.
-
-The most active collabs and collab contributors are also shown on the right sidebar.
-
-This view is also filterable by the standard set of issue and pull request filters:
-
-- Author
-- State (open/closed)
-- Type (issue/pull request)
-- Repository
-- Org (internal github organizations)
-- Language (repository programming language)
-- Collaborator (external collaborator github organizations)
-- Label
-- No Core Contributors response
-- Uncommented
-- No milestone
-- Unlabelled
-- Date range
-- Sort (newest, oldest, recently updated, least recently updated)
-
-### [All Issues + PRs](https://ipfs.ecosystem-dashboard.com/all)
-
-[All Issues + PRs](https://ipfs.ecosystem-dashboard.com/all) shows all issues and pull requests that have been opened by everyone (excluding bots), by default filtered to the last 30 days.
+[Issues + PRs](https://ipfs.ecosystem-dashboard.com/all) shows all issues and pull requests that have been opened by everyone (excluding bots), by default filtered to the last 30 days.
 
 It's helpful to give an overview of all new issues and pull requests across all internal organizations for triage.
 
@@ -122,9 +95,9 @@ This view is also filterable by the standard set of issue and pull request filte
 - Date range
 - Sort (newest, oldest, recently updated, least recently updated)
 
-### [Repositories](https://ipfs.ecosystem-dashboard.com/repositories)
+### [Internal Repositories](https://ipfs.ecosystem-dashboard.com/repositories)
 
-[Repositories](https://ipfs.ecosystem-dashboard.com/repositories) gives a filterable view of all active repositories across all your internal organizations, ordered by which have been pushed to most recently.
+[Internal Repositories](https://ipfs.ecosystem-dashboard.com/repositories) gives a filterable view of all active repositories across all your internal organizations.
 
 It shows highlevel information such as:
 - name
@@ -144,7 +117,7 @@ Repositories are also filterable by:
 
 ### [Collab Repositories](https://ipfs.ecosystem-dashboard.com/collabs/repositories)
 
-[Collab Repositories](https://ipfs.ecosystem-dashboard.com/collabs/repositories) gives a filterable view of all active repositories across all your collaborators organizations, ordered by which have been pushed to most recently.
+[Collab Repositories](https://ipfs.ecosystem-dashboard.com/collabs/repositories) gives a filterable view of all active repositories across all your collaborators organizations.
 
 It shows highlevel information such as:
 - name
@@ -162,6 +135,25 @@ Repositories are also filterable by:
 - Active (not archived)
 - Archived
 
+### [Community Repositories](https://ipfs.ecosystem-dashboard.com/community/repositories)
+
+[Community Repositories](https://ipfs.ecosystem-dashboard.com/community/repositories) gives a filterable view of all repositories that depend on an internal package and don't belong to a collaborator.
+
+It shows highlevel information such as:
+- name
+- description
+- organization
+- last pushed date and time
+- repo size
+- number of dependencies
+
+Repositories are also filterable by:
+- Organization
+- Main language
+- Source (not forked)
+- Forks
+- Active (not archived)
+- Archived
 
 ### [Events](https://ipfs.ecosystem-dashboard.com/events)
 
@@ -233,7 +225,7 @@ Packages are filterable by:
 
 ### [Collabs Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages)
 
-The [Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages) view is a list of all packages owned by collaborator that have been published from collaborator repositories.
+The [Collabs Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages) view is a list of all packages owned by collaborator that have been published from collaborator repositories.
 
 For each package it shows:
 - name
@@ -243,11 +235,18 @@ For each package it shows:
 - Dependent collab repositories
 - org icon
 
-It also has a basic package search function.
 
-Packages are filterable by:
-- Organization
-- Platform (package manager)
+### [Community Packages](https://ipfs.ecosystem-dashboard.com/community/packages)
+
+The [Packages](https://ipfs.ecosystem-dashboard.com/collabs/packages) view is a list of all packages found on a package registry (npmjs.org, crates.io etc) that depend on an internal package and don't belong to a collaborator.
+
+For each package it shows:
+- name
+- platform (package manager)
+- description
+- latest release number
+- Dependent collab repositories
+- owner icon
 
 ## Data model
 
@@ -307,7 +306,25 @@ TODO
 
 ### Cron
 
-TODO
+To keep all data fresh, regular background tasks are provided that can be ran on a regular basis to find and update issues, repositories and packages.
+
+Suggested regular background rake tasks:
+
+| Command | Frequency |
+|---------|-----------|
+|`bundle exec rake issues:sync_recent` | Every 10 minutes |
+|`bundle exec rake search:run_all` | Every 10 minutes |
+|`bundle exec rake issues:sync_collabs` | Hourly |
+|`bundle exec rake packages:sync` | Hourly |
+|`bundle exec rake repositories:sync` | Hourly |
+|`bundle exec rake issues:sync_daily` | Daily |
+|`bundle exec rake packages:find_missing_package_repos` | Daily |
+|`bundle exec rake packages:find_missing_npm_packages` | Daily	 |
+|`bundle exec rake packages:find_dependent_github_repos` | Daily |
+|`bundle exec rake packages:sync_internal` | Daily	 |
+|`bundle exec rake repositories:discover_from_search_results` | Daily |
+|`bundle exec rake repositories:recalculate_scores` | Daily |
+
 
 ### Configuring organizations
 
