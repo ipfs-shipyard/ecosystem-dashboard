@@ -330,17 +330,37 @@ Suggested regular background rake tasks:
 
 TODO
 
+Access the console with `$ bundle exec rails console` then you can create organizations with the following code replace GITHUB_ORG_NAME with your internal organization github name:
+
+```
+org = Organization.create(name: GITHUB_ORG_NAME, internal: true)
+org.import
+```
+
 ### Configuring collabs
 
-TODO
+Access the console with `$ bundle exec rails console` then you can create collaborator organizations with the following code replace GITHUB_ORG_NAME with the github name of the collaborator:
+
+```
+org = Organization.create(name: GITHUB_ORG_NAME, collaborator: true)
+org.import
+```
 
 ### Configuring core contributors
 
-TODO
+After creating all of your internal organizations, access the console with `$ bundle exec rails console` and then run the following code to automatically detect all the core contributors in those organizations:
+
+```
+Organization.internal.each(&:guess_core_contributors)
+```
 
 ### Configuring bots
 
-TODO
+After creating all of your internal organizations, access the console with `$ bundle exec rails console` and then run the following code to automatically detect all the bots that contribute in those organizations:
+
+```
+Organization.internal.each(&:guess_bots)
+```
 
 ## License
 
