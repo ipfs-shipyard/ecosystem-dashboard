@@ -422,7 +422,7 @@ class Repository < ApplicationRecord
     # Does it use go-ipfs via docker?
 
     # does it have any internal packages as dependencies
-    internal_package_dependencies = repository_dependencies.where(package_id: internal_package_ids).pluck(:package_name).uniq.length
+    internal_package_dependencies = repository_dependencies.select{|rd| internal_package_ids.include?(rd.package_id) }.map(&:package_name).uniq.length
     new_score += Math.log(internal_package_dependencies, 10) if internal_package_dependencies > 0
 
     new_score.round
