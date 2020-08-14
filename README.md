@@ -270,9 +270,9 @@ Organizations have many repositories, the dashboard will attempt to download all
 
 Repositories that belong to internal organizations can be found with the `internal` scope: `Repository.internal.all`
 
-Repositories that belong to collaborator organizations can be found with the `external` scope: `Repository.external.all`
+Repositories that belong to collaborator organizations can be found with the `collaborator` scope: `Repository.collaborator.all`
 
-Currently there are no repositories stored that do not belong to either internal or collaborator orgs.
+Repositories that belong don't belong to either collaborators or internal organizations can be found with the `community` scope: `Repository.community.all`
 
 ### Events
 

@@ -39,7 +39,7 @@ class RepositoriesController < ApplicationController
 
   def collab_repositories
     @page_title = 'Collaborator Repositories'
-    @scope = Repository.external.where('score >= 0')
+    @scope = Repository.collaborator.where('score >= 0')
     @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
