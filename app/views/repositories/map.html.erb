@@ -22,6 +22,7 @@
 
   <% @go.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
     <%= r.description %>
   </p>
@@ -34,6 +35,7 @@
 
   <% @javascript.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small> <br/>
     <%= r.description %>
   </p>
@@ -46,6 +48,7 @@
 
   <% @documentation.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
     <%= r.description %>
   </p>
@@ -58,6 +61,7 @@
 
   <% @infratructure.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
     <%= r.description %>
   </p>
@@ -70,6 +74,7 @@
 
   <% @websites.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
     <%= r.description %>
   </p>
@@ -82,6 +87,7 @@
 
   <% @others.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %><span class='text-muted'> <%= r.language %></span></small><br/>
     <%= r.description %>
   </p>
@@ -94,6 +100,7 @@
 
   <% @forks.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
     <%= r.description %>
   </p>
@@ -106,6 +113,7 @@
 
   <% @archived.each do |r| %>
   <p>
+    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
     <%= r.description %>
   </p>
