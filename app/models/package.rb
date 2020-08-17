@@ -451,11 +451,11 @@ class Package < ApplicationRecord
   end
 
   def set_outdated_percentage
-    major_versions = repository_dependencies.external.where(direct: true).active.source.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v }
+    major_versions = repository_dependencies.external.direct.active.source.select(&:latest_resolvable_version).group_by{|rd| rd.latest_resolvable_version.semantic_version.major }.sort_by{|v,rds| v }
     if major_versions.length > 1
       groups = major_versions
     else
-      groups = repository_dependencies.external.where(direct: true).active.source.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }
+      groups = repository_dependencies.external.direct.active.source.select(&:latest_resolvable_version).group_by{|rd| [rd.latest_resolvable_version.semantic_version.major, rd.latest_resolvable_version.semantic_version.minor] }.sort_by{|v,rds| v }
     end
     return if groups.empty?
     outdated = groups[0..-2].map(&:last).flatten.length

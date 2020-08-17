@@ -12,6 +12,8 @@ class RepositoryDependency < ApplicationRecord
   scope :kind, ->(kind) { where(kind: kind) }
   scope :active, -> { joins(:repository).where(repositories: {archived: false}) }
   scope :source, -> { joins(:repository).where(repositories: {fork: false}) }
+  scope :direct, -> { where(direct: true) }
+  scope :transitive, -> { where(direct: false) }
 
   scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
 

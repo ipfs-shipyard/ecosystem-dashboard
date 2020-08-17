@@ -115,7 +115,7 @@ class OrganizationsController < ApplicationController
     @search_scope = @search_scope.this_period(@period)
     @repos_count = Repository.org(@organization.name).active.source.count
 
-    @repository_dependencies = @organization.repository_dependencies.internal.where(direct: true).active.source.includes(:repository, :manifest)
+    @repository_dependencies = @organization.repository_dependencies.internal.direct.active.source.includes(:repository, :manifest)
 
     case params[:tab]
     when 'search'
