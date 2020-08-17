@@ -9,7 +9,7 @@
     </li>
     <% Organization.internal.order('id asc').each do |organization| %>
       <li class="nav-item">
-        <a class="nav-link <%= 'active' if organization == params[:organization] %>" href="<%= url_for(request.params.merge(organization: organization.name)) %>">
+        <a class="nav-link <%= 'active' if organization.name == params[:organization] %>" href="<%= url_for(request.params.merge(organization: organization.name)) %>">
           <%= organization.name %>
         </a>
       </li>
