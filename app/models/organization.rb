@@ -6,9 +6,9 @@ class Organization < ApplicationRecord
   scope :collaborator, -> { where(collaborator: true) }
   scope :not_community, -> { internal.or(collaborator) }
 
-  has_many :events, foreign_key: :org, primary_key: :name
-  has_many :issues, foreign_key: :org, primary_key: :name
-  has_many :repositories, foreign_key: :org, primary_key: :name
+  has_many :events, foreign_key: :org, primary_key: :name, dependent: :delete_all
+  has_many :issues, foreign_key: :org, primary_key: :name, dependent: :delete_all
+  has_many :repositories, foreign_key: :org, primary_key: :name, dependent: :destroy
   has_many :repository_dependencies, through: :repositories
 
   def to_param
