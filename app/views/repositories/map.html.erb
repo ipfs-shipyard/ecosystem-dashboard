@@ -17,23 +17,49 @@
   </ul>
 <% end %>
 
-<% if @go.any? %>
-  <h2>Go Repositories</h2>
+<% if @go_libs.any? %>
+  <h2>Go Libraries</h2>
 
-  <% @go.each do |r| %>
+  <% @go_libs.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+      <%= r.description %>
+    </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @go_tools.any? %>
+  <h2>Go Utilities and Apps</h2>
+
+  <% @go_tools.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+      <%= r.description %>
+    </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @javascript_libs.any? %>
+  <h2>JavaScript Libraries</h2>
+
+  <% @javascript_libs.each do |r| %>
   <p>
     <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+    <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small> <br/>
     <%= r.description %>
   </p>
   <% end %>
   <hr>
 <% end %>
 
-<% if @javascript.any? %>
-  <h2>JavaScript Repositories</h2>
+<% if @javascript_tools.any? %>
+  <h2>JavaScript Utilities and Apps</h2>
 
-  <% @javascript.each do |r| %>
+  <% @javascript_tools.each do |r| %>
   <p>
     <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small> <br/>
