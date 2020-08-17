@@ -1,0 +1,113 @@
+<h1>Repository Map</h1>
+
+<% if Organization.internal.count > 1 %>
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link <%= 'active' if params[:organization].blank? %>" href="<%= url_for(request.params.merge(organization: nil)) %>">
+        All
+      </a>
+    </li>
+    <% Organization.internal.order('id asc').each do |organization| %>
+      <li class="nav-item">
+        <a class="nav-link <%= 'active' if organization == params[:organization] %>" href="<%= url_for(request.params.merge(organization: organization.name)) %>">
+          <%= organization.name %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @go.any? %>
+  <h2>Go Repositories</h2>
+
+  <% @go.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @javascript.any? %>
+  <h2>JavaScript Repositories</h2>
+
+  <% @javascript.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small> <br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @documentation.any? %>
+  <h2>Documentation and Coordination</h2>
+
+  <% @documentation.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @infratructure.any? %>
+  <h2>Infratructure</h2>
+
+  <% @infratructure.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @websites.any? %>
+  <h2>Websites</h2>
+
+  <% @websites.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @others.any? %>
+  <h2>Other</h2>
+
+  <% @others.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %><span class='text-muted'> <%= r.language %></span></small><br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @forks.any? %>
+  <h2>Forks</h2>
+
+  <% @forks.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @archived.any? %>
+  <h2>Archived</h2>
+
+  <% @archived.each do |r| %>
+  <p>
+    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
+    <%= r.description %>
+  </p>
+  <% end %>
+<% end %>

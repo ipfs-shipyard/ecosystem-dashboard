@@ -100,4 +100,22 @@ class RepositoriesController < ApplicationController
       end
     end
   end
+
+  def map
+    if params[:organization].present?
+      @organization = Organization.find_by_name(params[:organization])
+      @scope = @organization.repositories
+    else
+      @scope = Repository.internal
+    end
+
+    @go = @scope.active.fork(false).where(language: 'Go').order('stargazers_count desc, pushed_at asc')
+    @javascript = @scope.active.fork(false).where(language: ['JavaScript', 'TypeScript', 'CoffeeScript']).order('stargazers_count desc, pushed_at asc')
+    @documentation = @scope.active.fork(false).where(language: [nil, 'TeX']).order('stargazers_count desc, pushed_at asc')
+    @websites = @scope.active.fork(false).where(language: ['HTML', 'CSS']).order('stargazers_count desc, pushed_at asc')
+    @infratructure = @scope.active.fork(false).where(language: ['Shell', 'Makefile', 'Dockerfile', 'HCL']).order('stargazers_count desc, pushed_at asc')
+    @others = @scope.active.fork(false).where.not(language: ['Go', 'JavaScript', 'TypeScript', 'HTML', 'CSS', 'Shell', 'Makefile', 'Dockerfile', 'CoffeeScript', 'HCL', 'TeX']).order('stargazers_count desc, pushed_at asc')
+    @forks = @scope.active.fork(true).order('stargazers_count desc, pushed_at asc')
+    @archived = @scope.archived(true).order('stargazers_count desc, pushed_at asc')
+  end
 end
