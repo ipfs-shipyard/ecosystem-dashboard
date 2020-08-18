@@ -36,15 +36,15 @@ module ApplicationHelper
     words << language_title(params[:language]) if params[:language]
     words << (params[:state].present? ? params[:state].capitalize : 'All')
     words << (params[:type].present? ? params[:type].humanize : 'Issues and PRs')
-    words << "labelled \"#{params[:label]}\"" if params[:label]
+    words << "labelled \"#{Array(params[:label]).join('+')}\"" if params[:label]
     words << "in the last #{@range} days created by"
 
     if params[:user].present?
-      words << params[:user]
+      words << Array(params[:user]).join('+')
     elsif params[:only_collabs].present?
       words << 'collab contributors'
     elsif params[:collab].present?
-      words << "#{params[:collab]} contributors"
+      words << "#{Array(params[:collab]).join('+')} contributors"
     else
       if params[:exclude_core].present?
         words << "non-core contributors"
@@ -55,8 +55,8 @@ module ApplicationHelper
       end
     end
 
-    words << "on #{params[:repo_full_name]}" if params[:repo_full_name].present?
-    words << "in #{params[:org]}" if params[:org] && params[:repo_full_name].blank?
+    words << "on #{Array(params[:repo_full_name]).join('+')}" if params[:repo_full_name].present?
+    words << "in #{Array(params[:org]).join('+')}" if params[:org] && params[:repo_full_name].blank?
 
     words.compact.join(' ')
   end
