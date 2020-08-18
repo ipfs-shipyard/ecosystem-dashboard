@@ -26,6 +26,7 @@ class Repository < ApplicationRecord
 
   scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
   scope :collaborator, -> { includes(:organization).where(organizations: {internal: false}) }
+  scope :not_community, -> { where(org: Organization.not_community.pluck(:name)) }
   scope :community, -> { where.not(org: Organization.not_community.pluck(:name)) }
   scope :org, ->(org) { where(org: org) }
   scope :language, ->(language) { where(language: language) }
