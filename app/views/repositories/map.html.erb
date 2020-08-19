@@ -18,7 +18,10 @@
 <% end %>
 
 <% if @user_go_libs.any? %>
-  <h2>Go Libraries</h2>
+  <h2>
+    Go Libraries
+    <small class='text-muted'>(<%= @user_go_libs.length %>)</small>
+  </h2>
 
   <% @user_go_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
     <p>
@@ -35,7 +38,10 @@
 <% end %>
 
 <% if @internal_go_libs.any? %>
-  <h2>Go Internal Libraries</h2>
+  <h2>
+    Go Internal Libraries
+    <small class='text-muted'>(<%= @internal_go_libs.length %>)</small>
+  </h2>
 
   <% @internal_go_libs.each do |r| %>
     <p>
@@ -51,7 +57,10 @@
 
 
 <% if @go_tools.any? %>
-  <h2>Go Utilities and Apps</h2>
+  <h2>
+    Go Utilities and Apps
+    <small class='text-muted'>(<%= @go_tools.length %>)</small>
+  </h2>
 
   <% @go_tools.each do |r| %>
     <p>
@@ -65,7 +74,10 @@
 <% end %>
 
 <% if @user_javascript_libs.any? %>
-  <h2>JavaScript Libraries</h2>
+  <h2>
+    JavaScript Libraries
+    <small class='text-muted'>(<%= @user_javascript_libs.length %>)</small>
+  </h2>
 
   <% @user_javascript_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
     <p>
@@ -81,7 +93,10 @@
 <% end %>
 
 <% if @internal_javascript_libs.any? %>
-  <h2>JavaScript Internal Libraries</h2>
+  <h2>
+    JavaScript Internal Libraries
+    <small class='text-muted'>(<%= @internal_javascript_libs.length %>)</small>
+  </h2>
 
   <% @internal_javascript_libs.each do |r| %>
     <p>
@@ -95,7 +110,10 @@
 <% end %>
 
 <% if @javascript_tools.any? %>
-  <h2>JavaScript Utilities and Apps</h2>
+  <h2>
+    JavaScript Utilities and Apps
+    <small class='text-muted'>(<%= @javascript_tools.length %>)</small>
+  </h2>
 
   <% @javascript_tools.each do |r| %>
     <p>
@@ -109,7 +127,10 @@
 <% end %>
 
 <% if @documentation.any? %>
-  <h2>Documentation and Coordination</h2>
+  <h2>
+    Documentation and Coordination
+    <small class='text-muted'>(<%= @documentation.length %>)</small>
+  </h2>
 
   <% @documentation.each do |r| %>
   <p>
@@ -122,7 +143,10 @@
 <% end %>
 
 <% if @infratructure.any? %>
-  <h2>Infratructure</h2>
+  <h2>
+    Infratructure
+    <small class='text-muted'>(<%= @infratructure.length %>)</small>
+  </h2>
 
   <% @infratructure.each do |r| %>
   <p>
@@ -135,7 +159,10 @@
 <% end %>
 
 <% if @websites.any? %>
-  <h2>Websites</h2>
+  <h2>
+    Websites
+    <small class='text-muted'>(<%= @websites.length %>)</small>
+  </h2>
 
   <% @websites.each do |r| %>
   <p>
@@ -148,7 +175,10 @@
 <% end %>
 
 <% if @others.any? %>
-  <h2>Other</h2>
+  <h2>
+    Other
+    <small class='text-muted'>(<%= @others.length %>)</small>
+  </h2>
 
   <% @others.each do |r| %>
   <p>
@@ -161,7 +191,10 @@
 <% end %>
 
 <% if @forks.any? %>
-  <h2>Forks</h2>
+  <h2>
+    Forks
+    <small class='text-muted'>(<%= @forks.length %>)</small>
+  </h2>
 
   <% @forks.each do |r| %>
   <p>
@@ -174,7 +207,10 @@
 <% end %>
 
 <% if @archived.any? %>
-  <h2>Archived</h2>
+  <h2>
+    Archived
+    <small class='text-muted'>(<%= @archived.length %>)</small>
+  </h2>
 
   <% @archived.each do |r| %>
   <p>
