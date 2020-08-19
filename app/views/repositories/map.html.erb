@@ -25,7 +25,7 @@
       <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
       <strong><%= link_to r.full_name, r.html_url %></strong>
       <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
-      <% dependents_count = r.packages.sum(&:collab_dependent_repos_count) %>
+      <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
       <% if dependents_count > 0 %>
         <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
       <% end %>
@@ -43,7 +43,7 @@
     <p>
       <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
       <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
-      <% dependents_count = r.packages.sum(&:collab_dependent_repos_count) %>
+      <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
       <% if dependents_count > 0 %>
         <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
       <% end %>
@@ -61,7 +61,7 @@
   <p>
     <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
-    <% dependents_count = r.packages.sum(&:collab_dependent_repos_count) %>
+    <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
     <% if dependents_count > 0 %>
       <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
     <% end %>
@@ -79,7 +79,7 @@
   <p>
     <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
     <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
-    <% dependents_count = r.packages.sum(&:collab_dependent_repos_count) %>
+    <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
     <% if dependents_count > 0 %>
       <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
     <% end %>
