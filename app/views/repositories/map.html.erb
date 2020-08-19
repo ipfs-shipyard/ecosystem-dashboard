@@ -17,24 +17,38 @@
   </ul>
 <% end %>
 
-<% if @go_libs.any? %>
+<% if @user_go_libs.any? %>
   <h2>Go Libraries</h2>
 
-  <% @go_libs.each do |r| %>
+  <% @user_go_libs.each do |r| %>
     <p>
       <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
       <strong><%= link_to r.full_name, r.html_url %></strong>
       <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
       <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
-      <% if dependents_count > 0 %>
-        <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
-      <% end %>
+      <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
       <br/>
       <%= r.description %>
     </p>
   <% end %>
   <hr>
 <% end %>
+
+<% if @internal_go_libs.any? %>
+  <h2>Go Internal Libraries</h2>
+
+  <% @internal_go_libs.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong>
+      <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
+      <br/>
+      <%= r.description %>
+    </p>
+  <% end %>
+  <hr>
+<% end %>
+
 
 <% if @go_tools.any? %>
   <h2>Go Utilities and Apps</h2>
@@ -43,10 +57,6 @@
     <p>
       <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
       <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
-      <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
-      <% if dependents_count > 0 %>
-        <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
-      <% end %>
       <br/>
       <%= r.description %>
     </p>
@@ -54,20 +64,32 @@
   <hr>
 <% end %>
 
-<% if @javascript_libs.any? %>
+<% if @user_javascript_libs.any? %>
   <h2>JavaScript Libraries</h2>
 
-  <% @javascript_libs.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
-    <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
-    <% if dependents_count > 0 %>
-      <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
-    <% end %>
-    <br/>
-    <%= r.description %>
-  </p>
+  <% @user_javascript_libs.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+      <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
+      <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
+      <br/>
+      <%= r.description %>
+    </p>
+  <% end %>
+  <hr>
+<% end %>
+
+<% if @internal_javascript_libs.any? %>
+  <h2>JavaScript Internal Libraries</h2>
+
+  <% @internal_javascript_libs.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+      <br/>
+      <%= r.description %>
+    </p>
   <% end %>
   <hr>
 <% end %>
@@ -76,16 +98,12 @@
   <h2>JavaScript Utilities and Apps</h2>
 
   <% @javascript_tools.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
-    <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
-    <% if dependents_count > 0 %>
-      <small><%= link_to pluralize(dependents_count, 'collab user'), repository_path(r) %></small>
-    <% end %>
-    <br/>
-    <%= r.description %>
-  </p>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+      <br/>
+      <%= r.description %>
+    </p>
   <% end %>
   <hr>
 <% end %>
