@@ -20,7 +20,7 @@
 <% if @user_go_libs.any? %>
   <h2>Go Libraries</h2>
 
-  <% @user_go_libs.each do |r| %>
+  <% @user_go_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
     <p>
       <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
       <strong><%= link_to r.full_name, r.html_url %></strong>
@@ -67,7 +67,7 @@
 <% if @user_javascript_libs.any? %>
   <h2>JavaScript Libraries</h2>
 
-  <% @user_javascript_libs.each do |r| %>
+  <% @user_javascript_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
     <p>
       <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
       <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
