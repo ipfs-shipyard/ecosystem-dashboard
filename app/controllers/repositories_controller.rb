@@ -112,14 +112,14 @@ class RepositoriesController < ApplicationController
     @go = @scope.active.fork(false).where(language: 'Go').order('stargazers_count desc, pushed_at asc')
     @go_deps = RepositoryDependency.direct.where(package_id: Package.internal.platform('Go').pluck(:id)).includes(package: :repository)
     @go_deps_repos = @go_deps.map{|d| d.package.repository }.uniq
-    @go_libs = @go.where(id: @go_deps_repos.pluck(:id))
-    @go_tools = @go.where.not(id: @go_deps_repos.pluck(:id))
+    @go_libs = @go.where(id: @go_deps_repos.pluck(:id)).includes(:packages)
+    @go_tools = @go.where.not(id: @go_deps_repos.pluck(:id)).includes(:packages)
 
     @javascript = @scope.active.fork(false).where(language: ['JavaScript', 'TypeScript', 'CoffeeScript']).order('stargazers_count desc, pushed_at asc')
     @javascript_deps = RepositoryDependency.direct.where(package_id: Package.internal.platform('Npm').pluck(:id)).includes(package: :repository)
     @javascript_deps_repos = @javascript_deps.map{|d| d.package.repository }.uniq
-    @javascript_libs = @javascript.where(id: @javascript_deps_repos.pluck(:id))
-    @javascript_tools = @javascript.where.not(id: @javascript_deps_repos.pluck(:id))
+    @javascript_libs = @javascript.where(id: @javascript_deps_repos.pluck(:id)).includes(:packages)
+    @javascript_tools = @javascript.where.not(id: @javascript_deps_repos.pluck(:id)).includes(:packages)
 
     @documentation = @scope.active.fork(false).where(language: [nil, 'TeX']).order('stargazers_count desc, pushed_at asc')
     @websites = @scope.active.fork(false).where(language: ['HTML', 'CSS']).order('stargazers_count desc, pushed_at asc')
