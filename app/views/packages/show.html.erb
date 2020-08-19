@@ -9,6 +9,7 @@
   Repository: <%= link_to @package.repository_url, @package.repository_url, target: :_blank %><br/>
   Latest version: <%= @package.latest_release_number %><br/>
   Versions: <%= @package.versions_count %><br/>
+  Dependent Repositories: <%= @package.dependent_repos_count %>
   Dependent Collab Repositories: <%= @package.collab_dependent_repos_count %>
 </small>
 </p>
