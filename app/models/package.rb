@@ -220,7 +220,7 @@ class Package < ApplicationRecord
   def set_dependents_count
     return if destroyed?
     new_dependents_count = dependents.joins(:version).pluck(Arel.sql('DISTINCT versions.package_id')).count
-    new_dependent_repos_count = direct_dependent_repositories.active.source.count.length
+    new_dependent_repos_count = direct_dependent_repositories.active.source.not_internal.count.length
     new_collab_dependent_repos_count = direct_dependent_repositories.active.source.collaborator.count.length
 
     updates = {}

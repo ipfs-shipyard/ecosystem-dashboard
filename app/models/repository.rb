@@ -25,6 +25,7 @@ class Repository < ApplicationRecord
   belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
 
   scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
+  scope :not_internal, -> { where.not(org: Organization.internal.pluck(:name)) }
   scope :collaborator, -> { includes(:organization).where(organizations: {internal: false}) }
   scope :not_community, -> { where(org: Organization.not_community.pluck(:name)) }
   scope :community, -> { where.not(org: Organization.not_community.pluck(:name)) }
