@@ -87,6 +87,8 @@ module ApplicationHelper
       'repo-push'
     when "PullRequestReviewCommentEvent"
       'comment-discussion'
+    when "PullRequestReviewEvent"
+      'code-review'
     when "PullRequestEvent"
       'git-pull-request'
     when "ForkEvent"
@@ -133,6 +135,8 @@ module ApplicationHelper
       'Pushed'
     when "PullRequestReviewCommentEvent"
       'Review Comments'
+    when "PullRequestReviewEvent"
+      'Review'
     when "PullRequestEvent"
       'Pull Requests'
     when "ForkEvent"

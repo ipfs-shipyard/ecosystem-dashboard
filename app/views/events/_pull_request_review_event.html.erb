@@ -1,1 +1,5 @@
-<%= debug event.payload %>
+<%== parse_markdown event.payload['review']['body'] %>
+
+<p>
+  <%= link_to 'View on GitHub', event.payload['review']['html_url'], target: :_blank %>
+</p>
