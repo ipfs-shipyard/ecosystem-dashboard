@@ -68,6 +68,8 @@ class Event < ApplicationRecord
       "https://github.com/#{repository.full_name}/commits/#{payload['ref'].gsub("refs/heads/", '')}"
     when "PullRequestReviewCommentEvent"
       payload['comment']['html_url']
+    when "PullRequestReviewEvent"
+      payload['review']['html_url']
     when "PullRequestEvent"
       payload['pull_request']['html_url']
     when "ForkEvent"
@@ -105,6 +107,8 @@ class Event < ApplicationRecord
       "pushed #{ActionController::Base.helpers.pluralize(payload['size'], 'commit')} to #{payload['ref'].gsub("refs/heads/", '')}"
     when "PullRequestReviewCommentEvent"
       "#{action} a review comment on an pull request on"
+    when "PullRequestReviewEvent"
+      "#{action} a review on an pull request on"
     when "PullRequestEvent"
       "#{action} an pull request on"
     when "ForkEvent"
