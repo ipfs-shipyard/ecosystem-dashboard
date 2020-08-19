@@ -19,204 +19,260 @@
 
 <% if @user_go_libs.any? %>
   <h2>
-    Go Libraries
-    <small class='text-muted'>(<%= @user_go_libs.length %>)</small>
+    <a title='Click to toggle' href="#user_go_libs" data-toggle="collapse" data-target="#user_go_libs" aria-expanded="true" aria-controls="user_go_libs">
+      Go Libraries
+      <small class='text-muted'>(<%= @user_go_libs.length %>)</small>
+    </a>
   </h2>
 
-  <% @user_go_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
-    <p>
-      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-      <strong><%= link_to r.full_name, r.html_url %></strong>
-      <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
-      <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
-      <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
-      <br/>
-      <%= r.description %>
-    </p>
-  <% end %>
-  <hr>
+  <div id='user_go_libs' class="collapse show">
+    <% @user_go_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
+      <p>
+        <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+        <strong><%= link_to r.full_name, r.html_url %></strong>
+        <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
+        <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
+        <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
+        <br/>
+        <%= r.description %>
+      </p>
+    <% end %>
+    <hr>
+  </div>
+
+
 <% end %>
 
 <% if @internal_go_libs.any? %>
   <h2>
-    Go Internal Libraries
-    <small class='text-muted'>(<%= @internal_go_libs.length %>)</small>
+    <a title='Click to toggle' href="#internal_go_libs" data-toggle="collapse" data-target="#internal_go_libs" aria-expanded="true" aria-controls="internal_go_libs">
+      Go Internal Libraries
+      <small class='text-muted'>(<%= @internal_go_libs.length %>)</small>
+    </a>
   </h2>
 
-  <% @internal_go_libs.each do |r| %>
-    <p>
-      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-      <strong><%= link_to r.full_name, r.html_url %></strong>
-      <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
-      <br/>
-      <%= r.description %>
-    </p>
-  <% end %>
-  <hr>
+  <div id='internal_go_libs' class="collapse show">
+    <% @internal_go_libs.each do |r| %>
+      <p>
+        <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+        <strong><%= link_to r.full_name, r.html_url %></strong>
+        <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
+        <br/>
+        <%= r.description %>
+      </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
 
 
 <% if @go_tools.any? %>
   <h2>
-    Go Utilities and Apps
-    <small class='text-muted'>(<%= @go_tools.length %>)</small>
+    <a title='Click to toggle' href="#go_tools" data-toggle="collapse" data-target="#go_tools" aria-expanded="true" aria-controls="go_tools">
+      Go Utilities and Apps
+      <small class='text-muted'>(<%= @go_tools.length %>)</small>
+    </a>
   </h2>
 
-  <% @go_tools.each do |r| %>
-    <p>
-      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
-      <br/>
-      <%= r.description %>
-    </p>
-  <% end %>
-  <hr>
+  <div id='go_tools' class="collapse show">
+    <% @go_tools.each do |r| %>
+      <p>
+        <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small>
+        <br/>
+        <%= r.description %>
+      </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
 
 <% if @user_javascript_libs.any? %>
   <h2>
-    JavaScript Libraries
-    <small class='text-muted'>(<%= @user_javascript_libs.length %>)</small>
+    <a title='Click to toggle' href="#user_javascript_libs" data-toggle="collapse" data-target="#user_javascript_libs" aria-expanded="true" aria-controls="user_javascript_libs">
+      JavaScript Libraries
+      <small class='text-muted'>(<%= @user_javascript_libs.length %>)</small>
+    </a>
   </h2>
 
-  <% @user_javascript_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
-    <p>
-      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
-      <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
-      <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
-      <br/>
-      <%= r.description %>
-    </p>
-  <% end %>
-  <hr>
+  <div id='user_javascript_libs' class="collapse show">
+    <% @user_javascript_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
+      <p>
+        <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+        <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
+        <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
+        <br/>
+        <%= r.description %>
+      </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
 
 <% if @internal_javascript_libs.any? %>
   <h2>
-    JavaScript Internal Libraries
-    <small class='text-muted'>(<%= @internal_javascript_libs.length %>)</small>
+    <a title='Click to toggle' href="#internal_javascript_libs" data-toggle="collapse" data-target="#internal_javascript_libs" aria-expanded="true" aria-controls="internal_javascript_libs">
+      JavaScript Internal Libraries
+      <small class='text-muted'>(<%= @internal_javascript_libs.length %>)</small>
+    </a>
   </h2>
 
-  <% @internal_javascript_libs.each do |r| %>
-    <p>
-      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
-      <br/>
-      <%= r.description %>
-    </p>
-  <% end %>
-  <hr>
+  <div id='internal_javascript_libs' class="collapse show">
+    <% @internal_javascript_libs.each do |r| %>
+      <p>
+        <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+        <br/>
+        <%= r.description %>
+      </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
 
 <% if @javascript_tools.any? %>
   <h2>
-    JavaScript Utilities and Apps
-    <small class='text-muted'>(<%= @javascript_tools.length %>)</small>
+    <a title='Click to toggle' href="#javascript_tools" data-toggle="collapse" data-target="#javascript_tools" aria-expanded="true" aria-controls="javascript_tools">
+      JavaScript Utilities and Apps
+      <small class='text-muted'>(<%= @javascript_tools.length %>)</small>
+    </a>
   </h2>
 
-  <% @javascript_tools.each do |r| %>
-    <p>
-      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-      <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
-      <br/>
-      <%= r.description %>
-    </p>
-  <% end %>
-  <hr>
-<% end %>
-
-<% if @documentation.any? %>
-  <h2>
-    Documentation and Coordination
-    <small class='text-muted'>(<%= @documentation.length %>)</small>
-  </h2>
-
-  <% @documentation.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
-    <%= r.description %>
-  </p>
-  <% end %>
-  <hr>
-<% end %>
-
-<% if @infratructure.any? %>
-  <h2>
-    Infratructure
-    <small class='text-muted'>(<%= @infratructure.length %>)</small>
-  </h2>
-
-  <% @infratructure.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
-    <%= r.description %>
-  </p>
-  <% end %>
-  <hr>
-<% end %>
-
-<% if @websites.any? %>
-  <h2>
-    Websites
-    <small class='text-muted'>(<%= @websites.length %>)</small>
-  </h2>
-
-  <% @websites.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
-    <%= r.description %>
-  </p>
-  <% end %>
-  <hr>
+  <div id='javascript_tools' class="collapse show">
+    <% @javascript_tools.each do |r| %>
+      <p>
+        <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+        <br/>
+        <%= r.description %>
+      </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
 
 <% if @others.any? %>
   <h2>
-    Other
-    <small class='text-muted'>(<%= @others.length %>)</small>
+    <a title='Click to toggle' href="#others" data-toggle="collapse" data-target="#others" aria-expanded="true" aria-controls="others">
+      Other Languages
+      <small class='text-muted'>(<%= @others.length %>)</small>
+    </a>
   </h2>
 
-  <% @others.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %><span class='text-muted'> <%= r.language %></span></small><br/>
-    <%= r.description %>
-  </p>
-  <% end %>
-  <hr>
+  <div id='others' class="collapse show">
+    <% @others.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %><span class='text-muted'> <%= r.language %></span></small>
+      <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
+      <% if dependents_count > 0 %>
+        <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
+      <% end %>
+      <br/>
+      <%= r.description %>
+    </p>
+    <% end %>
+    <hr>
+  </div>
+<% end %>
+
+
+<% if @documentation.any? %>
+  <h2>
+    <a title='Click to toggle' href="#documentation" data-toggle="collapse" data-target="#documentation" aria-expanded="true" aria-controls="documentation">
+      Documentation and Coordination
+      <small class='text-muted'>(<%= @documentation.length %>)</small>
+    </a>
+  </h2>
+
+  <div id='documentation' class="collapse show">
+    <% @documentation.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+      <%= r.description %>
+    </p>
+    <% end %>
+    <hr>
+  </div>
+<% end %>
+
+<% if @infratructure.any? %>
+  <h2>
+    <a title='Click to toggle' href="#infratructure" data-toggle="collapse" data-target="#infratructure" aria-expanded="true" aria-controls="infratructure">
+      Infratructure
+      <small class='text-muted'>(<%= @infratructure.length %>)</small>
+    </a>
+  </h2>
+
+  <div id='infratructure' class="collapse show">
+    <% @infratructure.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+      <%= r.description %>
+    </p>
+    <% end %>
+    <hr>
+  </div>
+<% end %>
+
+<% if @websites.any? %>
+  <h2>
+    <a title='Click to toggle' href="#websites" data-toggle="collapse" data-target="#websites" aria-expanded="true" aria-controls="websites">
+      Websites
+      <small class='text-muted'>(<%= @websites.length %>)</small>
+    </a>
+  </h2>
+
+  <div id='websites' class="collapse show">
+    <% @websites.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>
+      <%= r.description %>
+    </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
 
 <% if @forks.any? %>
   <h2>
-    Forks
-    <small class='text-muted'>(<%= @forks.length %>)</small>
+    <a title='Click to toggle' href="#forks" data-toggle="collapse" data-target="#forks" aria-expanded="true" aria-controls="forks">
+      Forks
+      <small class='text-muted'>(<%= @forks.length %>)</small>
+    </a>
   </h2>
 
-  <% @forks.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
-    <%= r.description %>
-  </p>
-  <% end %>
-  <hr>
+  <div id='forks' class="collapse show">
+    <% @forks.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
+      <%= r.description %>
+    </p>
+    <% end %>
+    <hr>
+  </div>
 <% end %>
 
 <% if @archived.any? %>
   <h2>
-    Archived
-    <small class='text-muted'>(<%= @archived.length %>)</small>
+    <a title='Click to toggle' href="#archived" data-toggle="collapse" data-target="#archived" aria-expanded="true" aria-controls="archived">
+      Archived
+      <small class='text-muted'>(<%= @archived.length %>)</small>
+    </a>
   </h2>
 
-  <% @archived.each do |r| %>
-  <p>
-    <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-    <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
-    <%= r.description %>
-  </p>
-  <% end %>
+  <div id='archived' class="collapse show">
+    <% @archived.each do |r| %>
+    <p>
+      <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
+      <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %>  <span class='text-muted'> <%= r.language %></span></small> <br/>
+      <%= r.description %>
+    </p>
+    <% end %>
+  </div>
 <% end %>
