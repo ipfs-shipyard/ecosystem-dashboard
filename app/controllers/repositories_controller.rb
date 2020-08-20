@@ -58,6 +58,7 @@ class RepositoriesController < ApplicationController
 
         @orgs = @scope.unscope(where: :org).collaborator.group(:org).count
         @languages = @scope.unscope(where: :language).group(:language).count
+        @topics = @scope.unscope(where: :topics).pluck(:topics).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
       end
       format.rss do
         @pagy, @repositories = pagy(@scope.order(@sort => @order))
@@ -92,6 +93,7 @@ class RepositoriesController < ApplicationController
 
         @orgs = @scope.unscope(where: :org).community.group(:org).count
         @languages = @scope.unscope(where: :language).group(:language).count
+        @topics = @scope.unscope(where: :topics).pluck(:topics).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
         render :collab_repositories
       end
       format.rss do
