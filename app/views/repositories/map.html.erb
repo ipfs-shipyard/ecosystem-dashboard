@@ -198,16 +198,16 @@
   </div>
 <% end %>
 
-<% if @infratructure.any? %>
+<% if @infrastructure.any? %>
   <h2>
-    <a title='Click to toggle' href="#infratructure" data-toggle="collapse" data-target="#infratructure" aria-expanded="true" aria-controls="infratructure">
-      Infratructure
-      <small class='text-muted'>(<%= @infratructure.length %>)</small>
+    <a title='Click to toggle' href="#infrastructure" data-toggle="collapse" data-target="#infrastructure" aria-expanded="true" aria-controls="infrastructure">
+      Infrastructure
+      <small class='text-muted'>(<%= @infrastructure.length %>)</small>
     </a>
   </h2>
 
-  <div id='infratructure' class="collapse show">
-    <% @infratructure.each do |r| %>
+  <div id='infrastructure' class="collapse show">
+    <% @infrastructure.each do |r| %>
     <p>
       <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
       <strong><%= link_to r.full_name, r.html_url %></strong><small><% r.topics.each do |t| %> <span class="badge badge-info"><%= t %></span> <% end %></small><br/>

@@ -127,7 +127,7 @@ class RepositoriesController < ApplicationController
 
     @documentation = @scope.active.fork(false).where(language: [nil, 'TeX']).order('stargazers_count desc, pushed_at asc')
     @websites = @scope.active.fork(false).where(language: ['HTML', 'CSS']).order('stargazers_count desc, pushed_at asc')
-    @infratructure = @scope.active.fork(false).where(language: ['Shell', 'Makefile', 'Dockerfile', 'HCL']).order('stargazers_count desc, pushed_at asc')
+    @infrastructure = @scope.active.fork(false).where(language: ['Shell', 'Makefile', 'Dockerfile', 'HCL']).order('stargazers_count desc, pushed_at asc')
     @others = @scope.active.fork(false).where.not(language: ['Go', 'JavaScript', 'TypeScript', 'HTML', 'CSS', 'Shell', 'Makefile', 'Dockerfile', 'CoffeeScript', 'HCL', 'TeX']).order('stargazers_count desc, pushed_at asc')
     @forks = @scope.active.fork(true).order('stargazers_count desc, pushed_at asc')
     @archived = @scope.archived(true).order('stargazers_count desc, pushed_at asc')
