@@ -62,7 +62,8 @@ class Repository < ApplicationRecord
   end
 
   def self.download_if_missing_and_active(name)
-    r = Repository.where('full_name ilike ?', name).first
+    return if name.to_s.blank?
+    r = Repository.where('full_name ilike ?', name.to_s).first
     unless r
       begin
         remote_repo = Issue.github_client.repo(name)

@@ -495,7 +495,7 @@ class Package < ApplicationRecord
   end
 
   def self.find_dependent_github_repos_names
-    Package.internal.includes(:repository).uniq(&:repository).map(&:find_dependent_github_repo_names).uniq
+    Package.internal.includes(:repository).uniq(&:repository).map(&:find_dependent_github_repo_names).flatten.uniq.compact
   end
 
   def self.find_dependent_github_repos
