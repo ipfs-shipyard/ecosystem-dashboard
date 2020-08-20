@@ -9,6 +9,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.language(params[:language]) if params[:language].present?
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
+    @scope = @scope.topic(params[:topic]) if params[:topic].present?
 
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
@@ -19,6 +20,7 @@ class RepositoriesController < ApplicationController
 
         @orgs = @scope.unscope(where: :org).internal.group(:org).count
         @languages = @scope.unscope(where: :language).group(:language).count
+        @topics = @scope.unscope(where: :topics).pluck(:topics).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
       end
       format.rss do
         @pagy, @repositories = pagy(@scope.order(@sort => @order))
@@ -45,6 +47,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.language(params[:language]) if params[:language].present?
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
+    @scope = @scope.topic(params[:topic]) if params[:topic].present?
 
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
@@ -78,6 +81,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.language(params[:language]) if params[:language].present?
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
+    @scope = @scope.topic(params[:topic]) if params[:topic].present?
 
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
@@ -108,6 +112,8 @@ class RepositoriesController < ApplicationController
     else
       @scope = Repository.internal
     end
+
+    @scope = @scope.topic(params[:topic]) if params[:topic].present?
 
     @go = @scope.active.fork(false).where(language: 'Go').order('stargazers_count desc, pushed_at asc')
     @go_deps = RepositoryDependency.direct.where(package_id: Package.internal.platform('Go').pluck(:id)).includes(package: :repository)

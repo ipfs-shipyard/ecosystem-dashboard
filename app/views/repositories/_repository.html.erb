@@ -9,6 +9,7 @@
       </span>
 
       <%= link_to repository.full_name, repository %>
+      <small><% repository.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
     </h5>
     <small class='text-muted'>
       <%= repository.description %>
