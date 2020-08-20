@@ -50,6 +50,26 @@
         </div>
       </li>
       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:topic].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Topic</a>
+        <div class="dropdown-menu">
+          <% if params[:topic].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, topic: nil)) %>">
+              <%= language_title(params[:topic]) %>
+            </a>
+          <% end %>
+          <% @topics.sort_by(&:last).reverse.reject{|r| r[0].blank? || r[1].zero? }.each do |topic,count| %>
+            <% unless topic == params[:topic] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, topic: topic)) %>">
+                <%= topic %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:fork].present? || params[:archived].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
         <div class="dropdown-menu">
           <% if params[:fork].present? && params[:fork] == 'false' %>
