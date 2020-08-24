@@ -1,0 +1,11 @@
+<h1>Newsletter</h1>
+
+<%= render_markdown(render('newsletter_releases_markdown').chomp) %>
+
+<h4>Markdown</h4>
+<textarea name="name" rows="20" cols="80">
+<%= render('newsletter_releases_markdown').chomp %></textarea>
+
+<h4>HTML</h4>
+<textarea name="name" rows="20" cols="80">
+<%= render_markdown(render('newsletter_releases_markdown').chomp) %></textarea>

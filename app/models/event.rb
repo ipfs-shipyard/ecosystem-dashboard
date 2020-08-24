@@ -119,4 +119,9 @@ class Event < ApplicationRecord
       "#{payload['pages'].first['action']} a wiki page on"
     end
   end
+
+  def breaking?
+    return false unless event_type == 'ReleaseEvent'
+    payload['release']['body'].downcase.match?(/##(.)+breaking/i)
+  end
 end

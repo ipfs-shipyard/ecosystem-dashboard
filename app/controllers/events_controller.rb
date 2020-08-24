@@ -64,4 +64,10 @@ class EventsController < ApplicationController
       end
     end
   end
+
+  def newsletter
+    @period = 7
+    @event_scope = Event.internal
+    @releases = @event_scope.this_period(@period).event_type('ReleaseEvent').order('repository_full_name ASC, events.created_at ASC').includes(:repository)
+  end
 end

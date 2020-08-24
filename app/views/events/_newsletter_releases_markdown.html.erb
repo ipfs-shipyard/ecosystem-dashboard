@@ -1,0 +1,14 @@
+<% if @releases.any? %>
+### New Releases this week
+
+<% @releases.group_by(&:repository).each do |repo, events| %>
+* <%= repo.full_name %><% if events.length == 1 %> [<%= events.first.payload['release']['tag_name'] %>](<%= events.first.payload['release']['html_url'] %>)<% if events.first.breaking? %> _(Breaking Changes)_<% end %>
+<% else %>
+<% events.each_with_index do |event, i| %>
+  * [<%= event.payload['release']['tag_name'] %>](<%= event.payload['release']['html_url'] %>)<% if event.breaking? %> _(Breaking Changes)_<% end %>
+<% end %>
+<% end %>
+<% end %>
+<% else %>
+No releases this week?!
+<% end %>

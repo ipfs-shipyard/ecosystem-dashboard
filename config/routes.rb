@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   get 'map', to: 'repositories#map'
 
+  get 'newsletter', to: 'events#newsletter'
+
   get 'search/collabs', to: 'search#collabs', as: :collabs_search
   get 'search/highlights', to: 'search#highlights', as: :highlights
   get 'search', to: 'search#index', as: :search
