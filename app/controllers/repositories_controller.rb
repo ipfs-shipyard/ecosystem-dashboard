@@ -140,4 +140,8 @@ class RepositoriesController < ApplicationController
     @forks = @scope.active.fork(true).order('stargazers_count desc, pushed_at asc')
     @archived = @scope.archived(true).order('stargazers_count desc, pushed_at asc')
   end
+
+  def audit
+    @repositories = Repository.internal.active.source.where("(description  <> '') IS NOT TRUE OR (readme_path  <> '') IS NOT TRUE OR (code_of_conduct_path  <> '') IS NOT TRUE OR (contributing_path  <> '') IS NOT TRUE OR (license_path  <> '') IS NOT TRUE OR (changelog_path  <> '') IS NOT TRUE").includes(:events).order('repositories.full_name')
+  end
 end

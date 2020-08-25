@@ -1,0 +1,59 @@
+<h1><%= @page_title = 'Repository Audit' %></h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+      <th class='text-center'>
+        Description
+      </th>
+      <th class='text-center'>
+        Readme
+      </th>
+      <th class='text-center'>
+        Code of Conduct
+      </th>
+      <th class='text-center'>
+        Contributing
+      </th>
+      <th class='text-center'>
+        License
+      </th>
+      <th class='text-center'>
+        Changelog
+      </th>
+    </tr>
+  </thead>
+  <% @repositories.each do |repo| %>
+    <% next if repo.valid_audit? %>
+    <tr>
+      <td>
+        <%= link_to repo.full_name, repo.html_url, target: :_blank %>
+      </td>
+      <td class='text-center' title='Description'>
+        <%= bool_icon(repo.description.present?) %>
+      </td>
+      <td class='text-center' title='Readme'>
+        <%= bool_icon(repo.readme_path.present?) %>
+      </td>
+      <td class='text-center' title='Code of Conduct'>
+        <%= bool_icon(repo.code_of_conduct_path.present?) %>
+      </td>
+      <td class='text-center' title='Contributing'>
+        <%= bool_icon(repo.contributing_path.present?) %>
+      </td>
+      <td class='text-center' title='License'>
+        <%= bool_icon(repo.license_path.present?) %>
+      </td>
+      <td class='text-center' title='Changelog'>
+        <% if repo.events.any?{|e| e.event_type == 'ReleaseEvent' } %>
+          <%= bool_icon(repo.changelog_path.present?) %>
+        <% else %>
+          N/A
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

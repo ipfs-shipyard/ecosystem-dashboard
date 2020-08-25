@@ -8,7 +8,11 @@ Rails.application.routes.draw do
       get :outdated
     end
   end
-  resources :repositories
+  resources :repositories do
+    collection do
+      get :audit
+    end
+  end
   resources :contributors
 
   get 'community/packages', to: 'packages#community', as: :community_packages

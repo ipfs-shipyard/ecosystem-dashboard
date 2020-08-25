@@ -114,9 +114,12 @@ class Repository < ApplicationRecord
           repo.unarchive_all_issues!
         end
       end
-      sync_manifests = repo.pushed_at_changed?
+      sync_files = repo.pushed_at_changed?
       repo.save
-      repo.download_manifests if !repo.fork? && !repo.archived? && sync_manifests
+      if !repo.fork? && !repo.archived? && sync_files
+        repo.download_manifests
+        repo.update_file_list
+      end
       repo
     rescue ArgumentError, Octokit::Error
       repo.update_column(:last_synced_at, Time.zone.now) if repo
@@ -254,10 +257,12 @@ class Repository < ApplicationRecord
   end
 
   def get_file_list
-    tree = Issue.github_client.tree(full_name, default_branch, :recursive => true).tree
-    tree.select{|item| item.type == 'blob' }.map{|file| file.path }
-  rescue *IGNORABLE_EXCEPTIONS
-    nil
+    @file_list ||= begin
+      tree = Issue.github_client.tree(full_name, default_branch, :recursive => true).tree
+      tree.select{|item| item.type == 'blob' }.map{|file| file.path }
+    rescue *IGNORABLE_EXCEPTIONS
+      nil
+    end
   end
 
   def get_file_contents(path)
@@ -270,6 +275,28 @@ class Repository < ApplicationRecord
     nil
   rescue *IGNORABLE_EXCEPTIONS
     nil
+  end
+
+  def update_file_list
+    file_list = get_file_list
+    return if file_list.nil?
+    self.readme_path          = file_list.find{|file| file.match(/^README/i) }
+    self.changelog_path       = file_list.find{|file| file.match(/^CHANGE|^HISTORY/i) }
+    self.contributing_path    = file_list.find{|file| file.match(/^(docs\/)?(.github\/)?CONTRIBUTING/i) }
+    self.license_path         = file_list.find{|file| file.match(/^LICENSE|^COPYING|^MIT-LICENSE/i) }
+    self.code_of_conduct_path = file_list.find{|file| file.match(/^(docs\/)?(.github\/)?CODE[-_]OF[-_]CONDUCT/i) }
+    save if self.changed?
+  end
+
+  def valid_audit?
+    description.present? &&
+    readme_path.present?  &&
+    code_of_conduct_path.present? &&
+    contributing_path.present? &&
+    license_path.present? &&
+    (
+      events.any?{|e| e.event_type == 'ReleaseEvent' } ? changelog_path.present? : true
+    )
   end
 
   def self.find_missing_npm_packages

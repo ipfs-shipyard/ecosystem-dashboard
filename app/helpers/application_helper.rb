@@ -185,4 +185,12 @@ module ApplicationHelper
     return array.join(', ') if array.length < 8
     array[0..2].join(', ') + ' ... ' + array[-3..-1].join(', ')
   end
+
+  def bool_icon(bool)
+    if bool
+      octicon('check-circle-fill', class: 'text-success', height: 20)
+    else
+      octicon('x-circle-fill', class: 'text-danger', height: 20)
+    end
+  end
 end
