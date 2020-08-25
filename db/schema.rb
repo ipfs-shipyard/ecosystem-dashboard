@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_25_094122) do
+ActiveRecord::Schema.define(version: 2020_08_25_101811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2020_08_25_094122) do
     t.index ["actor"], name: "index_events_on_actor"
     t.index ["github_id"], name: "index_events_on_github_id"
     t.index ["org", "event_type"], name: "index_events_on_org_and_event_type"
+    t.index ["repository_id"], name: "index_events_on_repository_id"
   end
 
   create_table "issues", force: :cascade do |t|
