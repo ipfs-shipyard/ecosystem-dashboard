@@ -14,6 +14,7 @@ class Repository < ApplicationRecord
   ]
 
   has_many :events
+  has_many :release_events, -> { where event_type: 'ReleaseEvent' }, class_name: 'Event'
   has_many :manifests, dependent: :destroy
   has_many :repository_dependencies
   has_many :dependencies, through: :manifests, source: :repository_dependencies
@@ -295,7 +296,7 @@ class Repository < ApplicationRecord
     contributing_path.present? &&
     license_path.present? &&
     (
-      events.any?{|e| e.event_type == 'ReleaseEvent' } ? changelog_path.present? : true
+      release_events.length > 0 ? changelog_path.present? : true
     )
   end
 

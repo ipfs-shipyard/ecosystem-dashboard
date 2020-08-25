@@ -48,7 +48,7 @@
         <%= bool_icon(repo.license_path.present?) %>
       </td>
       <td class='text-center' title='Changelog'>
-        <% if repo.events.any?{|e| e.event_type == 'ReleaseEvent' } %>
+        <% if repo.release_events.length > 0 %>
           <%= bool_icon(repo.changelog_path.present?) %>
         <% else %>
           N/A

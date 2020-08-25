@@ -142,6 +142,6 @@ class RepositoriesController < ApplicationController
   end
 
   def audit
-    @repositories = Repository.internal.active.source.preload(:events).order('repositories.full_name')
+    @repositories = Repository.internal.active.source.preload(:release_events).order('repositories.full_name')
   end
 end
