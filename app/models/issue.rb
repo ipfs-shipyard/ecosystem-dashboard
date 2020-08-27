@@ -2,7 +2,7 @@ class Issue < ApplicationRecord
 
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
 
-  scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
+  scope :internal, -> { includes(:repository, :organization).where(organizations: {internal: true}).or(includes(:repository, :organization).where('repositories.triage = true')) }
   scope :external, -> { includes(:organization).where(organizations: {internal: false}) }
   scope :humans, -> { core.or(not_core) }
   scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_25_101811) do
+ActiveRecord::Schema.define(version: 2020_08_27_145235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(version: 2020_08_25_101811) do
     t.string "contributing_path"
     t.string "license_path"
     t.string "changelog_path"
+    t.boolean "triage", default: false
   end
 
   create_table "repository_dependencies", force: :cascade do |t|

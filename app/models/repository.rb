@@ -38,6 +38,7 @@ class Repository < ApplicationRecord
   scope :source, -> { fork(false) }
   scope :no_topic, -> { where("topics = '{}'") }
   scope :topic, ->(topic) { where("topics @> ARRAY[?]::varchar[]", topic) }
+  scope :triage, -> { where(triage: true) }
 
   scope :with_manifests, -> { joins(:manifests).group(:id) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
@@ -158,6 +159,10 @@ class Repository < ApplicationRecord
     rescue
       []
     end
+  end
+
+  def download_issues(since = 1.week.ago)
+    Issue.download(full_name, since)
   end
 
   def sync_events(auto_paginate = false)
