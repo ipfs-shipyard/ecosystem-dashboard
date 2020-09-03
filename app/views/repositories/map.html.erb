@@ -30,7 +30,9 @@
       <p>
         <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
         <strong><%= link_to r.full_name, r.html_url %></strong>
-        <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <% if r.topics %>
+          <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <% end %>
         <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
         <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
         <br/>
@@ -56,7 +58,9 @@
       <p>
         <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
         <strong><%= link_to r.full_name, r.html_url %></strong>
-        <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <% if r.topics %>
+          <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <% end %>
         <br/>
         <%= r.description %>
       </p>
@@ -78,7 +82,10 @@
     <% @go_tools.each do |r| %>
       <p>
         <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <strong><%= link_to r.full_name, r.html_url %></strong>
+        <% if r.topics %>
+          <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <% end %>
         <br/>
         <%= r.description %>
       </p>
@@ -99,7 +106,10 @@
     <% @user_javascript_libs.sort_by{|r| -r.packages.sum(&:dependent_repos_count) }.each do |r| %>
       <p>
         <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+        <strong><%= link_to r.full_name, r.html_url %></strong>
+        <% if r.topics %>
+          <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <% end %>
         <% dependents_count = r.packages.sum(&:dependent_repos_count) %>
         <small><%= link_to pluralize(dependents_count, 'user'), repository_path(r) %></small>
         <br/>
@@ -122,7 +132,9 @@
     <% @internal_javascript_libs.each do |r| %>
       <p>
         <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+        <strong><%= link_to r.full_name, r.html_url %></strong> <% if r.topics %>
+          <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %></small>
+        <% end %>
         <br/>
         <%= r.description %>
       </p>
@@ -143,7 +155,11 @@
     <% @javascript_tools.each do |r| %>
       <p>
         <% if params[:organization].blank? %><img src="https://github.com/<%= r.org %>.png" class="rounded" height='18' width='18'><% end %>
-        <strong><%= link_to r.full_name, r.html_url %></strong> <small><% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %> <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
+        <strong><%= link_to r.full_name, r.html_url %></strong> <small>
+          <% if r.topics %>
+            <% r.topics.each do |t| %> <a class="badge badge-info" href='<%= url_for(request.params.merge(topic: t)) %>'><%= t  %></a> <% end %>
+          <% end %>
+          <% if r.language != 'JavaScript' %> <span class='text-muted'> <%= r.language %></span><% end %> </small>
         <br/>
         <%= r.description %>
       </p>
