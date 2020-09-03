@@ -92,20 +92,20 @@
         <%= bool_icon(repo.description.present?) %>
       </td>
       <td class='text-center' title='Readme'>
-        <%= bool_icon(repo.readme_path.present?) %>
+        <%= link_to bool_icon(repo.readme_path.present?), existing_or_new_file(repo, :readme_path, 'README.md') %>
       </td>
       <td class='text-center' title='Code of Conduct'>
-        <%= bool_icon(repo.code_of_conduct_path.present?) %>
+        <%= link_to bool_icon(repo.code_of_conduct_path.present?), existing_or_new_file(repo, :code_of_conduct_path, 'CODE_OF_CONDUCT.md') %>
       </td>
       <td class='text-center' title='Contributing'>
-        <%= bool_icon(repo.contributing_path.present?) %>
+        <%= link_to bool_icon(repo.contributing_path.present?), existing_or_new_file(repo, :contributing_path, 'CONTRIBUTING.md') %>
       </td>
       <td class='text-center' title='License'>
-        <%= bool_icon(repo.license_path.present?) %>
+        <%= link_to bool_icon(repo.license_path.present?), existing_or_new_file(repo, :license_path, 'LICENSE') %>
       </td>
       <td class='text-center' title='Changelog'>
         <% if repo.release_events.length > 0 %>
-          <%= bool_icon(repo.changelog_path.present?) %>
+          <%= link_to bool_icon(repo.changelog_path.present?), existing_or_new_file(repo, :changelog_path, 'CHANGELOG.md') %>
         <% else %>
           N/A
         <% end %>

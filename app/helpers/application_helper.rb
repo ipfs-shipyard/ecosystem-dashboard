@@ -193,4 +193,8 @@ module ApplicationHelper
       octicon('x-circle-fill', class: 'text-danger', height: 20)
     end
   end
+
+  def existing_or_new_file(repo, method, filename)
+    repo.send(method).present? ? repo.file_url(repo.send(method)) : repo.new_file_url(filename)
+  end
 end
