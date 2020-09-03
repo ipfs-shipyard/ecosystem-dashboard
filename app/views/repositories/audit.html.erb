@@ -1,4 +1,60 @@
-<h1><%= @page_title = 'Repository Audit' %></h1>
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong><%= @page_title = 'Repository Audit' %></strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav nav-pills mr-auto">
+      <% if Organization.internal.count > 1 %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
+          <div class="dropdown-menu">
+            <% if params[:org].present? %>
+              <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, org: nil)) %>">
+                <%= params[:org] %>
+              </a>
+            <% end %>
+            <% @orgs.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |org,count| %>
+              <% unless org == params[:org] %>
+                <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, org: org)) %>">
+                  <%= org %>
+                  <small class='text-muted'>
+                    <%= number_with_delimiter count %>
+                  </small>
+                </a>
+              <% end %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:language].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Language</a>
+        <div class="dropdown-menu">
+          <% if params[:language].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, language: nil)) %>">
+              <%= language_title(params[:language]) %>
+            </a>
+          <% end %>
+          <% @languages.sort_by(&:last).reverse.reject{|r| r[0].blank? || r[1].zero? }.each do |language,count| %>
+            <% unless language == params[:language] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, language: language)) %>">
+                <%= language_title(language) %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+
+
+    </ul>
+    <ul class="nav nav-pills ml-auto">
+      <%= render 'sort_filter' %>
+    </ul>
+  </div>
+</nav>
 
 <table class="table table-striped">
   <thead>

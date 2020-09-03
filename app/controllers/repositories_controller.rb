@@ -142,6 +142,17 @@ class RepositoriesController < ApplicationController
   end
 
   def audit
-    @repositories = Repository.internal.active.source.preload(:release_events).order('repositories.full_name')
+    @scope = Repository.internal.active.source.preload(:release_events)
+
+    @scope = @scope.org(params[:org]) if params[:org].present?
+    @scope = @scope.language(params[:language]) if params[:language].present?
+
+    @orgs = @scope.unscope(where: :org).internal.group(:org).count
+    @languages = @scope.unscope(where: :language).group(:language).count
+
+    @sort = params[:sort] || 'repositories.full_name'
+    @order = params[:order] || 'asc'
+
+    @repositories = @scope.order(@sort => @order).all
   end
 end
