@@ -15,6 +15,20 @@ class Organization < ApplicationRecord
     name
   end
 
+  def sync
+    org_json = Issue.github_client.org(name)
+    self.display_name = org_json.name
+    self.url = org_json.blog
+    self.description = org_json.description
+    self.email = org_json.email
+    self.location = org_json.location
+    self.verified = org_json.is_verified
+    self.company = org_json.company
+    self.twitter = org_json.twitter_username
+    self.last_synced_at = Time.now
+    save
+  end
+
   def download_events(auto_paginate = false)
     client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
     begin Octokit::NotFound
@@ -46,6 +60,7 @@ class Organization < ApplicationRecord
           existing_repo.try(:sync)
         end
       end
+      sync
     rescue Octokit::NotFound
       # org deleted
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_27_145235) do
+ActiveRecord::Schema.define(version: 2020_09_04_122106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -111,6 +111,15 @@ ActiveRecord::Schema.define(version: 2020_08_27_145235) do
     t.integer "search_results_count", default: 0
     t.integer "events_count", default: 0
     t.string "etag"
+    t.string "url"
+    t.string "description"
+    t.string "email"
+    t.string "location"
+    t.boolean "verified"
+    t.string "display_name"
+    t.string "company"
+    t.string "twitter"
+    t.datetime "last_synced_at"
   end
 
   create_table "packages", force: :cascade do |t|
