@@ -1,6 +1,8 @@
 class Issue < ApplicationRecord
-
   LANGUAGES = ['Go', 'JS', 'Rust', 'py', 'Java', 'Ruby', 'cs', 'clj', 'Scala', 'Haskell', 'C', 'PHP']
+
+  validates :repo_full_name, presence: true
+  validates :html_url, presence: true, uniqueness: true
 
   scope :internal, -> { includes(:repository, :organization).where(organizations: {internal: true}).or(includes(:repository, :organization).where('repositories.triage = true')) }
   scope :external, -> { includes(:organization).where(organizations: {internal: false}) }
@@ -87,7 +89,7 @@ class Issue < ApplicationRecord
 
   def self.update_from_github(repo_full_name, remote_issue)
     begin
-      issue = Issue.find_or_create_by(repo_full_name: repo_full_name, number: remote_issue.number)
+      issue = Issue.find_or_create_by(repo_full_name: repo_full_name, html_url: remote_issue.html_url)
       repo_full_name = remote_issue.repository_url.gsub('https://api.github.com/repos/', '')
       issue.github_id = remote_issue.id
       issue.repo_full_name = repo_full_name

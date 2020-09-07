@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_04_122106) do
+ActiveRecord::Schema.define(version: 2020_09_07_144549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2020_09_04_122106) do
     t.datetime "last_synced_at"
     t.index ["collabs"], name: "index_issues_on_collabs", using: :gin
     t.index ["created_at"], name: "index_issues_on_created_at"
+    t.index ["html_url"], name: "index_issues_on_html_url", unique: true
     t.index ["org"], name: "index_issues_on_org"
     t.index ["repo_full_name"], name: "index_issues_on_repo_full_name"
     t.index ["state"], name: "index_issues_on_state"
