@@ -111,6 +111,7 @@ class Issue < ApplicationRecord
       issue.labels = remote_issue.labels.map(&:name)
       issue.last_synced_at = Time.zone.now
       issue.save
+      return issue
     rescue ArgumentError, Octokit::Error
       # derp
     end
