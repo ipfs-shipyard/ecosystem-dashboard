@@ -79,7 +79,7 @@ class Issue < ApplicationRecord
     begin
       remote_issues = github_client.issues(repo_full_name, state: 'all', since: since)
       remote_issues.each do |remote_issue|
-        update_from_github(repo_full_name, remote_issue)
+        update_from_github(remote_issue)
       end
     rescue Octokit::NotFound
       # its gone
@@ -87,7 +87,8 @@ class Issue < ApplicationRecord
     nil
   end
 
-  def self.update_from_github(repo_full_name, remote_issue)
+  def self.update_from_github(remote_issue)
+    # TODO check if issue has been transferred between repos (maybe by github id)
     begin
       issue = Issue.find_or_create_by(html_url: remote_issue.html_url)
       repo_full_name = remote_issue.repository_url.gsub('https://api.github.com/repos/', '')
@@ -182,7 +183,7 @@ class Issue < ApplicationRecord
   def sync
     begin
       remote_issue = Issue.github_client.issue(repo_full_name, number)
-      Issue.update_from_github(repo_full_name, remote_issue)
+      Issue.update_from_github(remote_issue)
       update_extra_attributes
       update_column(:last_synced_at, Time.zone.now)
     rescue Octokit::NotFound
