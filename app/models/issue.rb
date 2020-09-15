@@ -183,9 +183,10 @@ class Issue < ApplicationRecord
   def sync
     begin
       remote_issue = Issue.github_client.issue(repo_full_name, number)
-      Issue.update_from_github(remote_issue)
-      update_extra_attributes
-      update_column(:last_synced_at, Time.zone.now)
+      destroy if remote_issue.id != self.github_id
+      i = Issue.update_from_github(remote_issue)
+      i.update_extra_attributes
+      i.update_column(:last_synced_at, Time.zone.now)
     rescue Octokit::NotFound
       destroy
     rescue ActiveRecord::ActiveRecordError
