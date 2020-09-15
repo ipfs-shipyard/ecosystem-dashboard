@@ -92,6 +92,7 @@ class Issue < ApplicationRecord
       issue = Issue.find_or_create_by(repo_full_name: repo_full_name, html_url: remote_issue.html_url)
       repo_full_name = remote_issue.repository_url.gsub('https://api.github.com/repos/', '')
       issue.github_id = remote_issue.id
+      issue.number = remote_issue.number
       issue.repo_full_name = repo_full_name
       issue.title = remote_issue.title.delete("\u0000")
       issue.body = remote_issue.body.try(:delete, "\u0000")
