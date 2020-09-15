@@ -89,7 +89,7 @@ class Issue < ApplicationRecord
 
   def self.update_from_github(repo_full_name, remote_issue)
     begin
-      issue = Issue.find_or_create_by(repo_full_name: repo_full_name, html_url: remote_issue.html_url)
+      issue = Issue.find_or_create_by(html_url: remote_issue.html_url)
       repo_full_name = remote_issue.repository_url.gsub('https://api.github.com/repos/', '')
       issue.github_id = remote_issue.id
       issue.number = remote_issue.number
