@@ -191,7 +191,7 @@ GEM
     pagy (3.8.3)
     pg (1.2.3)
     pg_query (1.2.0)
-    pg_search (2.3.2)
+    pg_search (2.3.3)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     pghero (2.7.2)
