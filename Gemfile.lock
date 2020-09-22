@@ -98,7 +98,7 @@ GEM
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
-    autoprefixer-rails (9.8.6.3)
+    autoprefixer-rails (10.0.0.2)
       execjs
     bindex (0.8.1)
     bootsnap (1.4.8)
