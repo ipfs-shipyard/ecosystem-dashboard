@@ -14,7 +14,7 @@ class Issue < ApplicationRecord
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
   scope :community, -> { not_core.where("collabs = '{}'") }
 
-  scope :comments_count, ->(count) { where(comments_count: count) }
+  scope :comments_count, ->(count) { where('comments_count <= ?' count) }
 
   scope :locked, -> { where(locked: true) }
   scope :unlocked, -> { where(locked: [false, nil]) }
