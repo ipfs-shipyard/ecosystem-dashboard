@@ -110,7 +110,7 @@ GEM
     bugsnag (6.17.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
-    chartkick (3.4.0)
+    chartkick (3.4.1)
     citrus (3.0.2)
     commander (4.5.2)
       highline (~> 2.0.0)
