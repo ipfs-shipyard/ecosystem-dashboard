@@ -62,6 +62,8 @@ class Repository < ApplicationRecord
       Repository.find_by_full_name(full_name).try(:destroy)
     rescue Octokit::InvalidRepository
       # full_name isn't a proper repo name
+    rescue Octokit::RepositoryUnavailable
+      # repo locked/disabled
     end
   end
 
