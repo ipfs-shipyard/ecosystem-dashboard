@@ -1,0 +1,26 @@
+<%= render 'admin/organizations/tabs' %>
+
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong><%= @page_title = 'Organizations' %></strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav nav-pills ml-auto">
+      <li class="nav-item">
+        <a class="btn btn-primary" href=" <%= new_admin_organization_path %>">
+          Add New Organization
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<% if @orgs.any? %>
+  <div class="row">
+    <%= render @orgs %>
+  </div>
+<% else %>
+  <p>No organizations found.</p>
+<% end %>
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>

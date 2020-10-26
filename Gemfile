@@ -39,6 +39,7 @@ gem 'bugsnag'
 gem 'zlib'
 
 gem 'omniauth-github'
+gem 'simple_form'
 
 group :development do
   gem 'web-console'

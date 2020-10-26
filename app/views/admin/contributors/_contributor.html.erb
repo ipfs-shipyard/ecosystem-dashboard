@@ -1,0 +1,23 @@
+<div class="card mb-3">
+  <div class="card-body">
+      <%= link_to "https://github.com/#{contributor}", target: :_blank, class: 'float-left mr-3' do %>
+        <img src="https://github.com/<%= contributor %>.png" class="rounded" height='40' width='40'>
+      <% end %>
+    <h5 class="card-title mb-0">
+      <%= link_to contributor, edit_admin_contributor_path(contributor) %>
+      <small>
+        <% Contributor.collabs_for(contributor).each do |collab| %>
+          <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+        <% end %>
+      </small>
+    </h5>
+
+    <small class='text-muted'>
+      <% if contributor.core? %>
+        Core
+      <% elsif contributor.bot? %>
+        Bot
+      <% end %>
+    </small>
+  </div>
+</div>

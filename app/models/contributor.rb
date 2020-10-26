@@ -1,5 +1,5 @@
 class Contributor < ApplicationRecord
-  validates_presence_of :github_username
+  validates :github_username, presence: true, uniqueness: true
 
   has_many :events, foreign_key: :user, primary_key: :github_username
   has_many :issues, foreign_key: :user, primary_key: :github_username
@@ -7,6 +7,10 @@ class Contributor < ApplicationRecord
   scope :core, -> { where(core: true) }
   scope :bot,  -> { where(bot: true) }
   scope :core_or_bot, -> { core.or(bot) }
+
+  def to_s
+    github_username
+  end
 
   def self.collabs_for(username)
     Event.external.user(username).event_type('PushEvent').group(:org).count.map(&:first)

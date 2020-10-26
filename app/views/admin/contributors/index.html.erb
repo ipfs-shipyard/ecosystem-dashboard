@@ -1,0 +1,22 @@
+<%= render 'admin/organizations/tabs' %>
+
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong><%= @page_title = 'Contributors' %></strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav nav-pills ml-auto">
+      <li class="nav-item">
+        <a class="btn btn-primary" href=" <%= new_admin_contributor_path %>">
+          Add new Contributor
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<% @contributors.each do |contributor, count| %>
+  <%= render partial: 'contributor', locals: {contributor: contributor, count: count} %>
+<% end %>
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>

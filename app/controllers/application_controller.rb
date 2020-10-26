@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   def authenticate_user!
     return if logged_in?
     respond_to do |format|
-      format.html { redirect_to root_path }
+      format.html { redirect_to root_path, flash: {error: 'Unauthorized access, please log in first'} }
       format.json { render json: { "error" => "unauthorized" }, status: :unauthorized }
     end
   end

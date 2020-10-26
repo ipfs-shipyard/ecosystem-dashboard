@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <span class="nav-link">
+      <strong>Admin</strong>
+    </span>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if controller_name == 'organizations' %>" href="<%= admin_organizations_path %>">
+      Organizations
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if controller_name == 'contributors' %>" href="<%= admin_contributors_path %>">
+      Contributors
+    </a>
+  </li>
+</ul>

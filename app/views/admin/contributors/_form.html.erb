@@ -1,0 +1,6 @@
+<%= simple_form_for [:admin,@contributor] do |f| %>
+  <%= f.input :github_username %>
+  <%= f.input :core %>
+  <%= f.input :bot %>
+  <%= f.button :submit %>
+<% end %>

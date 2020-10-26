@@ -271,6 +271,9 @@ GEM
       faraday (> 0.8, < 2.0)
     sdl4r (0.9.11)
     semantic_range (2.3.0)
+    simple_form (5.0.3)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -350,6 +353,7 @@ DEPENDENCIES
   sassc-rails
   semantic!
   semantic_range
+  simple_form
   spdx!
   spring
   spring-watcher-listen

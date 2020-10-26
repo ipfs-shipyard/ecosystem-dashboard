@@ -1,0 +1,19 @@
+<div class="col-md-4">
+  <div class="card mb-3">
+    <div class="card-body">
+        <%= link_to "https://github.com/#{organization.name}", target: :_blank, class: 'float-left mr-3' do %>
+          <img src="https://github.com/<%= organization.name %>.png" class="rounded" height='40' width='40'>
+        <% end %>
+      <h5 class="card-title mb-0">
+        <%= link_to organization.name, edit_admin_organization_path(organization) %>
+      </h5>
+      <small class='text-muted'>
+        <% if organization.internal? %>
+          Internal
+        <% elsif organization.collaborator? %>
+          Collaborator
+        <% end %>
+      </small>
+    </div>
+  </div>
+</div>
