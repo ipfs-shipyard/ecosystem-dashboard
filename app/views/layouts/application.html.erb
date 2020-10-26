@@ -96,8 +96,14 @@
                 <%= link_to 'Repositories', community_repositories_path, class: 'dropdown-item' %>
               </div>
             </li>
+            <% if logged_in? %>
+              <a class="nav-link" href='/admin'>
+                Admin
+              </a>
+            <% end %>
           </ul>
         </div>
+
         <% if controller_name == 'packages' %>
           <form class="form-inline" action="<%= search_packages_path %>">
             <input class="form-control mr-sm-2" name='query' type="search" placeholder="Package name.." aria-label="Search">
@@ -115,7 +121,7 @@
     <main role="main" class="flex-shrink-0">
       <div class="container">
         <% flash.each do |key, value| %>
-          <div class="<%= flash_class(key) %>">
+          <div class="<%= bootstrap_class_for(key) %>">
             <%= value %>
           </div>
         <% end %>

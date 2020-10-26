@@ -38,6 +38,8 @@ gem "spdx", git: "https://github.com/librariesio/spdx", ref: 'b590cd0'
 gem 'bugsnag'
 gem 'zlib'
 
+gem 'omniauth-github'
+
 group :development do
   gem 'web-console'
   gem 'listen'
