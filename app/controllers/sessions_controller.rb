@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   def new
     if logged_in?
-      redirect_to root_path
+      redirect_to admin_path
     else
       redirect_to '/auth/github'
     end
@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
   def create
     username = authorize_access!
     cookies.permanent.signed[:username] = {value: username, httponly: true}
-    redirect_to request.env['omniauth.origin'] || root_path
+    redirect_to request.env['omniauth.origin'] || admin_path
   end
 
   def destroy
