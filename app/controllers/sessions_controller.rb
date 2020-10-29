@@ -8,9 +8,15 @@ class SessionsController < ApplicationController
   end
 
   def create
-    username = authorize_access!
-    cookies.permanent.signed[:username] = {value: username, httponly: true}
-    redirect_to request.env['omniauth.origin'] || admin_path
+    client = Octokit::Client.new(access_token: auth_hash.credentials.token)
+    username = auth_hash.info.nickname
+    if organization_member?(client, user: username)
+      cookies.permanent.signed[:username] = {value: username, httponly: true}
+      redirect_to request.env['omniauth.origin'] || admin_path
+    else      
+      flash[:error] = 'Access denied.'
+      redirect_to root_path
+    end
   end
 
   def destroy
@@ -27,15 +33,6 @@ class SessionsController < ApplicationController
 
   def auth_hash
     @auth_hash ||= request.env['omniauth.auth']
-  end
-
-  def authorize_access!
-    client = Octokit::Client.new(access_token: auth_hash.credentials.token)
-    username = auth_hash.info.nickname
-    return username if organization_member?(client, user: username)
-
-    flash[:error] = 'Access denied.'
-    redirect_to root_path
   end
 
   def organization_member?(client, user:)
