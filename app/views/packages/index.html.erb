@@ -9,6 +9,7 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="nav nav-pills mr-auto">
+      <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'internal_org', filter_label: 'Internal Dependency Owner', filter_collection: @orgs} %>
       <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'org', filter_label: 'Owner', filter_collection: @owners} %>
       <%= render partial: 'issues/excludable_filter', locals: {filter_name: 'platform', filter_label: 'Platform', filter_collection: @platforms} %>
       <%= render 'issues/range_filter' %>

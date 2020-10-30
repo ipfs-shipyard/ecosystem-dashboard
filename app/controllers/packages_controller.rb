@@ -19,6 +19,7 @@ class PackagesController < ApplicationController
       format.html do
         @pagy, @packages = pagy(@scope.order(@sort => @order))
         @platforms = @scope.unscope(where: :platform).group(:platform).count
+        @orgs = Organization.internal.pluck(:name).map{|n| [n, @scope.depends_upon_internal(Package.internal.org(n)).count.length] }
         @owners = @orgs_scope.joins(:organization).group('organizations.name').count
       end
       format.rss do
@@ -51,6 +52,7 @@ class PackagesController < ApplicationController
       format.html do
         @pagy, @packages = pagy(@scope.order(@sort => @order))
         @platforms = @scope.unscope(where: :platform).group(:platform).count
+        @orgs = Organization.internal.pluck(:name).map{|n| [n, @scope.depends_upon_internal(Package.internal.org(n)).count.length] }
         @owners = @orgs_scope.joins(:repository).map{|p| p.repository.org }.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
         render 'index'
       end
@@ -88,6 +90,7 @@ class PackagesController < ApplicationController
       format.html do
         @pagy, @packages = pagy(@scope.order(@sort => @order))
         @platforms = @scope.unscope(where: :platform).group_by(&:platform).map{|k,v| [k,v.length]}
+        @orgs = Organization.internal.pluck(:name).map{|n| [n, @scope.depends_upon_internal(Package.internal.org(n)).count.length] }
         @owners = @orgs_scope.joins(:repository).map{|p| p.repository.org }.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
         render 'index'
       end
