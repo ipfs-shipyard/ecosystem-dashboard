@@ -57,10 +57,12 @@ class HomeController < ApplicationController
 
     repo_ids = RepositoryDependency.where(package_id: @packages_scope.pluck(:id)).group(:repository_id).count.keys
     @community_repo_scope = Repository.community.where(id: repo_ids)
+    @community_repo_scope = @community_repo_scope.org(params[:org]) if params[:org].present?
     @new_community_repositories = @community_repo_scope.this_period(@period).count
     @new_community_repositories_last_week = @community_repo_scope.last_period(@period).count
 
     @community_package_scope = Package.joins(:dependencies).where('dependencies.package_id in (?)', @packages_scope.pluck(:id)).group(:id).community
+    @community_package_scope = @community_package_scope.org(params[:org]) if params[:org].present?
     @new_community_packages = @community_package_scope.this_period(@period).count.keys.length
     @new_community_packages_last_week = @community_package_scope.last_period(@period).count.keys.length
 
