@@ -43,7 +43,7 @@
 <div class="container home">
   <div class="row">
     <div class="col-md-3">
-      <a href="<%= all_issues_path(range: @period, type: 'issues', exclude_core: true) %>">
+      <a href="<%= all_issues_path(range: @period, type: 'issues', exclude_core: true, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -70,7 +70,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= all_issues_path(range: @period, type: 'pull_requests', exclude_core: true) %>">
+      <a href="<%= all_issues_path(range: @period, type: 'pull_requests', exclude_core: true, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -97,7 +97,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= collab_issues_path(range: @period) %>">
+      <a href="<%= collab_issues_path(range: @period, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -124,7 +124,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= slow_response_path(range: @period) %>">
+      <a href="<%= slow_response_path(range: @period, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -156,7 +156,7 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <a href="<%= events_path(range: @period, event_type: 'WatchEvent', exclude_core: true) %>">
+      <a href="<%= events_path(range: @period, event_type: 'WatchEvent', exclude_core: true, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -182,7 +182,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= events_path(range: @period, event_type: 'ForkEvent', exclude_core: true) %>">
+      <a href="<%= events_path(range: @period, event_type: 'ForkEvent', exclude_core: true, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -208,7 +208,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= events_path(range: @period, event_type: 'IssueCommentEvent', exclude_core: true) %>">
+      <a href="<%= events_path(range: @period, event_type: 'IssueCommentEvent', exclude_core: true, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -234,7 +234,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= slow_response_path(range: @period) %>">
+      <a href="<%= slow_response_path(range: @period, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -262,7 +262,7 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <a href="<%= contributors_path(range: @period) %>">
+      <a href="<%= contributors_path(range: @period, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -288,7 +288,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= new_contributor_path(range: @period) %>">
+      <a href="<%= new_contributor_path(range: @period, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -339,7 +339,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <a href="<%= events_path(range: @period, event_type: 'ReleaseEvent') %>">
+      <a href="<%= events_path(range: @period, event_type: 'ReleaseEvent', org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -395,7 +395,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= community_repositories_path(order: 'desc', sort: 'created_at', range: @period) %>">
+      <a href="<%= community_repositories_path(order: 'desc', sort: 'created_at', range: @period, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
@@ -422,7 +422,7 @@
       </a>
     </div>
     <div class="col-md-3">
-      <a href="<%= community_packages_path(order: 'desc', sort: 'created_at', range: @period) %>">
+      <a href="<%= community_packages_path(order: 'desc', sort: 'created_at', range: @period, org: params[:org]) %>">
         <div class="card shadow-sm mb-3">
           <div class="card-content">
             <div class="card-body">
