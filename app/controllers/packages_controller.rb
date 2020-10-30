@@ -67,7 +67,11 @@ class PackagesController < ApplicationController
 
   def community
     @page_title = 'Community Packages'
-    @scope = Package.depends_upon_internal.community
+
+    internal_package_scope = Package.internal
+    internal_package_scope = internal_package_scope.org(params[:internal_org]) if params[:internal_org].present?
+
+    @scope = Package.depends_upon_internal(internal_package_scope).community
 
     @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
     @scope = @scope.exclude_platform(params[:exclude_platform]) if params[:exclude_platform].present?

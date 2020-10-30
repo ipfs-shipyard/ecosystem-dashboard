@@ -92,7 +92,7 @@ class Package < ApplicationRecord
   scope :collabs, -> { joins(:organization).where('organizations.name IN (?)', Organization.collaborator.pluck(:name)) }
   scope :community, -> { without_repo.or(where('repository_id NOT IN (?)', Repository.where(org: Organization.not_community.pluck(:name)).pluck(:id))) }
 
-  scope :depends_upon_internal, -> { joins(:dependencies).where('dependencies.package_id in (?)', Package.internal.pluck(:id)).group(:id) }
+  scope :depends_upon_internal, ->(package_scope = Package.internal) { joins(:dependencies).where('dependencies.package_id in (?)', package_scope.pluck(:id)).group(:id) }
 
   scope :exclude_org, ->(org) { joins(:organization).where('organizations.name != ?', org) }
   scope :org, ->(org) { joins(:organization).where('organizations.name = ?', org) }
