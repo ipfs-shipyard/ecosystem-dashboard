@@ -114,7 +114,7 @@ GEM
     commonmarker (0.21.0)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.7)
-    counter_culture (2.6.2)
+    counter_culture (2.7.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
     crass (1.0.6)
