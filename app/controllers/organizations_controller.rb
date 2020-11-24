@@ -43,7 +43,7 @@ class OrganizationsController < ApplicationController
       end
       format.rss do
         @scope = Organization.collaborator.order(sort => order)
-        @pagy, @orgs = pagy(@scope)
+        @pagy, @orgs = pagy(@scope, items: 1000)
         render 'index', :layout => false
       end
       format.json do
