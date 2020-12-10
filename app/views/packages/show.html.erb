@@ -18,16 +18,17 @@
 
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] != 'false' && params[:dependencies].blank? && params[:usage].blank? %>" href="<%= url_for(request.params.merge(direct: true, dependencies: nil, usage: nil)) %>">Direct Dependent Collab Repos</a>
+    <a class="nav-link <%= 'active' if params[:direct] != 'false' && params[:dependencies].blank? && params[:usage].blank? %>" href="<%= url_for(request.params.merge(direct: true, dependencies: nil, usage: nil)) %>">Direct Dependent External Repos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil, usage: nil)) %>">Transitive Dependent Collab Repos</a>
+    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil, usage: nil)) %>">Transitive Dependent External Repos</a>
   </li>
-  <% if @dependencies.any? %>
-    <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil)) %>">Internal Dependencies</a>
-    </li>
-  <% end %>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil)) %>">
+      Internal Dependencies
+      <span class='badge badge-secondary'><%= @dependencies.count %></span>
+    </a>
+  </li>
   <% if @package.internal? %>
     <li class="nav-item">
       <a class="nav-link <%= 'active' if params[:usage].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: nil, usage: true)) %>">Usage Breakdown</a>
