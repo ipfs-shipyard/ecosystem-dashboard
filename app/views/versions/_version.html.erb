@@ -1,0 +1,12 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title mb-0">
+      <%= link_to version.number, package_version_path(package_id: version.package.id, id: version.id) %>
+      <small class='text-muted'><%= version.published_at %></small>
+    </h5>
+
+    <small class='text-muted'>
+      Runtime dependencies: <%= version.runtime_dependencies_count %>
+    </small>
+  </div>
+</div>

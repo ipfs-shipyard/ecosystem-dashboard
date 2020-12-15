@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :packages do
+    resources :versions
     collection do
       get :search
       get :outdated

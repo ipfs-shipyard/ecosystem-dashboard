@@ -1,0 +1,10 @@
+<% @page_title = "#{@version.number} - #{@package.platform.downcase}/#{@package.name}" %>
+<h1>
+  <%= link_to "#{@package.platform.downcase}/#{@package.name}", @package %> -
+  <%= @version.number %>
+</h1>
+
+<p>
+  Published: <%= @version.published_at %><br/>
+  Runtime dependencies: <%= @version.runtime_dependencies_count %>
+</p>
