@@ -21,7 +21,7 @@ module PackageManager
 
 
     def self.package_link(package, version = nil)
-      "https://pkg.go.dev/#{project.name}#{"@#{version}" if version}"
+      "https://pkg.go.dev/#{package.name}#{"@#{version}" if version}"
     end
 
     def self.documentation_url(name, version = nil)
