@@ -88,20 +88,65 @@ namespace :packages do
 
     puts "#{all_indirect_dependent_ids.length} indirect dependent packages total"
   end
+
+  task find_direct_dependent_recursive_repos: :environment do
+    internal_package_ids = Package.internal.pluck(:id)
+    direct_version_ids = Dependency.where(package_id: internal_package_ids).pluck(:version_id).uniq
+
+    direct_package_ids = Version.where(id: direct_version_ids).pluck(:package_id).uniq
+
+    direct_repo_ids = RepositoryDependency.where(package_id: direct_package_ids, direct: true).pluck(:repository_id).uniq
+
+    names = []
+    direct_repo_ids.each do |id|
+      repo = Repository.find(id)
+      names << repo.full_name
+    end
+
+    names.sort.each{|n| puts n };nil
+  end
+
+  task find_indirect_dependent_recursive_repos: :environment do
+    internal_package_ids = Package.internal.pluck(:id)
+
+    exclude_package_ids = internal_package_ids
+    dependent_package_ids = load_dependents(internal_package_ids, exclude_package_ids, false)
+
+    all_indirect_dependent_ids = []
+
+    while dependent_package_ids.length > 0 do
+      exclude_package_ids = (exclude_package_ids + dependent_package_ids).uniq
+      dependent_package_ids = load_dependents(dependent_package_ids, exclude_package_ids, false)
+      all_indirect_dependent_ids = (all_indirect_dependent_ids + dependent_package_ids).uniq
+    end
+
+    indirect_repo_ids = RepositoryDependency.where(package_id: all_indirect_dependent_ids).pluck(:repository_id).uniq
+
+    names = []
+    indirect_repo_ids.each do |id|
+      repo = Repository.find(id)
+      names << repo.full_name
+    end
+
+    names.sort.each{|n| puts n };nil
+  end
 end
 
-def load_dependents(package_ids, exclude_package_ids)
+def load_dependents(package_ids, exclude_package_ids, log = true)
   version_ids = Dependency.where(package_id: package_ids).pluck(:version_id).uniq
   direct_package_ids = Version.where(id: version_ids).pluck(:package_id).uniq
 
   only_package_ids = direct_package_ids - exclude_package_ids
 
-  names = []
-  only_package_ids.each do |id|
-    package = Package.find(id)
-    names << "#{package.platform_name}/#{package.name}"
+  if log
+    names = []
+    only_package_ids.each do |id|
+      package = Package.find(id)
+      names << "#{package.platform_name}/#{package.name}"
+    end
+
+    names.sort.each{|n| puts n };nil
   end
 
-  names.sort.each{|n| puts n };nil
   return only_package_ids
 end
