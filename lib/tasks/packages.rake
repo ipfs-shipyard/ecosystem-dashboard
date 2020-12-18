@@ -77,8 +77,8 @@ namespace :packages do
 
     order = 1
     puts "# 1st order"
-    exclude_package_ids = internal_package_ids
-    dependent_package_ids = load_dependents(internal_package_ids, exclude_package_ids)
+    exclude_package_ids = []
+    dependent_package_ids = internal_package_ids
 
     all_indirect_dependent_ids = []
 
@@ -114,9 +114,8 @@ namespace :packages do
   task find_indirect_dependent_recursive_repos: :environment do
     internal_package_ids = Package.internal.pluck(:id)
 
-    exclude_package_ids = internal_package_ids
-    dependent_package_ids = load_dependents(internal_package_ids, exclude_package_ids, false)
-
+    exclude_package_ids = []
+    dependent_package_ids = internal_package_ids
     all_indirect_dependent_ids = []
 
     while dependent_package_ids.length > 0 do
