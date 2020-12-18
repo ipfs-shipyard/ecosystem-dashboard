@@ -34,6 +34,7 @@ namespace :packages do
     end
 
     names.sort.each{|n| puts n };nil
+    puts "#{direct_repo_ids.length} direct dependent repos total"
   end
 
   task find_indirect_dependent_repos: :environment do
@@ -50,6 +51,8 @@ namespace :packages do
     end
 
     names.sort.each{|n| puts n };nil
+
+    puts "#{only_indirect_repo_ids.length} indirect dependent repos total"
   end
 
   task find_direct_dependent_packages: :environment do
@@ -65,6 +68,8 @@ namespace :packages do
     end
 
     names.sort.each{|n| puts n };nil
+
+    puts "#{direct_package_ids.length} direct dependent packages total"
   end
 
   task find_indirect_dependent_packages: :environment do
@@ -129,6 +134,7 @@ namespace :packages do
     end
 
     names.sort.each{|n| puts n };nil
+    puts "#{indirect_repo_ids.length} indirect dependent repos total"
   end
 end
 
