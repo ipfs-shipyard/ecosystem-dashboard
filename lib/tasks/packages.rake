@@ -94,23 +94,6 @@ namespace :packages do
     puts "#{all_indirect_dependent_ids.length} indirect dependent packages total"
   end
 
-  task find_direct_dependent_recursive_repos: :environment do
-    internal_package_ids = Package.internal.pluck(:id)
-    direct_version_ids = Dependency.where(package_id: internal_package_ids).pluck(:version_id).uniq
-
-    direct_package_ids = Version.where(id: direct_version_ids).pluck(:package_id).uniq
-
-    direct_repo_ids = RepositoryDependency.where(package_id: direct_package_ids, direct: true).pluck(:repository_id).uniq
-
-    names = []
-    direct_repo_ids.each do |id|
-      repo = Repository.find(id)
-      names << repo.full_name
-    end
-
-    names.sort.each{|n| puts n };nil
-  end
-
   task find_indirect_dependent_recursive_repos: :environment do
     internal_package_ids = Package.internal.pluck(:id)
 
