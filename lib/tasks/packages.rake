@@ -118,6 +118,38 @@ namespace :packages do
     names.sort.each{|n| puts n };nil
     puts "#{indirect_repo_ids.length} indirect dependent repos total"
   end
+
+  task indirect_diff: :environment do
+    internal_package_ids = Package.internal.pluck(:id)
+
+    direct_repo_ids = RepositoryDependency.where(package_id: internal_package_ids, direct: true).pluck(:repository_id).uniq
+    indirect_repo_ids = RepositoryDependency.where(package_id: internal_package_ids, direct: false).pluck(:repository_id).uniq
+    only_indirect_repo_ids = indirect_repo_ids - direct_repo_ids
+
+
+    exclude_package_ids = []
+    dependent_package_ids = internal_package_ids
+    all_indirect_dependent_ids = []
+
+    while dependent_package_ids.length > 0 do
+      exclude_package_ids = (exclude_package_ids + dependent_package_ids).uniq
+      dependent_package_ids = load_dependents(dependent_package_ids, exclude_package_ids, false)
+      all_indirect_dependent_ids = (all_indirect_dependent_ids + dependent_package_ids).uniq
+    end
+
+    indirect_repo_ids = RepositoryDependency.where(package_id: all_indirect_dependent_ids).pluck(:repository_id).uniq
+
+    diff = indirect_repo_ids - only_indirect_repo_ids - direct_repo_ids
+
+    names = []
+    diff.each do |id|
+      repo = Repository.find(id)
+      names << repo.full_name
+    end
+
+    names.sort.each{|n| puts n };nil
+    puts "#{diff.length} indirect repos diff total"
+  end
 end
 
 def load_dependents(package_ids, exclude_package_ids, log = true)
