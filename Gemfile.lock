@@ -137,7 +137,7 @@ GEM
       ruby2_keywords
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
-    ffi (1.13.1)
+    ffi (1.14.2)
     fuzzy_match (2.1.0)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
@@ -156,7 +156,7 @@ GEM
     jwt (2.2.2)
     librariesio-gem-parser (1.0.0)
     license-compatibility (3.1.0)
-    listen (3.3.3)
+    listen (3.4.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     lograge (0.11.2)
