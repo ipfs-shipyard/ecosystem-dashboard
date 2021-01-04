@@ -483,4 +483,18 @@ class Repository < ApplicationRecord
     internal_package_ids = Package.internal.pluck(:id)
     includes(:search_results).find_each{|r| r.update_score(internal_package_ids) }
   end
+
+  def update_internal_dependency_lists(internal_package_ids = Package.internal.pluck(:id))
+    return unless manifests.any?
+    return unless repository_dependencies.any?
+
+    direct_ids = repository_dependencies.direct.where(package_id: internal_package_ids).pluck(:package_id)
+    lockfile_ids = repository_dependencies.transitive.where(package_id: internal_package_ids).pluck(:package_id)
+    indirect_ids = lockfile_ids - direct_ids
+
+    update(
+      direct_internal_dependency_package_ids: direct_ids,
+      indirect_internal_dependency_package_ids: indirect_ids
+    )
+  end
 end

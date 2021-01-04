@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_07_144549) do
+ActiveRecord::Schema.define(version: 2021_01_04_132331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -180,6 +180,8 @@ ActiveRecord::Schema.define(version: 2020_09_07_144549) do
     t.string "license_path"
     t.string "changelog_path"
     t.boolean "triage", default: false
+    t.integer "direct_internal_dependency_package_ids", default: [], array: true
+    t.integer "indirect_internal_dependency_package_ids", default: [], array: true
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
