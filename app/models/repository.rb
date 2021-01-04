@@ -122,6 +122,7 @@ class Repository < ApplicationRecord
       repo.save
       if !repo.fork? && !repo.archived? && sync_files
         repo.download_manifests
+        repo.update_internal_dependency_lists
         repo.update_file_list
       end
       repo
