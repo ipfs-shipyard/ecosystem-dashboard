@@ -147,15 +147,18 @@ class Repository < ApplicationRecord
     "https://github.com/#{full_name}"
   end
 
-  def blob_url(sha = default_branch)
+  def blob_url(sha = nil)
+    sha ||= default_branch
     "#{html_url}/blob/#{sha}/"
   end
 
-  def file_url(filename, sha = default_branch)
+  def file_url(filename, sha = nil)
+    sha ||= default_branch
     "#{blob_url(sha)}/#{filename}"
   end
 
-  def new_file_url(filename, branch = default_branch)
+  def new_file_url(filename, branch = nil)
+    branch ||= default_branch
     "#{html_url}/new/#{branch}?filename=#{filename}"
   end
 
