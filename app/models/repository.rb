@@ -446,9 +446,8 @@ class Repository < ApplicationRecord
 
     display_name = ENV['DISPLAY_NAME'].presence || ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
 
-    # does name or description mention search term?
-    new_score += 1 if full_name.match?(/#{Regexp.quote(display_name)}/i)
-    new_score += 1 if description.to_s.match?(/#{Regexp.quote(display_name)}/i)
+    # does name, description or topic contain search term?
+    new_score += 1 if full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i) || topics.any?{|t| t.match?(/#{Regexp.quote(display_name)}/i) }
 
     # Is it owned by an internal org?       (owner)
     # Is it owned by a collab org?          (owner)
