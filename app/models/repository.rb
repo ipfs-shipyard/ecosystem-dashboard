@@ -469,7 +469,7 @@ class Repository < ApplicationRecord
     new_score += Math.log(internal_package_dependencies, 10) if internal_package_dependencies > 0
 
     # only consider general attributes if repo appears to be connected to the ecosystem
-    if new_score > 1
+    if new_score >= 1
       # How many stars?
       new_score += 1 if stargazers_count && stargazers_count > 0
       new_score += 1 if stargazers_count && stargazers_count > 100
