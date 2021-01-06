@@ -12,6 +12,7 @@
 
 <p>
 <small class='text-muted'>
+  Score: <%= @repository.score %><br/>
   Language: <%= @repository.language %><br/>
   Last pushed: <%= distance_of_time_in_words_to_now @repository.pushed_at %> ago<br/>
   Size: <%= number_to_human_size @repository.size*1000 %><br/>
