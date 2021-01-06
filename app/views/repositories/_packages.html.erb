@@ -1,0 +1,11 @@
+<% if @repository.packages.present? %>
+  <ul class="list-group list-group-flush">
+    <% @repository.packages.each do |package| %>
+      <li class="list-group-item">
+        <%= package.platform_name %> - <%= link_to package.name, package_path(package.id) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No packages found</p>
+<% end %>

@@ -1,0 +1,37 @@
+<% if @manifests.present? %>
+  <% @manifests.each do |manifest| %>
+    <div class="card mb-3">
+      <div class="card-header">
+        <%= link_to manifest.filepath, manifest.repository_link, target: :_blank %>
+      </div>
+      <ul class="list-group list-group-flush">
+        <% if manifest.lockfile? %>
+          <li class="list-group-item">
+            <%= link_to pluralize(manifest.repository_dependencies.length, 'dependencies'), manifest.repository_link, target: :_blank %>
+          </li>
+        <% else %>
+          <% manifest.repository_dependencies.sort_by(&:package_name).each do |dependency| %>
+            <li class="list-group-item">
+              <% if dependency.package %>
+                <%= link_to dependency.package_name, package_url(dependency.package.id) %>
+              <% else %>
+                <%= dependency.package_name %>
+              <% end %>
+              <%= dependency.requirements %>
+              <small class='text-muted'>
+              <% if dependency.kind != 'runtime' %>
+                <%= dependency.kind %>
+              <% end %>
+              <% if dependency.optional %>
+                (optional)
+              <% end %>
+              </small>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% else %>
+  <p>No dependencies found</p>
+<% end %>
