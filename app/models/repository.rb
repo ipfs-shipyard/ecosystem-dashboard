@@ -443,17 +443,6 @@ class Repository < ApplicationRecord
     new_score += -10 if fork?
     # Is it archived?
     new_score += -10 if archived?
-    # How many stars?
-    new_score += 1 if stargazers_count && stargazers_count > 0
-    new_score += 1 if stargazers_count && stargazers_count > 100
-    # How many forks?
-    new_score += 1 if forks_count && forks_count > 0
-    # How long has it existed?
-    new_score += Math.log((Date.today-created_at.to_date).to_i, 10)/2 if (Date.today-created_at.to_date).to_i > 0
-    # When was it last updated?
-    new_score += -Math.log((Date.today-updated_at.to_date).to_i, 10) if (Date.today-updated_at.to_date).to_i > 0
-    # When was it last committed to?
-    new_score += -Math.log((Date.today-pushed_at.to_date).to_i, 10) if pushed_at && (Date.today-pushed_at.to_date).to_i > 0
 
     display_name = ENV['DISPLAY_NAME'].presence || ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
 
@@ -478,6 +467,21 @@ class Repository < ApplicationRecord
     # does it have any internal packages as dependencies
     internal_package_dependencies = direct_internal_dependency_package_ids.length + indirect_internal_dependency_package_ids.length
     new_score += Math.log(internal_package_dependencies, 10) if internal_package_dependencies > 0
+
+    # only consider general attributes if repo appears to be connected to the ecosystem
+    if new_score > 1
+      # How many stars?
+      new_score += 1 if stargazers_count && stargazers_count > 0
+      new_score += 1 if stargazers_count && stargazers_count > 100
+      # How many forks?
+      new_score += 1 if forks_count && forks_count > 0
+      # How long has it existed?
+      new_score += Math.log((Date.today-created_at.to_date).to_i, 10)/2 if (Date.today-created_at.to_date).to_i > 0
+      # When was it last updated?
+      new_score += -Math.log((Date.today-updated_at.to_date).to_i, 10) if (Date.today-updated_at.to_date).to_i > 0
+      # When was it last committed to?
+      new_score += -Math.log((Date.today-pushed_at.to_date).to_i, 10) if pushed_at && (Date.today-pushed_at.to_date).to_i > 0
+    end
 
     new_score.round
   end
