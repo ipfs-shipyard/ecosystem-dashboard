@@ -29,7 +29,7 @@
       Language: <%= @repository.language %><br/>
       Repo Size: <%= number_to_human_size @repository.size*1000 %><br/>
       Direct internal dependencies: <%= number_with_delimiter @repository.direct_internal_dependency_package_ids.length %><br/>
-      Indirect internal dependencies: <%= number_with_delimiter @repository.direct_internal_dependency_package_ids.length %><br/>
+      Indirect internal dependencies: <%= number_with_delimiter @repository.indirect_internal_dependency_package_ids.length %><br/>
       Total Dependencies: <%= number_with_delimiter @manifests.map(&:repository_dependencies).flatten.length %><br/>
     </small></p>
   </div>
