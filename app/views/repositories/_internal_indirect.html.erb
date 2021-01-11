@@ -6,19 +6,20 @@
         <%= link_to manifest.filepath, manifest.repository_link, target: :_blank %>
       </div>
       <ul class="list-group list-group-flush">
-        <% deps.each do |dependency| %>
+        <% deps.group_by(&:package_id).each do |package_id, deps| %>
+          <% package = deps.first.package %>
           <li class="list-group-item">
-            <% if dependency.package %>
-              <%= link_to dependency.package_name, package_url(dependency.package.id) %>
+            <% if package %>
+              <%= link_to package.name, package_url(package_id) %>
             <% else %>
-              <%= dependency.package_name %>
+              <%= deps.first.package_name %>
             <% end %>
-            <%= dependency.requirements %>
+            <%= deps.map(&:requirements).join(', ') %>
             <small class='text-muted'>
-            <% if dependency.kind != 'runtime' %>
-              <%= dependency.kind %>
+            <% if deps.first.kind != 'runtime' %>
+              <%= deps.first.kind %>
             <% end %>
-            <% if dependency.optional %>
+            <% if deps.first.optional %>
               (optional)
             <% end %>
             </small>
