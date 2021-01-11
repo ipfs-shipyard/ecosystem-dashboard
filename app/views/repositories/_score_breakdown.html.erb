@@ -1,0 +1,10 @@
+<% ecosystem_parts = @repository.ecosystem_score_parts %>
+<% ecosystem_parts.each do |k,v| %>
+  <%= k.to_s.humanize %>: <%= v.round %><br/>
+<% end %>
+<% if ecosystem_parts.values.sum > 0 %>
+  <% @repository.popularity_score_parts.each do |k,v| %>
+    <%= k.to_s.humanize %>: <%= v.round %><br/>
+  <% end %>
+<% end %>
+<strong>Total: <%= @repository.score %></strong>

@@ -437,50 +437,61 @@ class Repository < ApplicationRecord
     update_score
   end
 
-  def calculate_score
-    new_score = 0
-    # Is it a fork?
-    new_score += -10 if fork?
-    # Is it archived?
-    new_score += -10 if archived?
-
+  def ecosystem_score_parts
     display_name = ENV['DISPLAY_NAME'].presence || ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
+    keyword_match = full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i) || Array(topics).any?{|t| t.match?(/#{Regexp.quote(display_name)}/i) }
 
-    # does name, description or topic contain search term?
-    new_score += 1 if full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i) || Array(topics).any?{|t| t.match?(/#{Regexp.quote(display_name)}/i) }
+    search_results_length = search_results.select{|sr| sr.kind != 'code'}.length
+    search_score = search_results_length > 0 ? Math.log(search_results_length, 10) : 0
 
+    internal_package_dependencies = direct_internal_dependency_package_ids.length + indirect_internal_dependency_package_ids.length
+    internal_package_score = internal_package_dependencies > 0 ? Math.log(internal_package_dependencies, 10) : 0
+
+    # TODO
     # Is it owned by an internal org?       (owner)
     # Is it owned by a collab org?          (owner)
     # Is it owned by a collab contributor?  (owner)
     # Is it owned by a core contributor?    (owner)
     # Is it owned by a community contributor?  (owner)
+    # # Does it use go-ipfs as a library?
+    # # Does it use js-ipfs as a library?
+    # # Does it use go-ipfs via docker?
 
-    # does it have search results?
-    search_results_length = search_results.select{|sr| sr.kind != 'code'}.length
-    new_score += Math.log(search_results_length, 10) if search_results_length > 0
+    {
+      fork: fork? ? -10 : 0,
+      archived: archived? ? -10 : 0,
+      keyword: keyword_match ? 1 : 0,
+      search: search_score,
+      internal_packages: internal_package_score
+    }
+  end
 
-    # Does it use go-ipfs as a library?
-    # Does it use js-ipfs as a library?
-    # Does it use go-ipfs via docker?
+  def popularity_score_parts
+    stars = stargazers_count && stargazers_count > 0 ? 1 : 0
+    stars += 1 if stargazers_count && stargazers_count > 100
+    # How many forks?
+    forks = forks_count && forks_count > 0 ? 1 : 0
+    # How long has it existed?
+    created = (Date.today-created_at.to_date).to_i > 0 ? Math.log((Date.today-created_at.to_date).to_i, 10)/2 : 0
+    # When was it last updated?
+    updated = (Date.today-updated_at.to_date).to_i > 0 ? -Math.log((Date.today-updated_at.to_date).to_i, 10) : 0
+    # When was it last committed to?
+    committed = pushed_at && (Date.today-pushed_at.to_date).to_i  > 0 ? -Math.log((Date.today-pushed_at.to_date).to_i, 10) : 0
 
-    # does it have any internal packages as dependencies
-    internal_package_dependencies = direct_internal_dependency_package_ids.length + indirect_internal_dependency_package_ids.length
-    new_score += Math.log(internal_package_dependencies, 10) if internal_package_dependencies > 0
+    {
+      stars: stars,
+      forks: forks,
+      created: created,
+      updated: updated,
+      committed: committed
+    }
+  end
+
+  def calculate_score
+    new_score = ecosystem_score_parts.values.sum
 
     # only consider general attributes if repo appears to be connected to the ecosystem
-    if new_score >= 1
-      # How many stars?
-      new_score += 1 if stargazers_count && stargazers_count > 0
-      new_score += 1 if stargazers_count && stargazers_count > 100
-      # How many forks?
-      new_score += 1 if forks_count && forks_count > 0
-      # How long has it existed?
-      new_score += Math.log((Date.today-created_at.to_date).to_i, 10)/2 if (Date.today-created_at.to_date).to_i > 0
-      # When was it last updated?
-      new_score += -Math.log((Date.today-updated_at.to_date).to_i, 10) if (Date.today-updated_at.to_date).to_i > 0
-      # When was it last committed to?
-      new_score += -Math.log((Date.today-pushed_at.to_date).to_i, 10) if pushed_at && (Date.today-pushed_at.to_date).to_i > 0
-    end
+    new_score += popularity_score_parts.values.sum if new_score >= 1
 
     new_score.round
   end
