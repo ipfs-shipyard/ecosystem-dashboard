@@ -48,6 +48,18 @@
       <span class='badge badge-secondary'><%= @repository.repository_dependencies.length %></span>
     </a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:tab] == 'internal_direct' %>" href="<%= url_for(request.params.merge(tab: 'internal_direct')) %>">
+      Internal Direct Dependencies
+      <span class='badge badge-secondary'><%= @repository.direct_internal_dependency_package_ids.length %></span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:tab] == 'internal_indirect' %>" href="<%= url_for(request.params.merge(tab: 'internal_indirect')) %>">
+      Internal Indirect Dependencies
+      <span class='badge badge-secondary'><%= @repository.indirect_internal_dependency_package_ids.length %></span>
+    </a>
+  </li>
 </ul>
 
 <%= case params[:tab]
@@ -55,6 +67,10 @@ when 'dependencies'
   render 'dependencies'
 when 'packages'
   render 'packages'
+when 'internal_direct'
+  render 'internal_direct'
+when 'internal_indirect'
+  render 'internal_indirect'
 else
   render 'search'
 end %>

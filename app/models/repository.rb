@@ -507,4 +507,20 @@ class Repository < ApplicationRecord
       indirect_internal_dependency_package_ids: indirect_ids
     )
   end
+
+  def direct_internal_dependency_packages
+    Package.where(id: direct_internal_dependency_package_ids)
+  end
+
+  def indirect_internal_dependency_packages
+    Package.where(id: indirect_internal_dependency_package_ids)
+  end
+
+  def direct_internal_dependencies
+    repository_dependencies.where(package_id: direct_internal_dependency_package_ids)
+  end
+
+  def indirect_internal_dependencies
+    repository_dependencies.where(package_id: indirect_internal_dependency_package_ids)
+  end
 end
