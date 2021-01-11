@@ -1,7 +1,11 @@
 <% @page_title = @repository.full_name %>
 <h1>
   <span class='mr-1' style='color: <%= @repository.color %>;' title='<%= @repository.language %>'>
-    <%= octicon(repo_icon(@repository), height: 36) %>
+    <% if @repository.organization %>
+      <%= link_to octicon(repo_icon(@repository), height: 36), org_path(@repository.organization) %>
+    <% else %>
+      <%= octicon(repo_icon(@repository), height: 36) %>
+    <% end %>
   </span>
   <%= link_to @repository.full_name, "https://github.com/#{@repository.full_name}", target: :_blank %>
 </h1>
@@ -38,14 +42,6 @@
     </small></p>
   </div>
 </div>
-
-<p>
-<small class='text-muted'>
-
-
-
-</small>
-</p>
 
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
