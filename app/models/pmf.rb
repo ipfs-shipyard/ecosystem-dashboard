@@ -30,7 +30,15 @@ class Pmf
 
       previous_window = window
 
-      periods << [date, states]
+      state_groups = {}
+
+      states.sort_by{|u| -u[1]}.each do |u|
+        state_groups[u[2]] ||= []
+
+        state_groups[u[2]] << {username: u[0], score: u[1]}
+      end
+
+      periods << {date: date, states: state_groups}
     end
 
     return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers

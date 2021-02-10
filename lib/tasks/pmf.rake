@@ -7,13 +7,13 @@ namespace :pmf do
 
     windows = Pmf.state(state_name, start_date, end_date, window)
 
-    windows.each do |date, actors|
-      p date
+    windows.each do |window|
+      puts window[:date]
 
-      actors.group_by{|a| a[2]}.sort_by{|s,a| s}.each do |state, a|
-        puts "  #{state} (#{a.length})"
-        a.sort_by{|a| -a[0] }.first(10).each do |actor|
-          puts "    #{actor[0]} - #{actor[1]}"
+      window[:states].each do |state, users|
+        puts "  #{state}"
+        users.first(5).each do |user|
+          puts "    #{user[:username]} (#{user[:score]})"
         end
       end
 
