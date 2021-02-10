@@ -7,7 +7,7 @@ namespace :pmf do
 
     windows = Pmf.state(state_name, start_date, end_date, window)
 
-    windows.sort_by{|d,a| d }.each do |date, actors|
+    windows.each do |date, actors|
       p date
 
       actors.group_by{|a| a[2]}.sort_by{|s,a| s}.each do |state, a|

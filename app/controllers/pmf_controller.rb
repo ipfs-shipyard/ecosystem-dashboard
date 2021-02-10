@@ -1,38 +1,19 @@
-class PackagesController < ApplicationController
+class PmfController < ApplicationController
   def state
-    # start date
-    # end date
-    # state
-    # window length
+    state_name = params[:state_name]
+    start_date = params[:start_date] || 4.weeks.ago
+    end_date = params[:end_date] || Time.now
+    window = params[:window] || 1
 
-    # load event data between start and end dates
-    # note: load one extra window to find first timers
-
-    # slice event data into windows
-      # for each window
-        # group events by actor
-        # for each actor
-          # calculate their state
-
-    PMF.state(params[:state_name], params[:start_date], params[:end_date], params[:window])
+    render json: Pmf.state(state_name, start_date, end_date, window).to_json
   end
 
   def transition
-    # start date
-    # end date
-    # transition
-    # window length
+    transition_number = params[:transition_number]
+    start_date = params[:start_date] || 4.weeks.ago
+    end_date = params[:end_date] || Time.now
+    window = params[:window] || 1
 
-    # load event data between start and end dates
-    # note: load one extra window to find first timers
-
-    # slice event data into windows
-      # for each window
-        # group events by actor
-        # for each actor
-          # calculate their state
-
-    # compare states of each user between windows and map to relevant transition
-    PMF.transition(params[:transition_number], params[:start_date], params[:end_date], params[:window])
+    Pmf.transition(transition_number, start_date, end_date, window).to_json
   end
 end

@@ -2,6 +2,7 @@ class Pmf
   DEFAULT_WINDOW = 1 # week
 
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
+    window = DEFAULT_WINDOW if window.nil?
     return unless window >= 1
 
     previous_usernames = previously_active_usernames(start_date)
