@@ -8,13 +8,13 @@ class ContributorsController < ApplicationController
     @issues_scope = @issues_scope.collab(params[:collab]) if params[:collab].present?
 
     @scope = @issues_scope.group(:user).count.sort_by{|k,v| -v}
-    @pagy, @contributors = pagy_array(@scope)
 
     respond_to do |format|
       format.html do
-
+        @pagy, @contributors = pagy_array(@scope)
       end
       format.json do
+        @contributors = @scope
         render json: @contributors
       end
     end
@@ -30,13 +30,13 @@ class ContributorsController < ApplicationController
 
     first_timers = (@issues_scope.this_period(@range).group(:user).count.keys - @issues_scope.where('issues.created_at < ?', @range.days.ago).group(:user).count.keys)
     @scope = @issues_scope.where(user: first_timers).group(:user).count.sort_by{|k,v| -v}
-    @pagy, @contributors = pagy_array(@scope)
 
     respond_to do |format|
       format.html do
-
+        @pagy, @contributors = pagy_array(@scope)
       end
       format.json do
+        @contributors = @scope
         render json: @contributors
       end
     end
@@ -51,13 +51,13 @@ class ContributorsController < ApplicationController
     @issues_scope = @issues_scope.collab(params[:collab]) if params[:collab].present?
 
     @scope = @issues_scope.group(:user).count.sort_by{|k,v| -v}
-    @pagy, @contributors = pagy_array(@scope)
 
     respond_to do |format|
       format.html do
-
+        @pagy, @contributors = pagy_array(@scope)
       end
       format.json do
+        @contributors = @scope
         render json: @contributors
       end
     end
