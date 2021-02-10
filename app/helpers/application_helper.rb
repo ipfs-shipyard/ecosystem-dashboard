@@ -88,7 +88,7 @@ module ApplicationHelper
     when "IssuesEvent"
       'issue-opened'
     when "DeleteEvent"
-      'trashcan'
+      'trash'
     when "IssueCommentEvent"
       'comment'
     when "PublicEvent"
