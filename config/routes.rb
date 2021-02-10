@@ -31,6 +31,9 @@ Rails.application.routes.draw do
     match :failure,              to: 'sessions#failure', via: [:get, :post]
   end
 
+  get 'pmf/state', to: 'pmf#state'
+  get 'pmf/transition', to: 'pmf#transition'
+
   get 'community/packages', to: 'packages#community', as: :community_packages
   get 'community/repositories', to: 'repositories#community', as: :community_repositories
 
