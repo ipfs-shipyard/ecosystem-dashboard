@@ -10,9 +10,13 @@ namespace :pmf do
     windows.sort_by{|d,a| d }.each do |date, actors|
       p date
 
-      actors.sort_by{|a,e| -e.length }.first(10).each do |a, e|
-        puts "  #{a} - #{e.length}"
+      actors.group_by{|a| a[2]}.sort_by{|s,a| s}.each do |state, a|
+        puts "  #{state} (#{a.length})"
+        a.sort_by{|a| -a[0] }.first(10).each do |actor|
+          puts "    #{actor[0]} - #{actor[1]}"
+        end
       end
+
       puts
     end
   end
