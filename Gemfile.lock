@@ -26,15 +26,6 @@ GIT
   specs:
     semantic (1.6.1)
 
-GIT
-  remote: https://github.com/librariesio/spdx
-  revision: b590cd084f5fdf89339c2feaafaf1d9903fe8912
-  ref: b590cd0
-  specs:
-    spdx (2.0.12)
-      fuzzy_match (~> 2.1)
-      treetop (~> 1.6)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -140,7 +131,6 @@ GEM
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     ffi (1.14.2)
-    fuzzy_match (2.1.0)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
     globalid (0.4.2)
@@ -285,6 +275,8 @@ GEM
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
+    spdx (4.0.2)
+      treetop (~> 1.6)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -364,7 +356,7 @@ DEPENDENCIES
   semantic!
   semantic_range
   simple_form
-  spdx!
+  spdx
   spring
   spring-watcher-listen
   sprockets-rails
