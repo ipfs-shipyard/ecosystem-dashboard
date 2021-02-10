@@ -38,11 +38,11 @@ class Pmf
       periods << [date, states]
     end
 
-    return periods[1..-1]
+    return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
   end
 
   def self.transition(transition_number, start_date, end_date, window = DEFAULT_WINDOW)
-
+    # TODO
   end
 
   def self.states_for_window(window_events, previous_window_events, previous_usernames)
