@@ -11,12 +11,6 @@ class Pmf
 
     events = load_event_data(start_date_with_extra_window, end_date)
 
-    # slice event data into windows
-      # for each window
-        # group events by actor
-        # for each actor
-          # calculate their state
-
     windows = slice_events(events, window)
 
     periods = []
@@ -90,7 +84,7 @@ class Pmf
   def self.load_event_data(start_date, end_date)
     # might want to exclude certain event types
     # excludes PL folk and bots
-    Event.not_core.created_after(start_date).created_before(end_date).all
+    Event.not_core.select('events.created_at, actor').created_after(start_date).created_before(end_date).all
   end
 
   def self.slice_events(events, window)
