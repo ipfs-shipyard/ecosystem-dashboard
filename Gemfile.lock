@@ -230,6 +230,8 @@ GEM
       puma (>= 2.7)
     racc (1.5.2)
     rack (2.2.3)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-protection (2.1.0)
       rack
     rack-test (1.1.0)
@@ -359,6 +361,7 @@ DEPENDENCIES
   pghero
   puma
   puma_worker_killer
+  rack-cors
   rails
   sassc-rails
   semantic!
