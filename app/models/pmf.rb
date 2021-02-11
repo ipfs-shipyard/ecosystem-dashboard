@@ -45,6 +45,43 @@ class Pmf
     return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
   end
 
+  def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW)
+    window = DEFAULT_WINDOW if window.nil?
+    return unless window >= 1
+
+    previous_usernames = previously_active_usernames(start_date)
+
+    start_date_with_extra_window = start_date - window.week
+
+    events = load_event_data(start_date_with_extra_window, end_date)
+
+    windows = slice_events(events, window)
+
+    periods = []
+
+    previous_window = nil
+
+    windows.sort_by{|d,e| d}.each_with_index do |window, i|
+      date = window[0]
+      window_events = window[1]
+
+      previous_window_events = i.zero? ? [] : previous_window[1]
+
+      states = states_for_window(window_events, previous_window_events, previous_usernames)
+
+      previous_usernames += states.map{|a| a[0]}
+      previous_usernames.uniq!
+
+      previous_window = window
+
+      state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
+
+      periods << {date: date, states: state_groups}
+    end
+
+    return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
+  end
+
   def self.transition(transition_number, start_date, end_date, window = DEFAULT_WINDOW)
     # TODO
   end
