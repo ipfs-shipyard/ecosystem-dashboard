@@ -115,7 +115,7 @@ GEM
     citrus (3.0.2)
     commander (4.5.2)
       highline (~> 2.0.0)
-    commonmarker (0.21.1)
+    commonmarker (0.21.2)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.8)
     counter_culture (2.7.0)
