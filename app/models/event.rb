@@ -21,6 +21,9 @@ class Event < ApplicationRecord
   scope :this_week, -> { where('events.created_at > ?', 1.week.ago) }
   scope :last_week, -> { where('events.created_at > ?', 2.week.ago).where('events.created_at < ?', 1.week.ago) }
 
+  scope :created_before, ->(datetime) { where('events.created_at < ?', datetime) }
+  scope :created_after, ->(datetime) { where('events.created_at > ?', datetime) }
+
   scope :search, ->(query) { where('payload::text ilike ?', "%#{query}%") }
 
   def contributed?

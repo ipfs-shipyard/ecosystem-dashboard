@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   end
   resources :contributors
 
+  resources :users
+
   get :login,  to: 'sessions#new'
   get :logout, to: 'sessions#destroy'
 
@@ -30,6 +32,11 @@ Rails.application.routes.draw do
     match '/:provider/callback', to: 'sessions#create',  via: [:get, :post]
     match :failure,              to: 'sessions#failure', via: [:get, :post]
   end
+
+  get 'pmf/states', to: 'pmf#states'
+  get 'pmf/state', to: 'pmf#state'
+  get 'pmf/transitions', to: 'pmf#transitions'
+  get 'pmf/transition', to: 'pmf#transition'
 
   get 'community/packages', to: 'packages#community', as: :community_packages
   get 'community/repositories', to: 'repositories#community', as: :community_repositories
