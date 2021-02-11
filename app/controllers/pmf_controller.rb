@@ -1,7 +1,7 @@
 class PmfController < ApplicationController
   def states
-    start_date = params[:start_date] || 4.weeks.ago
-    end_date = params[:end_date] || Time.now
+    start_date = params[:start_date] || 4.weeks.ago.beginning_of_week
+    end_date = params[:end_date] || Time.now.beginning_of_week
     window = params[:window] || 1
 
     render json: Pmf.states_summary(start_date, end_date, window).to_json
@@ -9,11 +9,19 @@ class PmfController < ApplicationController
 
   def state
     state_name = params[:state_name]
-    start_date = params[:start_date] || 40.weeks.ago
-    end_date = params[:end_date] || 38.weeks.ago
+    start_date = params[:start_date] || 4.weeks.ago.beginning_of_week
+    end_date = params[:end_date] || Time.now.beginning_of_week
     window = params[:window] || 1
 
     render json: Pmf.state(state_name, start_date, end_date, window).to_json
+  end
+
+  def transitions
+    start_date = params[:start_date] || 4.weeks.ago.beginning_of_week
+    end_date = params[:end_date] || Time.now.beginning_of_week
+    window = params[:window] || 1
+
+    render json: Pmf.transitions(start_date, end_date, window).to_json
   end
 
   def transition
@@ -22,6 +30,6 @@ class PmfController < ApplicationController
     end_date = params[:end_date] || Time.now
     window = params[:window] || 1
 
-    Pmf.transition(transition_number, start_date, end_date, window).to_json
+    render json: Pmf.transition(transition_number, start_date, end_date, window).to_json
   end
 end
