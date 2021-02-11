@@ -20,6 +20,13 @@ class UsersController < ApplicationController
       Pmf.state(state_name, @start_date, @end_date, @window)
     end
 
-    @pagy, @users = pagy_array(@data.first[:states].first[1])
+    if @data
+      p @data.first[:date]
+      all_users = @data.first[:states].first[1]
+    else
+      all_users = []
+    end
+
+    @pagy, @users = pagy_array(all_users)
   end
 end

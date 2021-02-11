@@ -22,7 +22,7 @@
 
       <small class='text-muted'>
         <%= link_to all_issues_path(user: user[:username], range: @range) do %>
-           <%= pluralize user[:score], 'contribution' %> in the past <%= @range %> days
+           <%= pluralize user[:score], 'contribution' %> this week
         <% end %>
       </small>
     </div>

@@ -3,8 +3,30 @@
   <%= link_to octicon('mark-github', height: 26), "https://github.com/#{@username}", target: :_blank %>
 </h1>
 
-<p>PMF state this week: <strong><%= bucket(@username, @events_scope.this_period(7)) %></strong></p>
-<p>PMF state last week:  <strong><%= bucket(@username, @events_scope.last_period(7)) %></strong></p>
+<% if @events.any? %>
+  <% first_seen = @events_scope.order('events.created_at ASC').first.created_at %>
+  <p>First seen: <%= distance_of_time_in_words_to_now first_seen %> ago</p>
+
+  <p>PMF state this week:<strong>
+  <% this_week_events = @events_scope.created_before(Time.now.beginning_of_week).created_after(1.week.ago.beginning_of_week) %>
+
+  <% if first_seen > 1.week.ago.beginning_of_week %>
+    first (<%= Pmf.score_for_user(@username, this_week_events) %>)
+  <% else %>
+     <%= bucket(@username, this_week_events) %>
+  <% end %>
+  </strong></p>
+
+  <p>PMF state last week:  <strong>
+  <% last_week_events = @events_scope.created_before(1.week.ago.beginning_of_week).created_after(2.week.ago.beginning_of_week) %>
+  <% if first_seen > 2.week.ago.beginning_of_week %>
+    never (<%= Pmf.score_for_user(@username, last_week_events) %>)
+  <% else %>
+    <%= bucket(@username, last_week_events) %>
+  <% end %>
+  </strong></p>
+
+<% end %>
 
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
