@@ -5,6 +5,13 @@ class Pmf
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
     periods = load_periods(start_date, end_date, window = DEFAULT_WINDOW)
 
+    periods = periods.map do |period|
+      {
+        date:  period[:date],
+        states: period[:states].slice(state_name)
+      }
+    end
+
     return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
   end
 
