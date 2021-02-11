@@ -247,7 +247,7 @@ class Pmf
   def self.load_event_data(start_date, end_date)
     # might want to exclude certain event types
     # excludes PL folk and bots
-    Event.not_core.select('events.created_at, actor').created_after(start_date).created_before(end_date).all
+    event_scope.select('events.created_at, actor').created_after(start_date).created_before(end_date).all
   end
 
   def self.slice_events(events, window)
@@ -256,6 +256,10 @@ class Pmf
   end
 
   def self.previously_active_usernames(before_date)
-    Event.created_after(BACK_DATE).not_core.created_before(before_date).pluck(:actor).uniq
+    event_scope.created_after(BACK_DATE).created_before(before_date).pluck(:actor).uniq
+  end
+
+  def self.event_scope
+    Event.not_core.where.not(event_type: 'WatchEvent')
   end
 end

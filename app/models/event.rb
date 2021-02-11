@@ -9,7 +9,7 @@ class Event < ApplicationRecord
   scope :org, ->(org) { where(org: org) }
   scope :user, ->(user) { where(actor: user)}
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
-  scope :event_type, ->(event_type) { where(event_type: event_type)}
+  scope :event_type, ->(event_type) { where(event_type: event_type) }
 
   scope :humans, -> { core.or(not_core) }
   scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
