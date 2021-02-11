@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   def show
     @username = params[:id]
-    @pagy, @events = pagy(Event.user(@username))
+    @events_scope = Event.user(@username)
+
+    @pagy, @events = pagy(@events_scope)
   end
 end

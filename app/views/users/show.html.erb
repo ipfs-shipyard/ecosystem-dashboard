@@ -3,6 +3,9 @@
   <%= link_to octicon('mark-github', height: 26), "https://github.com/#{@username}", target: :_blank %>
 </h1>
 
+<p>PMF state this week: <strong><%= bucket(@username, @events_scope.this_period(7)) %></strong></p>
+<p>PMF state last week:  <strong><%= bucket(@username, @events_scope.last_period(7)) %></strong></p>
+
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:tab].blank? || params[:tab] == 'events' %>" href="<%= url_for(request.params.merge(tab: 'events')) %>">

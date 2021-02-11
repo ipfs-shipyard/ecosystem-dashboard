@@ -207,4 +207,10 @@ module ApplicationHelper
   def existing_or_new_file(repo, method, filename)
     repo.send(method).present? ? repo.file_url(repo.send(method)) : repo.new_file_url(filename)
   end
+
+  def bucket(user, events_scope)
+    score = Pmf.score_for_user(user, events_scope)
+    state = Pmf.state_for_user(user, score)
+    "#{state} (#{score})"
+  end
 end
