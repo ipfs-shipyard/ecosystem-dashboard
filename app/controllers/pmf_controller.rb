@@ -25,11 +25,11 @@ class PmfController < ApplicationController
   end
 
   def transition
-    transition_number = params[:transition_number]
-    start_date = params[:start_date] || 4.weeks.ago
-    end_date = params[:end_date] || Time.now
+    transition_name = params[:transition_name]
+    start_date = params[:start_date] || 4.weeks.ago.beginning_of_week
+    end_date = params[:end_date] || Time.now.beginning_of_week
     window = params[:window] || 1
 
-    render json: Pmf.transition(transition_number, start_date, end_date, window).to_json
+    render json: Pmf.transition(transition_name, start_date, end_date, window).to_json
   end
 end

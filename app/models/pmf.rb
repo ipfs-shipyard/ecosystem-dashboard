@@ -145,6 +145,16 @@ class Pmf
     return transition_periods # don't return the extra first period as it was only used for detecting first timersTODO
   end
 
+  def self.transition(transition_name, start_date, end_date, window = DEFAULT_WINDOW)
+    periods = transitions(start_date, end_date, window)
+    periods.map do |period|
+      {
+        date:  period[:date],
+        transitions: period[:transitions].slice(transition_name.to_sym)
+      }
+    end
+  end
+
   def self.compare_states(previous_states, current_states, previous_group, current_group)
     prev = previous_states[previous_group] || []
     curr = current_states[current_group] || []
