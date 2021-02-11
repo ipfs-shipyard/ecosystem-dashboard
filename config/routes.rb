@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   end
   resources :contributors
 
+  resources :users
+
   get :login,  to: 'sessions#new'
   get :logout, to: 'sessions#destroy'
 
