@@ -23,7 +23,7 @@
 
 <% if @events.any? %>
   <div class="mb-3">
-    <%= line_chart @events.group_by_day(:created_at).count, colors: ['#bbb'], height: "80px", library: { scales: { yAxes: [{ display: false }], xAxes: [{ display: false }] }}, points: false %>
+    <%= line_chart @events_scope.group_by_day(:created_at).count, colors: ['#bbb'], height: "80px", library: { scales: { yAxes: [{ display: false }], xAxes: [{ display: false }] }}, points: false %>
   </div>
   <%= render @events %>
 <% else %>
