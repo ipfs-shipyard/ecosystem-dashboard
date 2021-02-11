@@ -1,5 +1,6 @@
 class Pmf
   DEFAULT_WINDOW = 1 # week
+  BACK_DATE = DateTime.parse('01/01/2021')
 
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
@@ -101,6 +102,6 @@ class Pmf
   end
 
   def self.previously_active_usernames(before_date)
-    Event.not_core.created_before(before_date).pluck(:actor).uniq
+    Event.created_after(BACK_DATE).not_core.created_before(before_date).pluck(:actor).uniq
   end
 end
