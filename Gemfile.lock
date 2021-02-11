@@ -123,6 +123,7 @@ GEM
       activesupport (>= 4.2)
     crass (1.0.6)
     deb_control (0.0.1)
+    dalli (2.7.11)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -340,6 +341,7 @@ DEPENDENCIES
   chartkick
   commonmarker
   counter_culture
+  dalli
   dotenv-rails
   faraday
   faraday_middleware

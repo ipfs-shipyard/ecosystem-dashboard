@@ -42,6 +42,7 @@ gem 'omniauth-github'
 gem 'simple_form'
 
 gem 'rack-cors'
+gem 'dalli'
 
 group :development do
   gem 'web-console'
