@@ -67,7 +67,7 @@ class EventsController < ApplicationController
 
   def all
     @page_title = 'All Events'
-    @range = (params[:range].presence || 30).to_i
+    @range = (params[:range].presence || 7).to_i
     @scope = Event.includes(:repository).this_period(@range).humans
     @scope = @scope.search(params[:query]) if params[:query].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
