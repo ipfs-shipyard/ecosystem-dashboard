@@ -436,6 +436,7 @@ class Repository < ApplicationRecord
 
   def sync
     Repository.download(full_name)
+    sync_events
     update_score
   end
 
