@@ -267,6 +267,15 @@ class PmfRepo
   end
 
   def self.event_scope
-    Event.not_core.where.not(event_type: 'WatchEvent')
+    # not star events
+    # not PL employees/contractors
+    # only repos with pl dependencies or search results or pl owned repos
+
+    repository_ids = Repository.with_internal_deps.pluck(:id)
+    repository_ids += Repository.with_search_results.pluck(:id)
+    repository_ids += Repository.internal.pluck(:id)
+    repository_ids.uniq!
+
+    Event.not_core.where.not(event_type: 'WatchEvent').where(repository_id: repository_ids)
   end
 end
