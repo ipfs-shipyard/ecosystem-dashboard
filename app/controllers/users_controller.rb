@@ -16,9 +16,7 @@ class UsersController < ApplicationController
     @end_date = Time.now.beginning_of_week
     @window = 1
 
-    @data = Rails.cache.fetch(['state', state_name, @start_date, @end_date, @window], expires_in: 1.hours) do
-      Pmf.state(state_name, @start_date, @end_date, @window)
-    end
+    @data = Pmf.state(state_name, @start_date, @end_date, @window)
 
     if @data
       all_users = @data.first[:states].first[1]
