@@ -199,7 +199,7 @@ class PmfRepo
 
       state_groups = {}
 
-      states.sort_by{|u| -u[1]}.each do |u|
+      states.sort_by{|u| [-u[1], u[0]]}.each do |u|
         state_groups[u[2]] ||= []
 
         state_groups[u[2]] << {repo_full_name: u[0], score: u[1]}
