@@ -4,7 +4,7 @@
       <img src="https://github.com/<%= event.actor.gsub('[bot]', '') %>.png" class="rounded" height='40' width='40'>
     <% end %>
     <h5 class="card-title">
-      <span class='mr-1'>
+      <span class='mr-1' title='<%= event_name(event.event_type) %>'>
         <%= octicon(event_icon(event), height: 18) %>
       </span>
 
