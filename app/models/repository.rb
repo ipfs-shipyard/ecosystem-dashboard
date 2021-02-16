@@ -73,6 +73,12 @@ class Repository < ApplicationRecord
       # full_name isn't a proper repo name
     rescue Octokit::RepositoryUnavailable
       # repo locked/disabled
+      if full_name_or_id.is_a?(String)
+        repo = Repository.find_by_full_name(full_name_or_id)
+      else
+        repo = Repository.find_by_github_id(full_name_or_id)
+      end
+      repo.update_column(:last_sync_at, Time.zone.now) if repo
     end
   end
 
