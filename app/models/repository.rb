@@ -136,7 +136,7 @@ class Repository < ApplicationRecord
       end
       repo
     rescue ArgumentError, Octokit::Error
-      repo.update_column(:last_synced_at, Time.zone.now) if repo
+      repo.update_column(:last_sync_at, Time.zone.now) if repo
     end
   end
 
