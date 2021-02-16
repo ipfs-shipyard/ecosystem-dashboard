@@ -37,7 +37,7 @@ class Pmf
 
       previous_window_events = i.zero? ? [] : previous_window[1]
 
-      states = states_for_window(window_events, previous_window_events, previous_usernames)
+      states = states_for_window(window, previous_window, previous_usernames)
 
       previous_usernames += states.map{|a| a[0]}
       previous_usernames.uniq!
@@ -74,7 +74,7 @@ class Pmf
 
       previous_window_events = i.zero? ? [] : previous_window[1]
 
-      states = states_for_window(window_events, previous_window_events, previous_usernames)
+      states = states_for_window(window, previous_window, previous_usernames)
 
       previous_usernames += states.map{|a| a[0]}
       previous_usernames.uniq!
@@ -190,7 +190,7 @@ class Pmf
 
       previous_window_events = i.zero? ? [] : previous_window[1]
 
-      states = states_for_window(window_events, previous_window_events, previous_usernames)
+      states = states_for_window(window, previous_window, previous_usernames)
 
       previous_usernames += states.map{|a| a[0]}
       previous_usernames.uniq!
@@ -210,29 +210,37 @@ class Pmf
     return periods
   end
 
-  def self.states_for_window(window_events, previous_window_events, previous_usernames)
-    # TODO use previous_window_events for transitions
+  def self.states_for_window(window, previous_window, previous_usernames)
+    date = window[0]
 
-    active_actors = window_events.group_by(&:actor)
+    states_with_firsts = Rails.cache.fetch(['pmf_states_for_window', date], expires_in: 1.week) do
+      window_events = window[1]
 
-    scores = active_actors.map{|username, events| [username, score_for_user(username, events)] }
+      # TODO load only events required from db here
 
-    states = scores.map{|username, score| [username, score, state_for_user(username, score)] }
+      previous_window_events = previous_window.nil? ? [] : previous_window[1]
 
-    these_users = states.map{|a| a[0]}
+      active_actors = window_events.group_by(&:actor)
 
-    # user from previous_usernames not present here (inactive)
-    inactive = previous_usernames - these_users
-    states += inactive.map{|username| [username, 0, 'inactive'] }
+      scores = active_actors.map{|username, events| [username, score_for_user(username, events)] }
 
-    # user not in previous_usernames present here (first)
-    first = these_users - previous_usernames
+      states = scores.map{|username, score| [username, score, state_for_user(username, score)] }
 
-    states_with_firsts = states.map do |user|
-      if first.include?(user[0])
-        [user[0], user[1], 'first']
-      else
-        user
+      these_users = states.map{|a| a[0]}
+
+      # user from previous_usernames not present here (inactive)
+      inactive = previous_usernames - these_users
+      states += inactive.map{|username| [username, 0, 'inactive'] }
+
+      # user not in previous_usernames present here (first)
+      first = these_users - previous_usernames
+
+      states_with_firsts = states.map do |user|
+        if first.include?(user[0])
+          [user[0], user[1], 'first']
+        else
+          user
+        end
       end
     end
 
