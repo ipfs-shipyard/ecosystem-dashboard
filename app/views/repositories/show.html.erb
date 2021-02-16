@@ -46,33 +46,39 @@
 
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:tab].blank? || params[:tab] == 'search' %>" href="<%= url_for(request.params.merge(tab: 'search')) %>">
+    <a class="nav-link <%= 'active' if params[:tab].blank? || params[:tab] == 'events' %>" href="<%= url_for(request.params.merge(tab: 'events', page: 1)) %>">
+      Events
+      <span class='badge badge-secondary'><%= number_to_human @events_pagy.count %></span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:tab] == 'search' %>" href="<%= url_for(request.params.merge(tab: 'search', page: 1)) %>">
       Search results
-      <span class='badge badge-secondary'><%= @results.count %></span>
+      <span class='badge badge-secondary'><%= number_to_human @results_pagy.count %></span>
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:tab] == 'packages' %>" href="<%= url_for(request.params.merge(tab: 'packages')) %>">
+    <a class="nav-link <%= 'active' if params[:tab] == 'packages' %>" href="<%= url_for(request.params.merge(tab: 'packages', page: 1)) %>">
       Packages
-      <span class='badge badge-secondary'><%= @repository.packages.count %></span>
+      <span class='badge badge-secondary'><%= number_to_human @repository.packages.count %></span>
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:tab] == 'dependencies' %>" href="<%= url_for(request.params.merge(tab: 'dependencies')) %>">
-      Dependencies
-      <span class='badge badge-secondary'><%= @repository.repository_dependencies.length %></span>
+    <a class="nav-link <%= 'active' if params[:tab] == 'dependencies' %>" href="<%= url_for(request.params.merge(tab: 'dependencies', page: 1)) %>">
+      All Deps
+      <span class='badge badge-secondary'><%= number_to_human @repository.repository_dependencies.length %></span>
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:tab] == 'internal_direct' %>" href="<%= url_for(request.params.merge(tab: 'internal_direct')) %>">
-      Internal Direct Dependencies
-      <span class='badge badge-secondary'><%= @repository.direct_internal_dependency_package_ids.length %></span>
+    <a class="nav-link <%= 'active' if params[:tab] == 'internal_direct' %>" href="<%= url_for(request.params.merge(tab: 'internal_direct', page: 1)) %>">
+      Internal Direct Deps
+      <span class='badge badge-secondary'><%= number_to_human @repository.direct_internal_dependency_package_ids.length %></span>
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:tab] == 'internal_indirect' %>" href="<%= url_for(request.params.merge(tab: 'internal_indirect')) %>">
-      Internal Indirect Dependencies
-      <span class='badge badge-secondary'><%= @repository.indirect_internal_dependency_package_ids.length %></span>
+    <a class="nav-link <%= 'active' if params[:tab] == 'internal_indirect' %>" href="<%= url_for(request.params.merge(tab: 'internal_indirect', page: 1)) %>">
+      Internal Indirect Deps
+      <span class='badge badge-secondary'><%= number_to_human @repository.indirect_internal_dependency_package_ids.length %></span>
     </a>
   </li>
 </ul>
@@ -86,6 +92,8 @@ when 'internal_direct'
   render 'internal_direct'
 when 'internal_indirect'
   render 'internal_indirect'
-else
+when 'search'
   render 'search'
+else
+  render 'events'
 end %>

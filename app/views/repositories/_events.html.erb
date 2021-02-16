@@ -1,0 +1,6 @@
+<% if @events.any? %>
+  <%= render @events %>
+  <%== pagy_bootstrap_nav(@events_pagy) if @events_pagy.pages > 1 %>
+<% else %>
+  <p>No events found</p>
+<% end %>

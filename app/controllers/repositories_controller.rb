@@ -36,7 +36,8 @@ class RepositoriesController < ApplicationController
   def show
     @repository = Repository.find(params[:id])
     @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
-    @pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
+    @events_pagy, @events = pagy(@repository.events.order('created_at DESC'))
+    @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
   end
 
   def collab_repositories
