@@ -59,12 +59,16 @@ class Repository < ApplicationRecord
     nil
   end
 
-  def self.download(full_name)
+  def self.download(full_name_or_id)
     begin
-      remote_repo = Issue.github_client.repo(full_name, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')
+      remote_repo = Issue.github_client.repo(full_name_or_id, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')
       update_from_github(remote_repo)
     rescue Octokit::NotFound
-      Repository.find_by_full_name(full_name).try(:destroy)
+      if full_name_or_id.is_a?(String)
+        Repository.find_by_full_name(full_name_or_id).try(:destroy)
+      else
+        Repository.find_by_github_id(full_name_or_id).try(:destroy)
+      end
     rescue Octokit::InvalidRepository
       # full_name isn't a proper repo name
     rescue Octokit::RepositoryUnavailable
@@ -435,7 +439,7 @@ class Repository < ApplicationRecord
   end
 
   def sync
-    Repository.download(full_name)
+    Repository.download(github_id)
     sync_events
     update_score
   end
