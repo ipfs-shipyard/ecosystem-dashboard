@@ -2,9 +2,7 @@ class PmfRepoController < ApplicationController
   def states
     parse_date_params
 
-    json = Rails.cache.fetch(['repo_states', @start_date, @end_date, @window], expires_in: 12.hours) do
-      PmfRepo.states_summary(@start_date, @end_date, @window).to_json
-    end
+    json = PmfRepo.states_summary(@start_date, @end_date, @window).to_json
 
     render json: json
   end
@@ -13,9 +11,7 @@ class PmfRepoController < ApplicationController
     state_name = params[:state_name]
     parse_date_params
 
-    json = Rails.cache.fetch(['repo_state', state_name, @start_date, @end_date, @window], expires_in: 12.hours) do
-      PmfRepo.state(state_name, @start_date, @end_date, @window).to_json
-    end
+    json = PmfRepo.state(state_name, @start_date, @end_date, @window).to_json
 
     render json: json
   end
@@ -23,9 +19,7 @@ class PmfRepoController < ApplicationController
   def transitions
     parse_date_params
 
-    json = Rails.cache.fetch(['repo_transitions', @start_date, @end_date, @window], expires_in: 12.hours) do
-      PmfRepo.transitions(@start_date, @end_date, @window).to_json
-    end
+    json = PmfRepo.transitions(@start_date, @end_date, @window).to_json
 
     render json: json
   end
@@ -34,9 +28,7 @@ class PmfRepoController < ApplicationController
     transition_name = params[:transition_name]
     parse_date_params
 
-    json = Rails.cache.fetch(['repo_transition', transition_name, @start_date, @end_date, @window], expires_in: 12.hours) do
-      PmfRepo.transition(transition_name, @start_date, @end_date, @window).to_json
-    end
+    json = PmfRepo.transition(transition_name, @start_date, @end_date, @window).to_json
 
     render json: json
   end
