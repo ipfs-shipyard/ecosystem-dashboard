@@ -298,7 +298,67 @@ TODO
 
 ## Setup instructions
 
-TODO
+Want to hack on the website? Awesome!
+
+New to Ruby? No worries! You can follow these instructions to install a local server.
+
+#### Installing a Local Server
+
+First things first, you'll need to install Ruby 2.7.2. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+and [ruby-build](https://github.com/rbenv/ruby-build).
+
+```bash
+rbenv install 2.7.2
+rbenv global 2.7.2
+```
+
+Next, you'll need to make sure that you have PostgreSQL installed. This can be
+done easily on OSX using [Homebrew](http://mxcl.github.io/homebrew/) or by using [http://postgresapp.com](http://postgresapp.com). Please see these [further instructions for installing Postgres via Homebrew](http://www.mikeball.us/blog/setting-up-postgres-with-homebrew/).
+
+```bash
+brew install postgres
+```
+
+On Debian-based Linux distributions you can use apt-get to install Postgres:
+
+```bash
+sudo apt-get install postgresql postgresql-contrib libpq-dev
+```
+
+On Windows, you can use the [Chocolatey package manager](http://chocolatey.org/) to install Postgres:
+
+```bash
+choco install postgresql
+```
+
+Clone this repository:
+
+```bash
+git clone git@github.com:ipfs-shipyard/ecosystem-dashboard.git
+```
+
+Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other
+languages).
+
+```bash
+gem install bundler && rbenv rehash
+bundle install
+```
+
+Once all the gems are installed, we'll need to create the databases and
+tables. Rails makes this easy through the use of "Rake" tasks.
+
+```bash
+bundle exec rake db:create:all
+bundle exec rake db:migrate
+```
+
+Almost there! Now all we have to do is start up the Rails server and point
+our browser to <http://localhost:3000>
+
+```bash
+bundle exec rails s
+```
 
 ### Deployment
 
