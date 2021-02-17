@@ -195,6 +195,6 @@ class PmfRepo
     repository_ids -= Repository.internal.pluck(:id)
     repository_ids.uniq!
 
-    Event.not_core.where.not(event_type: 'WatchEvent').where(repository_id: repository_ids)
+    Event.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
   end
 end
