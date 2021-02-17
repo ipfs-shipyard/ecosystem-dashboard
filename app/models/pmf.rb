@@ -72,8 +72,8 @@ class Pmf
       # 13 	Low-Value                (low -> low)
       # 14 	Inactive                 (inactive -> inactive)
 
-      previous_states = Hash[previous_period[:states].group_by{|u| u[2] }]
-      current_states = Hash[period[:states].group_by{|u| u[2] }]
+      previous_states = Hash[previous_period[:states].group_by{|u| u[2] }.map{|s,users| [s, users.map{|u| u[0] }]}]
+      current_states = Hash[period[:states].group_by{|u| u[2] }.map{|s,users| [s, users.map{|u| u[0] }]}]
 
       bounced = compare_states(previous_states, current_states, 'first', 'inactive')
       new_low = compare_states(previous_states, current_states, 'first', 'low')
@@ -230,7 +230,7 @@ class Pmf
 
   def self.states_for_window_dates(start_date, end_date)
     Rails.cache.fetch(['pmf_states_for_window_dates', start_date, end_date], expires_in: 1.week) do
-      puts "Generatign cache for #{start_date} - #{end_date}"
+      puts "Generating cache for #{start_date} - #{end_date}"
       window_events = load_event_data(start_date, end_date)
 
       previous_usernames = previously_active_usernames(start_date)

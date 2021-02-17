@@ -132,7 +132,7 @@ class PmfRepo
 
   def self.states_for_window_dates(start_date, end_date)
     Rails.cache.fetch(['pmf_repo_states_for_window_dates', start_date, end_date], expires_in: 1.week) do
-      puts "Generatign cache for #{start_date} - #{end_date}"
+      puts "Generating cache for #{start_date} - #{end_date}"
       window_events = load_event_data(start_date, end_date)
 
       previous_repo_names = previously_active_repo_names(start_date)
