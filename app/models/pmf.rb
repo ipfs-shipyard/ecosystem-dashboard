@@ -153,18 +153,18 @@ class Pmf
       previous_states = Hash[previous_period[:states].group_by{|u| u[2] }]
       current_states = Hash[period[:states].group_by{|u| u[2] }]
 
-      bounced = compare_states(previous_states, current_states, 'first', 'inactive')
-      new_low = compare_states(previous_states, current_states, 'first', 'low')
-      new_high = compare_states(previous_states, current_states, 'first', 'high')
-      reactive_low = compare_states(previous_states, current_states, 'inactive', 'low')
-      low_high = compare_states(previous_states, current_states, 'low', 'high')
-      high_low = compare_states(previous_states, current_states, 'high', 'low')
-      reactive_high = compare_states(previous_states, current_states, 'inactive', 'high')
-      lapsed_low = compare_states(previous_states, current_states, 'low', 'inactive')
-      lapsed_high = compare_states(previous_states, current_states, 'high', 'inactive')
-      high = compare_states(previous_states, current_states, 'high', 'high')
-      low = compare_states(previous_states, current_states, 'low', 'low')
-      inactive = compare_states(previous_states, current_states, 'inactive', 'inactive')
+      bounced = compare_states_with_details(previous_states, current_states, 'first', 'inactive')
+      new_low = compare_states_with_details(previous_states, current_states, 'first', 'low')
+      new_high = compare_states_with_details(previous_states, current_states, 'first', 'high')
+      reactive_low = compare_states_with_details(previous_states, current_states, 'inactive', 'low')
+      low_high = compare_states_with_details(previous_states, current_states, 'low', 'high')
+      high_low = compare_states_with_details(previous_states, current_states, 'high', 'low')
+      reactive_high = compare_states_with_details(previous_states, current_states, 'inactive', 'high')
+      lapsed_low = compare_states_with_details(previous_states, current_states, 'low', 'inactive')
+      lapsed_high = compare_states_with_details(previous_states, current_states, 'high', 'inactive')
+      high = compare_states_with_details(previous_states, current_states, 'high', 'high')
+      low = compare_states_with_details(previous_states, current_states, 'low', 'low')
+      inactive = compare_states_with_details(previous_states, current_states, 'inactive', 'inactive')
 
       transition_periods << {
         date: period[:date],
@@ -213,6 +213,12 @@ class Pmf
   private
 
   def self.compare_states(previous_states, current_states, previous_group, current_group)
+    prev = previous_states[previous_group] || []
+    curr = current_states[current_group] || []
+    prev & curr
+  end
+
+  def self.compare_states_with_details(previous_states, current_states, previous_group, current_group)
     prev = previous_states[previous_group] || []
     curr = current_states[current_group] || []
     names = prev.map(&:first) & curr.map(&:first)
