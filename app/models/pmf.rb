@@ -1,6 +1,5 @@
 class Pmf
   DEFAULT_WINDOW = 1 # week
-  BACK_DATE = DateTime.parse('01/01/2021')
 
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
     week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
