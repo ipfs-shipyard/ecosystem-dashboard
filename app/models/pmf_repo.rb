@@ -3,88 +3,49 @@ class PmfRepo
   BACK_DATE = DateTime.parse('01/01/2021')
 
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
-    periods = load_periods(start_date, end_date, window = DEFAULT_WINDOW)
+    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    periods = periods.map do |period|
-      {
-        date:  period[:date],
-        states: period[:states].slice(state_name)
-      }
+    week_start_dates.map do |start_date|
+      end_date = start_date + 1.week
+      states = states_for_window_dates(start_date, end_date)
+
+      state_groups = {}
+
+      states.sort_by{|u| [-u[1], u[0]]}.each do |u|
+        next unless u[2] == state_name
+        state_groups[u[2]] ||= []
+        state_groups[u[2]] << {repo_name: u[0], score: u[1]}
+      end
+
+      {date: start_date, states: state_groups}
     end
-
-    return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
   end
 
   def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
     return unless window >= 1
 
-    previous_repo_names = previously_active_repo_names(start_date)
+    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    start_date_with_extra_window = start_date - window.week
-
-    events = load_event_data(start_date_with_extra_window, end_date)
-
-    windows = slice_events(events, window)
-
-    periods = []
-
-    previous_window = nil
-
-    windows.sort_by{|d,e| d}.each_with_index do |window, i|
-      date = window[0]
-      window_events = window[1]
-
-      previous_window_events = i.zero? ? [] : previous_window[1]
-
-      states = states_for_window(window_events, previous_window_events, previous_repo_names)
-
-      previous_repo_names += states.map{|a| a[0]}
-      previous_repo_names.uniq!
-
-      previous_window = window
-
+    week_start_dates.map do |start_date|
+      end_date = start_date + 1.week
+      states = states_for_window_dates(start_date, end_date)
       state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
-
-      periods << {date: date, states: state_groups}
+      {date: start_date, states: state_groups}
     end
-
-    return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
   end
 
   def self.transitions(start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
     return unless window >= 1
 
-    previous_repo_names = previously_active_repo_names(start_date)
+    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    start_date_with_extra_window = start_date - window.week
-
-    events = load_event_data(start_date_with_extra_window, end_date)
-
-    windows = slice_events(events, window)
-
-    periods = []
-
-    previous_window = nil
-
-    windows.sort_by{|d,e| d}.each_with_index do |window, i|
-      date = window[0]
-      window_events = window[1]
-
-      previous_window_events = i.zero? ? [] : previous_window[1]
-
-      states = states_for_window(window_events, previous_window_events, previous_repo_names)
-
-      previous_repo_names += states.map{|a| a[0]}
-      previous_repo_names.uniq!
-
-      previous_window = window
-
-      periods << {date: date, states: states}
+    periods = week_start_dates.map do |start_date|
+      end_date = start_date + 1.week
+      states = states_for_window_dates(start_date, end_date)
+      {date: start_date, states: states}
     end
-
-    # skip first window
 
     # for each window, compare states between repos and add to transition bucket
     previous_period = nil
@@ -149,7 +110,7 @@ class PmfRepo
       previous_period = period
     end
 
-    return transition_periods # don't return the extra first period as it was only used for detecting first timersTODO
+    return transition_periods
   end
 
   def self.transition(transition_name, start_date, end_date, window = DEFAULT_WINDOW)
@@ -162,89 +123,48 @@ class PmfRepo
     end
   end
 
+  private
+
   def self.compare_states(previous_states, current_states, previous_group, current_group)
     prev = previous_states[previous_group] || []
     curr = current_states[current_group] || []
     prev & curr
   end
 
-  def self.load_periods(start_date, end_date, window = DEFAULT_WINDOW)
-    window = DEFAULT_WINDOW if window.nil?
-    return unless window >= 1
+  def self.states_for_window_dates(start_date, end_date)
+    Rails.cache.fetch(['pmf_repo_states_for_window_dates', start_date, end_date], expires_in: 1.week) do
+      puts "Generatign cache for #{start_date} - #{end_date}"
+      window_events = load_event_data(start_date, end_date)
 
-    previous_repo_names = previously_active_repo_names(start_date)
+      previous_repo_names = previously_active_repo_names(start_date)
 
-    start_date_with_extra_window = start_date - window.week
+      active_repos = window_events.group_by(&:repository_full_name)
 
-    events = load_event_data(start_date_with_extra_window, end_date)
+      scores = active_repos.map{|repo_name, events| [repo_name, score_for_repo(repo_name, events)] }
 
-    windows = slice_events(events, window)
+      states = scores.map{|repo_name, score| [repo_name, score, state_for_repo(repo_name, score)] }
 
-    periods = []
+      these_repos = states.map{|a| a[0]}
 
-    previous_window = nil
+      # repo from previous_repo_names not present here (inactive)
+      inactive = previous_repo_names - these_repos
+      states += inactive.map{|repo_name| [repo_name, 0, 'inactive'] }
 
-    windows.sort_by{|d,e| d}.each_with_index do |window, i|
-      date = window[0]
-      window_events = window[1]
+      # repo not in previous_repo_names present here (first)
+      first = these_repos - previous_repo_names
 
-      previous_window_events = i.zero? ? [] : previous_window[1]
-
-      states = states_for_window(window_events, previous_window_events, previous_repo_names)
-
-      previous_repo_names += states.map{|a| a[0]}
-      previous_repo_names.uniq!
-
-      previous_window = window
-
-      state_groups = {}
-
-      states.sort_by{|u| [-u[1], u[0]]}.each do |u|
-        state_groups[u[2]] ||= []
-
-        state_groups[u[2]] << {repo_full_name: u[0], score: u[1]}
-      end
-
-      periods << {date: date, states: state_groups}
-    end
-    return periods
-  end
-
-  def self.states_for_window(window_events, previous_window_events, previous_repo_names)
-    # TODO use previous_window_events for transitions
-
-    active_repository_full_names = window_events.group_by(&:repository_full_name)
-
-    scores = active_repository_full_names.map{|repo_full_name, events| [repo_full_name, score_for_repo(repo_full_name, events)] }
-
-    states = scores.map{|repo_full_name, score| [repo_full_name, score, state_for_repo(repo_full_name, score)] }
-
-    these_repos = states.map{|a| a[0]}
-
-    # repo from previous_repo_names not present here (inactive)
-    inactive = previous_repo_names - these_repos
-    states += inactive.map{|repo_full_name| [repo_full_name, 0, 'inactive'] }
-
-    # repo not in previous_repo_names present here (first)
-    first = these_repos - previous_repo_names
-
-    states_with_firsts = states.map do |repo|
-      if first.include?(repo[0])
-        [repo[0], repo[1], 'first']
-      else
-        repo
+      states.map do |repo|
+        first.include?(repo[0]) ? [repo[0], repo[1], 'first'] : repo
       end
     end
-
-    states_with_firsts
   end
 
-  def self.score_for_repo(repo_full_name, events)
+  def self.score_for_repo(repo_name, events)
     # TODO this is were we can tweak the weights of various types, repos and orgs
     events.length
   end
 
-  def self.state_for_repo(repo_full_name, score)
+  def self.state_for_repo(repo_name, score)
     # TODO maybe make these thresholds tweakable
     return 'high' if score >= 5
     return 'low' if score >= 1
@@ -254,7 +174,7 @@ class PmfRepo
   def self.load_event_data(start_date, end_date)
     # might want to exclude certain event types
     # excludes PL folk and bots
-    event_scope.select('events.created_at, repository_full_name, actor').created_after(start_date).created_before(end_date).all
+    event_scope.select('events.created_at, actor, repository_full_name').created_after(start_date).created_before(end_date).all
   end
 
   def self.slice_events(events, window)
@@ -263,7 +183,7 @@ class PmfRepo
   end
 
   def self.previously_active_repo_names(before_date)
-    event_scope.created_after(BACK_DATE).created_before(before_date).pluck(:repository_full_name).uniq
+    event_scope.created_before(before_date).pluck(:repository_full_name).uniq
   end
 
   def self.event_scope

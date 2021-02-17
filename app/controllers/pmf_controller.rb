@@ -2,9 +2,7 @@ class PmfController < ApplicationController
   def states
     parse_date_params
 
-    json = Rails.cache.fetch(['states', @start_date, @end_date, @window], expires_in: 12.hours) do
-      Pmf.states_summary(@start_date, @end_date, @window).to_json
-    end
+    json = Pmf.states_summary(@start_date, @end_date, @window).to_json
 
     render json: json
   end
@@ -13,9 +11,7 @@ class PmfController < ApplicationController
     state_name = params[:state_name]
     parse_date_params
 
-    json = Rails.cache.fetch(['state', state_name, @start_date, @end_date, @window], expires_in: 12.hours) do
-      Pmf.state(state_name, @start_date, @end_date, @window).to_json
-    end
+    json = Pmf.state(state_name, @start_date, @end_date, @window).to_json
 
     render json: json
   end
@@ -23,9 +19,7 @@ class PmfController < ApplicationController
   def transitions
     parse_date_params
 
-    json = Rails.cache.fetch(['transitions', @start_date, @end_date, @window], expires_in: 12.hours) do
-      Pmf.transitions(@start_date, @end_date, @window).to_json
-    end
+    json = Pmf.transitions(@start_date, @end_date, @window).to_json
 
     render json: json
   end
@@ -34,9 +28,7 @@ class PmfController < ApplicationController
     transition_name = params[:transition_name]
     parse_date_params
 
-    json = Rails.cache.fetch(['transition', transition_name, @start_date, @end_date, @window], expires_in: 12.hours) do
-      Pmf.transition(transition_name, @start_date, @end_date, @window).to_json
-    end
+    json = Pmf.transition(transition_name, @start_date, @end_date, @window).to_json
 
     render json: json
   end

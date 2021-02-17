@@ -3,88 +3,49 @@ class Pmf
   BACK_DATE = DateTime.parse('01/01/2021')
 
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
-    periods = load_periods(start_date, end_date, window = DEFAULT_WINDOW)
+    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    periods = periods.map do |period|
-      {
-        date:  period[:date],
-        states: period[:states].slice(state_name)
-      }
+    week_start_dates.map do |start_date|
+      end_date = start_date + 1.week
+      states = states_for_window_dates(start_date, end_date)
+
+      state_groups = {}
+
+      states.sort_by{|u| [-u[1], u[0]]}.each do |u|
+        next unless u[2] == state_name
+        state_groups[u[2]] ||= []
+        state_groups[u[2]] << {username: u[0], score: u[1]}
+      end
+
+      {date: start_date, states: state_groups}
     end
-
-    return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
   end
 
   def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
     return unless window >= 1
 
-    previous_usernames = previously_active_usernames(start_date)
+    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    start_date_with_extra_window = start_date - window.week
-
-    events = load_event_data(start_date_with_extra_window, end_date)
-
-    windows = slice_events(events, window)
-
-    periods = []
-
-    previous_window = nil
-
-    windows.sort_by{|d,e| d}.each_with_index do |window, i|
-      date = window[0]
-      window_events = window[1]
-
-      previous_window_events = i.zero? ? [] : previous_window[1]
-
-      states = states_for_window(window, previous_window, previous_usernames)
-
-      previous_usernames += states.map{|a| a[0]}
-      previous_usernames.uniq!
-
-      previous_window = window
-
+    week_start_dates.map do |start_date|
+      end_date = start_date + 1.week
+      states = states_for_window_dates(start_date, end_date)
       state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
-
-      periods << {date: date, states: state_groups}
+      {date: start_date, states: state_groups}
     end
-
-    return periods[1..-1] # don't return the extra first period as it was only used for detecting first timers
   end
 
   def self.transitions(start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
     return unless window >= 1
 
-    previous_usernames = previously_active_usernames(start_date)
+    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    start_date_with_extra_window = start_date - window.week
-
-    events = load_event_data(start_date_with_extra_window, end_date)
-
-    windows = slice_events(events, window)
-
-    periods = []
-
-    previous_window = nil
-
-    windows.sort_by{|d,e| d}.each_with_index do |window, i|
-      date = window[0]
-      window_events = window[1]
-
-      previous_window_events = i.zero? ? [] : previous_window[1]
-
-      states = states_for_window(window, previous_window, previous_usernames)
-
-      previous_usernames += states.map{|a| a[0]}
-      previous_usernames.uniq!
-
-      previous_window = window
-
-      periods << {date: date, states: states}
+    periods = week_start_dates.map do |start_date|
+      end_date = start_date + 1.week
+      states = states_for_window_dates(start_date, end_date)
+      {date: start_date, states: states}
     end
-
-    # skip first window
 
     # for each window, compare states between users and add to transition bucket
     previous_period = nil
@@ -149,7 +110,7 @@ class Pmf
       previous_period = period
     end
 
-    return transition_periods # don't return the extra first period as it was only used for detecting first timersTODO
+    return transition_periods
   end
 
   def self.transition(transition_name, start_date, end_date, window = DEFAULT_WINDOW)
@@ -162,63 +123,20 @@ class Pmf
     end
   end
 
+  private
+
   def self.compare_states(previous_states, current_states, previous_group, current_group)
     prev = previous_states[previous_group] || []
     curr = current_states[current_group] || []
     prev & curr
   end
 
-  def self.load_periods(start_date, end_date, window = DEFAULT_WINDOW)
-    window = DEFAULT_WINDOW if window.nil?
-    return unless window >= 1
+  def self.states_for_window_dates(start_date, end_date)
+    Rails.cache.fetch(['pmf_states_for_window_dates', start_date, end_date], expires_in: 1.week) do
+      puts "Generatign cache for #{start_date} - #{end_date}"
+      window_events = load_event_data(start_date, end_date)
 
-    previous_usernames = previously_active_usernames(start_date)
-
-    start_date_with_extra_window = start_date - window.week
-
-    events = load_event_data(start_date_with_extra_window, end_date)
-
-    windows = slice_events(events, window)
-
-    periods = []
-
-    previous_window = nil
-
-    windows.sort_by{|d,e| d}.each_with_index do |window, i|
-      date = window[0]
-      window_events = window[1]
-
-      previous_window_events = i.zero? ? [] : previous_window[1]
-
-      states = states_for_window(window, previous_window, previous_usernames)
-
-      previous_usernames += states.map{|a| a[0]}
-      previous_usernames.uniq!
-
-      previous_window = window
-
-      state_groups = {}
-
-      states.sort_by{|u| [-u[1], u[0]]}.each do |u|
-        state_groups[u[2]] ||= []
-
-        state_groups[u[2]] << {username: u[0], score: u[1]}
-      end
-
-      periods << {date: date, states: state_groups}
-    end
-    return periods
-  end
-
-  def self.states_for_window(window, previous_window, previous_usernames)
-    date = window[0]
-
-    states_with_firsts = Rails.cache.fetch(['pmf_states_for_window', date], expires_in: 1.week) do
-      window_events = window[1]
-
-      # TODO load only events required from db here
-
-      previous_window_events = previous_window.nil? ? [] : previous_window[1]
+      previous_usernames = previously_active_usernames(start_date)
 
       active_actors = window_events.group_by(&:actor)
 
@@ -235,16 +153,10 @@ class Pmf
       # user not in previous_usernames present here (first)
       first = these_users - previous_usernames
 
-      states_with_firsts = states.map do |user|
-        if first.include?(user[0])
-          [user[0], user[1], 'first']
-        else
-          user
-        end
+      states.map do |user|
+        first.include?(user[0]) ? [user[0], user[1], 'first'] : user
       end
     end
-
-    states_with_firsts
   end
 
   def self.score_for_user(username, events)
@@ -271,7 +183,7 @@ class Pmf
   end
 
   def self.previously_active_usernames(before_date)
-    event_scope.created_after(BACK_DATE).created_before(before_date).pluck(:actor).uniq
+    event_scope.created_before(before_date).pluck(:actor).uniq
   end
 
   def self.event_scope
