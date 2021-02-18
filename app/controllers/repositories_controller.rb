@@ -36,7 +36,9 @@ class RepositoriesController < ApplicationController
   def show
     @repository = Repository.find_by_id(params[:id]) || Repository.find_by_full_name(params[:id])
     @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
-    @events_pagy, @events = pagy(@repository.events.order('created_at DESC'))
+
+    @events_scope = Pmf.event_scope.repo(@repository.full_name)
+    @events_pagy, @events = pagy(@events_scope.order('events.created_at DESC'))
     @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
   end
 
