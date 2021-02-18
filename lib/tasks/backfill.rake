@@ -4,7 +4,10 @@ require 'zlib'
 namespace :backfill do
   task all: :environment do
 
-    # org_names = Organization.internal.pluck(:name)
+    repo_names = Repository.with_internal_deps.pluck(:full_name)
+    repo_names += Repository.with_search_results.pluck(:full_name)
+    repo_names.uniq!
+
     if ENV['START_DATE'].present?
       start_date = Time.parse(ENV['START_DATE'])
     else
@@ -42,8 +45,7 @@ namespace :backfill do
 
                 Oj.load(js) do |event|
                   repo_name = event['repo']['name']
-                  org = repo_name.split('/').first
-                  # if org_names.include?(org)
+                  if repo_names.include?(repo_name)
 
                     repository = Repository.find_by_full_name(repo_name)
                     if repository
@@ -53,7 +55,7 @@ namespace :backfill do
                       end
                     end
 
-                  # end
+                  end
                 end
               rescue
                 # failed to download
