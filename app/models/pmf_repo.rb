@@ -283,6 +283,11 @@ class PmfRepo
     event_scope.created_before(before_date).pluck(:repository_full_name).uniq
   end
 
+  def self.pl_orgs
+    ['ipfs', 'ipfs-shipard', 'ipld', 'protoschool', 'libp2p', 'ipfs-cluster',
+      'multiformats', 'ipfs-inactive', 'filecoin-project', 'filecoin-shipyard']
+  end
+
   def self.event_scope
     # not star events
     # not PL employees/contractors
@@ -291,6 +296,7 @@ class PmfRepo
     repository_ids = Repository.with_internal_deps.pluck(:id)
     repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids -= Repository.internal.pluck(:id)
+    repository_ids -= Repository.org(pl_orgs).pluck(:id)
     repository_ids.uniq!
 
     Event.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
