@@ -27,7 +27,7 @@
       </h5>
 
       <small class='text-muted'>
-        <%= link_to all_issues_path(repo: repo[:repo_name], range: @range) do %>
+        <%= link_to repository_path(repo[:repo_name]) do %>
            <%= pluralize repo[:score], 'contribution' %> this week
         <% end %>
         <% if params[:tab] != 'First Time'  %>

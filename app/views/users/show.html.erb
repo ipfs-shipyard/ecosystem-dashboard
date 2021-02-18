@@ -47,7 +47,14 @@
   <div class="mb-3">
     <%= line_chart @events_scope.group_by_day(:created_at).count, colors: ['#bbb'], height: "80px", library: { scales: { yAxes: [{ display: false }], xAxes: [{ display: false }] }}, points: false %>
   </div>
-  <%= render @events %>
+  <% @events.group_by{|e| e.created_at.beginning_of_week }.each do |week, events| %>
+    <h4 class='text-center mb-3'>
+      <%= week.strftime('Week %V - %G') %>
+      <small class='text-muted'> <%= pluralize events.length, 'event' %></small>
+    </h4>
+    <%= render events %>
+  <% end %>
+
 <% else %>
   <p>No events found.</p>
 <% end %>

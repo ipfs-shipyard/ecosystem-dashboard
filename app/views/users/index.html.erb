@@ -21,7 +21,7 @@
       </h5>
 
       <small class='text-muted'>
-        <%= link_to all_issues_path(user: user[:username], range: @range) do %>
+        <%= link_to user_path(user[:username]) do %>
            <%= pluralize user[:score], 'contribution' %> this week
         <% end %>
       </small>
