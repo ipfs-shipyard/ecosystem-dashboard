@@ -284,7 +284,7 @@ class PmfRepo
   end
 
   def self.pl_orgs
-    ['ipfs', 'ipfs-shipard', 'ipld', 'protoschool', 'libp2p', 'ipfs-cluster',
+    ['protocol', 'ipfs', 'ipfs-shipard', 'ipld', 'protoschool', 'libp2p', 'ipfs-cluster',
       'multiformats', 'ipfs-inactive', 'filecoin-project', 'filecoin-shipyard']
   end
 
