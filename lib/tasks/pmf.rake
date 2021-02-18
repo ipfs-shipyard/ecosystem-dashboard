@@ -1,7 +1,7 @@
 namespace :pmf do
   task states: :environment do
-    start_date = 52.week.ago
-    end_date = 50.week.ago
+    start_date = 6.week.ago
+    end_date = 2.week.ago
     window = 1 # week
 
     windows = Pmf.states_summary(start_date, end_date, window)
@@ -17,8 +17,8 @@ namespace :pmf do
   end
 
   task transitions: :environment do
-    start_date = 52.week.ago
-    end_date = 50.week.ago
+    start_date = 6.week.ago
+    end_date = 2.week.ago
     window = 1 # week
 
     windows = Pmf.transitions(start_date, end_date, window)

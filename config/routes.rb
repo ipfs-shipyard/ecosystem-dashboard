@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   resources :repositories do
     collection do
       get :audit
+      get :states
+      get :transitions
     end
   end
   resources :contributors

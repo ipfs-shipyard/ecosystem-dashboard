@@ -34,7 +34,7 @@ class RepositoriesController < ApplicationController
   end
 
   def show
-    @repository = Repository.find(params[:id])
+    @repository = Repository.find_by_id(params[:id]) || Repository.find_by_full_name(params[:id])
     @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
     @events_pagy, @events = pagy(@repository.events.order('created_at DESC'))
     @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
@@ -158,5 +158,41 @@ class RepositoriesController < ApplicationController
     @order = params[:order] || 'asc'
 
     @repositories = @scope.order(@sort => @order).all
+  end
+
+  def states
+    state_name = params[:tab].presence || 'first'
+
+    @start_date = 1.week.ago.beginning_of_week
+    @end_date = Time.now.beginning_of_week
+    @window = 1
+
+    @data = PmfRepo.state(state_name, @start_date, @end_date, @window)
+
+    if @data
+      all_repos = @data.first[:states].first[1]
+    else
+      all_repos = []
+    end
+
+    @pagy, @repositories = pagy_array(all_repos)
+  end
+
+  def transitions
+    transition_name = params[:tab].presence || 'First Time'
+
+    @start_date = 2.week.ago.beginning_of_week
+    @end_date = 1.week.ago.beginning_of_week
+    @window = 1
+
+    @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window)
+
+    if @data
+      all_repos = @data.first[:transitions][transition_name.to_sym]
+    else
+      all_repos = []
+    end
+
+    @pagy, @repositories = pagy_array(all_repos)
   end
 end

@@ -1,0 +1,41 @@
+<h1>PMF Transitions</h1>
+
+<% @data.first[:transitions].keys.each_slice(7).each_with_index do |slice, i| %>
+  <ul class="nav nav-tabs mb-3">
+    <% slice.each_with_index do |state, j| %>
+      <li class="nav-item">
+        <a class="nav-link small <%= 'active' if (i.zero? && j.zero? && params[:tab].blank?) || params[:tab] == state.to_s %>" href="<%= url_for(request.params.merge(tab: state)) %>">
+          <%= state %>
+
+          <span class='badge badge-secondary'>
+            <%= number_to_human @data.first[:transitions][state].length %>
+          </span>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% @repositories.each do |repo| %>
+  <div class="card mb-3">
+    <div class="card-body">
+        <%= link_to "https://github.com/#{repo[:repo_name]}", target: :_blank, class: 'float-left mr-3' do %>
+          <img src="https://github.com/<%= repo[:repo_name].split('/').first %>.png" class="rounded" height='40' width='40'>
+        <% end %>
+      <h5 class="card-title mb-0">
+        <%= link_to repo[:repo_name], repository_path(repo[:repo_name]), target: :_blank %>
+      </h5>
+
+      <small class='text-muted'>
+        <%= link_to all_issues_path(repo: repo[:repo_name], range: @range) do %>
+           <%= pluralize repo[:score], 'contribution' %> this week
+        <% end %>
+        <% if params[:tab] != 'First Time'  %>
+          <i><%= pluralize repo[:previous], 'contribution' %> last week</i>
+        <% end %>
+      </small>
+    </div>
+  </div>
+<% end %>
+
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>

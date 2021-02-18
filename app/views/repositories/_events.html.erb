@@ -1,5 +1,12 @@
 <% if @events.any? %>
-  <%= render @events %>
+  <% @events.group_by{|e| e.created_at.beginning_of_week }.each do |week, events| %>
+    <h4 class='text-center mb-3'>
+      <%= week.strftime('Week %V - %G') %>
+      <small class='text-muted'> <%= pluralize events.length, 'event' %></small>
+    </h4>
+    <%= render events %>
+  <% end %>
+
   <%== pagy_bootstrap_nav(@events_pagy) if @events_pagy.pages > 1 %>
 <% else %>
   <p>No events found</p>
