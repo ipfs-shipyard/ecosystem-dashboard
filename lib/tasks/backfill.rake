@@ -4,13 +4,13 @@ require 'zlib'
 namespace :backfill do
   task all: :environment do
 
-    org_names = Organization.internal.pluck(:name)
+    # org_names = Organization.internal.pluck(:name)
     if ENV['START_DATE'].present?
       start_date = Time.parse(ENV['START_DATE'])
     else
-      start_date = Repository.internal.order('repositories.created_at asc').first.created_at
-
+      start_date = (Time.now - 1.year).beginning_of_year
     end
+
     start_year = start_date.year
     start_year = 2015 if start_year < 2015
 
@@ -43,7 +43,7 @@ namespace :backfill do
                 Oj.load(js) do |event|
                   repo_name = event['repo']['name']
                   org = repo_name.split('/').first
-                  if org_names.include?(org)
+                  # if org_names.include?(org)
 
                     repository = Repository.find_by_full_name(repo_name)
                     if repository
@@ -53,7 +53,7 @@ namespace :backfill do
                       end
                     end
 
-                  end
+                  # end
                 end
               rescue
                 # failed to download
