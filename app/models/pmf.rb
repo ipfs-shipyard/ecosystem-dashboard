@@ -1,12 +1,11 @@
 class Pmf
   DEFAULT_WINDOW = 1.week
+  DEFAULT_THRESHOLD = 5
 
-  def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
-    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
-
-    period_start_dates.map do |start_date|
+  def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+    period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date)
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
 
       state_groups = {}
 
@@ -20,27 +19,19 @@ class Pmf
     end
   end
 
-  def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW)
-    window = DEFAULT_WINDOW if window.nil?
-
-    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
-
-    period_start_dates.map do |start_date|
+  def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+    period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date)
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
       state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
       {date: start_date, states: state_groups}
     end
   end
 
-  def self.transitions(start_date, end_date, window = DEFAULT_WINDOW)
-    window = DEFAULT_WINDOW if window.nil?
-
-    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
-
-    periods = period_start_dates.map do |start_date|
+  def self.transitions(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+    periods = period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date)
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
       {date: start_date, states: states}
     end
 
@@ -110,14 +101,10 @@ class Pmf
     return transition_periods
   end
 
-  def self.transitions_with_details(start_date, end_date, window = DEFAULT_WINDOW)
-    window = DEFAULT_WINDOW if window.nil?
-
-    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
-
-    periods = period_start_dates.map do |start_date|
+  def self.transitions_with_details(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+    periods = period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date)
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
       {date: start_date, states: states}
     end
 
@@ -187,8 +174,8 @@ class Pmf
     return transition_periods
   end
 
-  def self.transition(transition_name, start_date, end_date, window = DEFAULT_WINDOW)
-    periods = transitions(start_date, end_date, window)
+  def self.transition(transition_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+    periods = transitions(start_date, end_date, window, threshold)
     periods.map do |period|
       {
         date:  period[:date],
@@ -197,8 +184,8 @@ class Pmf
     end
   end
 
-  def self.transition_with_details(transition_name, start_date, end_date, window = DEFAULT_WINDOW)
-    periods = transitions_with_details(start_date, end_date, window)
+  def self.transition_with_details(transition_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+    periods = transitions_with_details(start_date, end_date, window, threshold)
     periods.map do |period|
       {
         date:  period[:date],
@@ -208,6 +195,30 @@ class Pmf
   end
 
   private
+
+  def self.period_start_dates(start_date, end_date, window)
+    case window
+    when 1.week
+      (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
+    when 1.month
+      (start_date.to_date..end_date.to_date).map(&:beginning_of_month).uniq
+    else
+      p window
+      raise 'Unexpected window length'
+    end
+  end
+
+  def self.threshold_for_period(window, threshold)
+    case window
+    when 1.week
+      threshold || DEFAULT_THRESHOLD
+    when 1.month
+      threshold || (DEFAULT_THRESHOLD*4.3).round
+    else
+      p window
+      raise 'Unexpected window length'
+    end
+  end
 
   def self.compare_states(previous_states, current_states, previous_group, current_group)
     prev = previous_states[previous_group] || []
@@ -225,8 +236,8 @@ class Pmf
     end
   end
 
-  def self.states_for_window_dates(start_date, end_date)
-    Rails.cache.fetch(['pmf_states_for_window_dates', start_date, end_date], expires_in: 1.week) do
+  def self.states_for_window_dates(start_date, end_date, threshold)
+    Rails.cache.fetch(['pmf_states_for_window_dates', threshold, start_date, end_date], expires_in: 1.week) do
       puts "Generating cache for #{start_date} - #{end_date}"
       window_events = load_event_data(start_date, end_date)
 
@@ -236,7 +247,7 @@ class Pmf
 
       scores = active_actors.map{|username, events| [username, score_for_user(username, events)] }
 
-      states = scores.map{|username, score| [username, score, state_for_user(username, score)] }
+      states = scores.map{|username, score| [username, score, state_for_user(username, score, threshold)] }
 
       these_users = states.map{|a| a[0]}
 
@@ -258,16 +269,13 @@ class Pmf
     events.length
   end
 
-  def self.state_for_user(username, score)
-    # TODO maybe make these thresholds tweakable
-    return 'high' if score >= 5
+  def self.state_for_user(username, score, threshold)
+    return 'high' if score >= threshold
     return 'low' if score >= 1
     return 'inactive' if score.zero?
   end
 
   def self.load_event_data(start_date, end_date)
-    # might want to exclude certain event types
-    # excludes PL folk and bots
     event_scope.select('events.created_at, actor').created_after(start_date).created_before(end_date).all
   end
 
