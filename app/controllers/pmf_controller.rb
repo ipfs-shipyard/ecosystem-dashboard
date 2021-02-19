@@ -38,6 +38,12 @@ class PmfController < ApplicationController
   def parse_date_params
     @start_date = params[:start_date].presence || 4.weeks.ago.beginning_of_week
     @end_date = params[:end_date].presence || Time.now.beginning_of_week
-    @window = params[:window].presence || 1
+
+    case params[:window]
+    when 'month'
+      @window = 1.month
+    else
+      @window = 1.week
+    end
   end
 end

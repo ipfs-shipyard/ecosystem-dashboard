@@ -1,11 +1,11 @@
 class PmfRepo
-  DEFAULT_WINDOW = 1 # week
+  DEFAULT_WINDOW = 1.week
 
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW)
-    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
+    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    week_start_dates.map do |start_date|
-      end_date = start_date + 1.week
+    period_start_dates.map do |start_date|
+      end_date = start_date + window
       states = states_for_window_dates(start_date, end_date)
 
       state_groups = {}
@@ -22,12 +22,11 @@ class PmfRepo
 
   def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
-    return unless window >= 1
 
-    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
+    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    week_start_dates.map do |start_date|
-      end_date = start_date + 1.week
+    period_start_dates.map do |start_date|
+      end_date = start_date + window
       states = states_for_window_dates(start_date, end_date)
       state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
       {date: start_date, states: state_groups}
@@ -36,12 +35,11 @@ class PmfRepo
 
   def self.transitions(start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
-    return unless window >= 1
 
-    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
+    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    periods = week_start_dates.map do |start_date|
-      end_date = start_date + 1.week
+    periods = period_start_dates.map do |start_date|
+      end_date = start_date + window
       states = states_for_window_dates(start_date, end_date)
       {date: start_date, states: states}
     end
@@ -114,12 +112,11 @@ class PmfRepo
 
   def self.transitions_with_details(start_date, end_date, window = DEFAULT_WINDOW)
     window = DEFAULT_WINDOW if window.nil?
-    return unless window >= 1
 
-    week_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
+    period_start_dates = (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
 
-    periods = week_start_dates.map do |start_date|
-      end_date = start_date + 1.week
+    periods = period_start_dates.map do |start_date|
+      end_date = start_date + window
       states = states_for_window_dates(start_date, end_date)
       {date: start_date, states: states}
     end
@@ -272,11 +269,6 @@ class PmfRepo
     # might want to exclude certain event types
     # excludes PL folk and bots
     event_scope.select('events.created_at, actor, repository_full_name').created_after(start_date).created_before(end_date).all
-  end
-
-  def self.slice_events(events, window)
-    # TODO handle window for values other than 1
-    events.group_by{ |e| e.created_at.beginning_of_week }
   end
 
   def self.previously_active_repo_names(before_date)
