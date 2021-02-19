@@ -167,7 +167,7 @@ class RepositoriesController < ApplicationController
 
     @start_date = 1.week.ago.beginning_of_week
     @end_date = Time.now.beginning_of_week
-    @window = 1
+    @window = 1.week
 
     @data = PmfRepo.state(state_name, @start_date, @end_date, @window)
 
@@ -185,7 +185,7 @@ class RepositoriesController < ApplicationController
 
     @start_date = 2.week.ago.beginning_of_week
     @end_date = 1.week.ago.beginning_of_week
-    @window = 1
+    @window = 1.week
 
     @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window)
 
