@@ -5,7 +5,6 @@ namespace :backfill do
   task all: :environment do
 
     repo_names = Repository.with_internal_deps.pluck(:full_name)
-    repo_names += Repository.with_search_results.pluck(:full_name)
     repo_names.uniq!
 
     if ENV['START_DATE'].present?
