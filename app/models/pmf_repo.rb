@@ -293,10 +293,10 @@ class PmfRepo
   def self.event_scope
     # not star events
     # not PL employees/contractors
-    # only repos with pl dependencies or search results or pl owned repos
+    # only repos with pl dependencies or pl owned repos
 
     repository_ids = Repository.with_internal_deps.pluck(:id)
-    repository_ids += Repository.with_search_results.pluck(:id)
+    # repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids -= Repository.internal.pluck(:id)
     repository_ids -= Repository.org(pl_orgs).pluck(:id)
     repository_ids.uniq!
