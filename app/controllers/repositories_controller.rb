@@ -177,7 +177,14 @@ class RepositoriesController < ApplicationController
       all_repos = []
     end
 
-    @pagy, @repositories = pagy_array(all_repos)
+    respond_to do |format|
+      format.html do
+        @pagy, @repositories = pagy_array(all_repos)
+      end
+      format.json do
+        render json: all_repos
+      end
+    end
   end
 
   def transitions
@@ -195,6 +202,13 @@ class RepositoriesController < ApplicationController
       all_repos = []
     end
 
-    @pagy, @repositories = pagy_array(all_repos)
+    respond_to do |format|
+      format.html do
+        @pagy, @repositories = pagy_array(all_repos)
+      end
+      format.json do
+        render json: all_repos
+      end
+    end
   end
 end

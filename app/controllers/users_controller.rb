@@ -24,7 +24,14 @@ class UsersController < ApplicationController
       all_users = []
     end
 
-    @pagy, @users = pagy_array(all_users)
+    respond_to do |format|
+      format.html do
+        @pagy, @users = pagy_array(all_users)
+      end
+      format.json do
+        render json: all_users
+      end
+    end
   end
 
   def index
@@ -42,6 +49,13 @@ class UsersController < ApplicationController
       all_users = []
     end
 
-    @pagy, @users = pagy_array(all_users)
+    respond_to do |format|
+      format.html do
+        @pagy, @users = pagy_array(all_users)
+      end
+      format.json do
+        render json: all_users
+      end
+    end
   end
 end
