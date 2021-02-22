@@ -12,11 +12,9 @@ class UsersController < ApplicationController
   def transitions
     transition_name = params[:tab].presence || 'First Time'
 
-    @start_date = 2.week.ago.beginning_of_week
-    @end_date = 1.week.ago.beginning_of_week
-    @window = 1.week
+    parse_pmf_params
 
-    @data = Pmf.transitions_with_details(@start_date, @end_date, @window)
+    @data = Pmf.transitions_with_details(@start_date, @end_date, @window, @threshold)
 
     if @data
       all_users = @data.first[:transitions][transition_name.to_sym]
@@ -37,11 +35,9 @@ class UsersController < ApplicationController
   def index
     state_name = params[:tab].presence || 'first'
 
-    @start_date = 1.week.ago.beginning_of_week
-    @end_date = Time.now.beginning_of_week
-    @window = 1.week
+    parse_pmf_params
 
-    @data = Pmf.state(state_name, @start_date, @end_date, @window)
+    @data = Pmf.state(state_name, @start_date, @end_date, @window, @threshold)
 
     if @data
       all_users = @data.first[:states].first[1]
@@ -56,6 +52,19 @@ class UsersController < ApplicationController
       format.json do
         render json: all_users
       end
+    end
+  end
+
+  def parse_pmf_params
+    @start_date = params[:start_date].presence || 2.week.ago.beginning_of_week
+    @end_date = params[:end_date].presence || 1.week.ago.beginning_of_week
+    @threshold = params[:threshold].presence || nil
+
+    case params[:window]
+    when 'month'
+      @window = 1.month
+    else
+      @window = 1.week
     end
   end
 end

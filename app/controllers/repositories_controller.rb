@@ -165,11 +165,9 @@ class RepositoriesController < ApplicationController
   def states
     state_name = params[:tab].presence || 'first'
 
-    @start_date = 1.week.ago.beginning_of_week
-    @end_date = Time.now.beginning_of_week
-    @window = 1.week
+    parse_pmf_params
 
-    @data = PmfRepo.state(state_name, @start_date, @end_date, @window)
+    @data = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold)
 
     if @data
       all_repos = @data.first[:states].first[1]
@@ -190,11 +188,9 @@ class RepositoriesController < ApplicationController
   def transitions
     transition_name = params[:tab].presence || 'First Time'
 
-    @start_date = 2.week.ago.beginning_of_week
-    @end_date = 1.week.ago.beginning_of_week
-    @window = 1.week
+    parse_pmf_params
 
-    @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window)
+    @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold)
 
     if @data
       all_repos = @data.first[:transitions][transition_name.to_sym]
@@ -209,6 +205,19 @@ class RepositoriesController < ApplicationController
       format.json do
         render json: all_repos
       end
+    end
+  end
+
+  def parse_pmf_params
+    @start_date = params[:start_date].presence || 2.week.ago.beginning_of_week
+    @end_date = params[:end_date].presence || 1.week.ago.beginning_of_week
+    @threshold = params[:threshold].presence || nil
+
+    case params[:window]
+    when 'month'
+      @window = 1.month
+    else
+      @window = 1.week
     end
   end
 end
