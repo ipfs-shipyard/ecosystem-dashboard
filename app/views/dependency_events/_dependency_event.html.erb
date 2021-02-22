@@ -1,0 +1,11 @@
+<div class="card mb-3 event">
+  <div class="card-body pb-1">
+    <p><%= link_to dependency_event.repository.full_name, dependency_event.repository %> <%= dependency_event.action %> <%= dependency_event.platform %>/<%= link_to dependency_event.package.name, dependency_event.package %> (<%= dependency_event.requirement %>)</p>
+
+    <pre><%= dependency_event.commit_message %></pre>
+
+    <small class='text-muted'>
+      <%= link_to dependency_event.committed_at, "https://github.com/#{dependency_event.repository.full_name}/commit/#{dependency_event.commit_sha}", target: :_blank %>
+    </small>
+  </div>
+</div>
