@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/andrew/bibliothecary
-  revision: 8c0233c3174a3f3337128ade6a2cd89235688e82
+  revision: d4d3aeb1bac20e41d44ca3d40cbd79634e6b9254
   specs:
     bibliothecary (6.8.6)
       commander
