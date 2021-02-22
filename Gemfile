@@ -34,6 +34,7 @@ gem 'faraday'
 gem "faraday_middleware"
 gem "counter_culture"
 gem "spdx", git: "https://github.com/librariesio/spdx", ref: 'b590cd0'
+gem 'repo_miner', git: "https://github.com/andrew/repo_miner"
 
 gem 'bugsnag'
 gem 'zlib'

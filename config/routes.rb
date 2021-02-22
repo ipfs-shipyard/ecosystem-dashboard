@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       get :transitions
     end
   end
+
+  resources :dependency_events
+
   resources :contributors
 
   resources :users do

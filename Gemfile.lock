@@ -21,6 +21,14 @@ GIT
       escape_utils (~> 1.1)
 
 GIT
+  remote: https://github.com/andrew/repo_miner
+  revision: c4be7e788be9ad7933a48d840ef89ef9677f40d1
+  specs:
+    repo_miner (0.3.1)
+      bibliothecary
+      rugged
+
+GIT
   remote: https://github.com/librariesio/semantic
   revision: ed94eaa7107bdc60e8fd98e1904d4c065a9a576d
   specs:
@@ -272,6 +280,7 @@ GEM
     ruby-enum (0.9.0)
       i18n
     ruby2_keywords (0.0.4)
+    rugged (1.1.0)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -365,6 +374,7 @@ DEPENDENCIES
   puma_worker_killer
   rack-cors
   rails
+  repo_miner!
   sassc-rails
   semantic!
   semantic_range

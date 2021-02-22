@@ -1,4 +1,5 @@
 class Repository < ApplicationRecord
+  include DependencyMiner
 
   IGNORABLE_EXCEPTIONS = [
     Octokit::Unauthorized,
@@ -18,6 +19,7 @@ class Repository < ApplicationRecord
   has_many :manifests, dependent: :destroy
   has_many :repository_dependencies
   has_many :dependencies, through: :manifests, source: :repository_dependencies
+  has_many :dependency_events
   has_many :tags
   has_many :packages
   has_many :issues, foreign_key: :repo_full_name, primary_key: :full_name
