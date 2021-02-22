@@ -17,7 +17,7 @@ class DependencyEventsController < ApplicationController
         render 'index', :layout => false
       end
       format.json do
-        render json: @events
+        render json: @dependency_events
       end
     end
   end
