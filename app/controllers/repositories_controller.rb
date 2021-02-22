@@ -180,7 +180,7 @@ class RepositoriesController < ApplicationController
         @pagy, @repositories = pagy_array(all_repos)
       end
       format.json do
-        render json: all_repos
+        render json: @data
       end
     end
   end
@@ -203,7 +203,7 @@ class RepositoriesController < ApplicationController
         @pagy, @repositories = pagy_array(all_repos)
       end
       format.json do
-        render json: all_repos
+        render json: @data
       end
     end
   end

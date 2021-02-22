@@ -27,7 +27,7 @@ class UsersController < ApplicationController
         @pagy, @users = pagy_array(all_users)
       end
       format.json do
-        render json: all_users
+        render json: @data
       end
     end
   end
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
         @pagy, @users = pagy_array(all_users)
       end
       format.json do
-        render json: all_users
+        render json: @data
       end
     end
   end
