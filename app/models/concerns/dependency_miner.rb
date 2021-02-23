@@ -10,7 +10,7 @@ module DependencyMiner
     `rm -rf #{tmp_path}`
 
     # download code
-    system "git clone -b #{default_branch} --single-branch #{html_url} #{tmp_path}"
+    system "GIT_TERMINAL_PROMPT=0 git clone -b #{default_branch} --single-branch #{html_url} #{tmp_path}"
 
     return unless tmp_path.exist? # handle failed clones
 
