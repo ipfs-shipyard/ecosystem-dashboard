@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       get :outdated
     end
   end
-  resources :repositories do
+  resources :repositories, constraints: { id: /.*/ } do
     collection do
       get :audit
       get :states
