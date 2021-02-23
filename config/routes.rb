@@ -1,5 +1,7 @@
-Rails.application.routes.draw do
+require 'sidekiq/web'
 
+Rails.application.routes.draw do
+  mount Sidekiq::Web at: "sidekiq"
   mount PgHero::Engine, at: "pghero"
 
   get :admin, to: redirect('/admin/contributors')

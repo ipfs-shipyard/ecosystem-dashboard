@@ -45,6 +45,8 @@ gem 'simple_form'
 gem 'rack-cors'
 gem 'dalli'
 
+gem 'sidekiq'
+
 group :development do
   gem 'web-console'
   gem 'listen'
