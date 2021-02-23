@@ -47,6 +47,9 @@ class Repository < ApplicationRecord
   scope :with_manifests, -> { joins(:manifests).group(:id) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
 
+  scope :with_dependency_events, -> { joins(:dependency_events).group(:id) }
+  scope :without_dependency_events, -> { includes(:dependency_events).where(dependency_events: {repository_id: nil}) }
+
   scope :with_search_results, -> { joins(:search_results).group(:id) }
   scope :without_search_results, -> { includes(:search_results).where(search_results: {repository_full_name: nil}) }
 
