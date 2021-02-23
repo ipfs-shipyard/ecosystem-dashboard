@@ -4,8 +4,7 @@ require 'zlib'
 namespace :backfill do
   task all: :environment do
 
-    repo_names = Repository.with_internal_deps.pluck(:full_name)
-    repo_names.uniq!
+    repo_names = Repository.not_internal.with_internal_deps.pluck(:full_name)
 
     if ENV['START_DATE'].present?
       start_date = Time.parse(ENV['START_DATE'])
