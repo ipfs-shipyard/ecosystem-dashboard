@@ -284,7 +284,7 @@ class Pmf
     event_scope(dependency_threshold).created_before(before_date).pluck(:actor).uniq
   end
 
-  def self.event_scope(dependency_threshold)
+  def self.event_scope(dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     # not star events
     # not PL employees/contractors
     # only repos with pl dependencies or pl owned repos
