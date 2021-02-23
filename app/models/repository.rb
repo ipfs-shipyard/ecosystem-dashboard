@@ -42,7 +42,7 @@ class Repository < ApplicationRecord
   scope :topic, ->(topic) { where("topics @> ARRAY[?]::varchar[]", topic) }
   scope :triage, -> { where(triage: true) }
 
-  scope :with_internal_deps, -> { where('array_length(direct_internal_dependency_package_ids, 1) > 0 OR array_length(indirect_internal_dependency_package_ids, 1) > 0') }
+  scope :with_internal_deps, ->(count = 0) { having("SUM(array_length(direct_internal_dependency_package_ids, 1) + array_length(indirect_internal_dependency_package_ids, 1)) > ?", count).group(:id) }
 
   scope :with_manifests, -> { joins(:manifests).group(:id) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
@@ -532,8 +532,8 @@ class Repository < ApplicationRecord
     indirect_ids = lockfile_ids - direct_ids
 
     update(
-      direct_internal_dependency_package_ids: direct_ids,
-      indirect_internal_dependency_package_ids: indirect_ids
+      direct_internal_dependency_package_ids: direct_ids.uniq,
+      indirect_internal_dependency_package_ids: indirect_ids.uniq
     )
   end
 
