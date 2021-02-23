@@ -1,11 +1,12 @@
 class Pmf
   DEFAULT_WINDOW = 1.week
   DEFAULT_THRESHOLD = 5
+  DEFAULT_DEPENDENCY_THRESHOLD = 1
 
-  def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+  def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
 
       state_groups = {}
 
@@ -19,19 +20,19 @@ class Pmf
     end
   end
 
-  def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+  def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
       state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
       {date: start_date, states: state_groups}
     end
   end
 
-  def self.transitions(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+  def self.transitions(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     periods = period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
       {date: start_date, states: states}
     end
 
@@ -101,10 +102,10 @@ class Pmf
     return transition_periods
   end
 
-  def self.transitions_with_details(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+  def self.transitions_with_details(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     periods = period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
-      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold))
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
       {date: start_date, states: states}
     end
 
@@ -174,8 +175,8 @@ class Pmf
     return transition_periods
   end
 
-  def self.transition(transition_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
-    periods = transitions(start_date, end_date, window, threshold)
+  def self.transition(transition_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
+    periods = transitions(start_date, end_date, window, threshold, dependency_threshold)
     periods.map do |period|
       {
         date:  period[:date],
@@ -184,8 +185,8 @@ class Pmf
     end
   end
 
-  def self.transition_with_details(transition_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
-    periods = transitions_with_details(start_date, end_date, window, threshold)
+  def self.transition_with_details(transition_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
+    periods = transitions_with_details(start_date, end_date, window, threshold, dependency_threshold)
     periods.map do |period|
       {
         date:  period[:date],
@@ -236,12 +237,12 @@ class Pmf
     end
   end
 
-  def self.states_for_window_dates(start_date, end_date, threshold)
-    Rails.cache.fetch(['pmf_states_for_window_dates', threshold, start_date, end_date], expires_in: 1.week) do
+  def self.states_for_window_dates(start_date, end_date, threshold, dependency_threshold)
+    Rails.cache.fetch(['pmf_states_for_window_dates', threshold, dependency_threshold, start_date, end_date], expires_in: 1.week) do
       puts "Generating cache for #{start_date} - #{end_date}"
-      window_events = load_event_data(start_date, end_date)
+      window_events = load_event_data(start_date, end_date, dependency_threshold)
 
-      previous_usernames = previously_active_usernames(start_date)
+      previous_usernames = previously_active_usernames(start_date, dependency_threshold)
 
       active_actors = window_events.group_by(&:actor)
 
@@ -275,20 +276,20 @@ class Pmf
     return 'inactive' if score.zero?
   end
 
-  def self.load_event_data(start_date, end_date)
-    event_scope.select('events.created_at, actor').created_after(start_date).created_before(end_date).all
+  def self.load_event_data(start_date, end_date, dependency_threshold)
+    event_scope(dependency_threshold).select('events.created_at, actor').created_after(start_date).created_before(end_date).all
   end
 
-  def self.previously_active_usernames(before_date)
-    event_scope.created_before(before_date).pluck(:actor).uniq
+  def self.previously_active_usernames(before_date, dependency_threshold)
+    event_scope(dependency_threshold).created_before(before_date).pluck(:actor).uniq
   end
 
-  def self.event_scope
+  def self.event_scope(dependency_threshold)
     # not star events
     # not PL employees/contractors
     # only repos with pl dependencies or pl owned repos
 
-    repository_ids = Repository.with_internal_deps.pluck(:id)
+    repository_ids = Repository.with_internal_deps(dependency_threshold).pluck(:id)
     # repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids += Repository.internal.pluck(:id)
     repository_ids.uniq!

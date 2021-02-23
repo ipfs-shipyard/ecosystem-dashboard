@@ -175,7 +175,7 @@ class RepositoriesController < ApplicationController
 
     parse_pmf_params
 
-    @data = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold)
+    @data = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold, @dependency_threshold)
 
     if @data
       all_repos = @data.first[:states].first[1]
@@ -198,7 +198,7 @@ class RepositoriesController < ApplicationController
 
     parse_pmf_params
 
-    @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold)
+    @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
 
     if @data
       all_repos = @data.first[:transitions][transition_name.to_sym]
@@ -220,6 +220,7 @@ class RepositoriesController < ApplicationController
     @start_date = params[:start_date].presence || 2.week.ago.beginning_of_week
     @end_date = params[:end_date].presence || 1.week.ago.beginning_of_week
     @threshold = params[:threshold].presence || nil
+    @dependency_threshold = params[:dependency_threshold].presence || 0
 
     case params[:window]
     when 'month'

@@ -2,7 +2,7 @@ class PmfRepoController < ApplicationController
   def states
     parse_pmf_params
 
-    json = PmfRepo.states_summary(@start_date, @end_date, @window, @threshold).to_json
+    json = PmfRepo.states_summary(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
 
     render json: json
   end
@@ -11,7 +11,7 @@ class PmfRepoController < ApplicationController
     state_name = params[:state_name]
     parse_pmf_params
 
-    json = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold).to_json
+    json = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
 
     render json: json
   end
@@ -19,7 +19,7 @@ class PmfRepoController < ApplicationController
   def transitions
     parse_pmf_params
 
-    json = PmfRepo.transitions(@start_date, @end_date, @window, @threshold).to_json
+    json = PmfRepo.transitions(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
 
     render json: json
   end
@@ -28,7 +28,7 @@ class PmfRepoController < ApplicationController
     transition_name = params[:transition_name]
     parse_pmf_params
 
-    json = PmfRepo.transition(transition_name, @start_date, @end_date, @window, @threshold).to_json
+    json = PmfRepo.transition(transition_name, @start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
 
     render json: json
   end
@@ -39,6 +39,7 @@ class PmfRepoController < ApplicationController
     @start_date = params[:start_date].presence || 4.weeks.ago.beginning_of_week
     @end_date = params[:end_date].presence || Time.now.beginning_of_week
     @threshold = params[:threshold].presence || nil
+    @dependency_threshold = params[:dependency_threshold].presence || 0
 
     case params[:window]
     when 'month'

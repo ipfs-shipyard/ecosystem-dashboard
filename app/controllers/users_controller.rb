@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   def show
     @username = params[:id]
-    @events_scope = Pmf.event_scope.user(@username)
+    @events_scope = Pmf.event_scope(@dependency_threshold).user(@username)
 
     sort = params[:sort] || 'events.created_at'
     order = params[:order] || 'desc'
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
     parse_pmf_params
 
-    @data = Pmf.transitions_with_details(@start_date, @end_date, @window, @threshold)
+    @data = Pmf.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
 
     if @data
       all_users = @data.first[:transitions][transition_name.to_sym]
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
 
     parse_pmf_params
 
-    @data = Pmf.state(state_name, @start_date, @end_date, @window, @threshold)
+    @data = Pmf.state(state_name, @start_date, @end_date, @window, @threshold, @dependency_threshold)
 
     if @data
       all_users = @data.first[:states].first[1]
@@ -59,6 +59,7 @@ class UsersController < ApplicationController
     @start_date = params[:start_date].presence || 2.week.ago.beginning_of_week
     @end_date = params[:end_date].presence || 1.week.ago.beginning_of_week
     @threshold = params[:threshold].presence || nil
+    @dependency_threshold = params[:dependency_threshold].presence || 0
 
     case params[:window]
     when 'month'
