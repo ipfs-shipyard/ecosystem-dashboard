@@ -29,7 +29,7 @@ class PmfRepo
     end
   end
 
-  def self.transitions(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil)
+  def self.transitions(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     periods = period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
       states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
