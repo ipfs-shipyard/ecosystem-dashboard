@@ -81,7 +81,7 @@ class PmfRepo
       transition_periods << {
         date: period[:date],
         transitions: {
-          'First Time': current_states['first'].length,
+          'First Time': current_states.fetch('first', []).length,
           'Bounced': bounced.length,
           'New Low-Value': new_low.length,
           'New High-Value': new_high.length,
