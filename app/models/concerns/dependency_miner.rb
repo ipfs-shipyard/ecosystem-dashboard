@@ -26,6 +26,8 @@ module DependencyMiner
     # only consider commits with dependency data
     dependency_commits = commits.select{|c| c.data[:dependencies].present? }
 
+    @package_cache = {}
+
     activities = []
     if dependency_commits.any?
       dependency_commits.each do |commit|
@@ -67,9 +69,14 @@ module DependencyMiner
   end
 
   def find_package_id(package_name, platform)
+    id = @package_cache["#{package_name}-#{platform}"]
+    return id if id
     package_id = Package.platform(platform).where(name: package_name.try(:strip)).limit(1).pluck(:id).first
+    @package_cache["#{package_name}-#{platform}"] = package_id if package_id
     return package_id if package_id
-    Package.lower_platform(platform).lower_name(package_name.try(:strip)).limit(1).pluck(:id).first
+    package_id = Package.lower_platform(platform).lower_name(package_name.try(:strip)).limit(1).pluck(:id).first
+    @package_cache["#{package_name}-#{platform}"] = package_id if package_id
+    package_id
   end
 
   def format_activity(commit, manifest, dependency, action)
