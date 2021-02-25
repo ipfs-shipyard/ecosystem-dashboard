@@ -272,7 +272,7 @@ class PmfRepo
   end
 
   def self.state_for_repo(repo_name, score, threshold)
-    return 'high' if score >= threshold
+    return 'high' if score >= threshold.to_i
     return 'low' if score >= 1
     return 'inactive' if score.zero?
   end
