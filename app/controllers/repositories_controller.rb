@@ -40,6 +40,7 @@ class RepositoriesController < ApplicationController
       format.html do
         @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
 
+        @dependency_events_pagy, @dependency_events = pagy(@repository.dependency_events.internal.order('dependency_events.committed_at DESC'))
         @events_scope = Pmf.event_scope.repo(@repository.full_name)
         @events_pagy, @events = pagy(@events_scope.order('events.created_at DESC'))
         @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))

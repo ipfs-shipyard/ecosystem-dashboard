@@ -81,11 +81,19 @@
       <span class='badge badge-secondary'><%= number_to_human @repository.indirect_internal_dependency_package_ids.length %></span>
     </a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:tab] == 'dependency_events' %>" href="<%= url_for(request.params.merge(tab: 'dependency_events', page: 1)) %>">
+      Dep Events
+      <span class='badge badge-secondary'><%= number_to_human @repository.dependency_events.count %></span>
+    </a>
+  </li>
 </ul>
 
 <%= case params[:tab]
 when 'dependencies'
   render 'dependencies'
+when 'dependency_events'
+  render 'dependency_events'
 when 'packages'
   render 'packages'
 when 'internal_direct'

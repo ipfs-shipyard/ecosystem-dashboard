@@ -1,0 +1,6 @@
+<% if @dependency_events.any? %>
+  <%= render @dependency_events %>
+<% else %>
+  <p>No dependency events found.</p>
+<% end %>
+<%== pagy_bootstrap_nav(@dependency_events_pagy) if @dependency_events_pagy.pages > 1 %>
