@@ -175,19 +175,20 @@ class RepositoriesController < ApplicationController
 
     parse_pmf_params
 
-    @data = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold, @dependency_threshold)
-
-    if @data
-      all_repos = @data.first[:states].first[1]
-    else
-      all_repos = []
-    end
-
     respond_to do |format|
       format.html do
+        @data = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold, @dependency_threshold)
+
+        if @data
+          all_repos = @data.first[:states].first[1]
+        else
+          all_repos = []
+        end
+
         @pagy, @repositories = pagy_array(all_repos)
       end
       format.json do
+        @data = PmfRepo.states(@start_date, @end_date, @window, @threshold, @dependency_threshold)
         render json: @data
       end
     end

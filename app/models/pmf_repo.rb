@@ -20,6 +20,21 @@ class PmfRepo
     end
   end
 
+  def self.states(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
+    period_start_dates(start_date, end_date, window).map do |start_date|
+      end_date = start_date + window
+      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
+      state_groups = {}
+
+      states.sort_by{|u| [-u[1], u[0]]}.each do |u|
+        state_groups[u[2]] ||= []
+        state_groups[u[2]] << {repo_name: u[0], score: u[1]}
+      end
+
+      {date: start_date, states: state_groups}
+    end
+  end
+
   def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |start_date|
       end_date = start_date + window
