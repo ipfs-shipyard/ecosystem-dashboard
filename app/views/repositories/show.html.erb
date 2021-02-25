@@ -66,7 +66,6 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:tab] == 'dependencies' %>" href="<%= url_for(request.params.merge(tab: 'dependencies', page: 1)) %>">
       All Deps
-      <span class='badge badge-secondary'><%= number_to_human @repository.repository_dependencies.length %></span>
     </a>
   </li>
   <li class="nav-item">
@@ -84,7 +83,7 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:tab] == 'dependency_events' %>" href="<%= url_for(request.params.merge(tab: 'dependency_events', page: 1)) %>">
       Dep Events
-      <span class='badge badge-secondary'><%= number_to_human @repository.dependency_events.count %></span>
+      <span class='badge badge-secondary'><%= number_to_human @dependency_events_pagy.count %></span>
     </a>
   </li>
 </ul>
