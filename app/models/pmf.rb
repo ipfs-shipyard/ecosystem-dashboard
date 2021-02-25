@@ -1,12 +1,12 @@
 class Pmf
-  DEFAULT_WINDOW = 1.week
+  DEFAULT_WINDOW = 'week'
   DEFAULT_THRESHOLD = 5
   DEFAULT_DEPENDENCY_THRESHOLD = 1
 
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |period_start_date|
       next if period_start_date.to_date < start_date.to_date
-      end_date = period_start_date + window
+      end_date = calculate_end_date(period_start_date, window)
       states = states_for_window_dates(period_start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
 
       state_groups = {}
@@ -24,7 +24,7 @@ class Pmf
   def self.states(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |period_start_date|
       next if period_start_date.to_date < start_date.to_date
-      end_date = period_start_date + window
+      end_date = calculate_end_date(period_start_date, window)
       states = states_for_window_dates(period_start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
       state_groups = {}
 
@@ -41,7 +41,7 @@ class Pmf
   def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |period_start_date|
       next if period_start_date.to_date < start_date.to_date
-      end_date = period_start_date + window
+      end_date = calculate_end_date(period_start_date, window)
       states = states_for_window_dates(period_start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
       state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
       {date: period_start_date, states: state_groups}
@@ -50,7 +50,7 @@ class Pmf
 
   def self.transitions(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     periods = period_start_dates(start_date, end_date, window).map do |start_date|
-      end_date = start_date + window
+      end_date = calculate_end_date(start_date, window)
       states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
       {date: start_date, states: states}
     end
@@ -123,7 +123,7 @@ class Pmf
 
   def self.transitions_with_details(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     periods = period_start_dates(start_date, end_date, window).map do |start_date|
-      end_date = start_date + window
+      end_date = calculate_end_date(start_date, window)
       states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
       {date: start_date, states: states}
     end
@@ -218,25 +218,41 @@ class Pmf
 
   def self.period_start_dates(start_date, end_date, window)
     case window
-    when 1.week
+    when 'week'
       (start_date.to_date..end_date.to_date).map(&:beginning_of_week).uniq
-    when 1.month
+    when 'month'
       (start_date.to_date..end_date.to_date).map(&:beginning_of_month).uniq
     else
-      p window
-      raise 'Unexpected window length'
+      # x number of days rolling backwards from end_date until start_date
+      start_dates = []
+      next_start_date = (end_date.to_date - window).beginning_of_day
+      while next_start_date > (start_date.to_date - window) # include one extra week to get first_timers
+        start_dates << next_start_date
+        next_start_date = (next_start_date.to_date - window).beginning_of_day
+      end
+      start_dates.reverse
     end
   end
 
-  def self.threshold_for_period(window, threshold)
+  def self.threshold_for_period(window, threshold = nil)
     case window
-    when 1.week
+    when 'week'
       threshold || DEFAULT_THRESHOLD
-    when 1.month
+    when 'month'
       threshold || (DEFAULT_THRESHOLD*4.3).round
     else
-      p window
-      raise 'Unexpected window length'
+      threshold || ((DEFAULT_THRESHOLD/7.0)*window.to_i).round
+    end
+  end
+
+  def self.calculate_end_date(start_date, window)
+    case window
+    when 'week'
+      start_date + 1.week
+    when 'month'
+      start_date + 1.month
+    else
+      start_date + window
     end
   end
 

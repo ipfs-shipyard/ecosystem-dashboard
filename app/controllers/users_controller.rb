@@ -56,16 +56,20 @@ class UsersController < ApplicationController
   end
 
   def parse_pmf_params
-    @start_date = params[:start_date].presence || 2.week.ago.beginning_of_week
-    @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
+    @start_date = params[:start_date].presence || 2.weeks.ago.beginning_of_week
     @threshold = params[:threshold].presence || nil
     @dependency_threshold = params[:dependency_threshold].presence || 0
 
-    case params[:window]
-    when 'month'
-      @window = 1.month
+    if params[:window] =~ /\A[-+]?[0-9]+\z/ # integer
+      @end_date = params[:end_date].presence || Time.now.yesterday.end_of_day
+      @window = params[:window].to_i.days
     else
-      @window = 1.week
+      @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
+      if params[:window] == 'month'
+        @window = 'month'
+      else
+        @window = 'week'
+      end
     end
   end
 end
