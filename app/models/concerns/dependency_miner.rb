@@ -64,7 +64,7 @@ module DependencyMiner
       end
     end
 
-    activities.compact!
+    activities.compact!.uniq!
 
     # write activities to the database
     DependencyEvent.insert_all(activities) if activities.any?
