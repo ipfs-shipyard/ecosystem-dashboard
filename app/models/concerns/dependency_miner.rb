@@ -2,6 +2,11 @@ module DependencyMiner
   def mine_dependencies
     return if fork?
 
+    @package_cache = {}
+    Package.internal.select(:id, :name, :platform).each do |pkg|
+      @package_cache["#{pkg.platform.downcase}-#{pkg.name}"] = pkg.id
+    end
+
     tmp_dir_name = "github-#{full_name}".downcase
 
     tmp_path = Rails.root.join("tmp/#{tmp_dir_name}")
@@ -25,8 +30,6 @@ module DependencyMiner
 
     # only consider commits with dependency data
     dependency_commits = commits.select{|c| c.data[:dependencies].present? }
-
-    @package_cache = {}
 
     activities = []
     if dependency_commits.any?
@@ -61,6 +64,8 @@ module DependencyMiner
       end
     end
 
+    activities.compact!
+
     # write activities to the database
     DependencyEvent.insert_all(activities) if activities.any?
   ensure
@@ -68,21 +73,11 @@ module DependencyMiner
     `rm -rf #{tmp_path}`
   end
 
-  def find_package_id(package_name, platform)
-    id = @package_cache["#{package_name}-#{platform}"]
-    return id if id
-    package_id = Package.platform(platform).where(name: package_name.try(:strip)).limit(1).pluck(:id).first
-    @package_cache["#{package_name}-#{platform}"] = package_id if package_id
-    return package_id if package_id
-    package_id = Package.lower_platform(platform).lower_name(package_name.try(:strip)).limit(1).pluck(:id).first
-    @package_cache["#{package_name}-#{platform}"] = package_id if package_id
-    package_id
-  end
-
   def format_activity(commit, manifest, dependency, action)
+    return nil unless @package_cache["#{manifest[:platform]}-#{dependency[:name]}"]
     {
       repository_id: id,
-      package_id: find_package_id(dependency[:name], manifest[:platform]),
+      package_id: @package_cache["#{manifest[:platform]}-#{dependency[:name]}"],
       action: action,
       package_name: dependency[:name],
       commit_message: commit.message,
