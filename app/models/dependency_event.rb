@@ -4,6 +4,9 @@ class DependencyEvent < ApplicationRecord
 
   scope :internal, -> { where(package_id: Package.internal.pluck(:id)) }
 
+  scope :platform, ->(platform) { where(platform: platform) }
+  scope :action, ->(action) { where(platform: action) }
+
   scope :this_period, ->(period) { where('dependency_events.committed_at > ?', period.days.ago) }
   scope :last_period, ->(period) { where('dependency_events.committed_at > ?', (period*2).days.ago).where('dependency_events.committed_at < ?', period.days.ago) }
   scope :this_week, -> { where('dependency_events.committed_at > ?', 1.week.ago) }

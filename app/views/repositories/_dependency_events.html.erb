@@ -1,5 +1,5 @@
 <% if @dependency_events.any? %>
-  <%= render @dependency_events %>
+  <%= render 'dependency_events/dependency_events' %>
 <% else %>
   <p>No dependency events found.</p>
 <% end %>

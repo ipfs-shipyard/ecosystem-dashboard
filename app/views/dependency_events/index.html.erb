@@ -3,48 +3,7 @@
 </h1>
 
 <% if @dependency_events.any? %>
-  <% @dependency_events.group_by(&:commit_sha).each do |commit, dependency_events| %>
-    <% dependency_event = dependency_events.first %>
-
-    <div class="card mb-3 event">
-      <div class="card-body pb-1">
-        <h5 class="card-title">
-          <%= link_to dependency_event.repository.full_name, dependency_event.repository %>
-          <small class='text-muted'>
-            - #<%= commit %> <%= link_to dependency_event.committed_at, "https://github.com/#{dependency_event.repository.full_name}/commit/#{dependency_event.commit_sha}", target: :_blank %>
-          </small>
-        </h5>
-
-        <ul>
-          <% dependency_events.sort_by(&:manifest_path).group_by(&:manifest_path).each do |manifest_path, dependency_events| %>
-            <li>
-              <strong>
-                <%= manifest_path %>
-              </strong>
-              <ul>
-                <% dependency_events.sort_by(&:action).each do |dependency_event| %>
-                  <li>
-                    <%= dependency_event.action %>
-                    <%= link_to dependency_event.package.name, dependency_event.package %>
-                    <small class='text-muted'>
-                      <% if dependency_event.action == 'modified' %>
-                        <%= dependency_event.previous_requirement %> -> <%= dependency_event.requirement %>
-                      <% else %>
-                        <%= dependency_event.requirement %>
-                    <% end %>
-                    </small>
-                  </li>
-                  <!-- if action == 'update' previous_requirement and previous_kind -->
-                <% end %>
-              </ul>
-            </li>
-          <% end %>
-        </ul>
-
-        <pre><%= dependency_event.commit_message %></pre>
-      </div>
-    </div>
-  <% end %>
+  <%= render 'dependency_events/dependency_events' %>
 <% else %>
   <p>No dependency events found.</p>
 <% end %>
