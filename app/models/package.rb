@@ -30,6 +30,8 @@ class Package < ApplicationRecord
   has_many :dependent_repositories, -> { group('repositories.id').order('repositories.stargazers_count DESC') }, through: :repository_dependencies, source: :repository
   has_many :direct_dependent_repositories, -> { where(repository_dependencies: {direct: true}).group('repositories.id').order('repositories.stargazers_count DESC') }, through: :repository_dependencies, source: :repository
 
+  has_many :dependency_events
+
   scope :platform, ->(platform) { where(platform: PackageManager::Base.format_name(platform)) }
   scope :lower_platform, ->(platform) { where('lower(packages.platform) = ?', platform.try(:downcase)) }
   scope :lower_name, ->(name) { where('lower(packages.name) = ?', name.try(:downcase)) }

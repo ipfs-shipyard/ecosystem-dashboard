@@ -18,22 +18,27 @@
 
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] != 'false' && params[:dependencies].blank? && params[:usage].blank? %>" href="<%= url_for(request.params.merge(direct: true, dependencies: nil, usage: nil)) %>">Direct Dependent External Repos</a>
+    <a class="nav-link <%= 'active' if params[:direct] != 'false' && params[:dependencies].blank? && params[:usage].blank? %>" href="<%= url_for(request.params.merge(direct: true, dependencies: nil, usage: nil, dependency_events: nil)) %>">Direct Dependent Repos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil, usage: nil)) %>">Transitive Dependent External Repos</a>
+    <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil, usage: nil, dependency_events: nil)) %>">Transitive Dependent Repos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil)) %>">
-      Internal Dependencies
+    <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil, dependency_events: nil)) %>">
+      Internal Deps
       <span class='badge badge-secondary'><%= @dependencies.count %></span>
     </a>
   </li>
   <% if @package.internal? %>
     <li class="nav-item">
-      <a class="nav-link <%= 'active' if params[:usage].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: nil, usage: true)) %>">Usage Breakdown</a>
+      <a class="nav-link <%= 'active' if params[:usage].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: nil, usage: true, dependency_events: nil)) %>">Usage Breakdown</a>
     </li>
   <% end %>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:dependency_events].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: nil, usage: nil, dependency_events: true)) %>">
+      Dependency Activity
+    </a>
+  </li>
 </ul>
 
 <% if params[:usage].present? %>
@@ -61,6 +66,14 @@
       <% end %>
     </ul>
   </div>
+<% elsif params[:dependency_events].present? %>
+  <% if @dependency_events.any? %>
+    <%= render @dependency_events %>
+  <% else %>
+    <p>No dependency events found.</p>
+  <% end %>
+  <%== pagy_bootstrap_nav(@dependency_events_pagy) if @dependency_events_pagy.pages > 1 %>
+
 <% else %>
   <div class="dependencies">
     <% @repository_dependencies.group_by{|rd| rd.repository.org }.sort_by{|o,rd| o }.each do |org, repository_dependencies| %>

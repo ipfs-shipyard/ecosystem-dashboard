@@ -111,6 +111,8 @@ class PackagesController < ApplicationController
 
     @dependencies = Dependency.where(version_id: @package.version_ids).where(package_id: Package.internal.pluck(:id)).includes(:version, :package).group_by(&:package)
     @repository_dependencies = @package.repository_dependencies.external.where(direct: direct).active.source.includes(:repository, :manifest)
+
+    @dependency_events_pagy, @dependency_events = pagy(@package.dependency_events.internal.order('dependency_events.committed_at DESC'))
   end
 
   def search
