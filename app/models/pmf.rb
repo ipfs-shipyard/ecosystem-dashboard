@@ -305,7 +305,7 @@ class Pmf
     events.length
   end
 
-  def self.state_for_user(username, score, threshold)
+  def self.state_for_user(username, score, threshold = DEFAULT_THRESHOLD)
     return 'high' if score >= threshold.to_i
     return 'low' if score >= 1
     return 'inactive' if score.zero?

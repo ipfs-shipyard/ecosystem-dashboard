@@ -304,7 +304,7 @@ class PmfRepo
     events.length
   end
 
-  def self.state_for_repo(repo_name, score, threshold)
+  def self.state_for_repo(repo_name, score, threshold = DEFAULT_THRESHOLD)
     return 'high' if score >= threshold.to_i
     return 'low' if score >= 1
     return 'inactive' if score.zero?
