@@ -23,51 +23,59 @@ module DependencyMiner
     miner = RepoMiner::Repository.new(tmp_path.to_s)
 
     # Find last commit analysed
-    last_commit_sha = dependency_events.order('committed_at DESC').first.try(:commit_sha)
+    last_commit_sha = latest_commit_sha || dependency_events.order('committed_at DESC').first.try(:commit_sha)
 
     # store activities as DependencyActivity records
     commits = miner.analyse(default_branch, last_commit_sha)
 
-    # only consider commits with dependency data
-    dependency_commits = commits.select{|c| c.data[:dependencies].present? }
+    latest_commit_sha = last_commit_sha
 
-    activities = []
-    if dependency_commits.any?
-      dependency_commits.each do |commit|
-        dependency_data = commit.data[:dependencies]
+    miner.walk(default_branch, last_commit_sha).each do |commit|
+      latest_commit_sha = commit.oid
+      rc = RepoMiner::Commit.new(miner, commit).analyse
+      next unless rc.data[:dependencies].present?
 
-        dependency_data[:added_manifests].each do |added_manifest|
-          added_manifest[:added_dependencies].each do |added_dependency|
-            activities << format_activity(commit, added_manifest, added_dependency, 'added')
-          end
+      activities = []
+
+      dependency_data = rc.data[:dependencies]
+
+      dependency_data[:added_manifests].each do |added_manifest|
+        added_manifest[:added_dependencies].each do |added_dependency|
+          activities << format_activity(rc, added_manifest, added_dependency, 'added')
+        end
+      end
+
+      dependency_data[:modified_manifests].each do |modified_manifest|
+        modified_manifest[:added_dependencies].each do |added_dependency|
+          activities << format_activity(rc, modified_manifest, added_dependency, 'added')
         end
 
-        dependency_data[:modified_manifests].each do |modified_manifest|
-          modified_manifest[:added_dependencies].each do |added_dependency|
-            activities << format_activity(commit, modified_manifest, added_dependency, 'added')
-          end
-
-          modified_manifest[:modified_dependencies].each do |modified_dependency|
-            activities << format_activity(commit, modified_manifest, modified_dependency, 'modified')
-          end
-
-          modified_manifest[:removed_dependencies].each do |removed_dependency|
-            activities << format_activity(commit, modified_manifest, removed_dependency, 'removed')
-          end
+        modified_manifest[:modified_dependencies].each do |modified_dependency|
+          activities << format_activity(rc, modified_manifest, modified_dependency, 'modified')
         end
 
-        dependency_data[:removed_manifests].each do |removed_manifest|
-          removed_manifest[:removed_dependencies].each do |removed_dependency|
-            activities << format_activity(commit, removed_manifest, removed_dependency, 'removed')
-          end
+        modified_manifest[:removed_dependencies].each do |removed_dependency|
+          activities << format_activity(rc, modified_manifest, removed_dependency, 'removed')
         end
+      end
+
+      dependency_data[:removed_manifests].each do |removed_manifest|
+        removed_manifest[:removed_dependencies].each do |removed_dependency|
+          activities << format_activity(rc, removed_manifest, removed_dependency, 'removed')
+        end
+      end
+
+      if activities.any?
+        activities = activities.compact.uniq
+
+        # write activities to the database
+        DependencyEvent.insert_all(activities)
+
+        update({latest_commit_sha: latest_commit_sha, latest_dependency_mine: Time.now})
       end
     end
 
-    activities.compact!.uniq!
-
-    # write activities to the database
-    DependencyEvent.insert_all(activities) if activities.any?
+    update({latest_commit_sha: latest_commit_sha, latest_dependency_mine: Time.now})
   ensure
     # delete code
     `rm -rf #{tmp_path}`
