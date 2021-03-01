@@ -48,13 +48,12 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:tab].blank? || params[:tab] == 'events' %>" href="<%= url_for(request.params.merge(tab: 'events', page: 1)) %>">
       Events
-      <span class='badge badge-secondary'><%= number_to_human @events_pagy.count %></span>
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:tab] == 'search' %>" href="<%= url_for(request.params.merge(tab: 'search', page: 1)) %>">
       Search results
-      <span class='badge badge-secondary'><%= number_to_human @results_pagy.count %></span>
+      <span class='badge badge-secondary'><%= number_to_human @repository.search_results.count %></span>
     </a>
   </li>
   <li class="nav-item">
@@ -83,7 +82,7 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:tab] == 'dependency_events' %>" href="<%= url_for(request.params.merge(tab: 'dependency_events', page: 1)) %>">
       Dep Events
-      <span class='badge badge-secondary'><%= number_to_human @dependency_events_pagy.count %></span>
+      <span class='badge badge-secondary'><%= number_to_human @repository.dependency_events.count %></span>
     </a>
   </li>
 </ul>
