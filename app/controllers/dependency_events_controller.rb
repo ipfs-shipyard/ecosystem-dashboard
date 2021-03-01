@@ -3,6 +3,10 @@ class DependencyEventsController < ApplicationController
     @page_title = 'Dependency Events'
     @scope = DependencyEvent.all
 
+    @scope = @scope.where(action: params[:action_name]) if params[:action_name].present?
+    @scope = @scope.where(platform: params[:platform]) if params[:platform].present?
+    @scope = @scope.where(package_name: params[:package_name]) if params[:package_name].present?
+
     sort = params[:sort] || 'dependency_events.committed_at'
     order = params[:order] || 'desc'
 
@@ -10,7 +14,9 @@ class DependencyEventsController < ApplicationController
 
     respond_to do |format|
       format.html do
-
+        @action_names = @scope.unscope(where: :action).group(:action).count
+        @platforms = @scope.unscope(where: :platform).group(:platform).count
+        @package_names = @scope.unscope(where: :package_name).group(:package_name).count
       end
       format.rss do
         render 'index', :layout => false

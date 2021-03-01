@@ -1,6 +1,76 @@
-<h1>
-  <%= @page_title %>
-</h1>
+
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong><%= @page_title %></strong>
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav nav-pills mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:action_name].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Action</a>
+        <div class="dropdown-menu">
+          <% if params[:action_name].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, action_name: nil)) %>">
+              <%= params[:action_name] %>
+            </a>
+          <% end %>
+          <% @action_names.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |action_name,count| %>
+            <% unless action_name == params[:action] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, action_name: action_name)) %>">
+                <%= action_name %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:platform].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Platform</a>
+        <div class="dropdown-menu">
+          <% if params[:platform].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, platform: nil)) %>">
+              <%= params[:platform] %>
+            </a>
+          <% end %>
+          <% @platforms.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |platform,count| %>
+            <% unless platform == params[:platform] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, platform: platform)) %>">
+                <%= platform %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:package_name].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Package</a>
+        <div class="dropdown-menu">
+          <% if params[:package_name].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, package_name: nil)) %>">
+              <%= params[:package_name] %>
+            </a>
+          <% end %>
+          <% @package_names.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |package_name,count| %>
+            <% unless package_name == params[:package_name] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, package_name: package_name)) %>">
+                <%= package_name %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
 
 <% if @dependency_events.any? %>
   <%= render 'dependency_events/dependency_events' %>
