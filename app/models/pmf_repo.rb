@@ -172,7 +172,7 @@ class PmfRepo
       transition_periods << {
         date: period[:date],
         transitions: {
-          'First Time': current_states['first'].map{|u| {repo_name: u[0], score: u[1], previous: 0} } || [],
+          'First Time': (current_states['first'] || []).map{|u| {repo_name: u[0], score: u[1], previous: 0} },
           'Bounced': bounced,
           'New Low-Value': new_low,
           'New High-Value': new_high,
@@ -224,10 +224,10 @@ class PmfRepo
     else
       # x number of days rolling backwards from end_date until start_date
       start_dates = []
-      next_start_date = (end_date.to_date - window).beginning_of_day
+      next_start_date = (end_date.to_date - window).to_date
       while next_start_date > (start_date.to_date - window) # include one extra week to get first_timers
         start_dates << next_start_date
-        next_start_date = (next_start_date.to_date - window).beginning_of_day
+        next_start_date = (next_start_date.to_date - window).to_date
       end
       start_dates.reverse
     end
@@ -311,7 +311,7 @@ class PmfRepo
   end
 
   def self.load_event_data(start_date, end_date, dependency_threshold)
-    event_scope(dependency_threshold).select('events.created_at, actor, repository_full_name').created_after(start_date).created_before(end_date).all
+    event_scope(dependency_threshold).select('events.created_at, actor, repository_full_name').created_after(start_date.beginning_of_day).created_before(end_date.end_of_day).all
   end
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
