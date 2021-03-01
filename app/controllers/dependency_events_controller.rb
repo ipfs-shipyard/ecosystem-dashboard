@@ -6,7 +6,7 @@ class DependencyEventsController < ApplicationController
     sort = params[:sort] || 'dependency_events.committed_at'
     order = params[:order] || 'desc'
 
-    @pagy, @dependency_events = pagy(@scope.order(sort => order), items: 100)
+    @pagy, @dependency_events = pagy(@scope.order(sort => order), items: 150)
 
     respond_to do |format|
       format.html do
