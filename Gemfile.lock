@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/andrew/bibliothecary
-  revision: 5b14b9c891552b9313b8df4d008afdca346c3c53
+  revision: da4b4f55872ca5ff095a4219e6d2bb47b3b0d1d6
   specs:
     bibliothecary (6.8.6)
       commander
@@ -10,7 +10,7 @@ GIT
       sdl4r
       strings
       strings-ansi
-      toml-rb (~> 2.0)
+      tomlrb
       typhoeus
 
 GIT
@@ -120,7 +120,6 @@ GEM
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     chartkick (3.4.2)
-    citrus (3.0.2)
     commander (4.5.2)
       highline (~> 2.0.0)
     commonmarker (0.21.2)
@@ -321,8 +320,7 @@ GEM
     strings-ansi (0.2.0)
     thor (1.1.0)
     tilt (2.0.10)
-    toml-rb (2.0.1)
-      citrus (~> 3.0, > 3.0)
+    tomlrb (2.0.1)
     treetop (1.6.11)
       polyglot (~> 0.3)
     turbolinks (5.2.1)
