@@ -527,8 +527,10 @@ class Repository < ApplicationRecord
   end
 
   def update_internal_dependency_lists(internal_package_ids = Package.internal.pluck(:id))
-    return unless manifests.any?
-    return unless repository_dependencies.any?
+    if direct_internal_dependency_package_ids.blank? && indirect_internal_dependency_package_ids.blank?
+      return unless manifests.any?
+      return unless repository_dependencies.any?
+    end
 
     direct_ids = repository_dependencies.direct.where(package_id: internal_package_ids).pluck(:package_id)
     lockfile_ids = repository_dependencies.transitive.where(package_id: internal_package_ids).pluck(:package_id)
