@@ -66,6 +66,26 @@
           <% end %>
         </div>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:manifest_kind].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Manifest Kind</a>
+        <div class="dropdown-menu">
+          <% if params[:manifest_kind].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, manifest_kind: nil)) %>">
+              <%= params[:manifest_kind] %>
+            </a>
+          <% end %>
+          <% @manifest_kinds.sort_by(&:last).reverse.reject{|r| r[0].blank? }.each do |manifest_kind,count| %>
+            <% unless manifest_kind == params[:manifest_kind] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, manifest_kind: manifest_kind)) %>">
+                <%= manifest_kind %>
+                <small class='text-muted'>
+                  <%= number_with_delimiter count %>
+                </small>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
     </ul>
   </div>
 </nav>
