@@ -144,6 +144,7 @@ class Repository < ApplicationRecord
         repo.download_manifests
         repo.update_internal_dependency_lists
         repo.update_file_list
+        repo.mine_dependencies_async
       end
       repo
     rescue ArgumentError, Octokit::Error
@@ -556,5 +557,9 @@ class Repository < ApplicationRecord
 
   def indirect_internal_dependencies
     repository_dependencies.where(package_id: indirect_internal_dependency_package_ids)
+  end
+
+  def mine_dependencies_async
+    DependencyEventsWorker.perform_async(id)
   end
 end
