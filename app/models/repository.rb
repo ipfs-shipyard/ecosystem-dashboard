@@ -228,7 +228,10 @@ class Repository < ApplicationRecord
     return if file_list.blank?
     new_manifests = parse_manifests(file_list)
 
-    return if new_manifests.blank?
+    if new_manifests.blank?
+      manifests.each(&:destroy)
+      return
+    end
 
     new_manifests.each {|m| sync_manifest(m) }
 
