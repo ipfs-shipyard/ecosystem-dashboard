@@ -75,10 +75,25 @@ module DependencyMiner
       end
     end
 
-    update({latest_commit_sha: latest_commit_sha, latest_dependency_mine: Time.now})
+    update({
+      latest_commit_sha: latest_commit_sha,
+      latest_dependency_mine: Time.now,
+      first_added_internal_deps: calculate_first_added_internal_deps,
+      last_internal_dep_removed: calculate_last_internal_dep_removed
+    })
   ensure
     # delete code
     `rm -rf #{tmp_path}`
+  end
+
+  def calculate_first_added_internal_deps
+    dependency_events.order('committed_at ASC').action('added').first.try(:committed_at)
+  end
+
+  def calculate_last_internal_dep_removed
+    if dependency_events.action('added').count == dependency_events.action('removed').count
+      dependency_events.order('committed_at ASC').action('removed').last.try(:committed_at)
+    end
   end
 
   def format_activity(commit, manifest, dependency, action)

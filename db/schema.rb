@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_01_142256) do
+ActiveRecord::Schema.define(version: 2021_03_02_134323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -205,6 +205,8 @@ ActiveRecord::Schema.define(version: 2021_03_01_142256) do
     t.integer "indirect_internal_dependency_package_ids", default: [], array: true
     t.string "latest_commit_sha"
     t.datetime "latest_dependency_mine"
+    t.datetime "first_added_internal_deps"
+    t.datetime "last_internal_dep_removed"
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
