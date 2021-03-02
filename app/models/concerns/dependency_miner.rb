@@ -1,6 +1,7 @@
 module DependencyMiner
   def mine_dependencies
     return if fork?
+    return if size > 100_000
 
     @package_cache = {}
     Package.internal.select(:id, :name, :platform).each do |pkg|
