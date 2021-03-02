@@ -78,9 +78,3 @@
   <p>No dependency events found.</p>
 <% end %>
 <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
-
-<p>
-  <small class='text-muted'>
-    RSS feed for this page: <%= link_to truncate(url_for(request.params.merge(page: nil, format: :rss, only_path: false)), length: 100), url_for(request.params.merge(page: nil, format: :rss, only_path: false)) %>
-  </small>
-</p>
