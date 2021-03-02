@@ -22,15 +22,9 @@ module DependencyMiner
     # mine dependency activity from git repository
     miner = RepoMiner::Repository.new(tmp_path.to_s)
 
-    # Find last commit analysed
-    last_commit_sha = latest_commit_sha || dependency_events.order('committed_at DESC').first.try(:commit_sha)
+    latest_commit_sha = latest_commit_sha || dependency_events.order('committed_at DESC').first.try(:commit_sha)
 
-    # store activities as DependencyActivity records
-    commits = miner.analyse(default_branch, last_commit_sha)
-
-    latest_commit_sha = last_commit_sha
-
-    miner.walk(default_branch, last_commit_sha).each do |commit|
+    miner.walk(default_branch, latest_commit_sha).each do |commit|
       latest_commit_sha = commit.oid
       rc = RepoMiner::Commit.new(miner, commit).analyse
       next unless rc.data[:dependencies].present?
