@@ -23,8 +23,6 @@ module DependencyMiner
     # mine dependency activity from git repository
     miner = RepoMiner::Repository.new(tmp_path.to_s)
 
-    latest_commit_sha = latest_commit_sha || dependency_events.order('committed_at DESC').first.try(:commit_sha)
-
     miner.walk(default_branch, latest_commit_sha).each do |commit|
       latest_commit_sha = commit.oid
       rc = RepoMiner::Commit.new(miner, commit).analyse
@@ -76,6 +74,8 @@ module DependencyMiner
       first_added_internal_deps: calculate_first_added_internal_deps,
       last_internal_dep_removed: calculate_last_internal_dep_removed
     })
+  rescue Rugged::OdbError
+    update({latest_commit_sha: nil})
   ensure
     # delete code
     `rm -rf #{tmp_path}`
