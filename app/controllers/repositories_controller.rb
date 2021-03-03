@@ -235,8 +235,10 @@ class RepositoriesController < ApplicationController
       @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
       if params[:window] == 'month'
         @window = 'month'
-      else
+      elsif params[:window] == 'week'
         @window = 'week'
+      else
+        @window = 14
       end
     end
   end
