@@ -1,7 +1,7 @@
 class DependencyEventsController < ApplicationController
   def index
     @page_title = 'Dependency Events'
-    @scope = DependencyEvent.where('committed_at <= ?', Time.now).not_internal_repo
+    @scope = DependencyEvent.where('committed_at <= ?', Time.now).not_internal_repo.includes(:repository, :package)
 
     @scope = @scope.where(action: params[:action_name]) if params[:action_name].present?
     @scope = @scope.where(platform: params[:platform]) if params[:platform].present?
