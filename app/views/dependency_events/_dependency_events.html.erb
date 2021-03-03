@@ -20,7 +20,7 @@
               <% dependency_events.sort_by(&:action).each do |dependency_event| %>
                 <li>
                   <%= dependency_event.action %>
-                  <%= link_to dependency_event.package.name, dependency_event.package %>
+                  <%= link_to dependency_event.package_name, dependency_event.package %>
                   <small class='text-muted'>
                     <% if dependency_event.action == 'modified' %>
                       <%= dependency_event.previous_requirement %> -> <%= dependency_event.requirement %>
