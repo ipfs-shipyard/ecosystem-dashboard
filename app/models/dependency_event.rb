@@ -3,6 +3,7 @@ class DependencyEvent < ApplicationRecord
   belongs_to :package
 
   scope :internal, -> { where(package_id: Package.internal.pluck(:id)) }
+  scope :not_internal_repo, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
 
   scope :platform, ->(platform) { where(platform: platform) }
   scope :action, ->(action) { where(action: action) }

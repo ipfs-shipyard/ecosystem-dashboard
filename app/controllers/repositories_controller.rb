@@ -42,7 +42,7 @@ class RepositoriesController < ApplicationController
 
         case params[:tab]
         when 'dependency_events'
-          @dependency_events_pagy, @dependency_events = pagy(@repository.dependency_events.internal.order('dependency_events.committed_at DESC'), items: 150)
+          @dependency_events_pagy, @dependency_events = pagy(@repository.dependency_events.internal.where('committed_at <= ?', Time.now).order('dependency_events.committed_at DESC'), items: 150)
         when 'search'
           @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
         else
