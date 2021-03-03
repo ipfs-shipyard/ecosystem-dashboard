@@ -328,13 +328,17 @@ class PmfRepo
     # not star events
     # not PL employees/contractors
     # only repos with pl dependencies or pl owned repos
+    repository_ids = repo_ids(dependency_threshold)
 
+    Event.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
+  end
+
+  def self.repo_ids(dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     repository_ids = Repository.with_internal_deps(dependency_threshold).pluck(:id)
     # repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids -= Repository.internal.pluck(:id)
     repository_ids -= Repository.org(pl_orgs).pluck(:id)
     repository_ids.uniq!
-
-    Event.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
+    repository_ids
   end
 end

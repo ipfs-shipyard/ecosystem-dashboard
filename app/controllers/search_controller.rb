@@ -36,10 +36,11 @@ class SearchController < ApplicationController
     @scope = @scope.where(kind: params[:kind]) if params[:kind].present?
     @scope = @scope.where.not(kind: params[:exclude_kind]) if params[:exclude_kind].present?
 
-    @known_orgs = Organization.all.pluck(:name)
-    @known_contributors = Contributor.all.pluck(:github_username)
-    @known_owners = @known_orgs + @known_contributors
-    @orgs = @scope.group_by(&:org).reject{|k,v| v.length < 2}.reject{|k,v| @known_owners.include?(k) }.sort_by{|k,v| -v.group_by(&:repository_full_name).length }
+    # exclude repos that are included in PMF calcs
+    repo_names = Repository.where(id: PmfRepo.repo_ids).pluck(:full_name)
+    @scope = @scope.where.not(repository_full_name: repo_names)
+
+    @orgs = @scope.group_by(&:org).reject{|k,v| PmfRepo.pl_orgs.include?(k) }.sort_by{|k,v| -v.group_by(&:repository_full_name).length }
 
     @kinds = @scope.unscope(where: :kind).group(:kind).count
   end
