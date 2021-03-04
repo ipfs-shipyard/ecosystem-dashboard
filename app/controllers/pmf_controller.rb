@@ -36,7 +36,7 @@ class PmfController < ApplicationController
   private
 
   def parse_pmf_params
-    @start_date = params[:start_date].presence || 4.weeks.ago.beginning_of_week
+    @start_date = params[:start_date].presence || Time.now.yesterday.end_of_day - 4.weeks
     @threshold = params[:threshold].presence || nil
     @dependency_threshold = params[:dependency_threshold].presence || 0
 
