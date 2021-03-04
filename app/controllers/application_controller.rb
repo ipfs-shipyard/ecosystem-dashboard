@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
         @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
         @window = 'week'
       else
-        @window = 14.days
+        @window = 14
       end
     end
   end
