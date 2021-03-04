@@ -19,4 +19,25 @@ class ApplicationController < ActionController::Base
   def logged_in?
     !current_user.nil?
   end
+
+  def parse_pmf_params
+    @start_date = params[:start_date].presence || 4.weeks.ago.beginning_of_week
+    @end_date = params[:end_date].presence || Time.now.yesterday.end_of_day
+    @threshold = params[:threshold].presence || nil
+    @dependency_threshold = params[:dependency_threshold].presence || 0
+    
+    if params[:window] =~ /\A[-+]?[0-9]+\z/ # integer
+      @window = params[:window].to_i.days
+    else
+      if params[:window] == 'month'
+        @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
+        @window = 'month'
+      elsif params[:window] == 'week'
+        @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
+        @window = 'week'
+      else
+        @window = 14
+      end
+    end
+  end
 end
