@@ -274,7 +274,7 @@ class Pmf
 
   def self.states_for_window_dates(start_date, end_date, threshold, dependency_threshold)
     Rails.cache.fetch(['pmf_states_for_window_dates', threshold, dependency_threshold, start_date, end_date], expires_in: 1.week) do
-      puts "Generating cache for #{start_date} - #{end_date}"
+      puts "Generating cache for #{start_date} - #{end_date} (threshold:#{threshold}, dependency_threshold:#{dependency_threshold})"
       window_events = load_event_data(start_date, end_date, dependency_threshold)
 
       previous_usernames = previously_active_usernames(start_date, dependency_threshold)
