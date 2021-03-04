@@ -279,7 +279,7 @@ class Pmf
 
       previous_usernames = previously_active_usernames(start_date, dependency_threshold)
 
-      active_actors = window_events.group_by(&:actor)
+      active_actors = window_events.group(:actor).count
 
       scores = active_actors.map{|username, events| [username, score_for_user(username, events)] }
 
@@ -302,7 +302,7 @@ class Pmf
 
   def self.score_for_user(username, events)
     # TODO this is were we can tweak the weights of various types, repos and orgs
-    events.length
+    events
   end
 
   def self.state_for_user(username, score, threshold = DEFAULT_THRESHOLD)

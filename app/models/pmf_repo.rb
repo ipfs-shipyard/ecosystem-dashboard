@@ -278,7 +278,7 @@ class PmfRepo
 
       previous_repo_names = previously_active_repo_names(start_date, dependency_threshold)
 
-      active_repos = window_events.group_by(&:repository_full_name)
+      active_repos = window_events.group(:repository_full_name).count
 
       scores = active_repos.map{|repo_name, events| [repo_name, score_for_repo(repo_name, events)] }
 
@@ -301,7 +301,7 @@ class PmfRepo
 
   def self.score_for_repo(repo_name, events)
     # TODO this is were we can tweak the weights of various types, repos and orgs
-    events.length
+    events
   end
 
   def self.state_for_repo(repo_name, score, threshold = DEFAULT_THRESHOLD)
