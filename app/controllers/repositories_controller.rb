@@ -224,7 +224,7 @@ class RepositoriesController < ApplicationController
   end
 
   def parse_pmf_params
-    @start_date = params[:start_date].presence || 2.weeks.ago.beginning_of_week
+    @start_date = params[:start_date].presence || 4.weeks.ago.beginning_of_week
     @threshold = params[:threshold].presence || nil
     @dependency_threshold = params[:dependency_threshold].presence || 0
 
