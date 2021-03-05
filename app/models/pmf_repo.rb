@@ -311,11 +311,11 @@ class PmfRepo
   end
 
   def self.load_event_data(start_date, end_date, dependency_threshold)
-    event_scope(dependency_threshold).select('events.created_at, actor, repository_full_name').created_after(start_date.beginning_of_day).created_before(end_date.end_of_day).all
+    event_scope(end_date, dependency_threshold).select('events.created_at, actor, repository_full_name').created_after(start_date.beginning_of_day).created_before(end_date.end_of_day).all
   end
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
-    event_scope(dependency_threshold).created_before(before_date).pluck(:repository_full_name).uniq
+    event_scope(before_date, dependency_threshold).created_before(before_date).pluck(:repository_full_name).uniq
   end
 
   def self.pl_orgs
@@ -324,17 +324,23 @@ class PmfRepo
       'filecoin-shipyard', 'slate-engineering']
   end
 
-  def self.event_scope(dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
+  def self.event_scope(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     # not star events
     # not PL employees/contractors
     # only repos with pl dependencies or pl owned repos
-    repository_ids = repo_ids(dependency_threshold)
+    repository_ids = repo_ids(end_date, dependency_threshold)
 
     Event.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
   end
 
-  def self.repo_ids(dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
-    repository_ids = Repository.with_internal_deps(dependency_threshold).pluck(:id)
+  def self.repo_ids(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
+    if dependency_threshold == 1
+      repository_ids = Repository.where('first_added_internal_deps < ?', end_date).pluck(:id)
+    else
+      # temp fallback if dependency_threshold greater than 1
+      repository_ids = Repository.with_internal_deps(dependency_threshold).pluck(:id)
+    end
+
     # repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids -= Repository.internal.pluck(:id)
     repository_ids -= Repository.org(pl_orgs).pluck(:id)
