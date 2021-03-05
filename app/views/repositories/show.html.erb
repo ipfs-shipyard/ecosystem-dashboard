@@ -39,7 +39,13 @@
       Created: <%= distance_of_time_in_words_to_now @repository.created_at %> ago<br/>
       Updated: <%= distance_of_time_in_words_to_now @repository.updated_at %> ago<br/>
       Last pushed: <%= distance_of_time_in_words_to_now @repository.pushed_at %> ago<br/>
-      Last synced: <%= distance_of_time_in_words_to_now @repository.last_sync_at %> ago
+      Last synced: <%= distance_of_time_in_words_to_now @repository.last_sync_at %> ago<br/>
+      <% if @repository.first_added_internal_deps %>
+        First internal dep added: <%= distance_of_time_in_words_to_now @repository.first_added_internal_deps %> ago
+      <% end %>
+      <% if @repository.last_internal_dep_removed %>
+        Last internal dep removed: <%= distance_of_time_in_words_to_now @repository.last_internal_dep_removed %> ago
+      <% end %>
     </small></p>
   </div>
 </div>
