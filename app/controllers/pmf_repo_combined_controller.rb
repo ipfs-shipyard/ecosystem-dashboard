@@ -53,6 +53,24 @@ class PmfRepoCombinedController < ApplicationController
     render json: json
   end
 
+  def repo_transitions
+    parse_pmf_params
+
+    result = load_and_combine_transitions
+
+    json = result.to_json
+    render json: json
+  end
+
+  def repo_states
+    parse_pmf_params
+
+    result = load_and_combine_states
+
+    json = result.to_json
+    render json: json
+  end
+
   # TODO repositories/states.json
   # TODO repositories/transitions.json
 

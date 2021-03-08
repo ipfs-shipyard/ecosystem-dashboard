@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   get :admin, to: redirect('/admin/contributors')
 
+  get 'repositories/combined/states', to: 'pmf_repo_combined#repo_states'
+  get 'repositories/combined/transitions', to: 'pmf_repo_combined#repo_transitions'
+
   namespace :admin do
     resources :contributors
     resources :organizations
@@ -43,6 +46,7 @@ Rails.application.routes.draw do
     match '/:provider/callback', to: 'sessions#create',  via: [:get, :post]
     match :failure,              to: 'sessions#failure', via: [:get, :post]
   end
+
 
   get 'pmf/repo/combined/states', to: 'pmf_repo_combined#states'
   get 'pmf/repo/combined/state', to: 'pmf_repo_combined#state'
