@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   def parse_pmf_params
     @start_date = params[:start_date].presence || Time.now.yesterday.end_of_day - 4.weeks
     @end_date = params[:end_date].presence || Time.now.yesterday.end_of_day
-    @threshold = params[:threshold].presence || nil
+    @threshold = params[:threshold].presence || PmfRepo::DEFAULT_THRESHOLD
     @dependency_threshold = params[:dependency_threshold].presence || 1
 
     if params[:window] =~ /\A[-+]?[0-9]+\z/ # integer

@@ -344,7 +344,6 @@ class PmfRepo
     # repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids -= Repository.internal.pluck(:id)
     repository_ids -= Repository.org(pl_orgs).pluck(:id)
-    repository_ids.uniq!
     repository_ids
   end
 end
