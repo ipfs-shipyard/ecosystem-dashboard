@@ -327,7 +327,6 @@ class Pmf
     repository_ids = Repository.with_internal_deps(dependency_threshold).pluck(:id)
     # repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids += Repository.internal.pluck(:id)
-    repository_ids.uniq!
 
     Event.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
   end

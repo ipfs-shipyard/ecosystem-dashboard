@@ -334,11 +334,10 @@ class PmfRepo
   end
 
   def self.repo_ids(dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
-    repository_ids = Repository.with_internal_deps(dependency_threshold).pluck(:id)
+    repository_ids = Repository.source.with_internal_deps(dependency_threshold).pluck(:id)
     # repository_ids += Repository.with_search_results.pluck(:id)
     repository_ids -= Repository.internal.pluck(:id)
     repository_ids -= Repository.org(pl_orgs).pluck(:id)
-    repository_ids.uniq!
     repository_ids
   end
 end
