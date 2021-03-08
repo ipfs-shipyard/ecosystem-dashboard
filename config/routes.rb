@@ -44,6 +44,11 @@ Rails.application.routes.draw do
     match :failure,              to: 'sessions#failure', via: [:get, :post]
   end
 
+  get 'pmf/repo/combined/states', to: 'pmf_repo_combined#states'
+  get 'pmf/repo/combined/state', to: 'pmf_repo_combined#state'
+  get 'pmf/repo/combined/transitions', to: 'pmf_repo_combined#transitions'
+  get 'pmf/repo/combined/transition', to: 'pmf_repo_combined#transition'
+
   get 'pmf/repo/states', to: 'pmf_repo#states'
   get 'pmf/repo/state', to: 'pmf_repo#state'
   get 'pmf/repo/transitions', to: 'pmf_repo#transitions'
