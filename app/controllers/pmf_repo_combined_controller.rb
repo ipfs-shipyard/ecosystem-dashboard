@@ -2,13 +2,15 @@ class PmfRepoCombinedController < ApplicationController
   def states
     parse_pmf_params
 
-    result = load_and_combine_states
+    json = Rails.cache.fetch("combined-states-#{url_param_string}") do
+      result = load_and_combine_states
 
-    result = result.map do |window|
-      {date: window[:date], states: Hash[window[:states].map{|k,v| [k,v.length]}]}
+      result = result.map do |window|
+        {date: window[:date], states: Hash[window[:states].map{|k,v| [k,v.length]}]}
+      end
+      result.to_json
     end
 
-    json = result.to_json
     render json: json
   end
 
@@ -16,26 +18,30 @@ class PmfRepoCombinedController < ApplicationController
     state_name = params[:state_name]
     parse_pmf_params
 
-    result = load_and_combine_states
+    json = Rails.cache.fetch("combined-state-#{state_name}-#{url_param_string}") do
+      result = load_and_combine_states
 
-    result = result.map do |window|
-      {date: window[:date], states: Hash[window[:states].select{|k,v| k == state_name }]}
+      result = result.map do |window|
+        {date: window[:date], states: Hash[window[:states].select{|k,v| k.to_s == state_name }]}
+      end
+      result.to_json
     end
 
-    json = result.to_json
     render json: json
   end
 
   def transitions
     parse_pmf_params
 
-    result = load_and_combine_transitions
+    json = Rails.cache.fetch("combined-transitions-#{url_param_string}") do
+      result = load_and_combine_transitions
 
-    result = result.map do |window|
-      {date: window[:date], transitions: Hash[window[:transitions].map{|k,v| [k,v.length]}]}
+      result = result.map do |window|
+        {date: window[:date], transitions: Hash[window[:transitions].map{|k,v| [k,v.length]}]}
+      end
+      result.to_json
     end
 
-    json = result.to_json
     render json: json
   end
 
@@ -43,36 +49,38 @@ class PmfRepoCombinedController < ApplicationController
     transition_name = params[:transition_name]
     parse_pmf_params
 
-    result = load_and_combine_transitions
+    json = Rails.cache.fetch("combined-transition-#{transition_name}-#{url_param_string}") do
+      result = load_and_combine_transitions
 
-    result = result.map do |window|
-      {date: window[:date], transitions: Hash[window[:transitions].select{|k,v| k.to_s == transition_name }]}
+      result = result.map do |window|
+        {date: window[:date], transitions: Hash[window[:transitions].select{|k,v| k.to_s == transition_name }]}
+      end
+
+      result.to_json
     end
 
-    json = result.to_json
     render json: json
   end
 
   def repo_transitions
     parse_pmf_params
 
-    result = load_and_combine_transitions
+    json = Rails.cache.fetch("combined-repo_transitions-#{url_param_string}") do
+      load_and_combine_transitions.to_json
+    end
 
-    json = result.to_json
     render json: json
   end
 
   def repo_states
     parse_pmf_params
 
-    result = load_and_combine_states
+    json = Rails.cache.fetch("combined-repo_transitions-#{url_param_string}") do
+      load_and_combine_states.to_json
+    end
 
-    json = result.to_json
     render json: json
   end
-
-  # TODO repositories/states.json
-  # TODO repositories/transitions.json
 
   private
 
@@ -91,7 +99,7 @@ class PmfRepoCombinedController < ApplicationController
       states = ipfs_result.first{|h| h['date'] == data['date']}[:states]
       new_states = {}
       states.each do |k,v|
-        new_states[k] = ((v || []) + (data['states'][k] || [])).sort_by{|h| -h.with_indifferent_access[:score] }.uniq{|h| h.with_indifferent_access[:repo_name] }
+        new_states[k] = ((v || []) + (data['states'][k.to_s] || [])).sort_by{|h| -h.with_indifferent_access[:score] }.uniq{|h| h.with_indifferent_access[:repo_name] }
       end
 
       result << {date: data['date'], states: new_states}
