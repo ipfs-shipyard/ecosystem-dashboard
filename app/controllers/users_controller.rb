@@ -14,20 +14,23 @@ class UsersController < ApplicationController
 
     parse_pmf_params
 
-    @data = Pmf.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
-
-    if @data
-      all_users = @data.first[:transitions][transition_name.to_sym]
-    else
-      all_users = []
-    end
-
     respond_to do |format|
       format.html do
+        @data = Pmf.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
+
+        if @data
+          all_users = @data.first[:transitions][transition_name.to_sym]
+        else
+          all_users = []
+        end
+
         @pagy, @users = pagy_array(all_users)
       end
       format.json do
-        render json: @data
+        json = Rails.cache.fetch("user_transitions-#{pmf_url_param_string}") do
+          Pmf.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
+        end
+        render json: @json
       end
     end
   end
@@ -49,8 +52,11 @@ class UsersController < ApplicationController
         @pagy, @users = pagy_array(all_users)
       end
       format.json do
-        @data = Pmf.states(@start_date, @end_date, @window, @threshold, @dependency_threshold)
-        render json: @data
+        json = Rails.cache.fetch("user_states-#{pmf_url_param_string}") do
+          Pmf.states(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
+        end
+
+        render json: json
       end
     end
   end

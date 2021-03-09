@@ -194,8 +194,10 @@ class RepositoriesController < ApplicationController
         @pagy, @repositories = pagy_array(all_repos)
       end
       format.json do
-        @data = PmfRepo.states(@start_date, @end_date, @window, @threshold, @dependency_threshold)
-        render json: @data
+        json = Rails.cache.fetch("repo_states-#{pmf_url_param_string}") do
+          PmfRepo.states(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
+        end
+        render json: json
       end
     end
   end
@@ -205,20 +207,23 @@ class RepositoriesController < ApplicationController
 
     parse_pmf_params
 
-    @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
-
-    if @data
-      all_repos = @data.first[:transitions][transition_name.to_sym]
-    else
-      all_repos = []
-    end
-
     respond_to do |format|
       format.html do
+        @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
+
+        if @data
+          all_repos = @data.first[:transitions][transition_name.to_sym]
+        else
+          all_repos = []
+        end
+
         @pagy, @repositories = pagy_array(all_repos)
       end
       format.json do
-        render json: @data
+        json = Rails.cache.fetch("repo_transitions-#{pmf_url_param_string}") do
+          PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
+        end
+        render json: json
       end
     end
   end

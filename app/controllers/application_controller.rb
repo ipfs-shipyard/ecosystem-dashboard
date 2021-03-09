@@ -40,4 +40,8 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  def pmf_url_param_string
+    "start_date=#{@start_date}&end_date=#{@end_date}&window=#{@window}&threshold=#{@threshold}&dependency_threshold=#{@dependency_threshold}"
+  end
 end

@@ -2,7 +2,7 @@ class PmfRepoCombinedController < ApplicationController
   def states
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-states-#{url_param_string}") do
+    json = Rails.cache.fetch("combined-states-#{pmf_url_param_string}") do
       result = load_and_combine_states
 
       result = result.map do |window|
@@ -18,7 +18,7 @@ class PmfRepoCombinedController < ApplicationController
     state_name = params[:state_name]
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-state-#{state_name}-#{url_param_string}") do
+    json = Rails.cache.fetch("combined-state-#{state_name}-#{pmf_url_param_string}") do
       result = load_and_combine_states
 
       result = result.map do |window|
@@ -33,7 +33,7 @@ class PmfRepoCombinedController < ApplicationController
   def transitions
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-transitions-#{url_param_string}") do
+    json = Rails.cache.fetch("combined-transitions-#{pmf_url_param_string}") do
       result = load_and_combine_transitions
 
       result = result.map do |window|
@@ -49,7 +49,7 @@ class PmfRepoCombinedController < ApplicationController
     transition_name = params[:transition_name]
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-transition-#{transition_name}-#{url_param_string}") do
+    json = Rails.cache.fetch("combined-transition-#{transition_name}-#{pmf_url_param_string}") do
       result = load_and_combine_transitions
 
       result = result.map do |window|
@@ -65,7 +65,7 @@ class PmfRepoCombinedController < ApplicationController
   def repo_transitions
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-repo_transitions-#{url_param_string}") do
+    json = Rails.cache.fetch("combined-repo_transitions-#{pmf_url_param_string}") do
       load_and_combine_transitions.to_json
     end
 
@@ -75,7 +75,7 @@ class PmfRepoCombinedController < ApplicationController
   def repo_states
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-repo_transitions-#{url_param_string}") do
+    json = Rails.cache.fetch("combined-repo_transitions-#{pmf_url_param_string}") do
       load_and_combine_states.to_json
     end
 
@@ -89,7 +89,7 @@ class PmfRepoCombinedController < ApplicationController
     ipfs_result = PmfRepo.states(@start_date, @end_date, @window, @threshold, @dependency_threshold)
 
     # load filecoin states
-    res = Faraday.get("#{fil_domain}/repositories/states.json?#{url_param_string}")
+    res = Faraday.get("#{fil_domain}/repositories/states.json?#{pmf_url_param_string}")
     filecoin_result = Oj.load(res.body)
 
     # combine
@@ -113,7 +113,7 @@ class PmfRepoCombinedController < ApplicationController
     ipfs_result = PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
 
     # load filecoin states
-    res = Faraday.get("#{fil_domain}/repositories/transitions.json?#{url_param_string}")
+    res = Faraday.get("#{fil_domain}/repositories/transitions.json?#{pmf_url_param_string}")
     filecoin_result = Oj.load(res.body)
 
     # combine
@@ -134,9 +134,5 @@ class PmfRepoCombinedController < ApplicationController
 
   def fil_domain
     "https://filecoin.ecosystem-dashboard.com"
-  end
-
-  def url_param_string
-    "start_date=#{@start_date}&end_date=#{@end_date}&window=#{@window}&threshold=#{@threshold}&dependency_threshold=#{@dependency_threshold}"
   end
 end
