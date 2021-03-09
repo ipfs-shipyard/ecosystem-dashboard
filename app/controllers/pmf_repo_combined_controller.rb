@@ -96,7 +96,7 @@ class PmfRepoCombinedController < ApplicationController
     result = []
 
     filecoin_result.each do |data|
-      states = ipfs_result.first{|h| h['date'] == data['date']}[:states]
+      states = ipfs_result.find{|h| h[:date].to_s == data['date']}[:states]
       new_states = {}
       states.each do |k,v|
         new_states[k] = ((v || []) + (data['states'][k.to_s] || [])).sort_by{|h| -h.with_indifferent_access[:score] }.uniq{|h| h.with_indifferent_access[:repo_name] }
@@ -120,7 +120,7 @@ class PmfRepoCombinedController < ApplicationController
     result = []
 
     filecoin_result.each do |data|
-      transitions = ipfs_result.first{|h| h['date'] == data['date']}[:transitions]
+      transitions = ipfs_result.find{|h| h[:date].to_s == data['date']}[:transitions]
       new_transitions = {}
       transitions.each do |k,v|
         new_transitions[k] = ((v || []) + (data['transitions'][k.to_s] || [])).sort_by{|h| -h.with_indifferent_access[:score] }.uniq{|h| h.with_indifferent_access[:repo_name] }
