@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     @dependency_threshold = params[:dependency_threshold].presence || 1
 
     if params[:window] =~ /\A[-+]?[0-9]+\z/ # integer
-      @window = params[:window].to_i.days
+      @window = params[:window].to_i
     else
       if params[:window] == 'month'
         @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
@@ -42,6 +42,6 @@ class ApplicationController < ActionController::Base
   end
 
   def pmf_url_param_string
-    "start_date=#{@start_date}&end_date=#{@end_date}&window=#{@window}&threshold=#{@threshold}&dependency_threshold=#{@dependency_threshold}"
+    "start_date=#{@start_date.to_date}&end_date=#{@end_date.to_date}&window=#{@window}&threshold=#{@threshold}&dependency_threshold=#{@dependency_threshold}"
   end
 end
