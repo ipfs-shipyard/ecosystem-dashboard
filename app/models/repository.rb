@@ -459,6 +459,10 @@ class Repository < ApplicationRecord
     update_score
   end
 
+  def sync_if_updates
+    sync if sync_events.any?
+  end
+
   def ecosystem_score_parts
     display_name = ENV['DISPLAY_NAME'].presence || ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
     keyword_match = full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i) || Array(topics).any?{|t| t.match?(/#{Regexp.quote(display_name)}/i) }

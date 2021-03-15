@@ -8,6 +8,6 @@ namespace :repositories do
   end
 
   task sync: :environment do
-    Repository.order('last_sync_at ASC nulls first').limit(100).each(&:sync)
+    Repository.order('last_sync_at ASC nulls first').limit(200).each(&:sync_if_updates)
   end
 end

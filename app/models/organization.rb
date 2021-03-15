@@ -57,7 +57,7 @@ class Organization < ApplicationRecord
             Issue.download(full_name)
             Issue.internal.where(repo_full_name: full_name).where('issues.updated_at > ?', 1.hour.ago).each(&:sync)
           end
-          existing_repo.try(:sync)
+          repo.sync
         end
       end
       sync
