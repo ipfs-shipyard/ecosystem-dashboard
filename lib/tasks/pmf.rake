@@ -36,13 +36,14 @@ namespace :pmf do
   task warm_caches: :environment do
     # run this via cron just after midnight
     # calculate pmf windows for past year from yesterday
-    start_date = Time.now.yesterday.end_of_day - 52.weeks
+    start_date = 52.weeks.ago
     end_date = Time.now.yesterday.end_of_day
-    window = 14
 
-    Pmf.transitions(start_date, end_date, window)
-    Pmf.states(start_date, end_date, window)
-    PmfRepo.transitions(start_date, end_date, window)
-    PmfRepo.states(start_date, end_date, window)
+    [7,14,30,90].each do |window|
+      Pmf.transitions(start_date, end_date, window)
+      Pmf.states(start_date, end_date, window)
+      PmfRepo.transitions(start_date, end_date, window)
+      PmfRepo.states(start_date, end_date, window)
+    end
   end
 end
