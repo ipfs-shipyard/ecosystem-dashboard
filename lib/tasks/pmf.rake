@@ -40,8 +40,6 @@ namespace :pmf do
     end_date = Time.now.yesterday.end_of_day
 
     [7,14,30,90].each do |window|
-      Pmf.transitions(start_date, end_date, window)
-      Pmf.states(start_date, end_date, window)
       PmfRepo.transitions(start_date, end_date, window)
       PmfRepo.states(start_date, end_date, window)
     end
