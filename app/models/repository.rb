@@ -182,7 +182,7 @@ class Repository < ApplicationRecord
 
   def download_events(auto_paginate = false)
     client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
-    begin Octokit::NotFound
+    begin
       events = client.repository_events(full_name, auto_paginate: auto_paginate, headers: {'If-None-Match' => etag})
       return [] if events == ''
       new_etag = client.last_response.headers['etag']
@@ -190,7 +190,7 @@ class Repository < ApplicationRecord
         update_column(:etag, new_etag)
       end
       events
-    rescue
+    rescue Octokit::NotFound
       []
     end
   end
