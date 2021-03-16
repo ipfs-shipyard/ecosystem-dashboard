@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_04_125036) do
+ActiveRecord::Schema.define(version: 2021_03_16_112110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -208,6 +208,7 @@ ActiveRecord::Schema.define(version: 2021_03_04_125036) do
     t.datetime "latest_dependency_mine"
     t.datetime "first_added_internal_deps"
     t.datetime "last_internal_dep_removed"
+    t.datetime "last_events_sync_at"
   end
 
   create_table "repository_dependencies", force: :cascade do |t|

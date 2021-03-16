@@ -184,6 +184,7 @@ class Repository < ApplicationRecord
     client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
     begin
       events = client.repository_events(full_name, auto_paginate: auto_paginate, headers: {'If-None-Match' => etag})
+      update_column(:last_events_sync_at, Time.zone.now)
       return [] if events == ''
       new_etag = client.last_response.headers['etag']
       if !auto_paginate && new_etag && new_etag != etag
