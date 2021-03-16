@@ -191,7 +191,7 @@ class Repository < ApplicationRecord
         update_column(:etag, new_etag)
       end
       events
-    rescue Octokit::NotFound
+    rescue *IGNORABLE_EXCEPTIONS
       []
     end
   end
