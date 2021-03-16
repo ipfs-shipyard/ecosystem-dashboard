@@ -5,7 +5,7 @@
 
 <nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
   <span class="navbar-brand" >
-    <strong>Slow responses</strong>
+    <strong>Slow<%= 'ish' if params[:slowish_response].present? %> responses</strong>
   </span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -46,6 +46,15 @@
           <% else %>
             <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, unlabelled: 'true')) %>">
               Unlabelled
+            </a>
+          <% end %>
+          <% if params[:slowish_response].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, slowish_response: nil)) %>">
+              Slowish response
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, slowish_response: 'true')) %>">
+              Slowish response
             </a>
           <% end %>
         </div>
