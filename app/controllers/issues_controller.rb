@@ -48,14 +48,14 @@ class IssuesController < ApplicationController
     @range = (params[:range].presence || 7).to_i
 
     if params[:slowish].present?
-      wait_time = 4
+      @wait_time = 4
     else
-      wait_time = 2
+      @wait_time = 2
     end
 
-    @date_range = @range + wait_time
+    @date_range = @range + @wait_time
     @orginal_scope = Issue.internal.not_core.unlocked.where("html_url <> ''").not_draft.includes(:contributor)
-    @scope = @orginal_scope.where('issues.created_at > ?', @date_range.days.ago).where('issues.created_at < ?', wait_time.days.ago)
+    @scope = @orginal_scope.where('issues.created_at > ?', @date_range.days.ago).where('issues.created_at < ?', @wait_time.days.ago)
     apply_filters
 
     respond_to do |format|
