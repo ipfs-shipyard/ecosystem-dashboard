@@ -371,7 +371,7 @@ DEPENDENCIES
   ox
   pagy
   pg
-  pg_query (>= 0.9.0)
+  pg_query (= 1.3.0)
   pg_search
   pghero
   puma
