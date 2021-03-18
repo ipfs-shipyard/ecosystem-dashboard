@@ -6,8 +6,8 @@ class PmfRepo
   def self.state(state_name, start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |period_start_date|
       next if period_start_date.to_date < start_date.to_date
-      end_date = calculate_end_date(period_start_date, window)
-      states = states_for_window_dates(period_start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
+      period_end_date = calculate_end_date(period_start_date, window)
+      states = states_for_window_dates(period_start_date, period_end_date, threshold_for_period(window, threshold), dependency_threshold)
 
       state_groups = {}
 
@@ -24,8 +24,8 @@ class PmfRepo
   def self.states(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |period_start_date|
       next if period_start_date.to_date < start_date.to_date
-      end_date = calculate_end_date(period_start_date, window)
-      states = states_for_window_dates(period_start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
+      period_end_date = calculate_end_date(period_start_date, window)
+      states = states_for_window_dates(period_start_date, period_end_date, threshold_for_period(window, threshold), dependency_threshold)
       state_groups = {}
 
       states.sort_by{|u| [-u[1], u[0]]}.each do |u|
@@ -40,17 +40,25 @@ class PmfRepo
   def self.states_summary(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     period_start_dates(start_date, end_date, window).map do |period_start_date|
       next if period_start_date.to_date < start_date.to_date
-      end_date = calculate_end_date(period_start_date, window)
-      states = states_for_window_dates(period_start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
+      period_end_date = calculate_end_date(period_start_date, window)
+      states = states_for_window_dates(period_start_date, period_end_date, threshold_for_period(window, threshold), dependency_threshold)
       state_groups = Hash[states.group_by{|u| u[2]}.map{|s,u| [s, u.length]}]
       {date: period_start_date, states: state_groups}
     end.compact
   end
 
   def self.transitions(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
-    periods = period_start_dates(start_date, end_date, window).map do |start_date|
-      end_date = calculate_end_date(start_date, window)
-      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
+    period_dates = period_start_dates(start_date, end_date, window)
+
+    if period_dates.length < 2
+      # add extra period to the start of period_dates
+      extra_date = period_dates.first - window
+      period_dates = [extra_date, period_dates.first]
+    end
+
+    periods = period_dates.map do |period_start_date|
+      period_end_date = calculate_end_date(period_start_date, window)
+      states = states_for_window_dates(period_start_date, period_end_date, threshold_for_period(window, threshold), dependency_threshold)
       {date: start_date, states: states}
     end
 
@@ -121,15 +129,25 @@ class PmfRepo
   end
 
   def self.transitions_with_details(start_date, end_date, window = DEFAULT_WINDOW, threshold = nil, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
-    periods = period_start_dates(start_date, end_date, window).map do |start_date|
-      end_date = calculate_end_date(start_date, window)
-      states = states_for_window_dates(start_date, end_date, threshold_for_period(window, threshold), dependency_threshold)
+    period_dates = period_start_dates(start_date, end_date, window)
+
+    if period_dates.length < 2
+      # add extra period to the start of period_dates
+      extra_date = period_dates.first - window
+      period_dates = [extra_date, period_dates.first]
+    end
+
+    periods = period_dates.map do |period_start_date|
+      period_end_date = calculate_end_date(period_start_date, window)
+      states = states_for_window_dates(period_start_date, period_end_date, threshold_for_period(window, threshold), dependency_threshold)
       {date: start_date, states: states}
     end
 
     # for each window, compare states between users and add to transition bucket
     previous_period = nil
     transition_periods = []
+
+    # TODO if periods.length == 1 load an extra previous period
 
     periods.each_with_index do |period,i|
       if i.zero?
@@ -251,7 +269,7 @@ class PmfRepo
     when 'month'
       start_date + 1.month
     else
-      start_date + window
+      start_date.to_date + window
     end
   end
 
