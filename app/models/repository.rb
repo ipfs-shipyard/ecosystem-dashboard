@@ -183,7 +183,7 @@ class Repository < ApplicationRecord
   def download_events(auto_paginate = false)
     client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
     begin
-      if auto_paginate
+      if auto_paginate || etag.blank?
         events = client.repository_events(full_name, auto_paginate: auto_paginate)
       else
         events = client.repository_events(full_name, headers: {'If-None-Match' => etag})
