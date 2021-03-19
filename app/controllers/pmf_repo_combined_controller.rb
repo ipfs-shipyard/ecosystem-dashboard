@@ -33,7 +33,7 @@ class PmfRepoCombinedController < ApplicationController
   def transitions
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-transitions-#{pmf_url_param_string}") do
+    json = Rails.cache.fetch("combined-transitions-#{pmf_url_param_string}-v2") do
       result = load_and_combine_transitions
 
       result = result.map do |window|
@@ -49,7 +49,7 @@ class PmfRepoCombinedController < ApplicationController
     transition_name = params[:transition_name]
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-transition-#{transition_name}-#{pmf_url_param_string}") do
+    json = Rails.cache.fetch("combined-transition-#{transition_name}-#{pmf_url_param_string}-v2") do
       result = load_and_combine_transitions
 
       result = result.map do |window|
@@ -65,7 +65,7 @@ class PmfRepoCombinedController < ApplicationController
   def repo_transitions
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-repo_transitions-#{pmf_url_param_string}") do
+    json = Rails.cache.fetch("combined-repo_transitions-#{pmf_url_param_string}-v2") do
       load_and_combine_transitions.to_json
     end
 
@@ -75,7 +75,7 @@ class PmfRepoCombinedController < ApplicationController
   def repo_states
     parse_pmf_params
 
-    json = Rails.cache.fetch("combined-repo_transitions-#{pmf_url_param_string}") do
+    json = Rails.cache.fetch("combined-repo_states-#{pmf_url_param_string}") do
       load_and_combine_states.to_json
     end
 

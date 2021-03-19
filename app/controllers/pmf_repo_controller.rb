@@ -23,7 +23,7 @@ class PmfRepoController < ApplicationController
   def transitions
     parse_pmf_params
 
-    json = Rails.cache.fetch("pmfrepo-transitions-#{pmf_url_param_string}") do
+    json = Rails.cache.fetch("pmfrepo-transitions-#{pmf_url_param_string}-v2") do
       PmfRepo.transitions(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
     end
 
@@ -34,7 +34,7 @@ class PmfRepoController < ApplicationController
     transition_name = params[:transition_name]
     parse_pmf_params
 
-    json = Rails.cache.fetch("pmfrepo-transition-#{transition_name}-#{pmf_url_param_string}") do
+    json = Rails.cache.fetch("pmfrepo-transition-#{transition_name}-#{pmf_url_param_string}-v2") do
       PmfRepo.transition(transition_name, @start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
     end
 
