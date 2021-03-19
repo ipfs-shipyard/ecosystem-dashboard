@@ -59,7 +59,7 @@ class PmfRepo
     periods = period_dates.map do |period_start_date|
       period_end_date = calculate_end_date(period_start_date, window)
       states = states_for_window_dates(period_start_date, period_end_date, threshold_for_period(window, threshold), dependency_threshold)
-      {date: start_date, states: states}
+      {date: period_start_date, states: states}
     end
 
     # for each window, compare states between repos and add to transition bucket
@@ -140,7 +140,7 @@ class PmfRepo
     periods = period_dates.map do |period_start_date|
       period_end_date = calculate_end_date(period_start_date, window)
       states = states_for_window_dates(period_start_date, period_end_date, threshold_for_period(window, threshold), dependency_threshold)
-      {date: start_date, states: states}
+      {date: period_start_date, states: states}
     end
 
     # for each window, compare states between users and add to transition bucket
