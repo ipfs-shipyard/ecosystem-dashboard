@@ -531,10 +531,10 @@ class Package < ApplicationRecord
       while dependents_url.present? do
         begin
           page_contents = PackageManager::Base.send :get_html, dependents_url
-          names = page_contents.css('#dependents .Box-row .f5.text-gray-light').map{|node| node.text.squish.gsub(' ', '') }
+          names = page_contents.css('#dependents .Box-row .f5').map{|node| node.text.squish.gsub(' ', '') }
           new_dependent_repos += names
           dependents_url = page_contents.css('.paginate-container .btn.btn-outline.BtnGroup-item').select{|n| n.text == 'Next'}.first.try(:attr, 'href')
-          sleep 2
+          sleep 5
         rescue Faraday::ConnectionFailed
           dependents_url = nil
         end
