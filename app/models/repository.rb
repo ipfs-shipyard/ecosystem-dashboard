@@ -153,7 +153,7 @@ class Repository < ApplicationRecord
   end
 
   def self.discover_from_search_results(period = 7)
-    repos_from_search = SearchResult.where.not(kind: 'code').group(:repository_full_name).this_period(period).count.keys
+    repos_from_search = SearchResult.group(:repository_full_name).this_period(period).count.keys
     existing = Repository.where(full_name: repos_from_search).pluck(:full_name)
     missing = repos_from_search - existing
     missing.each do |name|
