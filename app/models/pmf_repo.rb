@@ -300,7 +300,16 @@ class PmfRepo
 
       scores = active_repos.map{|repo_name, events| [repo_name, score_for_repo(repo_name, events)] }
 
-      states = scores.map{|repo_name, score| [repo_name, score, state_for_repo(repo_name, score, threshold)] }
+      dep_removed_repo_names = Repository.where(full_name: active_repos.keys).where('last_internal_dep_removed < ?', end_date).pluck(:full_name)
+
+      states = scores.map do |repo_name, score|
+        if dep_removed_repo_names.include?(repo_name)
+          # inactive if not/stopped using dependencies in this period
+          [repo_name, 0, 'inactive']
+        else
+          [repo_name, score, state_for_repo(repo_name, score, threshold)]
+        end
+      end
 
       these_repos = states.map{|a| a[0]}
 

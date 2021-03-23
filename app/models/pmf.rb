@@ -346,7 +346,7 @@ class Pmf
 
   def self.repo_ids(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
     if dependency_threshold == 1
-      repository_ids = Repository.where('first_added_internal_deps < ?', end_date).pluck(:id)
+      repository_ids = Repository.where('first_added_internal_deps < ?', end_date).where('last_internal_dep_removed > ? OR last_internal_dep_removed is null', end_date).pluck(:id)
     else
       # temp fallback if dependency_threshold greater than 1
       repository_ids = Repository.with_internal_deps(dependency_threshold).pluck(:id)
