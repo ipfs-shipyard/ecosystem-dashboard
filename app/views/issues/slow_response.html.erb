@@ -5,7 +5,7 @@
 
 <nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
   <span class="navbar-brand" >
-    <strong>Slow responses</strong>
+    <strong>Slow<%= 'ish' if params[:slowish_response].present? %> responses</strong>
   </span>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -48,6 +48,15 @@
               Unlabelled
             </a>
           <% end %>
+          <% if params[:slowish_response].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, slowish_response: nil)) %>">
+              Slowish response
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, slowish_response: 'true')) %>">
+              Slowish response
+            </a>
+          <% end %>
         </div>
       </li>
       <%= render 'range_filter' %>
@@ -60,7 +69,7 @@
 
 <div class="row mb-3">
   <div class="col-md-12">
-    <% range = @date_range.days.ago.midnight..2.days.ago %>
+    <% range = @date_range.days.ago.midnight..@wait_time.days.ago %>
     <% if @range > 30 %>
     <%= line_chart [
         {name: 'Slow Responses', data: @slow.group_by_week(:created_at, range: range).count },

@@ -33,7 +33,9 @@ class Issue < ApplicationRecord
   scope :user, ->(user) { where(user: user) }
 
   scope :open_for_over_2_days, -> { where("DATE_PART('day', issues.closed_at - issues.created_at) > 2 OR issues.closed_at is NULL") }
+  scope :open_for_over_4_days, -> { where("DATE_PART('day', issues.closed_at - issues.created_at) > 4 OR issues.closed_at is NULL") }
   scope :slow_response, -> { open_for_over_2_days.where("DATE_PART('day', issues.first_response_at - issues.created_at) > 2 OR issues.first_response_at is NULL") }
+  scope :slowish_response, -> { open_for_over_4_days.where("DATE_PART('day', issues.first_response_at - issues.created_at) > 4 OR issues.first_response_at is NULL") }
   scope :no_response, -> { where(first_response_at: nil) }
 
   scope :draft, -> { where(draft: true) }

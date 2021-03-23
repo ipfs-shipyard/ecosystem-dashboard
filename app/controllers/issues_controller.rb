@@ -46,9 +46,16 @@ class IssuesController < ApplicationController
   def slow_response
     @page_title = "Slow Responses"
     @range = (params[:range].presence || 7).to_i
-    @date_range = @range + 2
+
+    if params[:slowish].present?
+      @wait_time = 4
+    else
+      @wait_time = 2
+    end
+
+    @date_range = @range + @wait_time
     @orginal_scope = Issue.internal.not_core.unlocked.where("html_url <> ''").not_draft.includes(:contributor)
-    @scope = @orginal_scope.where('issues.created_at > ?', @date_range.days.ago).where('issues.created_at < ?', 2.days.ago)
+    @scope = @orginal_scope.where('issues.created_at > ?', @date_range.days.ago).where('issues.created_at < ?', @wait_time.days.ago)
     apply_filters
 
     respond_to do |format|
@@ -86,7 +93,11 @@ class IssuesController < ApplicationController
           }
         ]
 
-        @slow = @scope.slow_response
+        if params[:slowish].present?
+          @slow = @scope.slowish_response
+        else
+          @slow = @scope.slow_response
+        end
 
         @pagy, @issues = pagy(@slow.order(@sort => @order))
 
@@ -96,14 +107,22 @@ class IssuesController < ApplicationController
 
       end
       format.rss do
-        @slow = @scope.slow_response
+        if params[:slowish].present?
+          @slow = @scope.slowish_response
+        else
+          @slow = @scope.slow_response
+        end
 
         @pagy, @issues = pagy(@slow.order(@sort => @order))
 
         render 'all', :layout => false
       end
       format.json do
-        @slow = @scope.slow_response
+        if params[:slowish].present?
+          @slow = @scope.slowish_response
+        else
+          @slow = @scope.slow_response
+        end
 
         @pagy, @issues = pagy(@slow.order(@sort => @order))
         render json: @issues

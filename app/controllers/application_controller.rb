@@ -21,8 +21,8 @@ class ApplicationController < ActionController::Base
   end
 
   def parse_pmf_params
-    @start_date = params[:start_date].presence || Time.now.yesterday.end_of_day - 4.weeks
-    @end_date = params[:end_date].presence || Time.now.yesterday.end_of_day
+    @start_date = params[:start_date].presence || Date.yesterday - 4.weeks
+    @end_date = params[:end_date].presence || Date.yesterday
     @threshold = params[:threshold].presence || PmfRepo::DEFAULT_THRESHOLD
     @dependency_threshold = params[:dependency_threshold].presence || 1
 
@@ -30,10 +30,10 @@ class ApplicationController < ActionController::Base
       @window = params[:window].to_i
     else
       if params[:window] == 'month'
-        @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
+        @end_date = params[:end_date].presence || Date.today.last_week.at_end_of_week
         @window = 'month'
       elsif params[:window] == 'week'
-        @end_date = params[:end_date].presence || Time.now.last_week.at_end_of_week
+        @end_date = params[:end_date].presence || Date.today.last_week.at_end_of_week
         @window = 'week'
       else
         @window = 14

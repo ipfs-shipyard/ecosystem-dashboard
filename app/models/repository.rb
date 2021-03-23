@@ -153,7 +153,7 @@ class Repository < ApplicationRecord
   end
 
   def self.discover_from_search_results(period = 7)
-    repos_from_search = SearchResult.where.not(kind: 'code').group(:repository_full_name).this_period(period).count.keys
+    repos_from_search = SearchResult.group(:repository_full_name).this_period(period).count.keys
     existing = Repository.where(full_name: repos_from_search).pluck(:full_name)
     missing = repos_from_search - existing
     missing.each do |name|
@@ -182,15 +182,21 @@ class Repository < ApplicationRecord
 
   def download_events(auto_paginate = false)
     client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
-    begin Octokit::NotFound
-      events = client.repository_events(full_name, auto_paginate: auto_paginate, headers: {'If-None-Match' => etag})
+    begin
+      if auto_paginate || etag.blank?
+        events = client.repository_events(full_name, auto_paginate: auto_paginate)
+      else
+        events = client.repository_events(full_name, headers: {'If-None-Match' => etag})
+      end
+
+      update_column(:last_events_sync_at, Time.zone.now)
       return [] if events == ''
       new_etag = client.last_response.headers['etag']
       if !auto_paginate && new_etag && new_etag != etag
         update_column(:etag, new_etag)
       end
       events
-    rescue
+    rescue *IGNORABLE_EXCEPTIONS
       []
     end
   end
@@ -457,6 +463,10 @@ class Repository < ApplicationRecord
     Repository.download(github_id)
     sync_events
     update_score
+  end
+
+  def sync_if_updates
+    sync if sync_events.any?
   end
 
   def ecosystem_score_parts
