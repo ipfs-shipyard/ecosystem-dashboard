@@ -21,8 +21,9 @@ class ApplicationController < ActionController::Base
   end
 
   def parse_pmf_params
-    @start_date = params[:start_date].presence || Date.yesterday - 4.weeks
-    @end_date = params[:end_date].presence || Date.yesterday
+    @end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : Date.yesterday - 3
+    @start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : @end_date - 4.weeks
+
     @threshold = params[:threshold].presence || PmfRepo::DEFAULT_THRESHOLD
     @dependency_threshold = params[:dependency_threshold].presence || 1
 
