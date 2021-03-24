@@ -46,7 +46,7 @@ class RepositoriesController < ApplicationController
         when 'search'
           @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
         else
-          @events_scope = Pmf.event_scope.repo(@repository.full_name)
+          @events_scope = Event.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).repo(@repository.full_name)
           @events_pagy, @events = pagy(@events_scope.order('events.created_at DESC'))
         end
       end
