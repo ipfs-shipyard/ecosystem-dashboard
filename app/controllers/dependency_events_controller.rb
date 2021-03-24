@@ -8,6 +8,11 @@ class DependencyEventsController < ApplicationController
     @scope = @scope.where(package_name: params[:package_name]) if params[:package_name].present?
     @scope = @scope.where(manifest_kind: params[:manifest_kind]) if params[:manifest_kind].present?
 
+    if params[:repository].present?
+      @repository = Repository.find_by_full_name(params[:repository])
+      @scope = @scope.where(repository_id: @repository.id) if @repository
+    end
+
     sort = params[:sort] || 'dependency_events.committed_at'
     order = params[:order] || 'desc'
 
