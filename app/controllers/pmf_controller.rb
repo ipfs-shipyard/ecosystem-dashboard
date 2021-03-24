@@ -40,4 +40,11 @@ class PmfController < ApplicationController
 
     render json: json
   end
+
+  def repositories
+    names = params[:names].split(',').sort
+    @repositories = Repository.where(full_name: names).order('full_name')
+
+    render json: @repositories.to_json
+  end
 end

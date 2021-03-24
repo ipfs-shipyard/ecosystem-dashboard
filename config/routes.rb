@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   get 'pmf/state', to: 'pmf#state'
   get 'pmf/transitions', to: 'pmf#transitions'
   get 'pmf/transition', to: 'pmf#transition'
+  get 'pmf/repositories', to: 'pmf#repositories'
 
   get 'community/packages', to: 'packages#community', as: :community_packages
   get 'community/repositories', to: 'repositories#community', as: :community_repositories
