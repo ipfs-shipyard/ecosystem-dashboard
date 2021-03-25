@@ -349,9 +349,9 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_npm_packages
-    active.source.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
+    internal.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
 
-    Package.platform('npm').each do |package|
+    Package.internal.platform('npm').find_each do |package|
       RepositoryDependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       Dependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       package.save
@@ -359,9 +359,9 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_cargo_packages
-    active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
+    internal.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
 
-    Package.platform('cargo').each do |package|
+    Package.internal.platform('cargo')..find_each do |package|
       RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       Dependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       package.save
@@ -369,9 +369,9 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_go_packages
-    active.source.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
+    internal.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
 
-    Package.platform('go').each do |package|
+    Package.internal.platform('go').find_each do |package|
       RepositoryDependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       Dependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       package.save
