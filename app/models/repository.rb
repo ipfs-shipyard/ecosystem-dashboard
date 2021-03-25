@@ -561,6 +561,14 @@ class Repository < ApplicationRecord
     Package.where(id: indirect_internal_dependency_package_ids)
   end
 
+  def direct_internal_dependency_package_names
+    direct_internal_dependency_packages.select(:name, :platform).map{|pkg| "#{pkg.platform}/#{pkg.name}"}
+  end
+
+  def indirect_internal_dependency_package_names
+    direct_internal_dependency_packages.select(:name, :platform).map{|pkg| "#{pkg.platform}/#{pkg.name}"}
+  end
+
   def direct_internal_dependencies
     repository_dependencies.where(package_id: direct_internal_dependency_package_ids)
   end

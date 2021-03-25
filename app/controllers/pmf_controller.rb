@@ -45,6 +45,7 @@ class PmfController < ApplicationController
     names = params[:names].split(',').sort
     @repositories = Repository.where(full_name: names).order('full_name')
 
-    render json: @repositories.to_json
+    render json: @repositories.to_json(methods: [:direct_internal_dependency_package_names, :indirect_internal_dependency_package_names],
+                                       except: [:direct_internal_dependency_package_ids, :indirect_internal_dependency_package_ids])
   end
 end
