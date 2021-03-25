@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_112110) do
+ActiveRecord::Schema.define(version: 2021_03_25_151130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -209,6 +209,7 @@ ActiveRecord::Schema.define(version: 2021_03_16_112110) do
     t.datetime "first_added_internal_deps"
     t.datetime "last_internal_dep_removed"
     t.datetime "last_events_sync_at"
+    t.index ["full_name"], name: "index_repositories_on_full_name"
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
@@ -247,6 +248,8 @@ ActiveRecord::Schema.define(version: 2021_03_16_112110) do
     t.jsonb "text_matches", default: "{}", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_at"], name: "index_search_results_on_created_at"
+    t.index ["repository_full_name"], name: "index_search_results_on_repository_full_name"
   end
 
   create_table "tags", force: :cascade do |t|
