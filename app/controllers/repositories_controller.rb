@@ -38,15 +38,15 @@ class RepositoriesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
-
         case params[:tab]
         when 'dependency_events'
           @dependency_events_pagy, @dependency_events = pagy(@repository.dependency_events.internal.where('committed_at <= ?', Time.now).order('dependency_events.committed_at DESC'), items: 150)
+        when 'dependencies'
+          @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
         when 'search'
           @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
         else
-          @events_scope = Event.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).repo(@repository.full_name)
+          @events_scope = Event.includes(:repository, :contributor).where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).repo(@repository.full_name)
           @events_pagy, @events = pagy(@events_scope.order('events.created_at DESC'))
         end
       end
