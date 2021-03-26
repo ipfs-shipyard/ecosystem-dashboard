@@ -238,5 +238,15 @@ class RepositoriesController < ApplicationController
       end.compact
       @remaining_missing_names = @missing_names - @new_repos.map(&:full_name)
     end
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: (@existing_repositories + @new_repos).to_json
+      end
+      format.rss do
+        @repositories = @existing_repositories + @new_repos
+        render 'index', :layout => false
+      end
+    end
   end
 end
