@@ -44,7 +44,7 @@ class RepositoriesController < ApplicationController
         when 'dependencies'
           @manifests = @repository.manifests.includes(repository_dependencies: {package: :versions}).order('kind DESC')
         when 'search'
-          @results_pagy, @results = pagy(@repository.search_results.order('created_at DESC'))
+          @results_pagy, @results = pagy(@repository.search_results.includes(:search_query).order('created_at DESC'))
         else
           @events_scope = Event.includes(:repository, :contributor).where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).repo(@repository.full_name)
           @events_pagy, @events = pagy(@events_scope.order('events.created_at DESC'))
