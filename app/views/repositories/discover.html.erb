@@ -1,0 +1,34 @@
+<h1>Discover Repositories</h1>
+
+<p>Look up GitHub repositories to see if they are part of the ecosystem</p>
+
+<%= form_tag discover_path, method: :get, :html => {:class => "form-horizontal center"} do |f| %>
+  <div class="form-row align-items-center mb-3">
+    <div class="col-auto">
+      <%= text_field_tag :names, params[:names], class: "form-control form-control-lg", placeholder: 'Repository names (example foo/bar, bar/baz)', size: 50 %>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary btn-lg">Search</button>
+    </div>
+  </div>
+<% end %>
+
+<% if @existing_repositories && @existing_repositories.any? %>
+  <div>
+    <h5>Existing Repositories</h5>
+    <%= render @existing_repositories %>
+  </div>
+<% end %>
+
+<% if @new_repos && @new_repos.any? %>
+  <div>
+    <h5>New Repositories</h5>
+    <%= render @new_repos %>
+  </div>
+<% end %>
+
+<% if @remaining_missing_names && @remaining_missing_names.any? %>
+<div class="">
+  Couldn't load: <%= @remaining_missing_names.join(', ') %>
+</div>
+<% end %>

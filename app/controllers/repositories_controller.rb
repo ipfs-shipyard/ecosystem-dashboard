@@ -227,4 +227,16 @@ class RepositoriesController < ApplicationController
       end
     end
   end
+
+  def discover
+    if params[:names].present?
+      names = params[:names].split(',').map(&:strip)
+      @existing_repositories = Repository.where(full_name: names)
+      @missing_names = names - @existing_repositories.map(&:full_name)
+      @new_repos = @missing_names.map do |name|
+        Repository.download(name)
+      end.compact
+      @remaining_missing_names = @missing_names - @new_repos.map(&:full_name)
+    end
+  end
 end

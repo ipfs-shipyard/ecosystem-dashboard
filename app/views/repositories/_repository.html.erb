@@ -16,17 +16,20 @@
     <small class='text-muted'>
       <%= repository.description %>
       <div class="row">
-        <div class="col-md-3">
-          Last pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago
+        <div class="col-md-2">
+          Pushed: <%= distance_of_time_in_words_to_now repository.pushed_at %> ago
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           Stars: <%= number_to_human repository.stargazers_count %>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           Forks: <%= number_to_human repository.forks_count %>
         </div>
-        <div class="col-md-3">
-          Score: <%= repository.score %>
+        <div class="col-md-2">
+          Ecosystem Score: <%= repository.score %>
+        </div>
+        <div class="col-md-2">
+          Internal Deps: <%= repository.internal_package_dependency_ids.length %>
         </div>
       </div>
     </small>

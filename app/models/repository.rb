@@ -469,6 +469,10 @@ class Repository < ApplicationRecord
     sync if sync_events.any?
   end
 
+  def internal_package_dependency_ids
+    direct_internal_dependency_package_ids + indirect_internal_dependency_package_ids
+  end
+
   def ecosystem_score_parts
     display_name = ENV['DISPLAY_NAME'].presence || ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
     keyword_match = full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i) || Array(topics).any?{|t| t.match?(/#{Regexp.quote(display_name)}/i) }
@@ -476,7 +480,7 @@ class Repository < ApplicationRecord
     search_results_length = search_results.select{|sr| sr.kind != 'code'}.length
     search_score = search_results_length > 0 ? Math.log(search_results_length, 10) : 0
 
-    internal_package_dependencies = direct_internal_dependency_package_ids.length + indirect_internal_dependency_package_ids.length
+    internal_package_dependencies = internal_package_dependency_ids.length
     internal_package_score = internal_package_dependencies > 0 ? Math.log(internal_package_dependencies, 10) : 0
 
     # TODO
