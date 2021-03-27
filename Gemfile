@@ -20,7 +20,7 @@ gem 'groupdate'
 gem 'languages', github: 'andrew/languages'
 
 gem 'pghero'
-gem 'pg_query', '1.3.0'
+gem 'pg_query'
 gem 'pg_search'
 
 gem 'commonmarker'
