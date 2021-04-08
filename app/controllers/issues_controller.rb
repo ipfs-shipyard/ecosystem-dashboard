@@ -141,6 +141,7 @@ class IssuesController < ApplicationController
     @scope = @scope.exclude_collab(params[:exclude_collab]) if params[:exclude_collab].present?
     @scope = @scope.exclude_label(params[:exclude_label]) if params[:exclude_label].present?
     @scope = @scope.not_core if params[:exclude_core].present?
+    @scope = @scope.core if params[:only_core].present?
 
     @scope = @scope.comments_count(params[:comments_count]) if params[:comments_count].present?
     @scope = @scope.not_draft unless params[:include_drafts].present?
