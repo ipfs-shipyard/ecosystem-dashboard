@@ -25,6 +25,7 @@ class Issue < ApplicationRecord
   scope :language, ->(language) { where('repo_full_name ilike ?', "%/#{language}-%") }
 
   scope :no_milestone, -> { where(milestone_name: nil) }
+  scope :no_boards, -> { where("board_ids = '{}'") }
   scope :unlabelled, -> { where("labels = '{}'") }
   scope :label, ->(label) { where("labels @> ARRAY[?]::varchar[]", label) }
 
