@@ -154,7 +154,8 @@ GEM
       ffi (~> 1.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    google-protobuf (3.15.7)
+    google-protobuf (3.15.7-universal-darwin)
+    google-protobuf (3.15.7-x86_64-linux)
     groupdate (5.2.2)
       activesupport (>= 5)
     hashie (4.1.0)
@@ -184,15 +185,15 @@ GEM
     marcel (1.0.1)
     method_source (1.0.0)
     mini_mime (1.0.3)
-    mini_portile2 (2.5.0)
     minitest (5.14.4)
     msgpack (1.4.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     nio4r (2.5.7)
-    nokogiri (1.11.3)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.11.3-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.11.3-x86_64-linux)
       racc (~> 1.4)
     oauth2 (1.4.7)
       faraday (>= 0.8, < 2.0)
@@ -345,7 +346,8 @@ GEM
     zlib (1.1.0)
 
 PLATFORMS
-  ruby
+  x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   bibliothecary!
@@ -394,7 +396,7 @@ DEPENDENCIES
   zlib
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 2.7.3p183
 
 BUNDLED WITH
-   2.1.4
+   2.2.15
