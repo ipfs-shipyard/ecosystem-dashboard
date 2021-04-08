@@ -19,7 +19,7 @@ class SearchQuery < ApplicationRecord
   def self.run_all
     all.each do |sq|
       sq.run
-      sleep(5)
+      sleep(10)
     end
   end
 
