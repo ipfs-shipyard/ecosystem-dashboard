@@ -361,7 +361,7 @@ class Repository < ApplicationRecord
   def self.find_missing_cargo_packages
     internal.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
 
-    Package.internal.platform('cargo')..find_each do |package|
+    Package.internal.platform('cargo').find_each do |package|
       RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       Dependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
       package.save
