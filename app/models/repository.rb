@@ -28,6 +28,8 @@ class Repository < ApplicationRecord
   belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
 
   scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
+  scope :partner, -> { includes(:organization).where(organizations: {partner: true}) }
+  scope :internal_or_partner, -> { includes(:organization).where('organizations.internal = ? OR organizations.partner = ?', true, true) }
   scope :not_internal, -> { where.not(org: Organization.internal.pluck(:name)) }
   scope :collaborator, -> { includes(:organization).where(organizations: {internal: false}) }
   scope :not_community, -> { where(org: Organization.not_community.pluck(:name)) }
@@ -212,7 +214,7 @@ class Repository < ApplicationRecord
   end
 
   def self.download_internal_repos
-    Organization.internal.pluck(:name).each do |org|
+    Organization.internal_or_partner.pluck(:name).each do |org|
       download_org_repos(org)
     end
   end
@@ -223,7 +225,7 @@ class Repository < ApplicationRecord
 
 
   def self.sync_recently_active_internal_repos
-    Organization.internal.each(&:sync_recently_active_repos)
+    Organization.internal_or_partner.each(&:sync_recently_active_repos)
   end
 
   def color
@@ -349,7 +351,7 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_npm_packages
-    internal.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
+    internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
 
     Package.internal_or_partner.platform('npm').find_each do |package|
       RepositoryDependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
@@ -359,7 +361,7 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_cargo_packages
-    internal.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
+    internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
 
     Package.internal_or_partner.platform('cargo').find_each do |package|
       RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
@@ -369,7 +371,7 @@ class Repository < ApplicationRecord
   end
 
   def self.find_missing_go_packages
-    internal.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
+    internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
 
     Package.internal_or_partner.platform('go').find_each do |package|
       RepositoryDependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)

@@ -468,7 +468,7 @@ class Package < ApplicationRecord
   end
 
   def self.set_outdated_percentage
-    Package.internal.where('collab_dependent_repos_count > 0').includes(:versions).each(&:set_outdated_percentage)
+    Package.internal_or_partner.where('collab_dependent_repos_count > 0').includes(:versions).each(&:set_outdated_percentage)
   end
 
   def internal?
