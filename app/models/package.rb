@@ -476,7 +476,7 @@ class Package < ApplicationRecord
   end
 
   def self.download_internal_dependent_packages
-    Package.internal.each do |package|
+    Package.internal_or_partner.each do |package|
       package.platform_class.dependents(package.name).each do |name|
         unless Package.platform(package.platform).find_by_name(name)
           package.platform_class.update(name)
@@ -499,7 +499,7 @@ class Package < ApplicationRecord
   end
 
   def self.find_dependent_github_repos_names
-    Package.internal.includes(:repository).uniq(&:repository).map(&:find_dependent_github_repo_names).flatten.uniq.compact
+    Package.internal_or_partner.includes(:repository).uniq(&:repository).map(&:find_dependent_github_repo_names).flatten.uniq.compact
   end
 
   def self.find_dependent_github_repos
