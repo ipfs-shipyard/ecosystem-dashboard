@@ -60,7 +60,7 @@
       <% end %>
 
       <% if issue.board_ids.any? %>
-        <span class='badge badge-info'><%= pluralize issue.board_ids.length, 'Board' %></span>
+        <span class='badge badge-warning'><%= pluralize issue.board_ids.length, 'Board' %></span>
       <% end %>
 
       <% issue.labels.first(5).each do |label| %>
