@@ -33,6 +33,6 @@ class Admin::OrganizationsController < Admin::ApplicationController
   private
 
   def organization_params
-    params.require(:organization).permit(:name, :internal, :collaborator, :docker_hub_org)
+    params.require(:organization).permit(:name, :internal, :collaborator, :docker_hub_org, :partner)
   end
 end

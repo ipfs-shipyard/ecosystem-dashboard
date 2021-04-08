@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_25_151130) do
+ActiveRecord::Schema.define(version: 2021_04_08_102457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 2021_03_25_151130) do
     t.string "company"
     t.string "twitter"
     t.datetime "last_synced_at"
+    t.boolean "partner", default: false
   end
 
   create_table "packages", force: :cascade do |t|

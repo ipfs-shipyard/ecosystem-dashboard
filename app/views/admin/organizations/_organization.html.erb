@@ -10,6 +10,8 @@
       <small class='text-muted'>
         <% if organization.internal? %>
           Internal
+        <% elsif organization.partner? %>
+          Partner
         <% elsif organization.collaborator? %>
           Collaborator
         <% end %>
