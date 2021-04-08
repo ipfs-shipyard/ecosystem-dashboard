@@ -158,10 +158,16 @@ class Issue < ApplicationRecord
     end
   end
 
+  def update_board_ids
+    return if board_ids.any?
+    events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview,application/vnd.github.starfox-preview+json')
+    update_column(:board_ids, events.map{|e| e.project_card}.compact.map{|c| c.project_id}.uniq)
+  end
+
   def calculate_first_response
     return if first_response_at.present?
     begin
-      events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview,application/vnd.github.starfox-preview+json')
+      events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview')
       # filter for events by core contributors
       core_contributor_usernames = Contributor.core.pluck(:github_username)
       events = events.select{|e| (e.actor && core_contributor_usernames.include?(e.actor.login)) || (e.user && core_contributor_usernames.include?(e.user.login)) }
@@ -204,5 +210,6 @@ class Issue < ApplicationRecord
   def update_extra_attributes
     download_pull_request
     calculate_first_response
+    update_board_ids
   end
 end
