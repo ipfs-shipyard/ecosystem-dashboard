@@ -541,7 +541,8 @@ class Repository < ApplicationRecord
     includes(:search_results).find_each{|r| r.update_score }
   end
 
-  def update_internal_dependency_lists(internal_package_ids = Package.internal.pluck(:id))
+  def update_internal_dependency_lists
+    internal_package_ids = Package.internal_or_partner.pluck(:id)
     if direct_internal_dependency_package_ids.blank? && indirect_internal_dependency_package_ids.blank?
       return unless manifests.any?
       return unless repository_dependencies.any?

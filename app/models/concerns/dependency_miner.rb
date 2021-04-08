@@ -4,7 +4,7 @@ module DependencyMiner
     return if size > 100_000
 
     @package_cache = {}
-    Package.internal.select(:id, :name, :platform).each do |pkg|
+    Package.internal_or_partner.select(:id, :name, :platform).each do |pkg|
       @package_cache["#{pkg.platform.downcase}-#{pkg.name}"] = pkg.id
     end
 

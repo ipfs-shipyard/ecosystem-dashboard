@@ -81,7 +81,7 @@ class Issue < ApplicationRecord
 
   def self.download(repo_full_name, since = 1.week.ago)
     begin
-      remote_issues = github_client.issues(repo_full_name, state: 'all', since: since)
+      remote_issues = github_client.issues(repo_full_name, state: 'all', since: since, :accept => 'application/vnd.github.starfox-preview+json')
       remote_issues.each do |remote_issue|
         update_from_github(remote_issue)
       end
@@ -161,7 +161,7 @@ class Issue < ApplicationRecord
   def calculate_first_response
     return if first_response_at.present?
     begin
-      events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview')
+      events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview,application/vnd.github.starfox-preview+json')
       # filter for events by core contributors
       core_contributor_usernames = Contributor.core.pluck(:github_username)
       events = events.select{|e| (e.actor && core_contributor_usernames.include?(e.actor.login)) || (e.user && core_contributor_usernames.include?(e.user.login)) }

@@ -90,6 +90,8 @@ class Package < ApplicationRecord
   scope :recently_created, -> { with_repo.where('repositories.created_at > ?', 2.weeks.ago)}
 
   scope :internal, -> { joins(:organization).where('organizations.internal = ?', true) }
+  scope :partner, -> { joins(:organization).where('organizations.partner = ?', true) }
+  scope :internal_or_partner, -> { joins(:organization).where('organizations.internal = ? OR organizations.partner = ?', true, true) }
   scope :external, -> { where.not(repository_id: Repository.internal.pluck(:id)) }
   scope :collabs, -> { joins(:organization).where('organizations.name IN (?)', Organization.collaborator.pluck(:name)) }
   scope :community, -> { without_repo.or(where('repository_id NOT IN (?)', Repository.where(org: Organization.not_community.pluck(:name)).pluck(:id))) }
