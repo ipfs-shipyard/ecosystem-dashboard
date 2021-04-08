@@ -3,6 +3,8 @@ class Organization < ApplicationRecord
   validates_uniqueness_of :name
 
   scope :internal, -> { where(internal: true) }
+  scope :partner, -> { where(partner: true) }
+  scope :internal_or_partner, -> {internal.or(partner) }
   scope :collaborator, -> { where(collaborator: true) }
   scope :not_community, -> { internal.or(collaborator) }
 
