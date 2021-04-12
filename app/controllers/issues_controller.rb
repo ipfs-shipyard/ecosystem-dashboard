@@ -159,8 +159,8 @@ class IssuesController < ApplicationController
     @scope = @scope.where(repo_full_name: params[:repo_full_name]) if params[:repo_full_name].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.no_response if params[:no_response].present?
-    @scope = @scope.collab(params[:collab]) if params[:collab].present?
-    @scope = @scope.all_collabs if params[:only_collabs].present?
+    @scope = @scope.collab(params[:collab]).not_core if params[:collab].present?
+    @scope = @scope.all_collabs.not_core if params[:only_collabs].present?
     @scope = @scope.community if params[:community].present?
 
     @scope = @scope.language(params[:language]) if params[:language].present?
