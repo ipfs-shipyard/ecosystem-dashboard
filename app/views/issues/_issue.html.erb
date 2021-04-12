@@ -45,6 +45,7 @@
         </span>
       <% end %>
       - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
+
       <% "<br/>" if issue.milestone_name || issue.collabs.any? || issue.labels.any? %>
       <% if issue.milestone_name %>
         <a href='https://github.com/<%= issue.repo_full_name %>/milestone/<%= issue.milestone_id %>' target='_blank' class='badge badge-warning'>
@@ -66,6 +67,8 @@
       <% issue.labels.first(5).each do |label| %>
         <%= link_to label, url_for(request.params.merge(label: label, page: nil)), class: "badge badge-light" %>
       <% end %>
+
+      <%= link_to octicon('sync', height: 12), sync_issue_path(issue), method: :post, class: 'ml-2' %>
     </small>
     <br>
     <%= truncate(issue.body, length: 100) %>

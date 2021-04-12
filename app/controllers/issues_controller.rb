@@ -128,7 +128,12 @@ class IssuesController < ApplicationController
         render json: @issues
       end
     end
+  end
 
+  def sync
+    @issue = Issue.find(params[:id])
+    @issue.sync
+    redirect_back(fallback_location: all_issues_path, notice: 'Issue synced')
   end
 
   private

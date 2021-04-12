@@ -4,6 +4,7 @@
 //= require chartkick
 //= require turbolinks
 //= require Chart.bundle
+//= require rails-ujs
 //= require_tree .
 
 document.addEventListener("turbolinks:load", function() {
