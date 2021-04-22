@@ -49,6 +49,8 @@ Rails.application.routes.draw do
 
   post 'issues/:id/sync', to: 'issues#sync', as: :sync_issue
 
+  get 'forage', to: 'forage#index'
+
   get 'discover', to: 'repositories#discover'
 
   get 'pmf/repo/combined/states', to: 'pmf_repo_combined#states'
