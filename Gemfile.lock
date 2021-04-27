@@ -129,7 +129,7 @@ GEM
       railties (>= 3.2)
     erubi (1.10.0)
     escape_utils (1.2.1)
-    ethon (0.13.0)
+    ethon (0.14.0)
       ffi (>= 1.15.0)
     execjs (2.7.0)
     faraday (1.4.1)
