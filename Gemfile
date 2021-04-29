@@ -39,7 +39,7 @@ gem 'repo_miner', git: "https://github.com/andrew/repo_miner"
 gem 'bugsnag'
 gem 'zlib'
 
-gem 'omniauth-github', '1.4.0'
+gem 'omniauth-github', '2.0.0'
 gem 'simple_form'
 
 gem 'rack-cors'
