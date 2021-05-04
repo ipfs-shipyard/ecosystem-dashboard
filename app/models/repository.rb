@@ -29,7 +29,7 @@ class Repository < ApplicationRecord
 
   scope :internal, -> { includes(:organization).where(organizations: {internal: true}) }
   scope :partner, -> { includes(:organization).where(organizations: {partner: true}) }
-  scope :internal_or_partner, -> { includes(:organization).where('organizations.internal = ? OR organizations.partner = ?', true, true) }
+  scope :internal_or_partner, -> { joins(:organization).where('organizations.internal = ? OR organizations.partner = ?', true, true) }
   scope :not_internal, -> { where.not(org: Organization.internal.pluck(:name)) }
   scope :collaborator, -> { includes(:organization).where(organizations: {internal: false}) }
   scope :not_community, -> { where(org: Organization.not_community.pluck(:name)) }
