@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_08_154253) do
+ActiveRecord::Schema.define(version: 2021_05_04_143325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 2021_04_08_154253) do
     t.datetime "first_added_internal_deps"
     t.datetime "last_internal_dep_removed"
     t.datetime "last_events_sync_at"
+    t.boolean "sol_files", default: false
     t.index ["full_name"], name: "index_repositories_on_full_name"
   end
 

@@ -337,6 +337,8 @@ class Repository < ApplicationRecord
     self.contributing_path    = file_list.find{|file| file.match(/^(docs\/)?(.github\/)?CONTRIBUTING/i) }
     self.license_path         = file_list.find{|file| file.match(/^LICENSE|^COPYING|^MIT-LICENSE/i) }
     self.code_of_conduct_path = file_list.find{|file| file.match(/^(docs\/)?(.github\/)?CODE[-_]OF[-_]CONDUCT/i) }
+    self.sol_files            = file_list.any?{|file| file.match(/\.sol$/i) }
+
     save if self.changed?
   end
 
