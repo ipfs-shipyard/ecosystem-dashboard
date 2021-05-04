@@ -24,47 +24,51 @@ module DependencyMiner
     miner = RepoMiner::Repository.new(tmp_path.to_s)
 
     miner.walk(default_branch, latest_commit_sha).each do |commit|
-      latest_commit_sha = commit.oid
-      rc = RepoMiner::Commit.new(miner, commit).analyse
-      next unless rc.data[:dependencies].present?
+      begin
+        latest_commit_sha = commit.oid
+        rc = RepoMiner::Commit.new(miner, commit).analyse
+        next unless rc.data[:dependencies].present?
 
-      activities = []
+        activities = []
 
-      dependency_data = rc.data[:dependencies]
+        dependency_data = rc.data[:dependencies]
 
-      dependency_data[:added_manifests].each do |added_manifest|
-        added_manifest[:added_dependencies].each do |added_dependency|
-          activities << format_activity(rc, added_manifest, added_dependency, 'added')
-        end
-      end
-
-      dependency_data[:modified_manifests].each do |modified_manifest|
-        modified_manifest[:added_dependencies].each do |added_dependency|
-          activities << format_activity(rc, modified_manifest, added_dependency, 'added')
+        dependency_data[:added_manifests].each do |added_manifest|
+          added_manifest[:added_dependencies].each do |added_dependency|
+            activities << format_activity(rc, added_manifest, added_dependency, 'added')
+          end
         end
 
-        modified_manifest[:modified_dependencies].each do |modified_dependency|
-          activities << format_activity(rc, modified_manifest, modified_dependency, 'modified')
+        dependency_data[:modified_manifests].each do |modified_manifest|
+          modified_manifest[:added_dependencies].each do |added_dependency|
+            activities << format_activity(rc, modified_manifest, added_dependency, 'added')
+          end
+
+          modified_manifest[:modified_dependencies].each do |modified_dependency|
+            activities << format_activity(rc, modified_manifest, modified_dependency, 'modified')
+          end
+
+          modified_manifest[:removed_dependencies].each do |removed_dependency|
+            activities << format_activity(rc, modified_manifest, removed_dependency, 'removed')
+          end
         end
 
-        modified_manifest[:removed_dependencies].each do |removed_dependency|
-          activities << format_activity(rc, modified_manifest, removed_dependency, 'removed')
+        dependency_data[:removed_manifests].each do |removed_manifest|
+          removed_manifest[:removed_dependencies].each do |removed_dependency|
+            activities << format_activity(rc, removed_manifest, removed_dependency, 'removed')
+          end
         end
-      end
 
-      dependency_data[:removed_manifests].each do |removed_manifest|
-        removed_manifest[:removed_dependencies].each do |removed_dependency|
-          activities << format_activity(rc, removed_manifest, removed_dependency, 'removed')
+        if activities.any?
+          activities = activities.compact.uniq
+
+          # write activities to the database
+          DependencyEvent.insert_all(activities)
+
+          update({latest_commit_sha: latest_commit_sha, latest_dependency_mine: Time.now})
         end
-      end
-
-      if activities.any?
-        activities = activities.compact.uniq
-
-        # write activities to the database
-        DependencyEvent.insert_all(activities)
-
-        update({latest_commit_sha: latest_commit_sha, latest_dependency_mine: Time.now})
+      rescue ArgumentError
+        # invalid utf8 in path
       end
     end
 
