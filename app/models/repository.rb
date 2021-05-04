@@ -318,6 +318,7 @@ class Repository < ApplicationRecord
 
   def get_file_contents(path)
     file = Issue.github_client.contents(full_name, path: path)
+    return nil if file.is_a?(Array)
     {
       sha: file.sha,
       content: file.content.present? ? Base64.decode64(file.content) : file.content
