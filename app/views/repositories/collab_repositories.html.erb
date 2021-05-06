@@ -70,7 +70,7 @@
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle <%= 'active' if params[:fork].present? || params[:archived].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:fork].present? || params[:archived].present? || params[:smart].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Type</a>
         <div class="dropdown-menu">
           <% if params[:fork].present? && params[:fork] == 'false' %>
             <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, fork: nil)) %>">
