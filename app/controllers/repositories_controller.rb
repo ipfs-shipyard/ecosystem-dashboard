@@ -10,6 +10,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
     @scope = @scope.topic(params[:topic]) if params[:topic].present?
+    @scope = @scope.smart if params[:smart].present?
 
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
@@ -65,6 +66,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
     @scope = @scope.topic(params[:topic]) if params[:topic].present?
+    @scope = @scope.smart if params[:smart].present?
 
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
@@ -103,6 +105,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.fork(params[:fork]) if params[:fork].present?
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
     @scope = @scope.topic(params[:topic]) if params[:topic].present?
+    @scope = @scope.smart if params[:smart].present?
 
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'

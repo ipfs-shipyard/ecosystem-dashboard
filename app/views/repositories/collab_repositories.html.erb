@@ -108,6 +108,15 @@
               Archived
             </a>
           <% end %>
+          <% if params[:smart].present? && params[:smart] == 'true' %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, smart: nil)) %>">
+              Smart Contract
+            </a>
+          <% else %>
+            <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, smart: 'true')) %>">
+              Smart Contract
+            </a>
+          <% end %>
         </div>
       </li>
       <%= render 'issues/range_filter' %>

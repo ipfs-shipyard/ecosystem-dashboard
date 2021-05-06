@@ -43,6 +43,7 @@ class Repository < ApplicationRecord
   scope :no_topic, -> { where("topics = '{}'") }
   scope :topic, ->(topic) { where("topics @> ARRAY[?]::varchar[]", topic) }
   scope :triage, -> { where(triage: true) }
+  scope :smart, -> { where(sol_files: true) }
 
   scope :with_internal_deps, ->(count = 1) { having("SUM(coalesce(array_length(direct_internal_dependency_package_ids, 1),0) + coalesce(array_length(indirect_internal_dependency_package_ids, 1),0)) >= ?", count).group(:id) }
 
