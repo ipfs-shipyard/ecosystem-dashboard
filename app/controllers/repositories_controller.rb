@@ -93,12 +93,7 @@ class RepositoriesController < ApplicationController
   def community
     @page_title = 'Community Repositories'
 
-    package_scope = Package.internal
-    package_scope = package_scope.org(params[:internal_org]) if params[:internal_org].present?
-
-    repo_ids = RepositoryDependency.where(package_id: package_scope.pluck(:id)).group(:repository_id).count.keys
-
-    @scope = Repository.community.where(id: repo_ids).where('score >= 1')
+    @scope = Repository.community.with_internal_deps.where('score >= 1')
     @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
