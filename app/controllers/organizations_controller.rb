@@ -93,7 +93,7 @@ class OrganizationsController < ApplicationController
 
   def show
     @organization = Organization.find_by_name!(params[:id])
-    @period = (params[:range].presence || 30).to_i
+    @period = (params[:range].presence || 7).to_i
 
     sort = params[:sort] || 'created_at'
     order = params[:order] || 'desc'
@@ -115,11 +115,11 @@ class OrganizationsController < ApplicationController
     @search_scope = @search_scope.this_period(@period)
     @repos_count = Repository.org(@organization.name).active.source.count
 
-    @repository_dependencies = @organization.repository_dependencies.internal.direct.active.source.includes(:repository, :manifest)
-
     case params[:tab]
     when 'search'
       @pagy, @results = pagy(@search_scope.order(sort => order))
+    when 'packages'
+      @repository_dependencies = @organization.repository_dependencies.internal.direct.active.source.includes(:repository, :manifest)
     else
       @pagy, @events = pagy(@event_scope.order(sort => order))
     end

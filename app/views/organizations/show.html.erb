@@ -136,7 +136,6 @@
       <li class="nav-item">
         <a class="nav-link <%= 'active' if params[:tab] == 'packages' %>" href="<%= url_for(request.params.merge(tab: 'packages')) %>">
           Package Usage
-          <span class='badge badge-secondary'><%= @repository_dependencies.group_by{|rd| [rd.package,rd.repository] }.length %></span>
         </a>
       </li>
     </ul>
@@ -152,14 +151,6 @@
 
   </div>
   <div class="col-md-3">
-    <h5>Contributors</h5>
-    <% @organization.pushing_contributor_names.each do |username| %>
-      <%= link_to "https://github.com/#{username}", target: :_blank, class: 'float-left mr-1 mt-1' do %>
-        <img src="https://github.com/<%= username %>.png" class="rounded" height='40' width='40'>
-      <% end %>
-    <% end %>
-
-    <div class="clearfix"></div>
     <p>
       <small class='text-muted'>
         Last activity: <%= @organization.events.last ? time_ago_in_words(@organization.events.last.created_at) : 'Never' %>
