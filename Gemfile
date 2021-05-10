@@ -13,7 +13,7 @@ gem 'bootsnap', require: false
 
 gem 'pagy'
 gem 'jquery-rails'
-gem 'bootstrap'
+gem 'bootstrap', '4.6.0'
 gem 'octicons_helper'
 gem "chartkick"
 gem 'groupdate'

@@ -347,7 +347,7 @@ PLATFORMS
 DEPENDENCIES
   bibliothecary!
   bootsnap
-  bootstrap
+  bootstrap (= 4.6.0)
   bugsnag
   chartkick
   commonmarker
