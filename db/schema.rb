@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_143325) do
+ActiveRecord::Schema.define(version: 2021_05_13_134413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_143325) do
     t.boolean "direct", default: false
     t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
     t.index ["package_id"], name: "index_repository_dependencies_on_package_id"
+    t.index ["package_name"], name: "index_repository_dependencies_on_package_name"
     t.index ["repository_id"], name: "index_repository_dependencies_on_repository_id"
   end
 
