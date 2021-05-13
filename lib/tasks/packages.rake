@@ -5,9 +5,15 @@ namespace :packages do
 
   task find_missing_npm_packages: :environment do
     Package.download_internal_dependent_packages
+    
     Repository.find_missing_npm_packages
     Repository.find_missing_cargo_packages
     Repository.find_missing_go_packages
+
+    Repository.update_npm_dependencies
+    Repository.update_cargo_dependencies
+    Repository.update_go_dependencies
+
     Organization.where('docker_hub_org is not null').each(&:sync_docker_packages)
   end
 

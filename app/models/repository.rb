@@ -356,7 +356,9 @@ class Repository < ApplicationRecord
 
   def self.find_missing_npm_packages
     internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
+  end
 
+  def self.update_npm_dependencies
     Package.internal_or_partner.platform('npm').find_each do |package|
       RepositoryDependency.platform('npm').without_package_id.where(package_name: package.name).find_each{|rd| rd.update_columns(package_id: package.id) }
       Dependency.platform('npm').without_package_id.where(package_name: package.name).find_each{|d| d.update_columns(package_id: package.id) }
@@ -366,7 +368,9 @@ class Repository < ApplicationRecord
 
   def self.find_missing_cargo_packages
     internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
+  end
 
+  def self.update_cargo_dependencies
     Package.internal_or_partner.platform('cargo').find_each do |package|
       RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).find_each{|rd| rd.update_columns(package_id: package.id) }
       Dependency.platform('cargo').without_package_id.where(package_name: package.name).find_each{|d| d.update_columns(package_id: package.id) }
@@ -376,7 +380,9 @@ class Repository < ApplicationRecord
 
   def self.find_missing_go_packages
     internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
+  end
 
+  def self.update_go_dependencies
     Package.internal_or_partner.platform('go').find_each do |package|
       RepositoryDependency.platform('go').without_package_id.where(package_name: package.name).find_each{|rd| rd.update_columns(package_id: package.id) }
       Dependency.platform('go').without_package_id.where(package_name: package.name).find_each{|d| d.update_columns(package_id: package.id) }
