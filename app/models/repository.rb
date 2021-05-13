@@ -358,8 +358,8 @@ class Repository < ApplicationRecord
     internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%package.json').uniq.each(&:find_npm_packages)
 
     Package.internal_or_partner.platform('npm').find_each do |package|
-      RepositoryDependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
-      Dependency.platform('npm').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      RepositoryDependency.platform('npm').without_package_id.where(package_name: package.name).find_each{|rd| rd.update_columns(package_id: package.id) }
+      Dependency.platform('npm').without_package_id.where(package_name: package.name).find_each{|d| d.update_columns(package_id: package.id) }
       package.save
     end
   end
@@ -368,8 +368,8 @@ class Repository < ApplicationRecord
     internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%Cargo.toml').uniq.each(&:find_cargo_packages)
 
     Package.internal_or_partner.platform('cargo').find_each do |package|
-      RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
-      Dependency.platform('cargo').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      RepositoryDependency.platform('cargo').without_package_id.where(package_name: package.name).find_each{|rd| rd.update_columns(package_id: package.id) }
+      Dependency.platform('cargo').without_package_id.where(package_name: package.name).find_each{|d| d.update_columns(package_id: package.id) }
       package.save
     end
   end
@@ -378,8 +378,8 @@ class Repository < ApplicationRecord
     internal_or_partner.active.source.joins(:manifests).where('manifests.filepath ilike ?', '%go.mod').uniq.each(&:find_go_packages)
 
     Package.internal_or_partner.platform('go').find_each do |package|
-      RepositoryDependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
-      Dependency.platform('go').without_package_id.where(package_name: package.name).update_all(package_id: package.id)
+      RepositoryDependency.platform('go').without_package_id.where(package_name: package.name).find_each{|rd| rd.update_columns(package_id: package.id) }
+      Dependency.platform('go').without_package_id.where(package_name: package.name).find_each{|d| d.update_columns(package_id: package.id) }
       package.save
     end
   end
@@ -404,7 +404,7 @@ class Repository < ApplicationRecord
       file = manifest.repository.get_file_contents(manifest.filepath)
 
       if file.present? && file[:content].present?
-        toml = TomlRB.parse(file[:content])
+        toml = Tomlrb.parse(file[:content])
         PackageManager::Cargo.update(toml['package']['name']) if toml['package']
       end
     end
