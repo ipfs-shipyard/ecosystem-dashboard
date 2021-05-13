@@ -32,7 +32,6 @@
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:tab].blank? || params[:tab] == 'events' %>" href="<%= url_for(request.params.merge(tab: 'events')) %>">
       Events
-      <span class='badge badge-secondary'><%= @events.count %></span>
     </a>
   </li>
   <li class="nav-item">
