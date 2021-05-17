@@ -203,6 +203,7 @@ class Issue < ApplicationRecord
       i = Issue.update_from_github(remote_issue)
       i.update_extra_attributes
       i.update_column(:last_synced_at, Time.zone.now)
+      destroy if i.html_url != self.html_url
     rescue Octokit::NotFound, Octokit::Middleware::RedirectLimitReached
       destroy
     rescue ActiveRecord::ActiveRecordError
