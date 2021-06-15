@@ -79,7 +79,7 @@ class Repository < ApplicationRecord
       end
     rescue Octokit::InvalidRepository
       # full_name isn't a proper repo name
-    rescue Octokit::RepositoryUnavailable
+    rescue Octokit::RepositoryUnavailable, Octokit::UnavailableForLegalReasons
       # repo locked/disabled
       if full_name_or_id.is_a?(String)
         repo = Repository.find_by_full_name(full_name_or_id)
