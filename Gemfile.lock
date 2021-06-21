@@ -113,8 +113,7 @@ GEM
     chartkick (4.0.4)
     commander (4.6.0)
       highline (~> 2.0.0)
-    commonmarker (0.21.2)
-      ruby-enum (~> 0.5)
+    commonmarker (0.22.0)
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     counter_culture (2.8.0)
@@ -275,8 +274,6 @@ GEM
     redis (4.3.1)
     request_store (1.5.0)
       rack (>= 1.4)
-    ruby-enum (0.9.0)
-      i18n
     ruby2_keywords (0.0.4)
     rugged (1.1.0)
     sassc (2.4.0)
