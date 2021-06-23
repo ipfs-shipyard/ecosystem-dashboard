@@ -1,0 +1,79 @@
+<nav class="mb-2 mt-2 navbar navbar-expand-lg navbar-light">
+  <span class="navbar-brand" >
+    <strong><%= @page_title = 'Lotus PR reviews' %></strong>
+  </span>
+</nav>
+
+<% @issues.each do |issue| %>
+<div class="card mb-3">
+  <!-- id: <%= issue.id %> -->
+  <div class="card-body">
+    <%= link_to contributor_path(issue.user), target: :_blank, class: 'float-right' do %>
+      <img src="https://github.com/<%= issue.user.gsub('[bot]', '') %>.png" class="rounded" height='40' width='40'>
+    <% end %>
+    <h5 class="card-title mb-0">
+      <span class='mr-1 text-<%= issue_colour(issue) %>'>
+        <% if issue.locked? %>
+          <%= octicon('lock', :height => 18) %>
+        <% else %>
+          <% if issue.pull_request? %>
+            <%= octicon('git-pull-request', :height => 18) %>
+          <% else %>
+            <%= octicon('issue-opened', :height => 18) %>
+          <% end %>
+        <% end %>
+      </span>
+
+      <%= link_to issue.title, issue.html_url, target: :_blank, title: "Last synced: #{time_ago_in_words(issue.last_synced_at || issue.created_at)}" %>
+      in <%= issue.repo_full_name %>
+      <span class='text-muted' title="ID: <%= issue.id %>">#<%= issue.number %></span>
+    </h5>
+    <small class='text-muted'>
+      <%= link_to "@#{issue.user}", url_for(request.params.merge(user: issue.user, page: nil)) %>
+      - opened <%= time_ago_in_words(issue.created_at) %> ago
+      - review requested <%= time_ago_in_words(issue.review_requested_at) %> ago
+      <% if issue.review_time %>
+        -
+        resolved after <%= distance_of_time_in_words(issue.review_time) %>
+      <% end %>
+
+      - <%= issue.comments_count %> <%= octicon('comment', height: 14) %>
+
+      <% "<br/>" if issue.milestone_name || issue.collabs.any? || issue.labels.any? %>
+      <% if issue.milestone_name %>
+        <a href='https://github.com/<%= issue.repo_full_name %>/milestone/<%= issue.milestone_id %>' target='_blank' class='badge badge-warning'>
+          Milestone: <%= issue.milestone_name %>
+        </a>
+      <% end %>
+      <% if issue.contributed? %>
+        <% issue.collabs.first(5).each do |collab| %>
+          <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+        <% end %>
+      <% else %>
+        <span class='badge badge-dark'>Core</span>
+      <% end %>
+
+      <% if issue.board_ids.any? %>
+        <span class='badge badge-success'><%= pluralize issue.board_ids.length, 'Board' %></span>
+      <% end %>
+
+      <% issue.labels.first(5).each do |label| %>
+        <%= link_to label, url_for(request.params.merge(label: label, page: nil)), class: "badge badge-light" %>
+      <% end %>
+
+      <%= link_to octicon('sync', height: 12), sync_issue_path(issue), method: :post, class: 'ml-2' %>
+    </small>
+    <br>
+    <%= truncate(issue.body, length: 100) %>
+  </div>
+</div>
+
+<% end %>
+
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+
+<p>
+  <small class='text-muted'>
+    RSS feed for this page: <%= link_to truncate(url_for(request.params.merge(page: nil, format: :rss, only_path: false)), length: 100), url_for(request.params.merge(page: nil, format: :rss, only_path: false)) %>
+  </small>
+</p>

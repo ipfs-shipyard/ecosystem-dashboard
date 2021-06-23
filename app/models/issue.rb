@@ -54,6 +54,8 @@ class Issue < ApplicationRecord
   scope :this_week, -> { where('issues.created_at > ?', 1.week.ago) }
   scope :last_week, -> { where('issues.created_at > ?', 2.week.ago).where('issues.created_at < ?', 1.week.ago) }
 
+  scope :review_requested, -> { where.not(review_requested_at: nil) }
+
   belongs_to :repository, foreign_key: :repo_full_name, primary_key: :full_name, optional: true
   belongs_to :contributor, foreign_key: :user, primary_key: :github_username, optional: true
   belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
@@ -216,6 +218,30 @@ class Issue < ApplicationRecord
   def update_extra_attributes
     download_pull_request
     calculate_first_response
+    calculate_pr_merge_time
     update_board_ids
+  end
+
+  def calculate_pr_merge_time
+    return unless repo_full_name == 'filecoin-project/lotus'
+    return unless pull_request?
+    return if review_time.present?
+
+    events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview,application/vnd.github.starfox-preview+json')
+
+    if review_requested_at
+      start_time = review_requested_at
+    else
+      start_time = events.select{|e| e[:event] == 'review_requested' && e[:requested_team] && e[:requested_team][:name] == "lotus-maintainers"}.first.try(:created_at)
+      return if start_time.nil?
+      update_columns(review_requested_at: start_time)
+    end
+
+    end_time = events.select{|e| ["merged", "closed", "convert_to_draft"].include?(e.event)}.first.try(:created_at)
+
+    return if end_time.nil?
+
+    review_time = end_time - start_time
+    update_columns(review_time: review_time)
   end
 end

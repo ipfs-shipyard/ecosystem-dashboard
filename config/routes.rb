@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     match :failure,              to: 'sessions#failure', via: [:get, :post]
   end
 
+  get 'issues/review_requested', to: 'issues#review_requested'
   post 'issues/:id/sync', to: 'issues#sync', as: :sync_issue
 
   get 'forage', to: 'forage#index'

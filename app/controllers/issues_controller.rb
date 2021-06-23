@@ -136,6 +136,24 @@ class IssuesController < ApplicationController
     redirect_back(fallback_location: all_issues_path, notice: 'Issue synced')
   end
 
+  def review_requested
+    @scope = Issue.review_requested
+    apply_filters
+    respond_to do |format|
+      format.html do
+        @pagy, @issues = pagy(@scope.order(@sort => @order))
+      end
+      format.json do
+        @pagy, @issues = pagy(@scope.order(@sort => @order))
+        render json: @issues
+      end
+      format.rss do
+        @pagy, @issues = pagy(@scope.order(@sort => @order))
+        render 'all', :layout => false
+      end
+    end
+  end
+
   private
 
   def apply_filters
