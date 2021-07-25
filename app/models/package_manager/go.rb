@@ -18,7 +18,7 @@ module PackageManager
       '.hg',
       '.svn',
     ]
-
+    GITHUB_PACKAGE_SUPPORT = true
 
     def self.package_link(package, version = nil)
       "https://pkg.go.dev/#{package.name}#{"@#{version}" if version}"
