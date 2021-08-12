@@ -67,6 +67,10 @@ class Repository < ApplicationRecord
     nil
   end
 
+  def self.download_async(full_name_or_id)
+    RepositoryDownloadWorker.perform_async(full_name_or_id)
+  end
+
   def self.download(full_name_or_id)
     begin
       remote_repo = Issue.github_client.repo(full_name_or_id, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')

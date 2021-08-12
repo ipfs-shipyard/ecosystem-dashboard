@@ -255,8 +255,8 @@ class RepositoriesController < ApplicationController
     @existing_repositories = Repository.where(full_name: names)
     @missing_names = names - @existing_repositories.map(&:full_name)
     @missing_names.map do |name|
-        Repository.download(name) # TODO do this async
-    end.compact
+        Repository.download_async(name)
+    end
 
     json = {}
     names.each do |name|
