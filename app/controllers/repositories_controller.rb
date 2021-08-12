@@ -1,4 +1,6 @@
 class RepositoriesController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:discover, :dependency_counts]
+
   def index
     @page_title = 'Internal Repositories'
     @scope = Repository.internal
@@ -244,6 +246,31 @@ class RepositoriesController < ApplicationController
       format.rss do
         @repositories = @existing_repositories + @new_repos
         render 'index', :layout => false
+      end
+    end
+  end
+
+  def dependency_counts
+    names = params[:names]
+    @existing_repositories = Repository.where(full_name: names)
+    @missing_names = names - @existing_repositories.map(&:full_name)
+    @missing_names.map do |name|
+        Repository.download(name) # TODO do this async
+    end.compact
+
+    json = {}
+    names.each do |name|
+      repo = @existing_repositories.find{|r| r.full_name == name}
+      if repo
+        json[name] = (repo.direct_internal_dependency_package_ids + repo.indirect_internal_dependency_package_ids).uniq.length
+      else
+        json[name] = 0
+      end
+    end
+
+    respond_to do |format|
+      format.json do
+        render json: json.to_json
       end
     end
   end

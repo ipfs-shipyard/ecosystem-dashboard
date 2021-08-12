@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       get :audit
       get :states
       get :transitions
+      post :dependency_counts
     end
   end
 
