@@ -38,10 +38,13 @@ namespace :pmf do
     # calculate pmf windows for past year from yesterday
     end_date = Date.yesterday - 3
     start_date = end_date - 52.weeks
-  
+
     [7,14,30,90].each do |window|
-      PmfRepo.transitions(start_date, end_date, window)
-      PmfRepo.states(start_date, end_date, window)
+      puts [start_date, end_date, window]
+      puts "transitions"
+      p PmfRepo.transitions(start_date, end_date, window)
+      puts "transitions"
+      p PmfRepo.states(start_date, end_date, window)
     end
   end
 end
