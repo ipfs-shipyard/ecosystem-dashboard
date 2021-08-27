@@ -42,9 +42,9 @@ namespace :pmf do
     [7,14,30,90].each do |window|
       puts [start_date, end_date, window]
       transitions = PmfRepo.transitions(start_date, end_date, window)
-      puts "  #{transitions} transitions"
+      puts "  #{transitions.length} transitions"
       states = PmfRepo.states(start_date, end_date, window)
-      puts "  #{states} states"
+      puts "  #{states.length} states"
     end
   end
 end
