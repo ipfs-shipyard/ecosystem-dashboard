@@ -113,7 +113,7 @@ GEM
     chartkick (4.0.5)
     commander (4.6.0)
       highline (~> 2.0.0)
-    commonmarker (0.22.0)
+    commonmarker (0.23.0)
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
     counter_culture (2.8.0)
