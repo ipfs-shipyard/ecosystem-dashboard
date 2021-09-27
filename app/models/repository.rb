@@ -601,4 +601,8 @@ class Repository < ApplicationRecord
   def mine_dependencies_async
     DependencyEventsWorker.perform_async(id)
   end
+
+  def contributors_count
+    events.select('DISTINCT(actor)').count
+  end
 end

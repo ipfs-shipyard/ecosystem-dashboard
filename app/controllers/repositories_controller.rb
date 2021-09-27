@@ -241,7 +241,7 @@ class RepositoriesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: (@existing_repositories + @new_repos).to_json
+        render json: (@existing_repositories + @new_repos).to_json(methods: :contributors_count)
       end
       format.rss do
         @repositories = @existing_repositories + @new_repos
