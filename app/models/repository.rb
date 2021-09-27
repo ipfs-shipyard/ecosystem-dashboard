@@ -605,4 +605,12 @@ class Repository < ApplicationRecord
   def contributors_count
     events.select('DISTINCT(actor)').count
   end
+
+  def direct_internal_dependency_counts
+    direct_internal_dependency_packages.group_by(&:organization).map{|k,v| [k.name, v.length] }.to_h
+  end
+
+  def indirect_internal_dependency_counts
+    indirect_internal_dependency_packages.group_by(&:organization).map{|k,v| [k.name, v.length] }.to_h
+  end
 end
