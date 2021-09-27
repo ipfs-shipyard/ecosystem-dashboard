@@ -237,14 +237,17 @@ class RepositoriesController < ApplicationController
         Repository.download(name)
       end.compact
       @remaining_missing_names = @missing_names - @new_repos.map(&:full_name)
+      @repositories = @existing_repositories + @new_repos
+    elsif params[:org].present?
+      Repository.import_org(params[:org])
+      @repositories = @existing_repositories = Repository.source.active.org(params[:org])
     end
     respond_to do |format|
       format.html
       format.json do
-        render json: (@existing_repositories + @new_repos).to_json(methods: [:contributors_count, :direct_internal_dependency_counts, :indirect_internal_dependency_counts])
+        render json: @repositories.to_json(methods: [:contributors_count, :direct_internal_dependency_counts, :indirect_internal_dependency_counts])
       end
       format.rss do
-        @repositories = @existing_repositories + @new_repos
         render 'index', :layout => false
       end
     end
