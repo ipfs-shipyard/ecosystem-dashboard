@@ -254,7 +254,7 @@ class RepositoriesController < ApplicationController
   end
 
   def dependency_counts
-    names = params[:names]
+    names = params[:names].split(',').map(&:strip)
     @existing_repositories = Repository.where(full_name: names)
     @missing_names = names - @existing_repositories.map(&:full_name)
     @missing_names.map do |name|
