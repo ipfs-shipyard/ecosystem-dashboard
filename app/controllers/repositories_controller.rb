@@ -234,7 +234,11 @@ class RepositoriesController < ApplicationController
       @existing_repositories = Repository.where(full_name: names)
       @missing_names = names - @existing_repositories.map(&:full_name)
       @new_repos = @missing_names.map do |name|
-        Repository.download(name)
+        if @missing_names.length > 1
+          Repository.download_async(name)
+        else
+          Repository.download(name)
+        end
       end.compact
       @remaining_missing_names = @missing_names - @new_repos.map(&:full_name)
       @repositories = @existing_repositories + @new_repos
