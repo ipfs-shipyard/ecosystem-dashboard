@@ -54,6 +54,7 @@ Rails.application.routes.draw do
   get 'forage', to: 'forage#index'
 
   get 'discover', to: 'repositories#discover'
+  post 'discover', to: 'repositories#discover'
 
   get 'pmf/repo/combined/states', to: 'pmf_repo_combined#states'
   get 'pmf/repo/combined/state', to: 'pmf_repo_combined#state'
