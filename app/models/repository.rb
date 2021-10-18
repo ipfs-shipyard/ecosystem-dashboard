@@ -579,7 +579,7 @@ class Repository < ApplicationRecord
   end
 
   def indirect_internal_dependency_packages
-    Package.where(id: indirect_internal_dependency_package_ids)
+    Package.where(id: indirect_internal_dependency_package_ids).includes(:organization)
   end
 
   def direct_internal_dependency_package_names
