@@ -236,6 +236,7 @@ class RepositoriesController < ApplicationController
       @new_repos = @missing_names.map do |name|
         if @missing_names.length > 1
           Repository.download_async(name)
+          nil
         else
           Repository.download(name)
         end
