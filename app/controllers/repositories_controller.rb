@@ -70,6 +70,11 @@ class RepositoriesController < ApplicationController
     @scope = @scope.topic(params[:topic]) if params[:topic].present?
     @scope = @scope.smart if params[:smart].present?
 
+    if params[:dependent_org].present?
+      org = Organization.find_by_name(params[:dependent_org])
+      @scope = @scope.with_internal_deps_from_org(org.package_ids)
+    end
+
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'
 
@@ -103,6 +108,11 @@ class RepositoriesController < ApplicationController
     @scope = @scope.archived(params[:archived]) if params[:archived].present?
     @scope = @scope.topic(params[:topic]) if params[:topic].present?
     @scope = @scope.smart if params[:smart].present?
+
+    if params[:dependent_org].present?
+      org = Organization.find_by_name(params[:dependent_org])
+      @scope = @scope.with_internal_deps_from_org(org.package_ids)
+    end
 
     @sort = params[:sort] || 'score'
     @order = params[:order] || 'desc'

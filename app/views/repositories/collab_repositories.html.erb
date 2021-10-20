@@ -30,6 +30,23 @@
         </div>
       </li>
       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle <%= 'active' if params[:dependent_org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dependent Org</a>
+        <div class="dropdown-menu">
+          <% if params[:dependent_org].present? %>
+            <a class="dropdown-item active" title='Click to Remove' href="<%= url_for(request.params.merge(page: nil, org: nil)) %>">
+              <%= params[:dependent_org] %>
+            </a>
+          <% end %>
+          <% Organization.internal.pluck(:name).each do |org| %>
+            <% unless org == params[:dependent_org] %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(page: nil, dependent_org: org)) %>">
+                <%= org %>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle <%= 'active' if params[:language].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Language</a>
         <div class="dropdown-menu">
           <% if params[:language].present? %>
