@@ -149,6 +149,7 @@
 
 <p>
   <small class='text-muted'>
+    <%== pagy_info(@pagy) %><br/>
     RSS feed for this page: <%= link_to truncate(url_for(request.params.merge(page: nil, format: :rss, only_path: false)), length: 100), url_for(request.params.merge(page: nil, format: :rss, only_path: false)) %>
   </small>
 </p>
