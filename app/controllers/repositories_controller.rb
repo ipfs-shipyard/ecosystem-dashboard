@@ -61,7 +61,7 @@ class RepositoriesController < ApplicationController
 
   def collab_repositories
     @page_title = 'Collaborator Repositories'
-    @scope = Repository.collaborator.where('score >= 1')
+    @scope = Repository.collaborator
     @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
@@ -73,6 +73,8 @@ class RepositoriesController < ApplicationController
     if params[:dependent_org].present?
       org = Organization.find_by_name(params[:dependent_org])
       @scope = @scope.with_internal_deps_from_org(org.package_ids)
+    else
+      @scope = @scope.where('score >= 1')
     end
 
     @sort = params[:sort] || 'score'
@@ -100,7 +102,7 @@ class RepositoriesController < ApplicationController
   def community
     @page_title = 'Community Repositories'
 
-    @scope = Repository.community.with_internal_deps.where('score >= 1')
+    @scope = Repository.community.with_internal_deps
     @scope = @scope.this_period(params[:range].to_i) if params[:range].present?
     @scope = @scope.org(params[:org]) if params[:org].present?
     @scope = @scope.language(params[:language]) if params[:language].present?
@@ -112,6 +114,8 @@ class RepositoriesController < ApplicationController
     if params[:dependent_org].present?
       org = Organization.find_by_name(params[:dependent_org])
       @scope = @scope.with_internal_deps_from_org(org.package_ids)
+    else
+      @scope = @scope.where('score >= 1')
     end
 
     @sort = params[:sort] || 'score'
