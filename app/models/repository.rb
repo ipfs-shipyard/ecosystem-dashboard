@@ -615,4 +615,8 @@ class Repository < ApplicationRecord
   def indirect_internal_dependency_counts
     indirect_internal_dependency_packages.group_by(&:organization).map{|k,v| [k.name, v.length] }.to_h
   end
+
+  def keyword_match_count
+    keyword_matches.strip.split("\n").length
+  end
 end

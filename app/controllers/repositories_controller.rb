@@ -264,7 +264,7 @@ class RepositoriesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: @repositories.to_json(methods: [:contributors_count, :direct_internal_dependency_counts, :indirect_internal_dependency_counts])
+        render json: @repositories.to_json(methods: [:contributors_count, :direct_internal_dependency_counts, :indirect_internal_dependency_counts, :keyword_match_count])
       end
       format.rss do
         render 'index', :layout => false

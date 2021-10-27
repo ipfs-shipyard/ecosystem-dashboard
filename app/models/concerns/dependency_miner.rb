@@ -20,6 +20,12 @@ module DependencyMiner
 
     return unless tmp_path.exist? # handle failed clones
 
+    matches = ENV['KEYWORDS'].to_s.split(',').map do |keyword|
+      `cd #{tmp_path} && git grep --line-number #{keyword}`
+    end
+
+    update_column(:keyword_matches, matches.join('\n'))
+
     # mine dependency activity from git repository
     miner = RepoMiner::Repository.new(tmp_path.to_s)
 
