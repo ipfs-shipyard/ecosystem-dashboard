@@ -24,7 +24,13 @@ module DependencyMiner
       `cd #{tmp_path} && git grep --line-number #{keyword}`
     end
 
-    update_column(:keyword_matches, matches.join("\n"))
+    combined_matches = matches.join("\n").strip
+
+    if combined_matches.present?
+      update_column(:keyword_matches, combined_matches)
+    else
+      update_column(:keyword_matches, nil)
+    end
 
     # mine dependency activity from git repository
     miner = RepoMiner::Repository.new(tmp_path.to_s)
