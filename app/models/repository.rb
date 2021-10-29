@@ -617,6 +617,6 @@ class Repository < ApplicationRecord
   end
 
   def keyword_match_count
-    keyword_matches.strip.split("\n").length
+    keyword_matches.to_s.strip.split("\n").length
   end
 end
