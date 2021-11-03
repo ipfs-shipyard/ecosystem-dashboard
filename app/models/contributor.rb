@@ -13,6 +13,7 @@ class Contributor < ApplicationRecord
   end
 
   def self.download(github_username)
+    # TODO check to see if github account still exists
     contrib = find_or_create_by(github_username: github_username)
     contrib.sync_events
     # TODO update other details here
