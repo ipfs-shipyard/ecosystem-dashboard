@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_27_085630) do
+ActiveRecord::Schema.define(version: 2021_11_03_112236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 2021_10_27_085630) do
     t.boolean "bot", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "last_events_sync_at"
+    t.string "etag"
   end
 
   create_table "dependencies", force: :cascade do |t|

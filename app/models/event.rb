@@ -1,6 +1,6 @@
 class Event < ApplicationRecord
 
-  belongs_to :repository
+  belongs_to :repository, optional: true
   belongs_to :contributor, foreign_key: :actor, primary_key: :github_username, optional: true
   belongs_to :organization, foreign_key: :org, primary_key: :name, optional: true
 
@@ -37,9 +37,9 @@ class Event < ApplicationRecord
     e.actor = event_json['actor']['login']
     e.event_type = event_json['type']
     e.action = event_json['payload']['action']
-    e.repository_id = repository.id
-    e.repository_full_name = repository.full_name
-    e.org = repository.org
+    e.repository_id = repository.try(:id)
+    e.repository_full_name = repository.try(:full_name) || event_json['repo']['name']
+    e.org = repository.try(:org) || event_json['repo']['name'].split('/')[0]
     e.payload = event_json['payload'].to_h
     e.created_at = event_json['created_at']
     e.save if e.changed?

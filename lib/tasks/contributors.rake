@@ -1,6 +1,10 @@
 require 'csv'
 
 namespace :contributors do
+  task sync: :environment do
+    Contributor.order('last_events_sync_at ASC nulls first').limit(200).each(&:sync)
+  end
+
   task research: :environment do
     contributors = Issue.not_core.group(:user).count.sort_by{|u,c| -c}.select{|u,c| c > 10 }.reject{|u,c| u == 'ghost'}
 

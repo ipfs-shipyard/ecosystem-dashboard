@@ -1,7 +1,7 @@
 class Contributor < ApplicationRecord
   validates :github_username, presence: true, uniqueness: true
 
-  has_many :events, foreign_key: :user, primary_key: :github_username
+  has_many :events, foreign_key: :actor, primary_key: :github_username
   has_many :issues, foreign_key: :user, primary_key: :github_username
 
   scope :core, -> { where(core: true) }
@@ -10,6 +10,12 @@ class Contributor < ApplicationRecord
 
   def to_s
     github_username
+  end
+
+  def self.download(github_username)
+    contrib = find_or_create_by(github_username: github_username)
+    contrib.sync_events
+    # TODO update other details here
   end
 
   def self.collabs_for(username)
@@ -58,5 +64,38 @@ class Contributor < ApplicationRecord
       end
     end
     searches.select{|k,v| v > 10 }
+  end
+
+  def sync
+    Contributor.download(github_username)
+    sync_events
+  end
+
+  def sync_events(auto_paginate = false)
+    download_events(auto_paginate).each do |e|
+      repo = Repository.find_by_full_name(e['repo']['name'])
+      Event.record_event(repo, e)
+    end
+  end
+
+  def download_events(auto_paginate = false)
+    client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+    begin
+      if auto_paginate || etag.blank?
+        events = client.user_public_events(github_username, auto_paginate: auto_paginate)
+      else
+        events = client.user_public_events(github_username, headers: {'If-None-Match' => etag})
+      end
+
+      update_column(:last_events_sync_at, Time.zone.now)
+      return [] if events == ''
+      new_etag = client.last_response.headers['etag']
+      if !auto_paginate && new_etag && new_etag != etag
+        update_column(:etag, new_etag)
+      end
+      events
+    rescue *Repository::IGNORABLE_EXCEPTIONS
+      []
+    end
   end
 end

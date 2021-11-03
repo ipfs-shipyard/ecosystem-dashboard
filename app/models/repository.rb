@@ -147,6 +147,7 @@ class Repository < ApplicationRecord
           repo.unarchive_all_issues!
         end
       end
+      repo.sync_contributors_async
       sync_files = repo.pushed_at_changed?
       repo.save
       if !repo.fork? && !repo.archived? && sync_files
@@ -606,6 +607,22 @@ class Repository < ApplicationRecord
 
   def contributors_count
     events.select('DISTINCT(actor)').count
+  end
+
+  def contributor_names
+    events.pluck('DISTINCT(actor)')
+  end
+
+  def sync_contributors
+    contributor_names.each{|n| Contributor.download(n) }
+  end
+
+  def sync_contributors_async
+    contributor_names.each{|n| ContributorDownloadWorker.perform_async(n) }
+  end
+
+  def contributors
+    Contributor.where(github_username: contributor_names)
   end
 
   def direct_internal_dependency_counts
