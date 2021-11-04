@@ -223,7 +223,7 @@ GEM
     omniauth-oauth2 (1.7.2)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
-    ox (2.14.5)
+    ox (2.14.6)
     pagy (5.1.3)
     pg (1.2.3)
     pg_query (2.1.1)
