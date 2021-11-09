@@ -14,18 +14,18 @@ class Contributor < ApplicationRecord
 
   def self.download(github_username)
     contrib = find_or_create_by(github_username: github_username)
-    begin
-      u = Issue.github_client.user(github_username)
-      contrib.github_id = u.id
-      # TODO update other details here
-      contrib.save if contrib.changed?
-    rescue Octokit::NotFound
-      # TODO record if account has been deleted and don't sync anymore
-    rescue Octokit::Error
-      # handle other octokit errors
-    end
-    # contrib.sync_events
-    return contrib
+    # begin
+    #   u = Issue.github_client.user(github_username)
+    #   contrib.github_id = u.id
+    #   # TODO update other details here
+    #   contrib.save if contrib.changed?
+    # rescue Octokit::NotFound
+    #   # TODO record if account has been deleted and don't sync anymore
+    # rescue Octokit::Error
+    #   # handle other octokit errors
+    # end
+    # # contrib.sync_events
+    # return contrib
   end
 
   def self.collabs_for(username)
