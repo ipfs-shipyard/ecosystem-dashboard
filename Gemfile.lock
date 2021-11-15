@@ -226,7 +226,7 @@ GEM
     ox (2.14.6)
     pagy (5.3.1)
     pg (1.2.3)
-    pg_query (2.1.1)
+    pg_query (2.1.2)
       google-protobuf (>= 3.17.1)
     pg_search (2.3.5)
       activerecord (>= 5.2)
