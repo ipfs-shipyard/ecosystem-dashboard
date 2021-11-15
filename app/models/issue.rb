@@ -6,7 +6,7 @@ class Issue < ApplicationRecord
 
   scope :internal, -> { includes(:repository, :organization).where(organizations: {internal: true}).or(includes(:repository, :organization).where('repositories.triage = true')) }
   scope :external, -> { includes(:organization).where(organizations: {internal: false}) }
-  scope :humans, -> { core.or(not_core) }
+  scope :humans, -> { includes(:contributor).where(contributors: {bot: false}) }
   scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
   scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
   scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }

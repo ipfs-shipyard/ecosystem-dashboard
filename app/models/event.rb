@@ -11,7 +11,7 @@ class Event < ApplicationRecord
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
   scope :event_type, ->(event_type) { where(event_type: event_type) }
 
-  scope :humans, -> { core.or(not_core) }
+  scope :humans, -> { includes(:contributor).where(contributors: {bot: false}) }
   scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
   scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
   scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
