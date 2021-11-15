@@ -610,15 +610,19 @@ class Repository < ApplicationRecord
   end
 
   def contributor_names
-    events.pluck('DISTINCT(actor)')
+    events.pluck('DISTINCT(actor)').compact
   end
 
   def sync_contributors
-    contributor_names.each{|n| Contributor.download(n) }
+    missing_contributor_names.each{|n| Contributor.download(n) }
   end
 
   def sync_contributors_async
-    contributor_names.each{|n| ContributorDownloadWorker.perform_async(n) }
+    missing_contributor_names.each{|n| ContributorDownloadWorker.perform_async(n) }
+  end
+
+  def missing_contributor_names
+    contributor_names - contributors.pluck(:github_username)
   end
 
   def contributors
