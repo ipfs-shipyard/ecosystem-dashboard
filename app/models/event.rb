@@ -14,7 +14,7 @@ class Event < ApplicationRecord
   scope :humans, -> { includes(:contributor).where(contributors: {bot: false}) }
   scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
   scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
-  scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
+  scope :not_core, -> { includes(:contributor).where(contributors: {core: false}) }
 
   scope :this_period, ->(period) { where('events.created_at > ?', period.days.ago) }
   scope :last_period, ->(period) { where('events.created_at > ?', (period*2).days.ago).where('events.created_at < ?', period.days.ago) }

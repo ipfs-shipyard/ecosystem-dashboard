@@ -9,7 +9,7 @@ class Issue < ApplicationRecord
   scope :humans, -> { includes(:contributor).where(contributors: {bot: false}) }
   scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
   scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
-  scope :not_core, -> { includes(:contributor).where(contributors: {id: nil}) }
+  scope :not_core, -> { includes(:contributor).where(contributors: {core: false}) }
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
   scope :community, -> { not_core.where("collabs = '{}'") }
