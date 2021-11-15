@@ -69,14 +69,15 @@ class Repository < ApplicationRecord
     nil
   end
 
-  def self.download_async(full_name_or_id)
-    RepositoryDownloadWorker.perform_async(full_name_or_id)
+  def self.download_async(full_name_or_id, discovered: false)
+    RepositoryDownloadWorker.perform_async(full_name_or_id, discovered)
   end
 
-  def self.download(full_name_or_id)
+  def self.download(full_name_or_id, discovered: false)
     begin
       remote_repo = Issue.github_client.repo(full_name_or_id, accept: 'application/vnd.github.drax-preview+json,application/vnd.github.mercy-preview+json')
-      update_from_github(remote_repo)
+      repo = update_from_github(remote_repo)
+      repo.update_column(:discovered, true) if repo && discovered
     rescue Octokit::NotFound
       if full_name_or_id.is_a?(String)
         Repository.find_by_full_name(full_name_or_id).try(:destroy)
@@ -92,7 +93,7 @@ class Repository < ApplicationRecord
       else
         repo = Repository.find_by_github_id(full_name_or_id)
       end
-      repo.update_column(:last_sync_at, Time.zone.now) if repo
+      repo.update_columns({ last_sync_at: Time.zone.now, discovered: discovered }) if repo
     end
   end
 
