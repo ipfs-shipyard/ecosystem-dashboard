@@ -109,7 +109,7 @@ module PackageManager
       packages = []
       loop do
         r = get("https://crates.io/api/v1/crates/#{name}/reverse_dependencies?page=#{page}&per_page=100")["versions"]
-        break if r == []
+        break if r == [] || r.nil?
 
         packages += r
         page += 1
