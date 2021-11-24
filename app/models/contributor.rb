@@ -14,7 +14,6 @@ class Contributor < ApplicationRecord
 
   def self.download(github_username)
     contrib = find_or_create_by(github_username: github_username)
-
   end
 
   def sync
@@ -22,7 +21,7 @@ class Contributor < ApplicationRecord
       u = Issue.github_client.user(github_username)
       self.github_id = u.id
       # TODO update other details here
-      self.save if contrib.changed?
+      self.save if u.changed?
       sync_events
     rescue Octokit::NotFound
       # TODO record if account has been deleted and don't sync anymore
