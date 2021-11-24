@@ -16,19 +16,6 @@ class Contributor < ApplicationRecord
     contrib = find_or_create_by(github_username: github_username)
   end
 
-  def sync
-    begin
-      u = Issue.github_client.user(github_username)
-      self.update(github_id: u.id)
-      # TODO update other details here
-      sync_events
-    rescue Octokit::NotFound
-      # TODO record if account has been deleted and don't sync anymore
-    rescue Octokit::Error
-      # handle other octokit errors
-    end
-  end
-
   def self.collabs_for(username)
     Event.external.user(username).event_type('PushEvent').group(:org).count.map(&:first)
   end
@@ -79,7 +66,20 @@ class Contributor < ApplicationRecord
 
   def sync
     Contributor.download(github_username)
+    sync_details
     sync_events
+  end
+
+  def sync_details
+    begin
+      u = Issue.github_client.user(github_username)
+      self.update(github_id: u.id)
+      # TODO update other details here
+    rescue Octokit::NotFound
+      # TODO record if account has been deleted and don't sync anymore
+    rescue Octokit::Error
+      # handle other octokit errors
+    end
   end
 
   def sync_events(auto_paginate = false)
