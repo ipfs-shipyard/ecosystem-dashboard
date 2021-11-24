@@ -261,7 +261,7 @@ class RepositoriesController < ApplicationController
       Repository.import_org(params[:org])
       @repositories = @existing_repositories = Repository.source.active.org(params[:org])
     end
-    @repositories.update_all(discovered: true)
+    @existing_repositories.update_all(discovered: true)
     respond_to do |format|
       format.html
       format.json do
