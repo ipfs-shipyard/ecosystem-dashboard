@@ -19,7 +19,7 @@ class Contributor < ApplicationRecord
   def sync
     begin
       u = Issue.github_client.user(github_username)
-      update(github_id: u.id)
+      self.update(github_id: u.id)
       # TODO update other details here
       sync_events
     rescue Octokit::NotFound
