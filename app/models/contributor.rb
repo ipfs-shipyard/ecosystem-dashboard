@@ -55,7 +55,7 @@ class Contributor < ApplicationRecord
     orgs.each do |org|
       sleep 5
       begin
-        search = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN']).search_code("org:#{org} #{query}", per_page: 1)
+        search = AuthToken.client.search_code("org:#{org} #{query}", per_page: 1)
         searches[org] = search.total_count
       rescue Octokit::UnprocessableEntity
         searches[org] = 0
@@ -68,6 +68,7 @@ class Contributor < ApplicationRecord
     Contributor.download(github_username)
     sync_details
     sync_events
+    update_column(:last_events_sync_at, Time.zone.now)
   end
 
   def sync_details
@@ -90,7 +91,7 @@ class Contributor < ApplicationRecord
   end
 
   def download_events(auto_paginate = false)
-    client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+    client = AuthToken.client
     begin
       if auto_paginate || etag.blank?
         events = client.user_public_events(github_username, auto_paginate: auto_paginate)
@@ -98,7 +99,6 @@ class Contributor < ApplicationRecord
         events = client.user_public_events(github_username, headers: {'If-None-Match' => etag})
       end
 
-      update_column(:last_events_sync_at, Time.zone.now)
       return [] if events == ''
       new_etag = client.last_response.headers['etag']
       if !auto_paginate && new_etag && new_etag != etag
