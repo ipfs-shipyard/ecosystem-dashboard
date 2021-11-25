@@ -101,7 +101,7 @@ GEM
     autoprefixer-rails (10.3.3.0)
       execjs (~> 2)
     bindex (0.8.1)
-    bootsnap (1.9.1)
+    bootsnap (1.9.3)
       msgpack (~> 1.0)
     bootstrap (4.6.1)
       autoprefixer-rails (>= 9.1.0)
@@ -156,7 +156,7 @@ GEM
     fuzzy_match (2.1.0)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
-    globalid (0.5.2)
+    globalid (0.6.0)
       activesupport (>= 5.0)
     google-protobuf (3.19.1-x86_64-darwin)
     google-protobuf (3.19.1-x86_64-linux)
@@ -397,7 +397,7 @@ DEPENDENCIES
   zlib
 
 RUBY VERSION
-   ruby 2.7.4p191
+   ruby 2.7.5p203
 
 BUNDLED WITH
-   2.2.27
+   2.2.32
