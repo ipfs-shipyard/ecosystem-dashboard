@@ -15,7 +15,7 @@ class AuthToken < ApplicationRecord
     end
   end
 
-  def high_rate_limit?(api_version)
+  def high_rate_limit?
     github_client.rate_limit.remaining > 500
     rescue Octokit::Unauthorized, Octokit::AccountSuspended
       false
