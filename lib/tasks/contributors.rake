@@ -2,7 +2,7 @@ require 'csv'
 
 namespace :contributors do
   task sync: :environment do
-    Repository.discovered_contributors.order('last_events_sync_at ASC nulls first').where(bot: false).limit(100).each(&:sync)
+    Repository.discovered_contributors.order('last_events_sync_at ASC nulls first').where(bot: false).limit(200).each(&:sync)
   end
 
   task research: :environment do
