@@ -21,7 +21,7 @@ class Contributor < ApplicationRecord
   end
 
   def self.suggest_orgs(github_username)
-    events = Issue.github_client.user_public_events(github_username)
+    events = AuthToken.client.user_public_events(github_username)
     pushes = events.select{|e| e[:type] == 'PushEvent'}
     orgs = pushes.map(&:org).compact.map(&:login).uniq
   end
@@ -72,7 +72,7 @@ class Contributor < ApplicationRecord
 
   def sync_details
     begin
-      u = Issue.github_client.user(github_username)
+      u = AuthToken.client.user(github_username)
       self.update(github_id: u.id)
       # TODO update other details here
     rescue Octokit::NotFound
