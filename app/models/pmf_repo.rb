@@ -358,7 +358,7 @@ class PmfRepo
     # only repos with pl dependencies or pl owned repos
     repository_ids = repo_ids(end_date, dependency_threshold)
 
-    Event.human.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
+    Event.humans.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
   end
 
   def self.repo_ids(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
