@@ -348,7 +348,8 @@ class PmfRepo
   def self.pl_orgs
     ['protocol', 'ipfs', 'ipfs-shipyard', 'ipld', 'protoschool', 'libp2p',
       'ipfs-cluster', 'multiformats', 'ipfs-inactive', 'filecoin-project',
-      'filecoin-shipyard', 'slate-engineering']
+      'filecoin-shipyard', 'slate-engineering', 'web3-storage', 'nftstorage',
+      'application-research']
   end
 
   def self.event_scope(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
