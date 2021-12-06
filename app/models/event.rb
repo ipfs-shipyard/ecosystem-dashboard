@@ -11,10 +11,10 @@ class Event < ApplicationRecord
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
   scope :event_type, ->(event_type) { where(event_type: event_type) }
 
-  scope :humans, -> { includes(:contributor).where(contributors: {bot: false}) }
-  scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
-  scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
-  scope :not_core, -> { includes(:contributor).where(contributors: {core: false}) }
+  scope :humans, -> { where.not(actor: Contributor.bot_usernames) }
+  scope :bots, -> { where(actor: Contributor.bot_usernames) }
+  scope :core, -> { where(actor: Contributor.core_usernames) }
+  scope :not_core, -> { where.not(actor: Contributor.core_usernames) }
 
   scope :this_period, ->(period) { where('events.created_at > ?', period.days.ago) }
   scope :last_period, ->(period) { where('events.created_at > ?', (period*2).days.ago).where('events.created_at < ?', period.days.ago) }
