@@ -6,10 +6,10 @@ class Issue < ApplicationRecord
 
   scope :internal, -> { includes(:repository, :organization).where(organizations: {internal: true}).or(includes(:repository, :organization).where('repositories.triage = true')) }
   scope :external, -> { includes(:organization).where(organizations: {internal: false}) }
-  scope :humans, -> { includes(:contributor).where(contributors: {bot: false}) }
-  scope :bots, -> { includes(:contributor).where(contributors: {bot: true}) }
-  scope :core, -> { includes(:contributor).where(contributors: {core: true}) }
-  scope :not_core, -> { includes(:contributor).where(contributors: {core: false}) }
+  scope :humans, -> { where.not(actor: Contributor.bot_usernames) }
+  scope :bots, -> { where(actor: Contributor.bot_usernames) }
+  scope :core, -> { where(actor: Contributor.core_usernames) }
+  scope :not_core, -> { where.not(actor: Contributor.core_usernames) }
   scope :all_collabs, -> { where.not("collabs = '{}'") }
   scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
   scope :community, -> { not_core.where("collabs = '{}'") }

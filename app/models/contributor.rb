@@ -8,6 +8,14 @@ class Contributor < ApplicationRecord
   scope :bot,  -> { where(bot: true) }
   scope :core_or_bot, -> { core.or(bot) }
 
+  def self.core_usernames
+    core.pluck(:github_username)
+  end
+
+  def self.bot_usernames
+    bot.pluck(:github_username)
+  end
+
   def to_s
     github_username
   end
