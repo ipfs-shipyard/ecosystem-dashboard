@@ -296,7 +296,7 @@ class PmfRepo
 
       previous_repo_names = previously_active_repo_names(start_date, dependency_threshold)
 
-      active_repos = window_events.group(:repository_full_name).count
+      active_repos = window_events.group(:repository_full_name).count(:id)
 
       scores = active_repos.map{|repo_name, events| [repo_name, score_for_repo(repo_name, events)] }
 
