@@ -89,7 +89,7 @@ class SearchQuery < ApplicationRecord
   end
 
   def github_client
-    @client ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+    @client ||= AuthToken.client
   end
 
   def html_url

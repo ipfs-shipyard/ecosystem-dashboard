@@ -33,7 +33,7 @@ class Organization < ApplicationRecord
   end
 
   def download_events(auto_paginate = false)
-    client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+    client = AuthToken.client(auto_paginate: true)
     begin Octokit::NotFound
       events = client.organization_public_events(name, auto_paginate: auto_paginate, headers: {'If-None-Match' => etag})
       return [] if events == ''

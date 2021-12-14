@@ -125,7 +125,7 @@ class Issue < ApplicationRecord
   end
 
   def self.github_client
-    @client ||= Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'], auto_paginate: true)
+    AuthToken.client(auto_paginate: true)
   end
 
   def self.active_repo_names
