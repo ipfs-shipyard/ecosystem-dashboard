@@ -7,7 +7,7 @@ class Contributor < ApplicationRecord
   scope :core, -> { where(core: true) }
   scope :bot,  -> { where(bot: true) }
   scope :core_or_bot, -> { core.or(bot) }
-  scope :not_core_or_bot, { where(core: false).where(bot: false) }
+  scope :not_core_or_bot, -> { where(core: false).where(bot: false) }
 
   def self.core_usernames
     core.pluck(:github_username)
