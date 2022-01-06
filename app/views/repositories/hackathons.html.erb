@@ -1,0 +1,27 @@
+<h1>
+  Hackathon Repositories
+</h1>
+
+<% @repositories.group_by { |r| r.created_at.beginning_of_month }.each do |month, repos| %>
+  <h2><%= month %></h2>
+  <ul>
+    <% repos.each do |r| %>
+      <li>
+        <%= repo.full_name %>
+        <% if repo.internal_package_dependency_ids.length > 0%>
+          <small class='text-muted'>
+            <%= pluralize repo.internal_package_dependency_ids.length, 'internal dependencies' %>
+          </small>
+        <% end %>  
+      </li>
+    <% end %>
+  </ul>
+<% end%>
+
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+
+<p>
+  <small class='text-muted'>
+    <%== pagy_info(@pagy) %>
+  </small>
+</p>
