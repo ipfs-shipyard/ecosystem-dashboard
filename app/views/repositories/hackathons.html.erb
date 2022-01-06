@@ -5,7 +5,7 @@
 <% @repositories.group_by { |r| r.created_at.beginning_of_month }.each do |month, repos| %>
   <h2><%= month %></h2>
   <ul>
-    <% repos.each do |r| %>
+    <% repos.each do |repo| %>
       <li>
         <%= repo.full_name %>
         <% if repo.internal_package_dependency_ids.length > 0%>
