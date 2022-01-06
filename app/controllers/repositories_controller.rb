@@ -299,7 +299,7 @@ class RepositoriesController < ApplicationController
   end
 
   def hackathons
-    @scope = Repository.discovered.order('created_at desc')
+    @scope = Repository.discovered.where(fork: false).order('created_at desc')
     @pagy, @repositories = pagy(@scope, items: 500)
   end
 end

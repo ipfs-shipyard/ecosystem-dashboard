@@ -3,16 +3,18 @@
 </h1>
 
 <% @repositories.group_by { |r| r.created_at.beginning_of_month }.each do |month, repos| %>
-  <h2><%= month %></h2>
+  <h2><%= month.strftime("%B %Y")   %></h2>
   <ul>
-    <% repos.each do |repo| %>
+    <% repos.sort_by{|r| -(r.internal_package_dependency_ids.length + r.keyword_match_count) }.each do |repo| %>
       <li>
-        <%= repo.full_name %>
-        <% if repo.internal_package_dependency_ids.length > 0%>
-          <small class='text-muted'>
-            <%= pluralize repo.internal_package_dependency_ids.length, 'internal dependencies' %>
-          </small>
+        <%= link_to repo.full_name, repo %>
+        <small class='text-muted'>
+          <% if repo.internal_package_dependency_ids.length > 0%>
+            <%= pluralize repo.internal_package_dependency_ids.length, 'internal dependency' %>
+          <% elsif repo.keyword_match_count > 0 %>
+            <%= pluralize repo.keyword_match_count, 'keyword match' %>
         <% end %>  
+        </small>
       </li>
     <% end %>
   </ul>
