@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   get 'forage', to: 'forage#index'
 
   get 'hackathons', to: 'repositories#hackathons'
+  get 'hackathons/users', to: 'users#hackathons'
+
   get 'discover', to: 'repositories#discover'
   post 'discover', to: 'repositories#discover'
 

@@ -8,7 +8,7 @@
 <hr>
 
 <h4>
-  Recent Issues and Pull Requests
+  Recent Internal Issues and Pull Requests
   <small class='float-right'>
     <%= link_to 'See all', all_issues_path(user: @contributor, range: 999) %>
   </small>
@@ -20,16 +20,25 @@
   <p>No issues or pull requests found.</p>
 <% end %>
 
+<% if @internal_events.any? %>
+  <h4 class='mt-5'>
+    Recent Internal Events
+    <small class='float-right'>
+      <%= link_to 'See all', events_path(user: @contributor, range: 999) %>
+    </small>
+  </h4>
 
-<h4 class='mt-5'>
-  Recent Events
-  <small class='float-right'>
-    <%= link_to 'See all', events_path(user: @contributor, range: 999) %>
-  </small>
-</h4>
+  <%= render @internal_events %>
+<% end %>
 
-<% if @events.any? %>
-  <%= render @events %>
-<% else %>
-  <p>No events found.</p>
+
+<% if @external_events.any? %>
+  <h4 class='mt-5'>
+    Recent External Events
+    <small class='float-right'>
+      <%= link_to 'See all', all_events_path(user: @contributor, range: 365) %>
+    </small>
+  </h4>
+
+  <%= render @external_events %>
 <% end %>

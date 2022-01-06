@@ -9,6 +9,8 @@ class Contributor < ApplicationRecord
   scope :core_or_bot, -> { core.or(bot) }
   scope :not_core_or_bot, -> { where(core: false).where(bot: false) }
 
+  scope :existing, -> { where.not(etag: nil) }
+
   def self.core_usernames
     core.pluck(:github_username)
   end
@@ -117,5 +119,9 @@ class Contributor < ApplicationRecord
     rescue *Repository::IGNORABLE_EXCEPTIONS
       []
     end
+  end
+
+  def contributed_repository_names
+    events.where.not(event_type: 'WatchEvent').pluck('DISTINCT(repository_full_name)').compact.map(&:downcase).uniq
   end
 end

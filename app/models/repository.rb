@@ -636,11 +636,11 @@ class Repository < ApplicationRecord
   end
 
   def self.discovered_contributors
-    Contributor.where(github_username: discovered_contributor_names)
+    Contributor.where(github_username: discovered_contributor_names).not_core_or_bot.existing
   end
 
   def self.discovered_related_repo_names
-    Event.where.not(event_type: 'WatchEvent').where(actor: Repository.discovered_contributors.not_core_or_bot.pluck(:github_username)).pluck('DISTINCT(repository_full_name)').compact.map(&:downcase).uniq
+    Event.where.not(event_type: 'WatchEvent').where(actor: Repository.discovered_contributors.pluck(:github_username)).pluck('DISTINCT(repository_full_name)').compact.map(&:downcase).uniq
   end
 
   def direct_internal_dependency_counts

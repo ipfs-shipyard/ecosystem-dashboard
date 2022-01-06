@@ -60,4 +60,9 @@ class UsersController < ApplicationController
       end
     end
   end
+
+  def hackathons
+    @scope = Repository.discovered_contributors.order('created_at desc')
+    @pagy, @contributors = pagy(@scope, items: 100)
+  end
 end

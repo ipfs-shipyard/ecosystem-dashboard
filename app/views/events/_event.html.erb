@@ -12,7 +12,12 @@
 
       <%= event.action_text %>
 
-      <%= link_to event.repository.full_name, event.repository %>
+      <% if event.repository_id %>
+        <%= link_to event.repository_full_name, repository_url(event.repository_id) %>
+      <% else %>
+        <%= link_to event.repository_full_name, "https://github.com/#{event.repository_full_name}", target: :_blank %>
+      <% end %>
+      
       <small class='text-muted'>
         <%= distance_of_time_in_words_to_now event.created_at %> ago
       </small>

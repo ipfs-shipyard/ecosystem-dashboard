@@ -65,7 +65,8 @@ class ContributorsController < ApplicationController
 
   def show
     @contributor = params[:id]
-    @events = Event.internal.user(@contributor).limit(10).order('events.created_at desc')
+    @internal_events = Event.internal.user(@contributor).limit(10).order('events.created_at desc')
+    @external_events = Event.user(@contributor).limit(10).order('events.created_at desc')
     @issues = Issue.internal.user(@contributor).limit(10).order('issues.created_at desc')
 
     respond_to do |format|

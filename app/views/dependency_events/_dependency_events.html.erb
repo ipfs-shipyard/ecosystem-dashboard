@@ -4,9 +4,9 @@
   <div class="card mb-3 event">
     <div class="card-body pb-1">
       <h5 class="card-title">
-        <%= link_to dependency_event.repository.full_name, dependency_event.repository %>
+        <%= link_to dependency_event.repository_full_name, dependency_event.repository %>
         <small class='text-muted'>
-          - <%= commit.first(6) %> <%= link_to dependency_event.committed_at, "https://github.com/#{dependency_event.repository.full_name}/commit/#{dependency_event.commit_sha}", target: :_blank %>
+          - <%= commit.first(6) %> <%= link_to dependency_event.committed_at, "https://github.com/#{dependency_event.repository_full_name}/commit/#{dependency_event.commit_sha}", target: :_blank %>
         </small>
       </h5>
 
