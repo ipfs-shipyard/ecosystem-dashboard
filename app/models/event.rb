@@ -26,6 +26,8 @@ class Event < ApplicationRecord
 
   scope :search, ->(query) { where('payload::text ilike ?', "%#{query}%") }
 
+  scope :not_stars, -> { where.not(event_type: 'WatchEvent') }
+
   def contributed?
     return true unless contributor.present?
     !contributor.core?

@@ -632,7 +632,7 @@ class Repository < ApplicationRecord
   end
 
   def self.discovered_contributor_names
-    Event.where.not(event_type: 'WatchEvent').where(repository_id: Repository.discovered.pluck(:id)).pluck('DISTINCT(actor)').compact.map(&:downcase).uniq
+    Event.not_stars.where(repository_id: Repository.discovered.pluck(:id)).pluck('DISTINCT(actor)').compact.map(&:downcase).uniq
   end
 
   def self.discovered_contributors
@@ -640,7 +640,7 @@ class Repository < ApplicationRecord
   end
 
   def self.discovered_related_repo_names
-    Event.where.not(event_type: 'WatchEvent').where(actor: Repository.discovered_contributors.pluck(:github_username)).pluck('DISTINCT(repository_full_name)').compact.map(&:downcase).uniq
+    Event.not_stars.where(actor: Repository.discovered_contributors.pluck(:github_username)).pluck('DISTINCT(repository_full_name)').compact.map(&:downcase).uniq
   end
 
   def direct_internal_dependency_counts
