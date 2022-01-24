@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class RepositoryDependencyTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  context 'associations' do
+    should belong_to(:repository)
+    should belong_to(:package).optional 
+    should belong_to(:manifest)
+  end
 end

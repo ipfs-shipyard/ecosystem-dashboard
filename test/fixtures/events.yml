@@ -2,18 +2,18 @@
 
 one:
   actor: MyString
-  type: 
+  event_type: 
   action: MyString
   repository_id: 1
   repository_full_name: MyString
   org: MyString
-  payload: 
+  payload: {}
 
 two:
   actor: MyString
-  type: 
+  event_type: 
   action: MyString
   repository_id: 1
   repository_full_name: MyString
   org: MyString
-  payload: 
+  payload: {}

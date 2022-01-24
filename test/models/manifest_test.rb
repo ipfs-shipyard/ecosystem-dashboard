@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class ManifestTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  context 'associations' do
+    should belong_to(:repository)
+    should have_many(:repository_dependencies)
+  end
 end

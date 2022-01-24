@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  package _id: 1
-  number: MyString
+  package_id: 1
+  number: 1.0.0
   published_at: 2020-05-01 17:13:38
   runtime_dependencies_count: 1
   spdx_expression: MyString
@@ -10,7 +10,7 @@ one:
 
 two:
   package_id: 1
-  number: MyString
+  number: 1.0.1
   published_at: 2020-05-01 17:13:38
   runtime_dependencies_count: 1
   spdx_expression: MyString

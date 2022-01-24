@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SearchQueryTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  context 'associations' do
+    should have_many(:search_results)
+  end
 end

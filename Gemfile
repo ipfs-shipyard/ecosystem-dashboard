@@ -47,6 +47,10 @@ gem 'dalli'
 
 gem 'sidekiq'
 
+group :test do
+  gem 'shoulda'
+end
+
 group :development do
   gem 'web-console'
   gem 'listen'

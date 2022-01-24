@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class VersionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  context 'associations' do
+    should belong_to(:package)
+    should have_many(:dependencies)
+  end
 end

@@ -5,8 +5,8 @@ one:
   body: MyText
   state: MyString
   number: 1
-  html_url: MyString
-  comments: 1
+  html_url: https://github.com/ipfs-shipyard/ecosystem-dashboard/issues/113
+  comments_count: 1
   user: MyString
 
 two:
@@ -14,6 +14,6 @@ two:
   body: MyText
   state: MyString
   number: 1
-  html_url: MyString
-  comments: 1
+  html_url: https://github.com/ipfs-shipyard/ecosystem-dashboard/issues/120
+  comments_count: 1
   user: MyString

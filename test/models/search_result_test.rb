@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SearchResultTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  context 'associations' do
+    should belong_to(:search_query)
+  end
 end

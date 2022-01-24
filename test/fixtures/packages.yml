@@ -9,11 +9,11 @@ one:
   licenses: MyString
   repository_url: MyString
   repository_id: 1
-  normalized_licenses: MyString
+  normalized_licenses: ['MyString']
   versions_count: 1
   latest_release_published_at: 2020-05-01 16:56:52
   latest_release_number: MyString
-  keywords_array: MyString
+  keywords_array: ['MyString']
   dependents_count: 1
   language: MyString
   status: MyString
@@ -24,7 +24,7 @@ one:
   latest_stable_release_published_at: MyString
 
 two:
-  name: MyString
+  name: MyString2
   platform: MyString
   description: MyText
   keywords: MyText
@@ -32,11 +32,11 @@ two:
   licenses: MyString
   repository_url: MyString
   repository_id: 1
-  normalized_licenses: MyString
+  normalized_licenses: ['MyString']
   versions_count: 1
   latest_release_published_at: 2020-05-01 16:56:52
   latest_release_number: MyString
-  keywords_array: MyString
+  keywords_array: ['MyString']
   dependents_count: 1
   language: MyString
   status: MyString
