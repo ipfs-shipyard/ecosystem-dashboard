@@ -438,7 +438,7 @@ DEPENDENCIES
   zlib
 
 RUBY VERSION
-   ruby 3.1.0p203
+   ruby 3.0.3p157
 
 BUNDLED WITH
-   2.3.4
+   2.3.5
