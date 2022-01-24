@@ -128,7 +128,7 @@ GEM
     crass (1.0.6)
     dalli (3.2.0)
     deb_control (0.0.1)
-    digest (3.1.0)
+    digest (3.0.0)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
