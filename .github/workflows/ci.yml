@@ -27,36 +27,28 @@ jobs:
         options: --entrypoint redis-server
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2.4.0
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
         with:
           ruby-version: 2.7.5
+          bundler-cache: true
       - name: Set up Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: 10.13.0
+          node-version: 15
       - name: Install dependencies
         run: |
           sudo apt-get -yqq install libpq-dev build-essential libcurl4-openssl-dev
           gem install bundler
           bundle install --jobs 4 --retry 3
-      - name: Setup test database
-        env:
-          RAILS_ENV: test
-          PGHOST: localhost
-          POSTGRES_DB: ecosystem_test
-          POSTGRES_USER: ecosystem
-          POSTGRES_PASSWORD: postgres
-        run: |
-          rake db:create db:migrate
-
       - name: Run tests
         env:
-          PGHOST: localhost
-          POSTGRES_DB: ecosystem_test
-          POSTGRES_USER: ecosystem
-          POSTGRES_PASSWORD: postgres
-          PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
-        run: rake test
+          POSTGRES_DB: octobox_test
+          POSTGRES_USER: octobox
+          POSTGRES_PASSWORD: postgres
+          OCTOBOX_DATABASE_PASSWORD: postgres
+          OCTOBOX_DATABASE_USERNAME: octobox
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+        run: bundle exec rake db:create db:migrate test
