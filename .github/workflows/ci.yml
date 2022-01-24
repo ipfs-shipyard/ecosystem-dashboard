@@ -39,6 +39,7 @@ jobs:
         with:
           ruby-version: 3.0.3
           bundler-cache: true
+          cache-version: 1
 
       - name: Run tests
         env:
