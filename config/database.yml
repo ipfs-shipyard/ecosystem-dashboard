@@ -15,6 +15,10 @@
 # gem 'pg'
 #
 default: &default
+  username: <%= ENV.fetch("DATABASE_USERNAME") { '' } %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { '' } %>
+  host:     <%= ENV.fetch("DATABASE_HOST") { '' } %>
+  port:     <%= ENV.fetch("DATABASE_PORT") { '' } %>
   adapter: postgresql
   encoding: unicode
   host: localhost
@@ -24,7 +28,7 @@ default: &default
 
 development:
   <<: *default
-  database: ecosystem_development
+  database: <%= ENV.fetch("DATABASE_NAME") { 'ecosystem_development' } %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -83,6 +87,7 @@ test:
 #
 production:
   <<: *default
+  database: <%= ENV.fetch("DATABASE_NAME") { 'ecosystem_production' } %>
   database: ecosystem_production
   username: ecosystem
   password: <%= ENV['ECOSYSTEM_DATABASE_PASSWORD'] %>
