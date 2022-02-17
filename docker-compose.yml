@@ -31,11 +31,13 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - PORT=3000
+      - PIDFILE=/usr/src/app/tmp/pids/server.pid
       - RAILS_ENV=development
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
       - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=development
       - DATABASE_HOST=database.service.ecosystem.internal
       - REDIS_URL=redis://redis.service.ecosystem.internal
     networks:
