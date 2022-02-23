@@ -10,16 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_15_160932) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_02_23_180022) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "auth_tokens", force: :cascade do |t|
     t.string "token"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -27,10 +26,11 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.integer "github_id"
     t.boolean "core", default: false
     t.boolean "bot", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "last_events_sync_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_events_sync_at", precision: nil
     t.string "etag"
+    t.index ["github_username"], name: "index_contributors_on_github_username"
   end
 
   create_table "dependencies", force: :cascade do |t|
@@ -41,8 +41,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "kind"
     t.boolean "optional", default: false
     t.string "requirements"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["package_id"], name: "index_dependencies_on_package_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
   end
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "platform"
     t.string "previous_requirement"
     t.string "previous_kind"
-    t.datetime "committed_at"
+    t.datetime "committed_at", precision: nil
     t.index ["committed_at"], name: "index_dependency_events_on_committed_at"
     t.index ["package_id"], name: "index_dependency_events_on_package_id"
     t.index ["repository_id"], name: "index_dependency_events_on_repository_id"
@@ -77,8 +77,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "repository_full_name"
     t.string "org"
     t.jsonb "payload", default: "{}", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["actor"], name: "index_events_on_actor"
     t.index ["created_at"], name: "index_events_on_created_at"
     t.index ["github_id"], name: "index_events_on_github_id"
@@ -95,24 +95,24 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.integer "comments_count"
     t.string "user"
     t.string "repo_full_name"
-    t.datetime "closed_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "closed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "org"
     t.string "collabs", default: [], array: true
     t.string "milestone_name"
     t.integer "milestone_id"
     t.string "labels", default: [], array: true
     t.boolean "locked"
-    t.datetime "merged_at"
+    t.datetime "merged_at", precision: nil
     t.boolean "draft"
-    t.datetime "first_response_at"
+    t.datetime "first_response_at", precision: nil
     t.integer "response_time"
     t.bigint "github_id"
-    t.datetime "last_synced_at"
+    t.datetime "last_synced_at", precision: nil
     t.integer "board_ids", default: [], array: true
     t.integer "review_time"
-    t.datetime "review_requested_at"
+    t.datetime "review_requested_at", precision: nil
     t.index ["collabs"], name: "index_issues_on_collabs", using: :gin
     t.index ["created_at"], name: "index_issues_on_created_at"
     t.index ["html_url"], name: "index_issues_on_html_url", unique: true
@@ -129,8 +129,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "sha"
     t.string "branch"
     t.string "kind"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["repository_id"], name: "index_manifests_on_repository_id"
   end
 
@@ -139,8 +139,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.integer "github_id"
     t.boolean "internal", default: false
     t.boolean "collaborator", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "docker_hub_org"
     t.integer "search_results_count", default: 0
     t.integer "events_count", default: 0
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "display_name"
     t.string "company"
     t.string "twitter"
-    t.datetime "last_synced_at"
+    t.datetime "last_synced_at", precision: nil
     t.boolean "partner", default: false
   end
 
@@ -168,19 +168,19 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.integer "repository_id"
     t.string "normalized_licenses", default: [], array: true
     t.integer "versions_count", default: 0, null: false
-    t.datetime "latest_release_published_at"
+    t.datetime "latest_release_published_at", precision: nil
     t.string "latest_release_number"
     t.string "keywords_array", default: [], array: true
     t.integer "dependents_count", default: 0, null: false
     t.string "language"
     t.string "status"
-    t.datetime "last_synced_at"
+    t.datetime "last_synced_at", precision: nil
     t.integer "dependent_repos_count"
     t.integer "runtime_dependencies_count"
     t.string "latest_stable_release_number"
     t.string "latest_stable_release_published_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "license_normalized", default: false
     t.integer "collab_dependent_repos_count"
     t.integer "outdated"
@@ -195,16 +195,16 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.boolean "archived"
     t.boolean "fork"
     t.string "description"
-    t.datetime "pushed_at"
+    t.datetime "pushed_at", precision: nil
     t.integer "size"
     t.integer "stargazers_count"
     t.integer "open_issues_count"
     t.integer "forks_count"
     t.integer "subscribers_count"
     t.string "default_branch"
-    t.datetime "last_sync_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "last_sync_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "etag"
     t.integer "score", default: 0
     t.string "topics", default: [], array: true
@@ -217,10 +217,10 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.integer "direct_internal_dependency_package_ids", default: [], array: true
     t.integer "indirect_internal_dependency_package_ids", default: [], array: true
     t.string "latest_commit_sha"
-    t.datetime "latest_dependency_mine"
-    t.datetime "first_added_internal_deps"
-    t.datetime "last_internal_dep_removed"
-    t.datetime "last_events_sync_at"
+    t.datetime "latest_dependency_mine", precision: nil
+    t.datetime "first_added_internal_deps", precision: nil
+    t.datetime "last_internal_dep_removed", precision: nil
+    t.datetime "last_events_sync_at", precision: nil
     t.boolean "sol_files", default: false
     t.text "keyword_matches"
     t.boolean "discovered", default: false
@@ -236,8 +236,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "platform"
     t.string "requirements"
     t.string "kind"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "direct", default: false
     t.index ["manifest_id"], name: "index_repository_dependencies_on_manifest_id"
     t.index ["package_id"], name: "index_repository_dependencies_on_package_id"
@@ -250,8 +250,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "kind"
     t.string "sort"
     t.string "order"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "search_results", force: :cascade do |t|
@@ -262,8 +262,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "title"
     t.string "html_url"
     t.jsonb "text_matches", default: "{}", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_search_results_on_created_at"
     t.index ["repository_full_name"], name: "index_search_results_on_repository_full_name"
   end
@@ -273,20 +273,20 @@ ActiveRecord::Schema.define(version: 2021_11_15_160932) do
     t.string "name"
     t.string "sha"
     t.string "kind"
-    t.datetime "published_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "published_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "versions", force: :cascade do |t|
     t.integer "package_id"
     t.string "number"
-    t.datetime "published_at"
+    t.datetime "published_at", precision: nil
     t.integer "runtime_dependencies_count"
     t.string "spdx_expression"
     t.jsonb "original_license"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["package_id", "number"], name: "index_versions_on_package_id_and_number", unique: true
   end
 
