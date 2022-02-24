@@ -68,4 +68,29 @@ class HomeController < ApplicationController
     # @new_search_results = @search_results_scope.this_period(@period).count
     # @new_search_results_last_week = @search_results_scope.last_period(@period).count
   end
+
+  def sitemap
+    @routes = Rails.application.routes.routes.map do |route|
+      {alias: route.name, path: route.path.spec.to_s[0..-11], controller: route.defaults[:controller], action: route.defaults[:action]}
+    end 
+    
+    @routes.sort_by!{|r| r[:path]}
+
+    banned_controllers = [
+      "rails/info", 
+      "rails/welcome",
+      "admin/contributors", 
+      "admin/organizations", 
+      "pmf_repo_combined", 
+      "pmf",
+      "pmf_repo",
+      "sessions",
+      "forage",
+      nil
+    ]
+    @routes.reject! {|route| banned_controllers.include?(route[:controller])}
+    @routes.reject! {|route| route[:alias].blank? }
+    @routes.reject! {|route| route[:path].include?(':') || route[:path].blank? }
+  
+  end
 end

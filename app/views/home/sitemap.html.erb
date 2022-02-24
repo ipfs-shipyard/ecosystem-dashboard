@@ -1,0 +1,9 @@
+<h1>Sitemap</h1>
+
+<ul>
+  <% @routes.each do |route| %>
+    <li>
+      <%= link_to route[:path], route[:path] %>
+    </li>
+  <% end %>
+</ul>

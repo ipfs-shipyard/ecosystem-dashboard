@@ -102,6 +102,7 @@ Rails.application.routes.draw do
   get 'orgs/:id', to: 'organizations#show', as: :org
   get 'orgs', to: 'organizations#internal', as: :orgs
   get 'home', to: 'home#index'
+  get 'sitemap', to: 'home#sitemap'
 
   root to: 'home#index'
 end
