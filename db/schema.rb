@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_23_180022) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_24_133608) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -225,6 +225,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_180022) do
     t.text "keyword_matches"
     t.boolean "discovered", default: false
     t.index ["full_name"], name: "index_repositories_on_full_name"
+    t.index ["github_id"], name: "index_repositories_on_github_id"
   end
 
   create_table "repository_dependencies", force: :cascade do |t|
@@ -265,6 +266,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_180022) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_search_results_on_created_at"
+    t.index ["html_url"], name: "index_search_results_on_html_url"
     t.index ["repository_full_name"], name: "index_search_results_on_repository_full_name"
   end
 
