@@ -496,7 +496,11 @@ class Repository < ApplicationRecord
 
   def ecosystem_score_parts
     display_name = ENV['DISPLAY_NAME'].presence || ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
-    keyword_match = full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i) || Array(topics).any?{|t| t.match?(/#{Regexp.quote(display_name)}/i) }
+    if display_name.present?
+      keyword_match = full_name.match?(/#{Regexp.quote(display_name)}/i) || description.to_s.match?(/#{Regexp.quote(display_name)}/i) || Array(topics).any?{|t| t.match?(/#{Regexp.quote(display_name)}/i) }
+    else
+      keyword_match = false
+    end
 
     search_results_length = search_results.select{|sr| sr.kind != 'code'}.length
     search_score = search_results_length > 0 ? Math.log(search_results_length, 10) : 0
