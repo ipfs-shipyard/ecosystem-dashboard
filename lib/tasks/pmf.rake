@@ -1,4 +1,5 @@
 namespace :pmf do
+  desc "list pmf states summary"
   task states: :environment do
     start_date = 6.week.ago
     end_date = 2.week.ago
@@ -16,6 +17,7 @@ namespace :pmf do
     end
   end
 
+  desc "list pmf transitions summary"
   task transitions: :environment do
     start_date = 6.week.ago
     end_date = 2.week.ago
@@ -33,6 +35,7 @@ namespace :pmf do
     end
   end
 
+  desc "calculate pmf windows for past year from yesterday"
   task warm_caches: :environment do
     # run this via cron just after midnight
     # calculate pmf windows for past year from yesterday

@@ -1,6 +1,7 @@
 require 'csv'
 
 namespace :docker do
+  desc 'search github for repositories that have Dockerfile files containing "ipfs"'
   task search: :environment do
     client = Issue.github_client
     search = client.search_code("filename:Dockerfile ipfs")
@@ -26,6 +27,7 @@ namespace :docker do
     end
   end
 
+  desc 'load more data for repositories found in docker:search task'  
   task augment_docker: :environment do
     client = Issue.github_client
     repos = {}
@@ -69,6 +71,7 @@ namespace :docker do
     end
   end
 
+  desc 'search github for repositories that have docker-compose files containing "ipfs"'
   task search_compose: :environment do
     client = Issue.github_client
 
@@ -94,6 +97,7 @@ namespace :docker do
     end
   end
 
+  desc 'load more data for repositories found in docker:search_compose task'
   task augment_compose: :environment do
     client = Issue.github_client
     repos = {}

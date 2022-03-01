@@ -1,6 +1,7 @@
 require 'csv'
 
 namespace :upgrades do
+  desc 'discover and export a csv of issues and pull requests on github related to updating ipfs'
   task search: :environment do
     search_to_csv(["update ipfs is:issue", "update ipfs is:pr", "upgrade ipfs is:issue", "upgrade ipfs is:pr", "bump ipfs", "ipfs 0.5", "go-ipfs", "ipfs docker"], 'ipfs')
   end

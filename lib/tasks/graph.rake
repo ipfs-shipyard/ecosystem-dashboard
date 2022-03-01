@@ -1,4 +1,5 @@
 namespace :graph do
+  desc "generate graphviz file to graph links between contributors and internal repos"
   task generate: :environment do
     issues = Issue.internal.not_core.humans.order('repo_full_name').map{|i| [i.user, i.repo_full_name] }.uniq
 
@@ -28,6 +29,7 @@ namespace :graph do
     # rake graph:generate && dot -Tjpeg -Kneato test.gv > both.jpeg && open both.jpeg
   end
 
+  desc "generate graphviz file to graph links between collaborators and internal repos"
   task collabs: :environment do
     issues = Issue.internal.not_core.humans.all_collabs.order('repo_full_name').map{|i| [i.collabs.first, i.repo_full_name] }.uniq
 
@@ -56,6 +58,7 @@ namespace :graph do
     # rake graph:generate && dot -Tjpeg -Kneato test.gv > both.jpeg && open both.jpeg
   end
 
+  desc "generate graphviz file to graph links internal repos and javascript dependencies"
   task deps: :environment do
 
     @scope = Repository.internal

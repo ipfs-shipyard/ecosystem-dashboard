@@ -2,6 +2,7 @@ require 'open-uri'
 require 'zlib'
 
 namespace :backfill do
+  desc 'import event data for all non-internal repos with internal dependencies from gharchive'
   task all: :environment do
 
     repo_names = Repository.not_internal.with_internal_deps.pluck(:full_name)

@@ -1,8 +1,10 @@
 namespace :packages do
+  desc "sync internal packages"
   task sync_internal: :environment do
     Package.internal_or_partner.maintained.find_each(&:sync)
   end
 
+  desc "find missing packages from npm, cargo, go and docker"
   task find_missing_npm_packages: :environment do
     Package.download_internal_dependent_packages
     
@@ -17,18 +19,22 @@ namespace :packages do
     Organization.where('docker_hub_org is not null').each(&:sync_docker_packages)
   end
 
+  desc 'sync 100 least recently updated packages'
   task sync: :environment do
     Package.order('last_synced_at ASC nulls first').limit(100).each(&:sync)
   end
 
+  desc "download repositories for packages with no repository"
   task find_missing_package_repos: :environment do
     Package.find_missing_package_repos
   end
 
+  desc "discover github repos that depend on internal packages"
   task find_dependent_github_repos: :environment do
     Package.find_dependent_github_repos
   end
 
+  desc 'list repositories that directly depend upon internal packages'
   task find_direct_dependent_repos: :environment do
     internal_package_ids = Package.internal.pluck(:id)
     direct_repo_ids = RepositoryDependency.where(package_id: internal_package_ids, direct: true).pluck(:repository_id).uniq
@@ -43,6 +49,7 @@ namespace :packages do
     puts "#{direct_repo_ids.length} direct dependent repos total"
   end
 
+  desc 'list repositories that indirectly depend upon internal packages'
   task find_indirect_dependent_repos: :environment do
     internal_package_ids = Package.internal.pluck(:id)
 
@@ -61,6 +68,7 @@ namespace :packages do
     puts "#{only_indirect_repo_ids.length} indirect dependent repos total"
   end
 
+  desc 'list packages that directly depend upon internal packages'
   task find_direct_dependent_packages: :environment do
     internal_package_ids = Package.internal.pluck(:id)
     direct_version_ids = Dependency.where(package_id: internal_package_ids).pluck(:version_id).uniq
@@ -78,6 +86,7 @@ namespace :packages do
     puts "#{direct_package_ids.length} direct dependent packages total"
   end
 
+  desc 'list packages that indirectly depend upon internal packages'
   task find_indirect_dependent_packages: :environment do
     internal_package_ids = Package.internal.pluck(:id)
 
@@ -100,6 +109,7 @@ namespace :packages do
     puts "#{all_indirect_dependent_ids.length} indirect dependent packages total"
   end
 
+  desc 'list repositories that indirectly depend upon internal packages via recursive method'  
   task find_indirect_dependent_recursive_repos: :environment do
     internal_package_ids = Package.internal.pluck(:id)
 
@@ -125,6 +135,7 @@ namespace :packages do
     puts "#{indirect_repo_ids.length} indirect dependent repos total"
   end
 
+  desc 'list the difference between find_indirect_dependent_recursive_repos and find_indirect_dependent_repos tasks'
   task indirect_diff: :environment do
     internal_package_ids = Package.internal.pluck(:id)
 

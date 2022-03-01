@@ -1,10 +1,13 @@
 require 'csv'
 
 namespace :contributors do
+
+  desc "sync least recently updated contributors from discovered repositories"
   task sync: :environment do
     Repository.discovered_contributors.order('last_events_sync_at ASC nulls first').where(bot: false).limit(200).each(&:sync)
   end
 
+  desc "output a csv of top contributor data"
   task research: :environment do
     contributors = Issue.not_core.group(:user).count.sort_by{|u,c| -c}.select{|u,c| c > 10 }.reject{|u,c| u == 'ghost'}
 
@@ -13,7 +16,6 @@ namespace :contributors do
     contributors.each do |username, contributions|
       collabs[username] = Issue.where(user: username).first.collabs
     end
-
 
     csv_string = CSV.generate do |csv|
       csv << [

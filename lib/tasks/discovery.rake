@@ -1,6 +1,6 @@
 namespace :discovery do
+  desc "search libraries.io for packages mentioning ipfs"
   task packages: :environment do
-    # find all packages that mention ipfs
     platforms = ['npm', 'maven', 'rubygems', 'pypi', 'cargo', 'packagist', 'nuget', 'clojars', 'cocoapods', 'hackage', 'hex', 'meteor', 'carthage', 'pub']
 
     platforms.each do |platform|
@@ -23,6 +23,7 @@ namespace :discovery do
     end
   end
 
+  desc "find repositories for packages discovered in discovery:packages task"
   task package_repos: :environment do
     platforms = ['npm', 'maven', 'rubygems', 'pypi', 'cargo', 'packagist', 'nuget', 'clojars', 'cocoapods', 'hackage', 'hex', 'meteor', 'carthage', 'pub']
 
@@ -41,6 +42,7 @@ namespace :discovery do
     end
   end
 
+  desc "find dependent repositories for packages discovered in discovery:packages task"
   task package_dependents: :environment do
     platforms = ['npm', 'maven', 'rubygems', 'pypi', 'nuget']
 
@@ -81,19 +83,15 @@ namespace :discovery do
     end
   end
 
-  task local_repos: :environment do
-    # find collab repos that depend on ipfs packages
-
-  end
-
+  desc "find collab repos that depend on ipfs packages"
   task local_search: :environment do
-    # find collab repos that depend on ipfs packages
     search_repo_names = SearchResult.group(:repository_full_name).count.keys
     File.open("data/search_results.json","w") do |f|
       f.write(search_repo_names.to_json)
     end
   end
 
+  desc "list unique repo names from package_dependents, local_search and package_repos task outputs"
   task all_repos: :environment do
     search_results = JSON.load(File.open("data/search_results.json")).map{|name| "https://github.com/#{name}"}
     package_repos = JSON.load(File.open("data/package_repos.json"))
@@ -106,6 +104,7 @@ namespace :discovery do
     # puts names.length
   end
 
+  desc 'list github orgs/users with most repos not already in the database'
   task big_orgs: :environment do
     # rows = []
     orgs = {}
@@ -127,6 +126,7 @@ namespace :discovery do
     # p rows.length
   end
 
+  desc 'check repo repos listed in all_repos.csv still exist'
   task check_status: :environment do
     valid_rows = []
     CSV.foreach("data/all_repos.csv") do |row,i|
@@ -154,7 +154,7 @@ namespace :discovery do
     p valid_rows.uniq.length
   end
 
-  task ranking: :environment do
+  # task ranking: :environment do
     # Is it a fork?                         (fork)
     # Is it archived?                       (archived)
     # How many stars?                       (stargazers_count)
@@ -178,6 +178,5 @@ namespace :discovery do
     # Does it use go-ipfs as a library?
     # Does it use js-ipfs as a library?
     # Does it use go-ipfs via docker?
-
-  end
+  # end
 end

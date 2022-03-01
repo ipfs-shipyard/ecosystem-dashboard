@@ -1,6 +1,7 @@
 require 'csv'
 
 namespace :contributions do
+  desc "generate output a csv of avg first response time for each contributor"
   task research: :environment do
     counts = Issue.not_core.group(:user).count
 

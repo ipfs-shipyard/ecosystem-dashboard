@@ -1,4 +1,5 @@
 namespace :research do
+  desc "download arweave org, repo and packages and output as csv"
   task arweave: :environment do
     # download all the repos
     o = Organization.find_or_create_by(name: 'ArweaveTeam')

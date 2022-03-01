@@ -1,8 +1,8 @@
 require 'csv'
 
 namespace :stewards do
+  desc 'export all internal repositories as csv'
   task export_repos: :environment do
-
     exclude_fields = ['topics', 'direct_internal_dependency_package_ids', 'indirect_internal_dependency_package_ids']
 
     scope = Repository.internal
@@ -16,8 +16,8 @@ namespace :stewards do
     puts csv_string
   end
 
+  desc 'export all internal events for the past 6 months as csv'
   task export_events: :environment do
-
     scope = Event.internal.this_period(180).humans
     csv_string = CSV.generate do |csv|
       csv << Event.attribute_names.excluding("payload")

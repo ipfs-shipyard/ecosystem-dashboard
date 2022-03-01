@@ -1,4 +1,5 @@
 namespace :changelog do
+  desc 'list internal repos with no changelog or history file'
   task missing: :environment do
     release_events = Event.internal.event_type('ReleaseEvent').includes(:repository)
     repos = release_events.map(&:repository).uniq.reject(&:archived?)
@@ -15,6 +16,7 @@ namespace :changelog do
     end
   end
 
+  desc "generate a changelog file for a repository based on it's releases"
   task generate: :environment do
     full_name = 'ipfs-shipyard/ipld-explorer-components'
     repo = Repository.find_by_full_name(full_name)
