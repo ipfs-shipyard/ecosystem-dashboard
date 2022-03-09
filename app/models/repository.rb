@@ -173,6 +173,21 @@ class Repository < ApplicationRecord
     end
   end
 
+  def setup_async
+    RepoSetupWorker.perform_async(id)
+  end
+
+  def setup
+    sync_events(true)
+    find_npm_packages
+    find_cargo_packages
+    find_go_packages
+    download_tags
+    Issue.download(full_name, self.created_at)
+    organization.guess_core_contributors
+    organization.guess_bots
+  end
+
   def html_url
     "https://github.com/#{full_name}"
   end

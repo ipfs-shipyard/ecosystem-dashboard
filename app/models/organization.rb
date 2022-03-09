@@ -14,6 +14,16 @@ class Organization < ApplicationRecord
   has_many :repository_dependencies, through: :repositories
   has_many :packages, through: :repositories
 
+  def setup_async
+    OrgSetupWorker.perform_async(id)
+  end
+
+  def setup
+    sync
+    Repository.download_org_repos(name)
+    Repository.org(name).each(&:setup_async)
+  end
+
   def to_param
     name
   end

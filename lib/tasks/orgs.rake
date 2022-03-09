@@ -3,4 +3,9 @@ namespace :orgs do
   task update_counts: :environment do
     Organization.collaborator.each(&:update_counts)
   end
+
+  desc 'setup and sync repositories for all orgs'
+  task setup: :environment do
+    Organization.internal.each(&:setup_async)
+  end
 end
