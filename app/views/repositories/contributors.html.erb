@@ -1,0 +1,26 @@
+<% @page_title = "#{@repository.full_name} contributors" %>
+<h1>
+  <%= @page_title%>
+</h1>
+
+<% @contributors.each do |contributor, count| %>
+
+  <div class="card mb-3">
+    <div class="card-body">
+        <%= link_to "https://github.com/#{contributor}", target: :_blank, class: 'float-left mr-3' do %>
+          <img src="https://github.com/<%= contributor %>.png" class="rounded" height='40' width='40'>
+        <% end %>
+      <h5 class="card-title mb-0">
+        <%= link_to contributor, contributor_path(contributor), target: :_blank %>
+      </h5>
+
+      <small class='text-muted'>
+        <%= link_to all_issues_path(user: contributor, range: @range) do %>
+          <%= pluralize number_with_delimiter(count), 'contribution' %>
+        <% end %>
+      </small>
+    </div>
+  </div>
+<% end %>
+
+<%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>

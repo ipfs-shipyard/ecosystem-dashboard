@@ -302,4 +302,18 @@ class RepositoriesController < ApplicationController
     @scope = Repository.discovered.where(fork: false).order('created_at desc')
     @pagy, @repositories = pagy(@scope, items: 500)
   end
+
+  def contributors
+    @repository = Repository.find_by_id(params[:id]) || Repository.find_by_full_name(params[:id])
+    @contributors = @repository.contributor_counts
+    
+    respond_to do |format|
+      format.html do
+        @pagy, @contributors = pagy_array(@contributors)
+      end
+      format.json do
+        render json: @contributors.map{|name, count| {github_username: name, contribution_count: count} }
+      end
+    end
+  end
 end

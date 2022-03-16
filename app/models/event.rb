@@ -27,6 +27,7 @@ class Event < ApplicationRecord
   scope :search, ->(query) { where('payload::text ilike ?', "%#{query}%") }
 
   scope :not_stars, -> { where.not(event_type: 'WatchEvent') }
+  scope :not_forks, -> { where.not(event_type: 'ForkEvent') }
 
   def contributed?
     return true unless contributor.present?

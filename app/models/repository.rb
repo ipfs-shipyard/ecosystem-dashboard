@@ -673,4 +673,8 @@ class Repository < ApplicationRecord
   def keyword_match_count
     keyword_matches.to_s.strip.split("\n").length
   end
+
+  def contributor_counts
+    events.not_stars.not_forks.humans.group(:actor).count.sort_by{|k,v| -v}
+  end
 end

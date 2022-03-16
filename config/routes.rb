@@ -28,6 +28,9 @@ Rails.application.routes.draw do
       get :transitions
       post :dependency_counts
     end
+    member do
+      get :contributors
+    end
   end
 
   resources :dependency_events
