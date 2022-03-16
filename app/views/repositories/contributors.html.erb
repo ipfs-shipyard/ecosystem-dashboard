@@ -15,7 +15,7 @@
       </h5>
 
       <small class='text-muted'>
-        <%= link_to all_issues_path(user: contributor, range: @range) do %>
+        <%= link_to events_path(user: contributor, range: 999, repo_full_name: @repository.full_name) do %>
           <%= pluralize number_with_delimiter(count), 'contribution' %>
         <% end %>
       </small>
