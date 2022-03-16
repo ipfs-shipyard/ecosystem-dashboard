@@ -3,7 +3,7 @@
   <%= @page_title%>
 </h1>
 
-<% @contributors.each do |contributor, count| %>
+<% @contributors.each do |contributor, count, core| %>
 
   <div class="card mb-3">
     <div class="card-body">
@@ -12,6 +12,14 @@
         <% end %>
       <h5 class="card-title mb-0">
         <%= link_to contributor, contributor_path(contributor), target: :_blank %>
+        <small>
+          <% if core %>
+          <span class='badge badge-dark'>Core</span>
+          <% end %>
+          <% Contributor.collabs_for(contributor).each do |collab| %>
+            <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
+          <% end %>
+        </small>
       </h5>
 
       <small class='text-muted'>

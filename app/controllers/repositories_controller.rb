@@ -306,13 +306,15 @@ class RepositoriesController < ApplicationController
   def contributors
     @repository = Repository.find_by_id(params[:id]) || Repository.find_by_full_name(params[:id])
     @contributors = @repository.contributor_counts
-    
+    @contributor_records = Contributor.where(github_username: @contributors.map(&:first)).select('github_username, core')
+    @contributors.map!{|a| [a[0], a[1], @contributor_records.find{|c| c.github_username == a[0] }.try(:core)] }
+
     respond_to do |format|
       format.html do
         @pagy, @contributors = pagy_array(@contributors)
       end
       format.json do
-        render json: @contributors.map{|name, count| {github_username: name, contribution_count: count} }
+        render json: @contributors.map{|name, count, core| {github_username: name, contribution_count: count, core: core} }
       end
     end
   end
