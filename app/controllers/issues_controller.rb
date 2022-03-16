@@ -18,9 +18,10 @@ class IssuesController < ApplicationController
           'pull_requests' => @scope.pull_requests.count
         }
 
-        @languages = Issue::LANGUAGES.to_h do |language|
-          [language, @scope.unscope(where: :language).language(language).count]
-        end
+        # @languages = Issue::LANGUAGES.to_h do |language|
+        #   [language, @scope.unscope(where: :language).language(language).count]
+        # end
+        @languages = @scope.unscope(where: :language).joins(:repository).group('repositories.language').count
 
         @pagy, @issues = pagy(@scope.order(@sort => @order))
 
@@ -64,9 +65,8 @@ class IssuesController < ApplicationController
           'issues' => @scope.issues.count,
           'pull_requests' => @scope.pull_requests.count
         }
-        @languages = Issue::LANGUAGES.to_h do |language|
-          [language, @scope.unscope(where: :language).language(language).count]
-        end
+
+        @languages = @scope.unscope(where: :language).joins(:repository).group('repositories.language').count
 
         @users = @scope.group(:user).count
         @states = @scope.unscope(where: :state).group(:state).count
