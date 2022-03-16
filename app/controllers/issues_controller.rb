@@ -18,9 +18,6 @@ class IssuesController < ApplicationController
           'pull_requests' => @scope.pull_requests.count
         }
 
-        # @languages = Issue::LANGUAGES.to_h do |language|
-        #   [language, @scope.unscope(where: :language).language(language).count]
-        # end
         @languages = @scope.unscope(where: :language).joins(:repository).group('repositories.language').count
 
         @pagy, @issues = pagy(@scope.order(@sort => @order))
