@@ -22,7 +22,7 @@ class Issue < ApplicationRecord
   scope :pull_requests, -> { where("html_url like ?", '%/pull/%') }
   scope :issues, -> { where.not("html_url like ?", '%/pull/%') }
 
-  scope :language, ->(language) { joins(:repository).where('repositories.language = ?', language)}
+  scope :language, ->(language) { joins(:repository).where('repositories.language IN (?)', Array(language))}
 
   scope :no_milestone, -> { where(milestone_name: nil) }
   scope :no_boards, -> { where("board_ids = '{}'") }
