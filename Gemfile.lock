@@ -255,7 +255,7 @@ GEM
     omniauth-oauth2 (1.7.2)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
-    ox (2.14.10)
+    ox (2.14.11)
     pagy (5.10.1)
       activesupport
     pg (1.3.4)
