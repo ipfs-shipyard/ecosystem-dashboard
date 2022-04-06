@@ -144,6 +144,10 @@ class Issue < ApplicationRecord
     end
   end
 
+  def update_collabs
+    update_column(:collabs, Contributor.collabs_for(user))
+  end
+
   def pull_request?
     html_url && html_url.match?(/\/pull\//i)
   end
@@ -222,6 +226,7 @@ class Issue < ApplicationRecord
     calculate_first_response
     calculate_pr_merge_time
     update_board_ids
+    update_collabs
   end
 
   def calculate_pr_merge_time
