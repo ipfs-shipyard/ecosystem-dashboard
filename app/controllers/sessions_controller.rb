@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    AuthToken.create_multiple([auth_hash.credentials.token])
     client = Octokit::Client.new(access_token: auth_hash.credentials.token)
     username = auth_hash.info.nickname
     if organization_member?(client, user: username)
