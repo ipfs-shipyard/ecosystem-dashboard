@@ -166,12 +166,46 @@ class Issue < ApplicationRecord
       destroy
     end
   end
+  
+  def org_github_client
+    # special client with read:org access to load new github project cards via graphql
+    Octokit::Client.new({access_token: ENV['GITHUB_ORG_TOKEN'], auto_paginate: true})
+  end
 
   def update_board_ids
     return if board_ids.any?
     begin
       events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview,application/vnd.github.starfox-preview+json')
-      update_column(:board_ids, events.map{|e| e.project_card}.compact.map{|c| c.project_id}.uniq)
+      ids = events.map{|e| e.project_card}.compact.map{|c| c.project_id}.uniq
+
+      if ENV['GITHUB_ORG_TOKEN'].present?
+        query = <<-GRAPHQL
+          query{
+            repository(owner: "ipfs", name: "go-ipfs"){
+              issueOrPullRequest(number: 8806){
+                ... on Issue {
+                  projectsNext(first:10){
+                    nodes {
+                      number
+                    }
+                  }
+                }
+                ... on PullRequest {
+                  projectsNext(first:10){
+                    nodes {
+                      number
+                    }
+                  }
+                }
+              }
+            }
+          }
+        GRAPHQL
+        res = org_github_client.post '/graphql', { query: query }.to_json
+        ids += res[:data][:repository][:issueOrPullRequest][:projectsNext][:nodes].map{|n| n[:number]}
+      end
+
+      update_column(:board_ids, ids.uniq)
     rescue Octokit::NotFound
       destroy
     end
