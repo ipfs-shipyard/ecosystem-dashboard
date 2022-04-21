@@ -181,8 +181,8 @@ class Issue < ApplicationRecord
       if ENV['GITHUB_ORG_TOKEN'].present?
         query = <<-GRAPHQL
           query{
-            repository(owner: "ipfs", name: "go-ipfs"){
-              issueOrPullRequest(number: 8806){
+            repository(owner: "#{org}", name: "#{repo_full_name.split('/').last}"){
+              issueOrPullRequest(number: #{number}){
                 ... on Issue {
                   projectsNext(first:10){
                     nodes {
