@@ -119,7 +119,7 @@ class Issue < ApplicationRecord
       issue.milestone_id = remote_issue.milestone.try(:number)
       issue.labels = remote_issue.labels.map(&:name)
       issue.last_synced_at = Time.zone.now
-      issue.save
+      issue.save(touch: false)
       return issue
     rescue ArgumentError, Octokit::Error
       # derp
