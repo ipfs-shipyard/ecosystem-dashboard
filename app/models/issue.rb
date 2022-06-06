@@ -202,7 +202,7 @@ class Issue < ApplicationRecord
           }
         GRAPHQL
         res = org_github_client.post('/graphql', { query: query }.to_json).to_h
-        ids += (res.dig(:data, :repository, :issueOrPullRequest, :projectsNext, :nodes) || []).map{|n| n[:number]}
+        ids += (res.dig(:data, :repository, :issueOrPullRequest, :projectsNext, :nodes) || []).compact.map{|n| n[:number]}
       end
 
       update_column(:board_ids, ids.uniq)
