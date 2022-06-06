@@ -201,7 +201,7 @@ class Issue < ApplicationRecord
             }
           }
         GRAPHQL
-        res = org_github_client.post '/graphql', { query: query }.to_json
+        res = org_github_client.post('/graphql', { query: query }.to_json).to_h
         ids += (res.dig(:data, :repository, :issueOrPullRequest, :projectsNext, :nodes) || []).map{|n| n[:number]}
       end
 
