@@ -115,4 +115,8 @@ Rails.application.configure do
   if ENV["MEMCACHEDCLOUD_SERVERS"]
     config.cache_store = :mem_cache_store, ENV["MEMCACHEDCLOUD_SERVERS"].split(','), { :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"], compress: true }
   end
+
+  if ENV['MEMCACHED_URL']
+    config.cache_store = :mem_cache_store, ENV['MEMCACHED_URL']
+  end
 end
