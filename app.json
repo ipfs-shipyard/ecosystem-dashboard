@@ -1,0 +1,64 @@
+{
+  "cron": [
+    {
+      "command": "bundle exec rake issues:sync_recent",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "command": "bundle exec rake issues:sync_collabs",
+      "schedule": "0 * * * *"
+    },
+    {
+      "command": "bundle exec rake packages:sync_internal",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "command": "bundle exec rake packages:find_missing_npm_packages",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "command": "bundle exec rake packages:sync",
+      "schedule": "0 * * * *"
+    },
+    {
+      "command": "bundle exec rake issues:sync_daily",
+      "schedule": "0 7 * * *"
+    },
+    {
+      "command": "bundle exec rake search:run_all",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "command": "bundle exec rake packages:find_missing_package_repos",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "command": "bundle exec rake packages:find_dependent_github_repos",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "command": "bundle exec rake repositories:sync",
+      "schedule": "50 * * * *"
+    },
+    {
+      "command": "bundle exec rake repositories:discover_from_search_results",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "command": "bundle exec rake repositories:recalculate_scores",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "command": "bundle exec rake pmf:warm_caches",
+      "schedule": "10 * * * *"
+    },
+    {
+      "command": "bundle exec rake contributors:sync",
+      "schedule": "40 * * * *"
+    },
+    {
+      "command": "bundle exec rake repositories:sync_discovered",
+      "schedule": "30 * * * *"
+    }
+  ]
+}
