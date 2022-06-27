@@ -1,6 +1,6 @@
 namespace :cleanup do
   desc "Cleanup repositories"
-  task :repos do
+  task repos: :environment do
     Repository.community.where('first_added_internal_deps is null and last_internal_dep_removed is null').find_each do |repo|
       repo.events.delete_all
       repo.destroy
