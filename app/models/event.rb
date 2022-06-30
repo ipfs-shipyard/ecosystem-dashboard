@@ -46,20 +46,29 @@ class Event < ApplicationRecord
     end
   end
 
-  def self.record_event(repository, event_json)
+  def self.record_event(repository, event_json, contributor = nil)
     begin
       e = Event.find_or_initialize_by(github_id: event_json['id'])
 
       e.actor = event_json['actor']['login']
       e.event_type = event_json['type']
       e.action = event_json['payload']['action']
-      e.repository_id = repository.try(:id)
-      e.repository_full_name = repository.try(:full_name) || event_json['repo']['name']
-      e.org = repository.try(:org) || event_json['repo']['name'].split('/')[0]
+      if e.repository_id.nil?
+        repository ||= Repository.find_by_full_name(event_json['repo']['name'])
+        e.repository_id = repository.try(:id)
+        e.repository_full_name = repository.try(:full_name) || event_json['repo']['name']
+        e.org = repository.try(:org) || event_json['repo']['name'].split('/')[0]
+      end
       e.payload = event_json['payload'].to_h
       e.created_at = event_json['created_at']
-      e.core = Contributor.where(github_username: event_json['actor']['login']).pluck(:core).first
-      e.bot = Contributor.where(github_username: event_json['actor']['login']).pluck(:bot).first
+      if e.core.nil?
+        contributor ||= Contributor.find_by(github_username: e.actor)
+        e.core = contributor.core
+      end
+      if e.bot.nil?
+        contributor ||= Contributor.find_by(github_username: e.actor)
+        e.bot = contributor.bot
+      end
       e.save if e.changed?
     rescue ActiveRecord::StatementInvalid
       # garbage data, ignore it

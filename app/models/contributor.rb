@@ -101,8 +101,7 @@ class Contributor < ApplicationRecord
 
   def sync_events(auto_paginate = false)
     download_events(auto_paginate).each do |e|
-      repo = Repository.find_by_full_name(e['repo']['name'])
-      Event.record_event(repo, e)
+      Event.record_event(nil, e, self)
     end
   end
 
