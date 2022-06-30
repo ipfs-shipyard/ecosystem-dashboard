@@ -63,11 +63,11 @@ class Event < ApplicationRecord
       e.created_at = event_json['created_at']
       if e.core.nil?
         contributor ||= Contributor.find_by(github_username: e.actor)
-        e.core = contributor.core
+        e.core = contributor.try(:core)
       end
       if e.bot.nil?
         contributor ||= Contributor.find_by(github_username: e.actor)
-        e.bot = contributor.bot
+        e.bot = contributor.try(:bot)
       end
       e.save if e.changed?
     rescue ActiveRecord::StatementInvalid
