@@ -220,6 +220,7 @@ GEM
       digest
       net-protocol
       timeout
+    newrelic_rpm (8.8.0)
     nio4r (2.5.8)
     nokogiri (1.13.6)
       mini_portile2 (~> 2.8.0)
@@ -407,6 +408,7 @@ DEPENDENCIES
   license-compatibility
   listen
   lograge
+  newrelic_rpm
   octicons_helper
   octokit
   oj
