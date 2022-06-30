@@ -17,11 +17,11 @@ class Contributor < ApplicationRecord
   end
 
   def self.core_usernames
-    core.pluck(:github_username)
+    @core_usernames ||= core.pluck(:github_username)
   end
 
   def self.bot_usernames
-    bot.pluck(:github_username)
+    @bot_usernames ||= bot.pluck(:github_username)
   end
 
   def to_s
