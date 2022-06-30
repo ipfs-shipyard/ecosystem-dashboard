@@ -11,6 +11,12 @@ class Contributor < ApplicationRecord
 
   scope :existing, -> { where.not(etag: nil) }
 
+  after_save :update_events
+
+  def update_events
+    Event.where(actor: github_username).update_all(bot: bot, core: core)
+  end
+
   def self.core_usernames
     core.pluck(:github_username)
   end

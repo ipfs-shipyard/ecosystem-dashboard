@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_24_133608) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_30_102511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -79,6 +79,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_24_133608) do
     t.jsonb "payload", default: "{}", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "core"
+    t.boolean "bot"
     t.index ["actor"], name: "index_events_on_actor"
     t.index ["created_at"], name: "index_events_on_created_at"
     t.index ["github_id"], name: "index_events_on_github_id"

@@ -11,10 +11,10 @@ class Event < ApplicationRecord
   scope :repo, ->(repository_full_name) { where(repository_full_name: repository_full_name)}
   scope :event_type, ->(event_type) { where(event_type: event_type) }
 
-  scope :humans, -> { where.not(actor: Contributor.bot_usernames) }
-  scope :bots, -> { where(actor: Contributor.bot_usernames) }
-  scope :core, -> { where(actor: Contributor.core_usernames) }
-  scope :not_core, -> { where.not(actor: Contributor.core_usernames) }
+  scope :humans, -> { where(bot: [false, nil]) }
+  scope :bots, -> { where(bot: true) }
+  scope :core, -> { where(core: true) }
+  scope :not_core, -> { where(core: [false, nil]) }
 
   scope :this_period, ->(period) { where('events.created_at > ?', period.days.ago) }
   scope :last_period, ->(period) { where('events.created_at > ?', (period*2).days.ago).where('events.created_at < ?', period.days.ago) }
@@ -34,6 +34,18 @@ class Event < ApplicationRecord
     !contributor.core?
   end
 
+  def self.update_core_events
+    Contributor.core.pluck(:github_username).each do |username|
+      Event.where(actor: username).update_all(core: true)
+    end
+  end
+
+  def self.update_bot_events
+    Contributor.bot.pluck(:github_username).each do |username|
+      Event.where(actor: username).update_all(bot: true)
+    end
+  end
+
   def self.record_event(repository, event_json)
     begin
       e = Event.find_or_initialize_by(github_id: event_json['id'])
@@ -46,6 +58,8 @@ class Event < ApplicationRecord
       e.org = repository.try(:org) || event_json['repo']['name'].split('/')[0]
       e.payload = event_json['payload'].to_h
       e.created_at = event_json['created_at']
+      e.core = Contributor.where(github_username: event_json['actor']['login']).pluck(:core).first
+      e.bot = Contributor.where(github_username: event_json['actor']['login']).pluck(:bot).first
       e.save if e.changed?
     rescue ActiveRecord::StatementInvalid
       # garbage data, ignore it
