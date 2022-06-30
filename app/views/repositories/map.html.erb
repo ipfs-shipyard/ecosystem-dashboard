@@ -1,6 +1,6 @@
 <h1>Repository Map</h1>
 
-<% if Organization.internal.count > 1 %>
+<% if Organization.internal_org_names.many? %>
   <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
       <a class="nav-link <%= 'active' if params[:organization].blank? %>" href="<%= url_for(request.params.merge(organization: nil)) %>">

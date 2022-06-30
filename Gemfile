@@ -55,6 +55,7 @@ group :development do
   gem 'web-console'
   gem 'listen'
   gem 'dotenv-rails'
+  gem 'sql_queries_count'
 end
 
 group :production do

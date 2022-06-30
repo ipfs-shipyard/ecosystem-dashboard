@@ -15,7 +15,7 @@
         <a class="nav-link <%= 'active' if params[:range].to_i == 90 %>" href=" <%= url_for(request.params.merge(range: 90)) %>">Last 90 days</a>
       </li>
     </ul>
-    <% if Organization.internal.count > 1 %>
+    <% if Organization.internal_org_names.many? %>
       <ul class="nav nav-pills ml-auto">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -27,10 +27,10 @@
                 <%= params[:org] %>
               </a>
             <% end %>
-            <% Organization.internal.all.each do |org| %>
-              <% next if params[:org] == org.name %>
-              <a class="dropdown-item" href="<%= url_for(request.params.merge(org: org.name)) %>">
-                <%= org.name %>
+            <% Organization.internal_org_names.each do |name| %>
+              <% next if params[:org] == name %>
+              <a class="dropdown-item" href="<%= url_for(request.params.merge(org: name)) %>">
+                <%= name %>
               </a>
             <% end %>
           </div>

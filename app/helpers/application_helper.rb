@@ -184,7 +184,7 @@ module ApplicationHelper
   end
 
   def default_org_name
-    ENV['DEFAULT_ORG'].presence || Organization.internal.first.try(:name)
+    @default_org_name ||= ENV['DEFAULT_ORG'].presence || Organization.internal_org_names.first
   end
 
   def display_name

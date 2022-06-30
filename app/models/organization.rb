@@ -14,6 +14,10 @@ class Organization < ApplicationRecord
   has_many :repository_dependencies, through: :repositories
   has_many :packages, through: :repositories
 
+  def self.internal_org_names
+    @internal_org_names ||= internal.pluck(:name)
+  end
+
   def setup_async
     OrgSetupWorker.perform_async(id)
   end

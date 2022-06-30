@@ -9,7 +9,7 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="nav nav-pills mr-auto">
-      <% if Organization.internal.count > 1 %>
+      <% if Organization.internal_org_names.many? %>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle <%= 'active' if params[:org].present? %>" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Organisation</a>
           <div class="dropdown-menu">
