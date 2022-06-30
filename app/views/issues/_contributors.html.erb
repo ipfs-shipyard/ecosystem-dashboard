@@ -9,7 +9,7 @@
     <% @users.sort_by(&:last).reverse.first(25).each do |user, count| %>
       <li class="list-group-item">
         <img src="https://github.com/<%= user %>.png" class="rounded mr-1" height='20' width='20'>
-        <%= user %>
+        <%= link_to user, "https://github.com/#{user}", target: :_blank %>
         <small class='text-muted'>
           <%= number_with_delimiter count %>
         </small>
