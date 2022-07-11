@@ -46,7 +46,9 @@ namespace :pmf do
 
     paths = [
       "/pmf/repo/transitions.json?start_date=2020-11-20",
-      "/pmf/repo/states.json?start_date=2020-11-20"
+      "/pmf/repo/states.json?start_date=2020-11-20",
+      "/pmf/transitions.json?start_date=2020-11-20",
+      "/pmf/states.json?start_date=2020-11-20"
     ]
 
     if ENV['DISPLAY_NAME'] == 'IPFS'
@@ -62,6 +64,8 @@ namespace :pmf do
       puts "  #{transitions.length} transitions"
       states = PmfRepo.states(start_date, end_date, window)
       puts "  #{states.length} states"
+      transitions = Pmf.transitions(start_date, end_date, window)
+      states = Pmf.states(start_date, end_date, window)
     end
 
     paths.each do |path|
