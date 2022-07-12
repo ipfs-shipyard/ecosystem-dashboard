@@ -342,7 +342,9 @@ class PmfRepo
   end
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
-    event_scope(before_date, dependency_threshold).created_before(before_date).pluck(:repository_full_name).uniq
+    names = []
+    event_scope(before_date, dependency_threshold).created_before(before_date).select('id,repository_full_name').find_in_batches(batch_size: 1000){|b| names += b.map(&:repository_full_name)}
+    names.uniq
   end
 
   def self.pl_orgs
