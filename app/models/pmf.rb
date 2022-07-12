@@ -332,7 +332,9 @@ class Pmf
   end
 
   def self.previously_active_usernames(before_date, dependency_threshold)
-    event_scope(before_date, dependency_threshold).created_before(before_date).pluck(:actor).uniq
+    names = []
+    event_scope(before_date, dependency_threshold).created_before(before_date).select('id,actor').find_in_batches(batch_size: 1000){|b| names += b.map(&:actor)}
+    names.uniq
   end
 
   def self.event_scope(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
