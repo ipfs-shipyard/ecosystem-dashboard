@@ -34,6 +34,10 @@ class Event < ApplicationRecord
     !contributor.core?
   end
 
+  def self.set_pmf_field
+    Event.humans.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(pmf: nil).in_batches(of: 10_000).update_all(pmf: true)
+  end
+
   def self.update_core_events
     Contributor.core.pluck(:github_username).each do |username|
       Event.where(actor: username).update_all(core: true)

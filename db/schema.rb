@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_30_121629) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_12_105536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -83,10 +83,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_121629) do
     t.datetime "updated_at", null: false
     t.boolean "core"
     t.boolean "bot"
+    t.boolean "pmf"
     t.index ["actor"], name: "index_events_on_actor"
     t.index ["created_at"], name: "index_events_on_created_at"
     t.index ["github_id"], name: "index_events_on_github_id"
     t.index ["org", "event_type"], name: "index_events_on_org_and_event_type"
+    t.index ["pmf"], name: "index_events_on_pmf"
     t.index ["repository_id"], name: "index_events_on_repository_id"
   end
 

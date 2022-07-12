@@ -343,7 +343,7 @@ class PmfRepo
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
     names = []
-    event_scope(before_date, dependency_threshold).created_before(before_date).select('id,repository_full_name').find_in_batches(batch_size: 1000){|b| names += b.map(&:repository_full_name)}
+    event_scope(before_date, dependency_threshold).created_before(before_date).select('id,repository_full_name').find_in_batches(batch_size: 10_000){|b| names += b.map(&:repository_full_name)}
     names.uniq
   end
 
@@ -360,7 +360,7 @@ class PmfRepo
     # only repos with pl dependencies or pl owned repos
     repository_ids = repo_ids(end_date, dependency_threshold)
 
-    Event.humans.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(repository_id: repository_ids)
+    Event.where(pmf: true).where(repository_id: repository_ids)
   end
 
   def self.repo_ids(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
