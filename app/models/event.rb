@@ -35,7 +35,7 @@ class Event < ApplicationRecord
   end
 
   def self.set_pmf_field
-    Event.humans.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(pmf: nil).in_batches(of: 10_000).update_all(pmf: true)
+    Event.humans.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(pmf: nil).in_batches(of: 1000).update_all(pmf: true)
   end
 
   def self.update_core_events
@@ -72,6 +72,11 @@ class Event < ApplicationRecord
       if e.bot.nil?
         contributor ||= Contributor.find_by(github_username: e.actor)
         e.bot = contributor.try(:bot)
+      end
+      if !e.event_type.include?(['WatchEvent', 'MemberEvent', 'PublicEvent'])
+        if event.core && !event.bot
+          e.pmf = true
+        end
       end
       e.save if e.changed?
     rescue ActiveRecord::StatementInvalid
