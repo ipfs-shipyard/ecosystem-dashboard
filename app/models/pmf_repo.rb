@@ -342,9 +342,13 @@ class PmfRepo
   end
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
+    repo_names = repo_names(before_date, dependency_threshold).sort
+
     names = []
-    event_scope(before_date, dependency_threshold).created_before(before_date).select('id,repository_full_name').find_in_batches(batch_size: 10_000){|b| names += b.map(&:repository_full_name)}
-    names.uniq
+
+    Event.where(pmf: true).created_before(before_date).select('id,repository_full_name').find_in_batches(batch_size: 10_000){|b| names |= b.map(&:repository_full_name).uniq}
+    
+    names.sort.uniq & repo_names
   end
 
   def self.pl_orgs
@@ -361,6 +365,20 @@ class PmfRepo
     repository_ids = repo_ids(end_date, dependency_threshold)
 
     Event.where(pmf: true).where(repository_id: repository_ids)
+  end
+
+  def self.repo_names(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
+    if dependency_threshold == 1
+      repo_names = Repository.where('first_added_internal_deps < ?', end_date).pluck(:full_name)
+    else
+      # temp fallback if dependency_threshold greater than 1
+      repo_names = Repository.with_internal_deps(dependency_threshold).pluck(:full_name)
+    end
+
+    # repository_ids += Repository.with_search_results.pluck(:full_name)
+    repo_names -= Repository.internal.pluck(:full_name)
+    repo_names -= Repository.org(pl_orgs).pluck(:full_name)
+    repo_names
   end
 
   def self.repo_ids(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
