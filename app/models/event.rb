@@ -74,7 +74,7 @@ class Event < ApplicationRecord
         e.bot = contributor.try(:bot)
       end
       if !['WatchEvent', 'MemberEvent', 'PublicEvent'].include?(e.event_type)
-        if event.core && !event.bot
+        if e.core && !e.bot
           e.pmf = true
         end
       end
