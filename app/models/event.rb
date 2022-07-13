@@ -73,7 +73,7 @@ class Event < ApplicationRecord
         contributor ||= Contributor.find_by(github_username: e.actor)
         e.bot = contributor.try(:bot)
       end
-      if !e.event_type.include?(['WatchEvent', 'MemberEvent', 'PublicEvent'])
+      if !['WatchEvent', 'MemberEvent', 'PublicEvent'].include?(e.event_type)
         if event.core && !event.bot
           e.pmf = true
         end
