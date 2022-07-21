@@ -344,18 +344,22 @@ class PmfRepo
   def self.previously_active_repo_names(before_date, dependency_threshold)
     repo_names = repo_names(before_date, dependency_threshold).sort
 
-    names = []
+    start_date = Event.where(pmf: true).first.created_at.to_date
 
-    Event.where(pmf: true).created_before(before_date).select('id,repository_full_name').find_in_batches(batch_size: 10_000){|b| names |= b.map(&:repository_full_name).uniq}
+    names = (start_date..before_date.to_date).map do |date|
+      Rails.cache.fetch "previously_active_repo_names_#{date}_#{dependency_threshold}" do
+        Event.where(pmf: true).where('created_at > ? AND created_at < ?', date.beginning_of_day, date.end_of_day).distinct.pluck(:repository_full_name)
+      end
+    end
     
-    names.sort.uniq & repo_names
+    names.flatten.sort.uniq & repo_names
   end
 
   def self.pl_orgs
     ['protocol', 'ipfs', 'ipfs-shipyard', 'ipld', 'protoschool', 'libp2p',
       'ipfs-cluster', 'multiformats', 'ipfs-inactive', 'filecoin-project',
       'filecoin-shipyard', 'slate-engineering', 'web3-storage', 'nftstorage',
-      'application-research']
+      'application-research', 'ipfs-examples', 'ipfs-elastic-provider']
   end
 
   def self.event_scope(end_date, dependency_threshold = DEFAULT_DEPENDENCY_THRESHOLD)
