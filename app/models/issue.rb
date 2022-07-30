@@ -139,7 +139,7 @@ class Issue < ApplicationRecord
   end
 
   def self.update_collab_labels
-    Issue.unlocked.internal.where('issues.created_at > ?', 1.month.ago).not_core.group(:user).count.each do |u, count|
+    Issue.unlocked.internal.where('issues.created_at > ?', 1.month.ago).where(collabs: []).not_core.group(:user).count.each do |u, count|
       Issue.internal.unlocked.where(user: u).update_all(collabs: Contributor.collabs_for(u))
     end
   end
