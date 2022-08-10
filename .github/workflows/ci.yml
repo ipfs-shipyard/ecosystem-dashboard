@@ -11,7 +11,7 @@ jobs:
         image: postgres:11
         env:
           POSTGRES_USER: ecosystem
-          POSTGRES_DB: ecosystem_test
+          DATABASE_NAME: ecosystem_test
           POSTGRES_PASSWORD: postgres
         ports: ["5432:5432"]
         options: >-
@@ -44,9 +44,9 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          POSTGRES_DB: ecosystem_test
+          DATABASE_NAME: ecosystem_test
           POSTGRES_USER: ecosystem
           POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+          DATABASE_HOST: localhost
+          DATABASE_PORT: ${{ job.services.postgres.ports[5432] }}
         run: bundle exec rake db:create db:migrate test
