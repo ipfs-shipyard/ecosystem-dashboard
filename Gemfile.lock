@@ -236,10 +236,10 @@ GEM
       rack (>= 1.2, < 3)
       rash_alt (>= 0.4, < 1)
       version_gem (~> 1.1)
-    octicons (17.4.1)
-    octicons_helper (17.4.1)
+    octicons (17.5.0)
+    octicons_helper (17.5.0)
       actionview
-      octicons (= 17.4.1)
+      octicons (= 17.5.0)
       railties
     octokit (5.3.0)
       faraday (>= 1, < 3)
