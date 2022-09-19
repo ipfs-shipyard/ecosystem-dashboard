@@ -109,7 +109,8 @@ class PackagesController < ApplicationController
     @package = Package.find(params[:id])
     direct = params[:direct] == 'false' ? false : true
 
-    @dependencies = Dependency.where(version_id: @package.version_ids).where(package_id: Package.internal.pluck(:id)).includes(:version, :package).group_by(&:package)
+    @internal_dependencies = Dependency.where(version_id: @package.version_ids).where(package_id: Package.internal.pluck(:id)).includes(:version, :package).group_by(&:package)
+    @external_dependencies = Dependency.where(version_id: @package.version_ids).where(package_id: Package.external.pluck(:id)).includes(:version, :package).group_by(&:package)
     @repository_dependencies = @package.repository_dependencies.external.where(direct: direct).active.source.includes(:repository, :manifest)
 
     @dependency_events_scope = @package.dependency_events.internal.order('dependency_events.committed_at DESC').where('committed_at <= ?', Time.now).not_internal_repo

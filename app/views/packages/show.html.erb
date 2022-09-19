@@ -24,9 +24,15 @@
     <a class="nav-link <%= 'active' if params[:direct] == 'false' %>" href="<%= url_for(request.params.merge(direct: false, dependencies: nil, usage: nil, dependency_events: nil)) %>">Transitive Dependent Repos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link <%= 'active' if params[:dependencies].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil, dependency_events: nil)) %>">
+    <a class="nav-link <%= 'active' if params[:dependencies].present? && !params[:external].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil, dependency_events: nil, external: nil)) %>">
       Internal Deps
-      <span class='badge badge-secondary'><%= @dependencies.count %></span>
+      <span class='badge badge-secondary'><%= @internal_dependencies.count %></span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <%= 'active' if params[:dependencies].present? && params[:external].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: true, usage: nil, dependency_events: nil, external: true)) %>">
+      External Deps
+      <span class='badge badge-secondary'><%= @external_dependencies.count %></span>
     </a>
   </li>
   <% if @package.internal? %>
@@ -36,7 +42,7 @@
   <% end %>
   <li class="nav-item">
     <a class="nav-link <%= 'active' if params[:dependency_events].present? %>" href="<%= url_for(request.params.merge(direct: nil,dependencies: nil, usage: nil, dependency_events: true)) %>">
-      Dependency Activity
+      Activity
     </a>
   </li>
 </ul>
@@ -44,28 +50,11 @@
 <% if params[:usage].present? %>
   <%= render 'usage' if @package.internal? %>
 <% elsif params[:dependencies].present? %>
-  <div class="dependencies">
-    <ul class="list-group list-group-flush">
-      <% @dependencies.each do |package,dependencies| %>
-        <li class="list-group-item">
-          <% if package.repository %>
-            <%= link_to "https://github.com/#{package.repository.org}", title: package.repository.org, target: :_blank, class: 'float-left mr-2' do %>
-              <img src="https://github.com/<%= package.repository.org %>.png" class="rounded" height='20' width='20'>
-            <% end %>
-          <% end %>
-          <%= package.platform_name %> - <%= link_to package.name, package_path(package.id) %>
-
-          <small class='text-muted'>
-            <% kinds = dependencies.map(&:kind).uniq.reject{|k| k == 'runtime' } %>
-            <% if kinds.length > 0 %>
-             (<%= kinds.join(', ') %>)
-            <% end %>
-             - <%= compressed_list dependencies.map{|d| d.version.number }.sort %>
-          </small>
-        </li>
-      <% end %>
-    </ul>
-  </div>
+  <% if params[:external].present? %>
+    <%= render 'external_dependents' %>
+  <% else %>
+    <%= render 'internal_dependents' %>
+  <% end %>
 <% elsif params[:dependency_events].present? %>
   <% if @dependency_events.any? %>
     <%= render 'dependency_events/dependency_events' %>
