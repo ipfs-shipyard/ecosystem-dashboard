@@ -77,7 +77,7 @@
 <% else %>
   <div class="dependencies">
     <div class="card mb-3">
-      <ul id='org-<%= org %>' class="list-group list-group-flush">
+      <ul class="list-group list-group-flush">
         <% @repository_dependencies.sort_by{|rd| rd.repository.score }.group_by(&:repository).each do |repository, dependencies| %>
           <li class="list-group-item" data-rank="<%= repository.score %>">
             <%= octicon(repo_icon(repository)) %>
