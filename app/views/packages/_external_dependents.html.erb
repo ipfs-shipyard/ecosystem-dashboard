@@ -1,6 +1,6 @@
 <div class="dependencies">
   <ul class="list-group list-group-flush">
-    <% @external_dependencies.each do |package,dependencies| %>
+    <% @external_dependencies.sort_by{|p,d| p.repository.try(:score) || 0 }.reverse.each do |package,dependencies| %>
       <li class="list-group-item d-flex justify-content-between">
         <span>
         <% if package.repository %>
