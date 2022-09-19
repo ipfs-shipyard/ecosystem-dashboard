@@ -76,30 +76,22 @@
 
 <% else %>
   <div class="dependencies">
-    <% @repository_dependencies.group_by{|rd| rd.repository.org }.sort_by{|o,rd| o }.each do |org, repository_dependencies| %>
-      <div class="card mb-3">
-        <div class="card-header p-2 pl-3 pr-3" title='Click to expand/collapse' data-toggle="collapse" href="#org-<%= org %>">
-          <%= link_to "https://github.com/#{org}", target: :_blank, class: 'mr-1' do %>
-            <img src="https://github.com/<%= org %>.png" class="rounded" height='18' width='18'>
-          <% end %>
-          <%= link_to org, org_dependencies_path(org) %>
-        </div>
-        <ul id='org-<%= org %>' class="list-group list-group-flush">
-          <% repository_dependencies.group_by(&:repository).sort_by{|r,d| d.any?(&:direct?) ? 0 : 1 }.each do |repository, dependencies| %>
-            <li class="list-group-item">
-              <%= octicon(repo_icon(repository)) %>
-              <%= link_to repository.full_name, repository %>
-              <small class='text-muted'>
-                <% dep = dependencies.sort_by(&:requirements).first %>
-                <%= dependencies.map(&:requirements).uniq.sort.join(', ') %>
-                <% if dependencies.none?(&:direct?) %>
-                  <span class='badge badge-info' title='Pulled in by another dependency' >Transitive</span>
-                <% end %>
-              </small>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <div class="card mb-3">
+      <ul id='org-<%= org %>' class="list-group list-group-flush">
+        <% @repository_dependencies.sort_by{|rd| rd.repository.score }.group_by(&:repository).each do |repository, dependencies| %>
+          <li class="list-group-item" data-rank="<%= repository.score %>">
+            <%= octicon(repo_icon(repository)) %>
+            <%= link_to repository.full_name, repository %>
+            <small class='text-muted'>
+              <% dep = dependencies.sort_by(&:requirements).first %>
+              <%= dependencies.map(&:requirements).uniq.sort.join(', ') %>
+              <% if dependencies.none?(&:direct?) %>
+                <span class='badge badge-info' title='Pulled in by another dependency' >Transitive</span>
+              <% end %>
+            </small>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 <% end %>
