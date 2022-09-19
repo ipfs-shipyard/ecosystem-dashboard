@@ -78,8 +78,8 @@
   <div class="dependencies">
     <div class="card mb-3">
       <ul class="list-group list-group-flush">
-        <% @repository_dependencies.sort_by{|rd| rd.repository.score }.group_by(&:repository).each do |repository, dependencies| %>
-          <li class="list-group-item" data-rank="<%= repository.score %>">
+        <% @repository_dependencies.group_by(&:repository).sort_by{|r,d| r.score }.reverse.each do |repository, dependencies| %>
+          <li class="list-group-item" data-score="<%= repository.score %>">
             <%= octicon(repo_icon(repository)) %>
             <%= link_to repository.full_name, repository %>
             <small class='text-muted'>
