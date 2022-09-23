@@ -1,7 +1,7 @@
 class ContributorsController < ApplicationController
   def index
     @range = (params[:range].presence || 7).to_i
-    @issues_scope = Issue.internal.this_period(@range).not_core.unlocked.where("html_url <> ''")
+    @issues_scope = Issue.internal.this_period(@range).not_core_or_bot.unlocked.where("html_url <> ''")
 
     @issues_scope = @issues_scope.org(params[:org]) if params[:org].present?
     @collabs = @issues_scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
@@ -22,7 +22,7 @@ class ContributorsController < ApplicationController
 
   def new
     @range = (params[:range].presence || 7).to_i
-    @issues_scope = Issue.internal.not_core.unlocked.where("html_url <> ''")
+    @issues_scope = Issue.internal.not_core_or_bot.unlocked.where("html_url <> ''")
 
     @issues_scope = @issues_scope.org(params[:org]) if params[:org].present?
     @collabs = @issues_scope.unscope(where: :collabs).all_collabs.pluck(:collabs).flatten.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }

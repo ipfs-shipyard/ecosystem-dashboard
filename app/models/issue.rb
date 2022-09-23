@@ -10,9 +10,9 @@ class Issue < ApplicationRecord
   scope :bots, -> { where(user: Contributor.bot_usernames) }
   scope :core, -> { where(user: Contributor.core_usernames) }
   scope :not_core, -> { where.not(user: Contributor.core_usernames) }
-  scope :all_collabs, -> { where.not("collabs = '{}'") }
-  scope :collab, ->(collab) { where("collabs @> ARRAY[?]::varchar[]", collab)  }
-  scope :community, -> { not_core.where("collabs = '{}'") }
+  scope :all_collabs, -> { where.not("issues.collabs = '{}'") }
+  scope :collab, ->(collab) { where("issues.collabs @> ARRAY[?]::varchar[]", collab)  }
+  scope :community, -> { not_core.where("issues.collabs = '{}'") }
 
   scope :comments_count, ->(count) { where('comments_count <= ?', count) }
 
@@ -48,7 +48,7 @@ class Issue < ApplicationRecord
 
   scope :exclude_language, ->(languages) { joins(:repository).where('repositories.language NOT IN (?)', Array(languages))}
 
-  scope :exclude_collab, ->(collab) { where.not("collabs && ARRAY[?]::varchar[]", collab)  }
+  scope :exclude_collab, ->(collab) { where.not("issues.collabs && ARRAY[?]::varchar[]", collab)  }
   scope :exclude_label, ->(label) { where.not("labels && ARRAY[?]::varchar[]", label)  }
 
   scope :this_period, ->(period) { where('issues.created_at > ?', period.days.ago) }
