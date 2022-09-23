@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_12_105536) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_23_140234) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_12_105536) do
     t.datetime "updated_at", null: false
     t.datetime "last_events_sync_at", precision: nil
     t.string "etag"
+    t.string "collabs", default: [], array: true
     t.index ["bot"], name: "index_contributors_on_bot"
     t.index ["core"], name: "index_contributors_on_core"
     t.index ["github_username"], name: "index_contributors_on_github_username"

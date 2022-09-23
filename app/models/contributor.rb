@@ -10,6 +10,7 @@ class Contributor < ApplicationRecord
 
   scope :existing, -> { where.not(etag: nil) }
 
+  before_save :set_collabs
   after_save :update_events
 
   def update_events
@@ -32,8 +33,8 @@ class Contributor < ApplicationRecord
     contrib = find_or_create_by(github_username: github_username)
   end
 
-  def self.collabs(github_username)
-    Issue.where(user: github_username).first.try(:collabs)
+  def set_collabs
+    self.collabs = Issue.where(user: github_username).last.try(:collabs)
   end
 
   def self.collabs_for(username)
