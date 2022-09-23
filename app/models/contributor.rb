@@ -100,7 +100,11 @@ class Contributor < ApplicationRecord
   end
 
   def sync_events(auto_paginate = false)
-    download_events(auto_paginate).each do |e|
+    recent_events = download_events(auto_paginate)
+    recent_events_ids = recent_events.map(&:id)
+    existing_event_ids = Event.where(github_id: recent_events_ids).pluck(:github_id)
+    recent_events.each do |e|
+      next if existing_event_ids.include?(e.id)
       Event.record_event(nil, e, self)
     end
   end
