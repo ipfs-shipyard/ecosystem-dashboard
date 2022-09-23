@@ -33,6 +33,10 @@ class Contributor < ApplicationRecord
     contrib = find_or_create_by(github_username: github_username)
   end
 
+  def self.collabs(github_username)
+    Issue.where(user: github_username).last.try(:collabs)
+  end
+
   def set_collabs
     self.collabs = Issue.where(user: github_username).last.try(:collabs)
   end
