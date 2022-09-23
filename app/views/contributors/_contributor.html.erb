@@ -6,7 +6,7 @@
     <h5 class="card-title mb-0">
       <%= link_to contributor, contributor_path(contributor), target: :_blank %>
       <small>
-        <% Contributor.collabs_for(contributor).each do |collab| %>
+        <% Contributor.collabs(contributor).each do |collab| %>
           <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
         <% end %>
       </small>
