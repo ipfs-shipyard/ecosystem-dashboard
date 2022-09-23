@@ -119,4 +119,6 @@ Rails.application.configure do
   if ENV['MEMCACHED_URL']
     config.cache_store = :mem_cache_store, ENV['MEMCACHED_URL']
   end
+
+  ActiveRecord::Base.verbose_query_logs = true
 end
