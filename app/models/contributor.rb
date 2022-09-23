@@ -33,7 +33,7 @@ class Contributor < ApplicationRecord
   end
 
   def self.collabs(github_username)
-    Issue.where(user: github_username).first.collabs
+    Issue.where(user: github_username).first.try(:collabs)
   end
 
   def self.collabs_for(username)
