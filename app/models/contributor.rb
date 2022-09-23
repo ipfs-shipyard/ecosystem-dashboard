@@ -32,6 +32,10 @@ class Contributor < ApplicationRecord
     contrib = find_or_create_by(github_username: github_username)
   end
 
+  def self.collabs(github_username)
+    Issue.where(user: github_username).first.collabs
+  end
+
   def self.collabs_for(username)
     Event.external.user(username).event_type('PushEvent').group(:org).count.map(&:first)
   end

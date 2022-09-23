@@ -16,7 +16,7 @@
           <% if core %>
           <span class='badge badge-dark'>Core</span>
           <% end %>
-          <% Contributor.collabs_for(contributor).each do |collab| %>
+          <% Contributor.collabs(contributor).each do |collab| %>
             <%= link_to collab, url_for(request.params.merge(collab: collab, page: nil)), class: "badge badge-info" %>
           <% end %>
         </small>
