@@ -257,7 +257,7 @@ GEM
     ox (2.14.11)
     pagy (5.10.1)
       activesupport
-    pg (1.4.3)
+    pg (1.4.4)
     pg_query (2.1.4)
       google-protobuf (>= 3.19.2)
     pg_search (2.3.6)
