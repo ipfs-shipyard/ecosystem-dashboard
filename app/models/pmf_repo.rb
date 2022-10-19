@@ -338,7 +338,7 @@ class PmfRepo
   end
 
   def self.load_event_data(start_date, end_date, dependency_threshold)
-    event_scope(end_date, dependency_threshold).select('events.created_at, actor, repository_full_name').created_after_date(start_date).created_before_date(end_date).all
+    event_scope(end_date, dependency_threshold).select('repository_full_name').created_after_date(start_date).created_before_date(end_date).all
   end
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
