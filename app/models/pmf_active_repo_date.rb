@@ -25,7 +25,7 @@ class PmfActiveRepoDate < ApplicationRecord
   end
 
   def self.regenerate_recent
-    (1.week.ago.to_date..Date.today).each do |date|
+    (1.month.ago.to_date..Date.today).each do |date|
       PmfActiveRepoDate.update_pmf_events(date)
       PmfActiveRepoDate.update_by_date(date)
     end

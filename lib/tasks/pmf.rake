@@ -67,7 +67,7 @@ namespace :pmf do
     end_date = Date.yesterday - 3
     start_date = Date.parse('2021-07-12')
 
-    paths = [
+    paths += [
       "/pmf/repo/transitions.json?start_date=#{start_date.to_s}",
       "/pmf/repo/states.json?start_date=#{start_date.to_s}"
     ]
@@ -90,5 +90,10 @@ namespace :pmf do
     paths.each do |path|
       Faraday.get("https://#{host}#{path}")
     end
+  end
+
+  desc 'rengerate pmf active repo dates'
+  task regenerate: :environment do
+    PmfActiveRepoDate.regenerate_recent
   end
 end
