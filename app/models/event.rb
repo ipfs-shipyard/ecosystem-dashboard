@@ -23,6 +23,8 @@ class Event < ApplicationRecord
 
   scope :created_before, ->(datetime) { where('events.created_at < ?', datetime) }
   scope :created_after, ->(datetime) { where('events.created_at > ?', datetime) }
+  scope :created_before_date, ->(date) { where('date(events.created_at) < ?', date) }
+  scope :created_after_date, ->(date) { where('date(events.created_at) > ?', date) }
 
   scope :search, ->(query) { where('payload::text ilike ?', "%#{query}%") }
 
