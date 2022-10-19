@@ -24,7 +24,19 @@ class PmfActiveRepoDate < ApplicationRecord
     end
   end
 
+  def self.regenerate_recent
+    (1.week.ago.to_date..Date.today).each do |date|
+      PmfActiveRepoDate.update_pmf_events(date)
+      PmfActiveRepoDate.update_by_date(date)
+    end
+  end
+
   def update_repo_names
     update_column(:repository_full_names, Event.where(pmf: true).where('Date(created_at) = ?', date).distinct.pluck(:repository_full_name))
   end
+
+  def self.update_pmf_events(date)
+    Event.humans.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(pmf: nil).where('Date(created_at) = ?', date).in_batches(of: 1000).update_all(pmf: true)
+  end
 end
+
