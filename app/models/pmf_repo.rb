@@ -343,16 +343,8 @@ class PmfRepo
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
     repo_names = repo_names(before_date, dependency_threshold).sort
-
-    start_date = Event.where(pmf: true).first.created_at.to_date
-
-    names = (start_date..before_date.to_date).map do |date|
-      Rails.cache.fetch "previously_active_repo_names_#{date}_#{dependency_threshold}" do
-        Event.where(pmf: true).where('created_at > ? AND created_at < ?', date.beginning_of_day, date.end_of_day).distinct.pluck(:repository_full_name)
-      end
-    end
-    
-    names.flatten.sort.uniq & repo_names
+    all_active_repo_names = PmfActiveRepoDate.where('date <= ?', before_date).pluck(:repository_full_names).flatten.sort.uniq
+    all_active_repo_names & repo_names
   end
 
   def self.pl_orgs
