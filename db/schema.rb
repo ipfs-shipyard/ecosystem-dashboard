@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_23_140234) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_19_102726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -85,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_23_140234) do
     t.boolean "core"
     t.boolean "bot"
     t.boolean "pmf"
+    t.index "date(created_at)", name: "index_events_on_date_created_at"
     t.index ["actor"], name: "index_events_on_actor"
     t.index ["created_at"], name: "index_events_on_created_at"
     t.index ["github_id"], name: "index_events_on_github_id"
@@ -192,6 +193,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_23_140234) do
     t.integer "collab_dependent_repos_count"
     t.integer "outdated"
     t.index ["platform", "name"], name: "index_packages_on_platform_and_name", unique: true
+  end
+
+  create_table "pmf_active_repo_dates", force: :cascade do |t|
+    t.date "date"
+    t.string "repository_full_names", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_pmf_active_repo_dates_on_date"
   end
 
   create_table "repositories", force: :cascade do |t|
