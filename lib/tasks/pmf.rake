@@ -44,29 +44,32 @@ namespace :pmf do
 
     host = "#{ENV['DISPLAY_NAME'].downcase}.ecosystem-dashboard.com"
 
-    paths = [
-      "/pmf/repo/transitions.json?start_date=#{start_date.to_s}",
-      "/pmf/repo/states.json?start_date=#{start_date.to_s}"
-    ]
-
-    if ENV['DISPLAY_NAME'] == 'IPFS'
-      paths += [
-        "/pmf/repo/combined/states.json?start_date=#{start_date.to_s}",
-        "/pmf/repo/combined/transitions.json?start_date=#{start_date.to_s}"
-      ]
-    end
+    paths = []
 
     [7,14,30,90].each do |window|
       puts [start_date, end_date, window].join('-')
-      transitions = PmfRepo.transitions(start_date, end_date, window)
-      puts "  #{transitions.length} transitions"
-      states = PmfRepo.states(start_date, end_date, window)
-      puts "  #{states.length} states"
+
+      paths += [
+        "/pmf/repo/transitions.json?start_date=#{start_date.to_s}&window=#{window}",
+        "/pmf/repo/states.json?start_date=#{start_date.to_s}&window=#{window}"
+      ]
+  
+      if ENV['DISPLAY_NAME'] == 'IPFS'
+        paths += [
+          "/pmf/repo/combined/states.json?start_date=#{start_date.to_s}&window=#{window}",
+          "/pmf/repo/combined/transitions.json?start_date=#{start_date.to_s}&window=#{window}"
+        ]
+      end
+      
+      PmfRepo.transitions(start_date, end_date, window)
+      PmfRepo.states(start_date, end_date, window)
+      PmfRepo.states_summary(start_date, end_date, window)
     end
 
     paths.each do |path|
       Faraday.get("https://#{host}#{path}")
     end
+
   end
 
   desc 'rengerate pmf active repo dates'
