@@ -290,6 +290,7 @@ class PmfRepo
   end
 
   def self.states_for_window_dates(start_date, end_date, threshold, dependency_threshold)
+    puts "states_for_window_dates: #{start_date} - #{end_date} (threshold:#{threshold}, dependency_threshold:#{dependency_threshold})"
     Rails.cache.fetch(['pmf_repo_states_for_window_dates', threshold, dependency_threshold, start_date, end_date], expires_in: 1.week) do
       puts "Generating cache for #{start_date} - #{end_date} (threshold:#{threshold}, dependency_threshold:#{dependency_threshold})"
       previous_repo_names = previously_active_repo_names(start_date, dependency_threshold)
