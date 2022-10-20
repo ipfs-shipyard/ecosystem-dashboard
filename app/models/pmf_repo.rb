@@ -292,17 +292,20 @@ class PmfRepo
   def self.states_for_window_dates(start_date, end_date, threshold, dependency_threshold)
     Rails.cache.fetch(['pmf_repo_states_for_window_dates', threshold, dependency_threshold, start_date, end_date], expires_in: 1.week) do
       puts "Generating cache for #{start_date} - #{end_date} (threshold:#{threshold}, dependency_threshold:#{dependency_threshold})"
-      window_events = load_event_data(start_date, end_date, dependency_threshold)
-
       previous_repo_names = previously_active_repo_names(start_date, dependency_threshold)
+      repository_ids = repo_ids(end_date, dependency_threshold)
+      active_repos = {}
 
-      active_repos = window_events.group(:repository_full_name).count(:id)
+      repository_ids.each_slice(10000) do |ids|
+        print "."
+        active_repos.merge!(Event.where(pmf: true).where(repository_id: ids).select('repository_full_name').created_after_date(start_date).created_before_date(end_date).group(:repository_full_name).count(:id))
+      end
 
-      scores = active_repos.map{|repo_name, events| [repo_name, score_for_repo(repo_name, events)] }
+      puts "active_repos: #{active_repos.keys.length}"
 
       dep_removed_repo_names = Repository.where(full_name: active_repos.keys).where('last_internal_dep_removed < ?', end_date).pluck(:full_name)
 
-      states = scores.map do |repo_name, score|
+      states = active_repos.map do |repo_name, score|
         if dep_removed_repo_names.include?(repo_name)
           # inactive if not/stopped using dependencies in this period
           [repo_name, 0, 'inactive']
@@ -338,7 +341,7 @@ class PmfRepo
   end
 
   def self.load_event_data(start_date, end_date, dependency_threshold)
-    event_scope(end_date, dependency_threshold).select('repository_full_name').created_after_date(start_date).created_before_date(end_date).all
+    
   end
 
   def self.previously_active_repo_names(before_date, dependency_threshold)
