@@ -297,7 +297,7 @@ class PmfRepo
       repository_ids = repo_ids(end_date, dependency_threshold)
       active_repos = {}
 
-      repository_ids.each_slice(10000) do |ids|
+      repository_ids.each_slice(1000) do |ids|
         print "."
         active_repos.merge!(Event.where(pmf: true).where(repository_id: ids).select('repository_full_name').created_after_date(start_date).created_before_date(end_date).group(:repository_full_name).count(:id))
       end
