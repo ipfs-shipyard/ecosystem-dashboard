@@ -47,7 +47,7 @@ gem 'dalli'
 
 gem 'sidekiq'
 
-gem 'google-protobuf', '3.21.7'
+gem 'google-protobuf', '3.21.9'
 
 group :test do
   gem 'shoulda'
