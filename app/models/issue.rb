@@ -184,14 +184,14 @@ class Issue < ApplicationRecord
             repository(owner: "#{org}", name: "#{repo_full_name.split('/').last}"){
               issueOrPullRequest(number: #{number}){
                 ... on Issue {
-                  projectsNext(first:10){
+                  projectsV2(first:10){
                     nodes {
                       number
                     }
                   }
                 }
                 ... on PullRequest {
-                  projectsNext(first:10){
+                  projectsV2(first:10){
                     nodes {
                       number
                     }
@@ -202,7 +202,7 @@ class Issue < ApplicationRecord
           }
         GRAPHQL
         res = org_github_client.post('/graphql', { query: query }.to_json).to_h
-        ids += (res.dig(:data, :repository, :issueOrPullRequest, :projectsNext, :nodes) || []).compact.map{|n| n[:number]}
+        ids += (res.dig(:data, :repository, :issueOrPullRequest, :projectsV2, :nodes) || []).compact.map{|n| n[:number]}
       end
 
       update_column(:board_ids, ids.uniq)
