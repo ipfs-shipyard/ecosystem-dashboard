@@ -168,9 +168,9 @@ GEM
       ffi (~> 1.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    google-protobuf (3.21.9)
-    google-protobuf (3.21.9-x86_64-darwin)
-    google-protobuf (3.21.9-x86_64-linux)
+    google-protobuf (3.21.11)
+    google-protobuf (3.21.11-x86_64-darwin)
+    google-protobuf (3.21.11-x86_64-linux)
     groupdate (6.1.0)
       activesupport (>= 5.2)
     hashie (5.0.0)
@@ -400,7 +400,7 @@ DEPENDENCIES
   dotenv-rails
   faraday
   faraday_middleware
-  google-protobuf (= 3.21.9)
+  google-protobuf (= 3.21.11)
   groupdate
   jquery-rails
   languages!
