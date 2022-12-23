@@ -253,8 +253,7 @@ GEM
       oauth2 (>= 1.4, < 3)
       omniauth (>= 1.9, < 3)
     ox (2.14.11)
-    pagy (5.10.1)
-      activesupport
+    pagy (6.0.0)
     pg (1.4.5)
     pg_query (2.2.0)
       google-protobuf (>= 3.19.2)
