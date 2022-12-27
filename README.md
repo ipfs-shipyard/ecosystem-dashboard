@@ -304,6 +304,12 @@ New to Ruby? No worries! You can follow these instructions to install a local se
 
 #### Installing a Local Server
 
+If you're on a Debian-based distro, you'll need some dependencies:
+
+```
+sudo apt install build-essential cmake pkg-config
+```
+
 First things first, you'll need to install Ruby 3.1.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build).
 
@@ -322,7 +328,7 @@ brew install postgres
 On Debian-based Linux distributions you can use apt-get to install Postgres:
 
 ```bash
-sudo apt-get install postgresql postgresql-contrib libpq-dev
+sudo apt install postgresql postgresql-contrib libpq-dev
 ```
 
 On Windows, you can use the [Chocolatey package manager](http://chocolatey.org/) to install Postgres:
