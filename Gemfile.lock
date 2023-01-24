@@ -255,7 +255,7 @@ GEM
     ox (2.14.13)
     pagy (6.0.1)
     pg (1.4.5)
-    pg_query (2.2.0)
+    pg_query (2.2.1)
       google-protobuf (>= 3.19.2)
     pg_search (2.3.6)
       activerecord (>= 5.2)
