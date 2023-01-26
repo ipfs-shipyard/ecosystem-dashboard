@@ -120,7 +120,7 @@ GEM
     commander (4.6.0)
       highline (~> 2.0.0)
     commonmarker (0.23.6)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.0)
     connection_pool (2.3.0)
     counter_culture (3.3.0)
       activerecord (>= 4.2)
@@ -234,10 +234,10 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    octicons (17.10.2)
-    octicons_helper (17.10.2)
+    octicons (17.11.1)
+    octicons_helper (17.11.1)
       actionview
-      octicons (= 17.10.2)
+      octicons (= 17.11.1)
       railties
     octokit (6.0.1)
       faraday (>= 1, < 3)
