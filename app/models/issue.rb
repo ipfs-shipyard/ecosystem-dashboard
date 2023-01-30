@@ -176,7 +176,7 @@ class Issue < ApplicationRecord
     return if board_ids.any?
     begin
       events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview,application/vnd.github.starfox-preview+json')
-      ids = events.map{|e| e.project_card}.compact.map{|c| c.project_id}.uniq
+      ids = events.compact.map{|e| e.project_card}.compact.map{|c| c.project_id}.uniq
 
       if ENV['GITHUB_ORG_TOKEN'].present?
         query = <<-GRAPHQL
@@ -217,7 +217,7 @@ class Issue < ApplicationRecord
       events = Issue.github_client.issue_timeline(repo_full_name, number, accept: 'application/vnd.github.mockingbird-preview')
       # filter for events by core contributors
       core_contributor_usernames = Contributor.core.pluck(:github_username)
-      events = events.select{|e| (e.actor && core_contributor_usernames.include?(e.actor.login)) || (e.user && core_contributor_usernames.include?(e.user.login)) }
+      events = events.compact.select{|e| (e.actor && core_contributor_usernames.include?(e.actor.login)) || (e.user && core_contributor_usernames.include?(e.user.login)) }
       # ignore events where actor isn't who acted
       events = events.select{|e| !['subscribed', 'mentioned'].include?(e.event)  }
       # bail if no core contributor response yet
