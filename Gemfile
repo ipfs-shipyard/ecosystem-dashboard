@@ -45,7 +45,7 @@ gem 'simple_form'
 gem 'rack-cors'
 gem 'dalli'
 
-gem 'sidekiq', '<7'
+gem 'sidekiq', '<8'
 
 gem 'google-protobuf', '3.22.0'
 
