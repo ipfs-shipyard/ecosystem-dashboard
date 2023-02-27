@@ -403,7 +403,7 @@ DEPENDENCIES
   dotenv-rails
   faraday
   faraday_middleware
-  google-protobuf (= 3.22.0)
+  google-protobuf
   groupdate
   jquery-rails
   languages!
@@ -440,7 +440,7 @@ DEPENDENCIES
   zlib
 
 RUBY VERSION
-   ruby 3.1.3p185
+   ruby 3.2.1p31
 
 BUNDLED WITH
    2.4.5

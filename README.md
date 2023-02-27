@@ -310,12 +310,12 @@ If you're on a Debian-based distro, you'll need some dependencies:
 sudo apt install build-essential cmake pkg-config nodejs
 ```
 
-First things first, you'll need to install Ruby 3.1.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 3.2.1. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build).
 
 ```bash
-rbenv install 3.1.3
-rbenv global 3.1.3
+rbenv install 3.2.1
+rbenv global 3.2.1
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
