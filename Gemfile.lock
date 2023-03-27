@@ -121,7 +121,7 @@ GEM
       highline (~> 2.0.0)
     commonmarker (0.23.8)
     concurrent-ruby (1.2.2)
-    connection_pool (2.3.0)
+    connection_pool (2.4.0)
     counter_culture (3.3.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
