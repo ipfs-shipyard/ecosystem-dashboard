@@ -126,7 +126,7 @@ GEM
       activerecord (>= 4.2)
       activesupport (>= 4.2)
     crass (1.0.6)
-    dalli (3.2.4)
+    dalli (3.2.5)
     date (3.3.3)
     deb_control (0.0.1)
     dotenv (2.8.1)
