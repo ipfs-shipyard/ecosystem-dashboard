@@ -205,7 +205,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.2)
-    minitest (5.18.0)
+    minitest (5.18.1)
     msgpack (1.7.1)
     multi_xml (0.6.0)
     multipart-post (2.3.0)
@@ -234,10 +234,10 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    octicons (19.3.0)
-    octicons_helper (19.3.0)
+    octicons (19.4.0)
+    octicons_helper (19.4.0)
       actionview
-      octicons (= 19.3.0)
+      octicons (= 19.4.0)
       railties
     octokit (6.1.1)
       faraday (>= 1, < 3)
