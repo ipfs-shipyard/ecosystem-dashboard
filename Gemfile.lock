@@ -218,7 +218,6 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    newrelic_rpm (9.3.1)
     nio4r (2.5.9)
     nokogiri (1.15.3)
       mini_portile2 (~> 2.8.2)
@@ -412,7 +411,6 @@ DEPENDENCIES
   license-compatibility
   listen
   lograge
-  newrelic_rpm
   octicons_helper
   octokit
   oj

@@ -63,5 +63,4 @@ end
 group :production do
   gem 'lograge'
   gem 'puma_worker_killer'
-  gem 'newrelic_rpm'
 end
