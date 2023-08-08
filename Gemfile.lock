@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: https://github.com/andrew/repo_miner
-  revision: 90ae85c032f95af2db6caffe12503c6b94773f74
+  revision: 53c93ebb060fd27ce1b2c3191c5e93574fce6416
   specs:
     repo_miner (0.3.1)
       bibliothecary
