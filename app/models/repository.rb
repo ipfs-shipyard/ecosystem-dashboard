@@ -14,7 +14,7 @@ class Repository < ApplicationRecord
     Octokit::UnavailableForLegalReasons
   ]
 
-  has_many :events
+  has_many :events, dependent: :delete_all
   has_many :release_events, -> { where event_type: 'ReleaseEvent' }, class_name: 'Event'
   has_many :manifests, dependent: :destroy
   has_many :repository_dependencies
