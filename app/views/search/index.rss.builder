@@ -8,7 +8,7 @@ xml.rss :version => "2.0" do
     @search_results.each do |search_result|
       xml.item do
         xml.title search_result.title
-        xml.pubDate search_result.created_at.to_s(:rfc822)
+        xml.pubDate search_result.created_at.to_fs(:rfc822)
         xml.link search_result.html_url
         xml.guid search_result.html_url
       end

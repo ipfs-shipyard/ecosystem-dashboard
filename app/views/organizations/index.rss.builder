@@ -8,7 +8,7 @@ xml.rss :version => "2.0" do
     @orgs.each do |org|
       xml.item do
         xml.title org.name
-        xml.pubDate org.created_at.to_s(:rfc822)
+        xml.pubDate org.created_at.to_fs(:rfc822)
         xml.link org_url(org)
         xml.guid org_url(org)
       end

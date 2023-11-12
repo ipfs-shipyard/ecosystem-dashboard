@@ -9,7 +9,7 @@ xml.rss :version => "2.0" do
       xml.item do
         xml.title issue.title
         xml.description issue.body
-        xml.pubDate issue.created_at.to_s(:rfc822)
+        xml.pubDate issue.created_at.to_fs(:rfc822)
         xml.link issue.html_url
         xml.guid issue.html_url
       end
