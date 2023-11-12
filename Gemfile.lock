@@ -191,7 +191,7 @@ GEM
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
-    irb (1.8.3)
+    irb (1.9.0)
       rdoc
       reline (>= 0.3.8)
     jquery-rails (4.6.0)
@@ -268,7 +268,7 @@ GEM
       oauth2 (>= 1.4, < 3)
       omniauth (>= 1.9, < 3)
     ox (2.14.17)
-    pagy (6.1.0)
+    pagy (6.2.0)
     pg (1.5.4)
     pg_query (4.2.3)
       google-protobuf (>= 3.22.3)
