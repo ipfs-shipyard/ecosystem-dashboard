@@ -45,6 +45,8 @@ class Repository < ApplicationRecord
 
   scope :with_internal_deps, ->(count = 1) { having("SUM(coalesce(array_length(direct_internal_dependency_package_ids, 1),0) + coalesce(array_length(indirect_internal_dependency_package_ids, 1),0)) >= ?", count).group(:id) }
 
+  scope :without_internal_deps, -> { having("SUM(coalesce(array_length(direct_internal_dependency_package_ids, 1),0) + coalesce(array_length(indirect_internal_dependency_package_ids, 1),0)) = ?", 0).group(:id) }
+
   scope :with_internal_deps_from_org, -> (package_ids) { where("(direct_internal_dependency_package_ids && :ids) OR (indirect_internal_dependency_package_ids && :ids)", ids: "{#{package_ids.join(',')}}") }
 
   scope :with_manifests, -> { joins(:manifests).group(:id) }
@@ -226,6 +228,7 @@ class Repository < ApplicationRecord
   end
 
   def sync_events(auto_paginate = false)
+    return if internal_package_dependency_ids.blank?
     recent_events = download_events(auto_paginate)
     recent_events_ids = recent_events.map(&:id)
     existing_event_ids = Event.where(github_id: recent_events_ids).pluck(:github_id)
