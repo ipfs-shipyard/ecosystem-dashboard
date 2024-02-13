@@ -33,8 +33,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :dependency_events
-
   resources :contributors
 
   resources :users do

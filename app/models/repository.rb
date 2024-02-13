@@ -1,6 +1,4 @@
 class Repository < ApplicationRecord
-  include DependencyMiner
-
   IGNORABLE_EXCEPTIONS = [
     Octokit::Unauthorized,
     Octokit::InvalidRepository,
@@ -19,7 +17,6 @@ class Repository < ApplicationRecord
   has_many :manifests, dependent: :destroy
   has_many :repository_dependencies
   has_many :dependencies, through: :manifests, source: :repository_dependencies
-  has_many :dependency_events, dependent: :delete_all
   has_many :tags, dependent: :delete_all
   has_many :packages
   has_many :issues, foreign_key: :repo_full_name, primary_key: :full_name
@@ -52,9 +49,6 @@ class Repository < ApplicationRecord
 
   scope :with_manifests, -> { joins(:manifests).group(:id) }
   scope :without_manifests, -> { includes(:manifests).where(manifests: {repository_id: nil}) }
-
-  scope :with_dependency_events, -> { joins(:dependency_events).group(:id) }
-  scope :without_dependency_events, -> { includes(:dependency_events).where(dependency_events: {repository_id: nil}) }
 
   scope :with_search_results, -> { joins(:search_results).group(:id) }
   scope :without_search_results, -> { includes(:search_results).where(search_results: {repository_full_name: nil}) }
@@ -156,7 +150,6 @@ class Repository < ApplicationRecord
         repo.download_manifests
         repo.update_internal_dependency_lists
         repo.update_file_list
-        repo.mine_dependencies_async
       end
       repo
     rescue ArgumentError, Octokit::Error
@@ -624,10 +617,6 @@ class Repository < ApplicationRecord
 
   def indirect_internal_dependencies
     repository_dependencies.where(package_id: indirect_internal_dependency_package_ids)
-  end
-
-  def mine_dependencies_async
-    DependencyEventsWorker.perform_async(id)
   end
 
   def contributors_count

@@ -8,7 +8,6 @@ class RepositoryTest < ActiveSupport::TestCase
     should have_many(:manifests)
     should have_many(:repository_dependencies)
     should have_many(:dependencies)
-    should have_many(:dependency_events)
     should have_many(:tags)
     should have_many(:packages)
     should have_many(:issues)

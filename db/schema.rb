@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_19_102726) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_13_202203) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -48,27 +48,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_19_102726) do
     t.datetime "updated_at", null: false
     t.index ["package_id"], name: "index_dependencies_on_package_id"
     t.index ["version_id"], name: "index_dependencies_on_version_id"
-  end
-
-  create_table "dependency_events", force: :cascade do |t|
-    t.bigint "repository_id"
-    t.bigint "package_id"
-    t.string "action"
-    t.string "package_name"
-    t.string "commit_message"
-    t.string "requirement"
-    t.string "kind"
-    t.string "manifest_path"
-    t.string "manifest_kind"
-    t.string "branch"
-    t.string "commit_sha"
-    t.string "platform"
-    t.string "previous_requirement"
-    t.string "previous_kind"
-    t.datetime "committed_at", precision: nil
-    t.index ["committed_at"], name: "index_dependency_events_on_committed_at"
-    t.index ["package_id"], name: "index_dependency_events_on_package_id"
-    t.index ["repository_id"], name: "index_dependency_events_on_repository_id"
   end
 
   create_table "events", force: :cascade do |t|
