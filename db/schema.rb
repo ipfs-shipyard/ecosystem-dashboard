@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_13_204535) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_13_205402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -63,7 +63,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_13_204535) do
     t.datetime "updated_at", null: false
     t.boolean "core"
     t.boolean "bot"
-    t.boolean "pmf"
     t.index "date(created_at)", name: "index_events_on_date_created_at"
     t.index ["actor"], name: "index_events_on_actor"
     t.index ["created_at"], name: "index_events_on_created_at"
