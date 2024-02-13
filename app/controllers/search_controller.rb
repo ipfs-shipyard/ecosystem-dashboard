@@ -36,12 +36,6 @@ class SearchController < ApplicationController
     @scope = @scope.where(kind: params[:kind]) if params[:kind].present?
     @scope = @scope.where.not(kind: params[:exclude_kind]) if params[:exclude_kind].present?
 
-    # exclude repos that are included in PMF calcs
-    repo_names = Repository.where(id: PmfRepo.repo_ids(@range.days.ago)).pluck(:full_name)
-    @scope = @scope.where.not(repository_full_name: repo_names)
-
-    @orgs = @scope.group_by(&:org).reject{|k,v| PmfRepo.pl_orgs.include?(k) }.sort_by{|k,v| -v.group_by(&:repository_full_name).length }
-
     @kinds = @scope.unscope(where: :kind).group(:kind).count
   end
 

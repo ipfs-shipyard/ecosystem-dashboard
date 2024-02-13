@@ -36,10 +36,6 @@ class Event < ApplicationRecord
     !contributor.core?
   end
 
-  def self.set_pmf_field
-    Event.humans.not_core.where.not(event_type: ['WatchEvent', 'MemberEvent', 'PublicEvent']).where(pmf: nil).in_batches(of: 1000).update_all(pmf: true)
-  end
-
   def self.update_core_events
     Contributor.core.pluck(:github_username).each do |username|
       Event.where(actor: username).update_all(core: true)
@@ -75,11 +71,7 @@ class Event < ApplicationRecord
         contributor ||= Contributor.find_by(github_username: e.actor)
         e.bot = contributor.try(:bot)
       end
-      if !['WatchEvent', 'MemberEvent', 'PublicEvent'].include?(e.event_type)
-        if e.core && !e.bot
-          e.pmf = true
-        end
-      end
+      
       e.save if e.changed?
     rescue ActiveRecord::StatementInvalid
       # garbage data, ignore it

@@ -6,9 +6,6 @@ Rails.application.routes.draw do
 
   get :admin, to: redirect('/admin/contributors')
 
-  get 'repositories/combined/states', to: 'pmf_repo_combined#repo_states'
-  get 'repositories/combined/transitions', to: 'pmf_repo_combined#repo_transitions'
-
   namespace :admin do
     resources :contributors
     resources :organizations
@@ -35,12 +32,6 @@ Rails.application.routes.draw do
 
   resources :contributors
 
-  resources :users do
-    collection do
-      get :transitions
-    end
-  end
-
   get :login,  to: 'sessions#new'
   get :logout, to: 'sessions#destroy'
 
@@ -59,22 +50,6 @@ Rails.application.routes.draw do
 
   get 'discover', to: 'repositories#discover'
   post 'discover', to: 'repositories#discover'
-
-  get 'pmf/repo/combined/states', to: 'pmf_repo_combined#states'
-  get 'pmf/repo/combined/state', to: 'pmf_repo_combined#state'
-  get 'pmf/repo/combined/transitions', to: 'pmf_repo_combined#transitions'
-  get 'pmf/repo/combined/transition', to: 'pmf_repo_combined#transition'
-
-  get 'pmf/repo/states', to: 'pmf_repo#states'
-  get 'pmf/repo/state', to: 'pmf_repo#state'
-  get 'pmf/repo/transitions', to: 'pmf_repo#transitions'
-  get 'pmf/repo/transition', to: 'pmf_repo#transition'
-
-  get 'pmf/states', to: 'pmf#states'
-  get 'pmf/state', to: 'pmf#state'
-  get 'pmf/transitions', to: 'pmf#transitions'
-  get 'pmf/transition', to: 'pmf#transition'
-  get 'pmf/repositories', to: 'pmf#repositories'
 
   get 'community/packages', to: 'packages#community', as: :community_packages
   get 'community/repositories', to: 'repositories#community', as: :community_repositories

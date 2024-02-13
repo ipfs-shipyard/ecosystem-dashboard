@@ -81,9 +81,6 @@ class HomeController < ApplicationController
       "rails/welcome",
       "admin/contributors", 
       "admin/organizations", 
-      "pmf_repo_combined", 
-      "pmf",
-      "pmf_repo",
       "sessions",
       "forage",
       nil

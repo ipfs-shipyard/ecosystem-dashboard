@@ -188,58 +188,6 @@ class RepositoriesController < ApplicationController
     @repositories = @scope.order(@sort => @order).all
   end
 
-  def states
-    state_name = params[:tab].presence || 'first'
-
-    parse_pmf_params
-
-    respond_to do |format|
-      format.html do
-        @data = PmfRepo.state(state_name, @start_date, @end_date, @window, @threshold, @dependency_threshold)
-
-        if @data
-          all_repos = @data.first[:states].first[1]
-        else
-          all_repos = []
-        end
-
-        @pagy, @repositories = pagy_array(all_repos)
-      end
-      format.json do
-        json = Rails.cache.fetch("repo_states-#{pmf_url_param_string}") do
-          PmfRepo.states(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
-        end
-        render json: json
-      end
-    end
-  end
-
-  def transitions
-    transition_name = params[:tab].presence || 'First Time'
-
-    parse_pmf_params
-
-    respond_to do |format|
-      format.html do
-        @data = PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold)
-
-        if @data
-          all_repos = @data.first[:transitions][transition_name.to_sym]
-        else
-          all_repos = []
-        end
-
-        @pagy, @repositories = pagy_array(all_repos)
-      end
-      format.json do
-        json = Rails.cache.fetch("repo_transitions-#{pmf_url_param_string}") do
-          PmfRepo.transitions_with_details(@start_date, @end_date, @window, @threshold, @dependency_threshold).to_json
-        end
-        render json: json
-      end
-    end
-  end
-
   def discover
     if params[:names].present?
       names = params[:names].split(',').map(&:strip)

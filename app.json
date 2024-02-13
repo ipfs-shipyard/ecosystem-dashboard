@@ -49,10 +49,6 @@
       "schedule": "0 8 * * *"
     },
     {
-      "command": "bundle exec rake pmf:warm_caches",
-      "schedule": "10 * * * *"
-    },
-    {
       "command": "bundle exec rake contributors:sync",
       "schedule": "40 * * * *"
     },
