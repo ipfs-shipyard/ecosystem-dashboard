@@ -228,7 +228,7 @@ class Repository < ApplicationRecord
   end
 
   def sync_events(auto_paginate = false)
-    return if internal_package_dependency_ids.blank?
+    return [] if internal_package_dependency_ids.blank?
     recent_events = download_events(auto_paginate)
     recent_events_ids = recent_events.map(&:id)
     existing_event_ids = Event.where(github_id: recent_events_ids).pluck(:github_id)
