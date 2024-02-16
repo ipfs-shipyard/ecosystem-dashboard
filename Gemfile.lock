@@ -132,9 +132,9 @@ GEM
     dalli (3.2.8)
     date (3.3.4)
     deb_control (0.0.1)
-    dotenv (3.0.1)
-    dotenv-rails (3.0.1)
-      dotenv (= 3.0.1)
+    dotenv (3.0.2)
+    dotenv-rails (3.0.2)
+      dotenv (= 3.0.2)
       railties (>= 6.1)
     drb (2.2.0)
       ruby2_keywords
@@ -174,7 +174,9 @@ GEM
       ffi (~> 1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (3.25.2)
+    google-protobuf (3.25.3)
+    google-protobuf (3.25.3-x86_64-darwin)
+    google-protobuf (3.25.3-x86_64-linux)
     groupdate (6.4.0)
       activesupport (>= 6.1)
     hashie (5.0.0)
@@ -261,8 +263,8 @@ GEM
       oauth2 (>= 1.4, < 3)
       omniauth (>= 1.9, < 3)
     ox (2.14.17)
-    pagy (7.0.0)
-    pg (1.5.4)
+    pagy (7.0.1)
+    pg (1.5.5)
     pg_query (5.1.0)
       google-protobuf (>= 3.22.3)
     pg_search (2.3.6)
@@ -462,4 +464,4 @@ RUBY VERSION
    ruby 3.3.0p31
 
 BUNDLED WITH
-   2.5.5
+   2.5.6
