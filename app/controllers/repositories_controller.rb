@@ -14,7 +14,7 @@ class RepositoriesController < ApplicationController
     @scope = @scope.topic(params[:topic]) if params[:topic].present?
     @scope = @scope.smart if params[:smart].present?
 
-    @sort = params[:sort] || 'score'
+    @sort = params[:sort] || 'stargazers_count'
     @order = params[:order] || 'desc'
 
     respond_to do |format|
