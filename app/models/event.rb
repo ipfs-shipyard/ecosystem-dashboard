@@ -79,7 +79,7 @@ class Event < ApplicationRecord
   end
 
   def title
-    "#{actor} #{action_text} #{repository.full_name}"
+    "#{actor} #{action_text} #{repository_full_name}"
   end
 
   def html_url
