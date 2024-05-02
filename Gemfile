@@ -23,7 +23,7 @@ gem 'pghero'
 gem 'pg_query'
 gem 'pg_search'
 
-gem 'commonmarker', '0.23.10'
+gem 'commonmarker', '1.1.1'
 gem 'bibliothecary', git: "https://github.com/andrew/bibliothecary"
 gem "license-compatibility"
 gem "semantic", git: "https://github.com/librariesio/semantic"
