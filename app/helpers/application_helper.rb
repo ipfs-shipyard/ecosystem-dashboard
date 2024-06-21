@@ -117,7 +117,7 @@ module ApplicationHelper
     when 'issues'
       'issue-opened'
     when 'commits'
-      'commit'
+      'git-commit'
     else
       'code-square'
     end
