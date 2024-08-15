@@ -39,11 +39,11 @@ class OrganizationsController < ApplicationController
     respond_to do |format|
       format.html do
         @scope = Organization.collaborator.order(sort => order)
-        @pagy, @orgs = pagy(@scope, items: 100)
+        @pagy, @orgs = pagy(@scope, limit: 100)
       end
       format.rss do
         @scope = Organization.collaborator.order(sort => order)
-        @pagy, @orgs = pagy(@scope, items: 1000)
+        @pagy, @orgs = pagy(@scope, limit: 1000)
         render 'index', :layout => false
       end
       format.json do
@@ -65,7 +65,7 @@ class OrganizationsController < ApplicationController
     @active_collab_names = Organization.active_collabs(Event.internal.this_period(@period))
 
     @scope = Organization.where(name: @active_collab_names).order(sort => order)
-    @pagy, @orgs = pagy(@scope, items: 100)
+    @pagy, @orgs = pagy(@scope, limit: 100)
 
     respond_to do |format|
       format.html do

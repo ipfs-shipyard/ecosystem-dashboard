@@ -246,7 +246,7 @@ class RepositoriesController < ApplicationController
 
   def hackathons
     @scope = Repository.discovered.where(fork: false).order('created_at desc')
-    @pagy, @repositories = pagy(@scope, items: 500)
+    @pagy, @repositories = pagy(@scope, limit: 500)
   end
 
   def contributors

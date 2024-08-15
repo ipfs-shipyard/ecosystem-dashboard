@@ -11,7 +11,7 @@ gem 'turbolinks'
 gem 'octokit'
 gem 'bootsnap', require: false
 
-gem 'pagy', '8.6.3'
+gem 'pagy'
 gem 'jquery-rails'
 gem 'bootstrap', '4.6.2'
 gem 'octicons_helper'

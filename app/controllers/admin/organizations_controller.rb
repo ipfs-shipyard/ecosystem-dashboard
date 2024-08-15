@@ -1,7 +1,7 @@
 class Admin::OrganizationsController < Admin::ApplicationController
   def index
     @scope = Organization.order('name DESC').where('collaborator IS true or internal IS true')
-    @pagy, @orgs = pagy(@scope, items: 100)
+    @pagy, @orgs = pagy(@scope, limit: 100)
   end
 
   def new
