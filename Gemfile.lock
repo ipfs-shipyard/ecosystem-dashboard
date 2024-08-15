@@ -450,7 +450,7 @@ DEPENDENCIES
   oj
   omniauth-github (= 1.4.0)
   ox
-  pagy
+  pagy (= 8.6.3)
   pg
   pg_query
   pg_search
