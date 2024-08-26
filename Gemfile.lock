@@ -112,10 +112,9 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
-    bootstrap (4.6.2)
+    bootstrap (4.6.2.1)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.16.1, < 2)
-      sassc-rails (>= 2.0.0)
     bugsnag (6.27.1)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
@@ -222,7 +221,7 @@ GEM
     marcel (1.0.4)
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
-    minitest (5.25.0)
+    minitest (5.25.1)
     msgpack (1.7.2)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
@@ -429,7 +428,7 @@ PLATFORMS
 DEPENDENCIES
   bibliothecary!
   bootsnap
-  bootstrap (= 4.6.2)
+  bootstrap (= 4.6.2.1)
   bugsnag
   chartkick
   commonmarker (= 0.23.10)
