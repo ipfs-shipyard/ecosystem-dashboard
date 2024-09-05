@@ -335,7 +335,8 @@ GEM
       ffi (~> 1.0)
     rdoc (6.7.0)
       psych (>= 4.0.0)
-    redis (4.8.1)
+    redis-client (0.22.2)
+      connection_pool
     reline (0.5.9)
       io-console (~> 0.5)
     request_store (1.7.0)
@@ -361,10 +362,12 @@ GEM
     shoulda-context (2.0.0)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
-    sidekiq (6.5.12)
-      connection_pool (>= 2.2.5, < 3)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.3.2)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      logger
+      rack (>= 2.2.4)
+      redis-client (>= 0.22.2)
     simple_form (5.3.1)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -460,7 +463,7 @@ DEPENDENCIES
   semantic!
   semantic_range (= 2.3.1)
   shoulda
-  sidekiq (< 7)
+  sidekiq (< 8)
   simple_form
   spdx (= 2.0.10)
   sprockets-rails
