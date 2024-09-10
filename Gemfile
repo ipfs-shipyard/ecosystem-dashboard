@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.0'
+ruby '3.3.5'
 
 gem 'rails', '7.2.1'
 gem 'pg'
@@ -47,6 +47,8 @@ gem 'dalli'
 gem 'sidekiq', '<7'
 
 gem 'google-protobuf'
+gem 'ostruct'
+gem 'csv'
 
 group :test do
   gem 'shoulda'

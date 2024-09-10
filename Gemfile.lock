@@ -124,6 +124,7 @@ GEM
       activerecord (>= 4.2)
       activesupport (>= 4.2)
     crass (1.0.6)
+    csv (3.3.0)
     dalli (3.2.8)
     date (3.3.4)
     deb_control (0.0.1)
@@ -431,6 +432,7 @@ DEPENDENCIES
   chartkick
   commonmarker (= 0.23.10)
   counter_culture
+  csv
   dalli
   dotenv-rails
   faraday
@@ -446,6 +448,7 @@ DEPENDENCIES
   octokit
   oj
   omniauth-github (= 1.4.0)
+  ostruct
   ox
   pagy
   pg
@@ -470,7 +473,7 @@ DEPENDENCIES
   zlib
 
 RUBY VERSION
-   ruby 3.3.0p31
+   ruby 3.3.5p31
 
 BUNDLED WITH
    2.5.18
