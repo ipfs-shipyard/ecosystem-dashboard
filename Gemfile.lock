@@ -259,15 +259,16 @@ GEM
     oj (3.16.6)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
-    omniauth (1.9.2)
+    omniauth (2.1.2)
       hashie (>= 3.4.6)
-      rack (>= 1.6.2, < 3)
-    omniauth-github (1.4.0)
-      omniauth (~> 1.5)
-      omniauth-oauth2 (>= 1.4.0, < 2.0)
-    omniauth-oauth2 (1.7.3)
+      rack (>= 2.2.3)
+      rack-protection
+    omniauth-github (2.0.1)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.8)
+    omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
-      omniauth (>= 1.9, < 3)
+      omniauth (~> 2.0)
     ostruct (0.6.0)
     ox (2.14.18)
     pagy (9.1.0)
@@ -294,6 +295,9 @@ GEM
     rack (2.2.10)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
+      rack (~> 2.2, >= 2.2.4)
     rack-session (1.0.2)
       rack (< 3)
     rack-test (2.1.0)
@@ -447,7 +451,7 @@ DEPENDENCIES
   octicons_helper
   octokit
   oj
-  omniauth-github (= 1.4.0)
+  omniauth-github
   ostruct
   ox
   pagy

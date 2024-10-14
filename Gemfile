@@ -38,7 +38,7 @@ gem "spdx", '2.0.10'
 gem 'bugsnag'
 gem 'zlib'
 
-gem 'omniauth-github', '1.4.0'
+gem 'omniauth-github'
 gem 'simple_form'
 
 gem 'rack-cors'
