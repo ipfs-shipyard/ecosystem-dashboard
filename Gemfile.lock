@@ -114,7 +114,7 @@ GEM
     bugsnag (6.27.1)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
-    chartkick (5.1.0)
+    chartkick (5.1.1)
     commander (5.0.0)
       highline (~> 3.0.0)
     commonmarker (0.23.10)
