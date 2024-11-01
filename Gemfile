@@ -27,7 +27,7 @@ gem 'commonmarker', '0.23.10'
 gem 'bibliothecary', git: "https://github.com/andrew/bibliothecary"
 gem "license-compatibility"
 gem "semantic", git: "https://github.com/librariesio/semantic"
-gem "semantic_range", '2.3.1'
+gem "semantic_range", '3.1.0'
 gem 'oj'
 gem 'ox'
 gem 'faraday'

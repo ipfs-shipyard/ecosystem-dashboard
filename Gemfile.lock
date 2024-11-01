@@ -361,7 +361,7 @@ GEM
       faraday (>= 0.17.3, < 3)
     sdl4r (0.9.11)
     securerandom (0.3.1)
-    semantic_range (2.3.1)
+    semantic_range (3.1.0)
     shoulda (4.0.0)
       shoulda-context (~> 2.0)
       shoulda-matchers (~> 4.0)
@@ -467,7 +467,7 @@ DEPENDENCIES
   rails (= 7.2.2)
   sassc-rails
   semantic!
-  semantic_range (= 2.3.1)
+  semantic_range (= 3.1.0)
   shoulda
   sidekiq (< 7)
   simple_form
