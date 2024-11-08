@@ -271,7 +271,7 @@ GEM
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
-    ostruct (0.6.0)
+    ostruct (0.6.1)
     ox (2.14.18)
     pagy (9.2.0)
     pg (1.5.9)
