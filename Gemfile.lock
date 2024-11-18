@@ -479,7 +479,7 @@ DEPENDENCIES
   zlib
 
 RUBY VERSION
-   ruby 3.3.5p31
+   ruby 3.3.6p31
 
 BUNDLED WITH
    2.5.23
