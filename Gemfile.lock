@@ -105,7 +105,7 @@ GEM
     autoprefixer-rails (10.4.19.0)
       execjs (~> 2)
     base64 (0.2.0)
-    benchmark (0.3.0)
+    benchmark (0.4.0)
     bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.18.4)
@@ -128,7 +128,7 @@ GEM
     crass (1.0.6)
     csv (3.3.0)
     dalli (3.2.8)
-    date (3.3.4)
+    date (3.4.0)
     deb_control (0.0.1)
     dotenv (3.1.4)
     dotenv-rails (3.1.4)
@@ -220,13 +220,13 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.7)
+    mini_portile2 (2.8.8)
     minitest (5.25.1)
-    msgpack (1.7.3)
+    msgpack (1.7.5)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
-    net-imap (0.5.0)
+    net-imap (0.5.1)
       date
       net-protocol
     net-pop (0.1.2)
@@ -284,7 +284,7 @@ GEM
       activerecord (>= 6.1)
     polyglot (0.3.5)
     popper_js (1.16.1)
-    psych (5.1.2)
+    psych (5.2.0)
       stringio
     public_suffix (6.0.1)
     puma (6.4.3)
@@ -343,7 +343,7 @@ GEM
     rdoc (6.7.0)
       psych (>= 4.0.0)
     redis (4.8.1)
-    reline (0.5.10)
+    reline (0.5.11)
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
@@ -360,7 +360,7 @@ GEM
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
     sdl4r (0.9.11)
-    securerandom (0.3.1)
+    securerandom (0.3.2)
     semantic_range (2.3.1)
     shoulda (4.0.0)
       shoulda-context (~> 2.0)
@@ -390,7 +390,7 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
-    stringio (3.1.1)
+    stringio (3.1.2)
     strings (0.2.1)
       strings-ansi (~> 0.2)
       unicode-display_width (>= 1.5, < 3.0)
@@ -398,7 +398,7 @@ GEM
     strings-ansi (0.2.0)
     thor (1.3.2)
     tilt (2.4.0)
-    timeout (0.4.1)
+    timeout (0.4.2)
     tomlrb (2.0.3)
     treetop (1.6.12)
       polyglot (~> 0.3)
@@ -418,7 +418,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webrick (1.8.2)
+    webrick (1.9.0)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -482,4 +482,4 @@ RUBY VERSION
    ruby 3.3.5p31
 
 BUNDLED WITH
-   2.5.22
+   2.5.23
