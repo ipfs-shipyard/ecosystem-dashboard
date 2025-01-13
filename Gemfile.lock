@@ -272,7 +272,7 @@ GEM
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
     ostruct (0.6.1)
-    ox (2.14.19)
+    ox (2.14.20)
       bigdecimal (>= 3.0)
     pagy (9.3.3)
     pg (1.5.9)
