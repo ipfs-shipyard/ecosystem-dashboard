@@ -1,5 +1,4 @@
-### Build stage
-FROM ruby:3.3.6-alpine AS builder
+FROM ruby:3.3.6-alpine
 
 ENV APP_ROOT=/usr/src/app
 ENV DATABASE_PORT=5432
@@ -42,11 +41,5 @@ RUN bundle install --jobs 2
 # This is done to include assets in production images on Dockerhub.
 RUN SECRET_KEY_BASE_DUMMY=1 RAILS_ENV=production bundle exec rake assets:precompile
 
-### Runtime stage
-FROM ruby:3.3.6-alpine
-ENV APP_ROOT=/usr/src/app
-ENV DATABASE_PORT=5432
-COPY --from=builder /$APP_ROOT /$APP_ROOT
-WORKDIR $APP_ROOT
 # Startup
 CMD ["bin/docker-start"]
