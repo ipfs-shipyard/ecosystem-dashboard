@@ -1,8 +1,8 @@
 ### Build stage
 FROM ruby:3.3.6-alpine AS builder
 
-ENV APP_ROOT /usr/src/app
-ENV DATABASE_PORT 5432
+ENV APP_ROOT=/usr/src/app
+ENV DATABASE_PORT=5432
 WORKDIR $APP_ROOT
 
 # =============================================
@@ -42,8 +42,8 @@ RUN SECRET_KEY_BASE_DUMMY=1 RAILS_ENV=production bundle exec rake assets:precomp
 
 ### Runtime stage
 FROM ruby:3.3.6-alpine
-ENV APP_ROOT /usr/src/app
-ENV DATABASE_PORT 5432
+ENV APP_ROOT=/usr/src/app
+ENV DATABASE_PORT=5432
 COPY --from=builder /$APP_ROOT /$APP_ROOT
 WORKDIR $APP_ROOT
 # Startup
