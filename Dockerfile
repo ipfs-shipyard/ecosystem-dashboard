@@ -41,7 +41,7 @@ COPY . $APP_ROOT
 RUN SECRET_KEY_BASE_DUMMY=1 RAILS_ENV=production bundle exec rake assets:precompile
 
 ### Runtime stage
-FROM ruby:3.3.5-alpine
+FROM ruby:3.3.6-alpine
 ENV APP_ROOT /usr/src/app
 ENV DATABASE_PORT 5432
 COPY --from=builder /$APP_ROOT /$APP_ROOT
