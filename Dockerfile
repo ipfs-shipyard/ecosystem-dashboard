@@ -22,6 +22,9 @@ RUN apk add --update \
     curl-dev \
     openssl-dev \
     cmake \
+    libffi-dev \
+    yaml-dev \
+    linux-headers \
  && rm -rf /var/cache/apk/* \
  && gem update --system \
  && gem install bundler foreman \
