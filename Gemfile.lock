@@ -298,7 +298,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (7.0.4)
+    puma (7.1.0)
       nio4r (~> 2.0)
     puma_worker_killer (1.0.0)
       bigdecimal (>= 2.0)
@@ -414,7 +414,7 @@ GEM
     tilt (2.6.1)
     timeout (0.4.3)
     tomlrb (2.0.3)
-    treetop (1.6.14)
+    treetop (1.6.15)
       polyglot (~> 0.3)
     tsort (0.2.0)
     turbolinks (5.2.1)
