@@ -473,7 +473,7 @@ DEPENDENCIES
   omniauth-github
   ostruct
   ox
-  pagy
+  pagy (~> 9.4.0)
   pg
   pg_query
   pg_search
