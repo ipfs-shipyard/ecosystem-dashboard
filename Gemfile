@@ -17,14 +17,14 @@ gem 'bootstrap', '4.6.2.1'
 gem 'octicons_helper'
 gem "chartkick"
 gem 'groupdate'
-gem 'languages', github: 'andrew/languages'
+gem 'languages'
 
 gem 'pghero'
 gem 'pg_query'
 gem 'pg_search'
 
 gem 'commonmarker', '0.23.10'
-gem 'bibliothecary', git: "https://github.com/andrew/bibliothecary"
+gem 'bibliothecary', git: "https://github.com/ecosyste-ms/bibliothecary"
 gem "license-compatibility"
 gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range", '2.3.1'
@@ -52,6 +52,7 @@ gem 'csv'
 
 group :test do
   gem 'shoulda'
+  gem 'minitest', '< 6.0'
 end
 
 group :development do
