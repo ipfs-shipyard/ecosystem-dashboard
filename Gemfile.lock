@@ -222,7 +222,8 @@ GEM
     marcel (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.27.0)
+    minitest (6.0.0)
+      prism (~> 1.5)
     msgpack (1.8.0)
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
@@ -294,6 +295,7 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
+    prism (1.7.0)
     psych (5.3.1)
       date
       stringio
@@ -459,7 +461,7 @@ DEPENDENCIES
   license-compatibility
   listen
   lograge
-  minitest (< 6.0)
+  minitest (< 7.0)
   octicons_helper
   octokit
   oj
