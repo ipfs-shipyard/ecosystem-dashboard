@@ -52,7 +52,7 @@ gem 'csv'
 
 group :test do
   gem 'shoulda'
-  gem 'minitest', '< 6.0'
+  gem 'minitest', '< 7.0'
 end
 
 group :development do
