@@ -1,18 +1,14 @@
 GIT
   remote: https://github.com/ecosyste-ms/bibliothecary
-  revision: 07cb96af171c0d8eeb5aee793e4f0b010e92484e
+  revision: 827bda17dc8866d3f712d40942760f4d52e23b63
   specs:
-    bibliothecary (14.2.0)
+    ecosystems-bibliothecary (15.0.1)
       bundler
-      commander
-      deb_control
+      csv
       json (~> 2.8)
-      librariesio-gem-parser
       ox (>= 2.8.1)
-      packageurl-ruby
-      sdl4r
+      racc
       tomlrb (~> 2.0)
-      typhoeus
 
 GIT
   remote: https://github.com/librariesio/semantic
@@ -100,7 +96,7 @@ GEM
       execjs (~> 2)
     base64 (0.3.0)
     benchmark (0.5.0)
-    bigdecimal (3.3.1)
+    bigdecimal (4.0.1)
     bindex (0.8.1)
     bootsnap (1.20.1)
       msgpack (~> 1.2)
@@ -111,8 +107,6 @@ GEM
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
     chartkick (5.2.1)
-    commander (5.0.0)
-      highline (~> 3.0.0)
     commonmarker (0.23.10)
     concurrent-ruby (1.3.6)
     connection_pool (2.5.5)
@@ -123,7 +117,6 @@ GEM
     csv (3.3.5)
     dalli (3.2.8)
     date (3.5.1)
-    deb_control (0.0.1)
     dotenv (3.2.0)
     dotenv-rails (3.2.0)
       dotenv (= 3.2.0)
@@ -132,9 +125,6 @@ GEM
     erb (6.0.1)
     erubi (1.13.1)
     escape_utils (1.3.0)
-    ethon (0.18.0)
-      ffi (>= 1.15.0)
-      logger
     execjs (2.10.0)
     faraday (1.10.4)
       faraday-em_http (~> 1.0)
@@ -152,7 +142,7 @@ GEM
     faraday-em_synchrony (1.0.1)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.1.1)
+    faraday-multipart (1.2.0)
       multipart-post (~> 2.0)
     faraday-net_http (1.0.2)
     faraday-net_http_persistent (1.2.0)
@@ -161,9 +151,8 @@ GEM
     faraday-retry (1.0.3)
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
-    ffi (1.17.2)
-    ffi (1.17.2-x86_64-darwin)
-    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.3-arm64-darwin)
+    ffi (1.17.3-x86_64-linux-gnu)
     fuzzy_match (2.1.0)
     get_process_mem (1.0.0)
       bigdecimal (>= 2.0)
@@ -173,7 +162,7 @@ GEM
     google-protobuf (4.33.2)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.33.2-x86_64-darwin)
+    google-protobuf (4.33.2-arm64-darwin)
       bigdecimal
       rake (>= 13)
     google-protobuf (4.33.2-x86_64-linux-gnu)
@@ -181,8 +170,8 @@ GEM
       rake (>= 13)
     groupdate (6.7.0)
       activesupport (>= 7.1)
-    hashie (5.0.0)
-    highline (3.0.1)
+    hashie (5.1.0)
+      logger
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     io-console (0.8.2)
@@ -199,7 +188,6 @@ GEM
       base64
     languages (2.0.0)
       escape_utils (~> 1.1)
-    librariesio-gem-parser (1.0.0)
     license-compatibility (3.1.0)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -221,11 +209,10 @@ GEM
       net-smtp
     marcel (1.1.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (5.27.0)
     msgpack (1.8.0)
-    multi_xml (0.7.2)
-      bigdecimal (~> 3.1)
+    multi_xml (0.8.0)
+      bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
     net-imap (0.6.2)
       date
@@ -237,12 +224,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.18.10)
-      mini_portile2 (~> 2.8.2)
+    nokogiri (1.19.0-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.18.10-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.10-x86_64-linux-gnu)
+    nokogiri (1.19.0-x86_64-linux-gnu)
       racc (~> 1.4)
     oauth2 (2.0.18)
       faraday (>= 0.17.3, < 4.0)
@@ -277,10 +261,9 @@ GEM
     ostruct (0.6.3)
     ox (2.14.23)
       bigdecimal (>= 3.0)
-    packageurl-ruby (0.2.0)
     pagy (9.4.0)
     pg (1.6.3)
-    pg (1.6.3-x86_64-darwin)
+    pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-linux)
     pg_query (6.1.0)
       google-protobuf (>= 3.25.3)
@@ -297,7 +280,7 @@ GEM
     psych (5.3.1)
       date
       stringio
-    public_suffix (7.0.0)
+    public_suffix (7.0.2)
     puma (7.1.0)
       nio4r (~> 2.0)
     puma_worker_killer (1.0.0)
@@ -351,7 +334,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rdoc (7.0.2)
+    rdoc (7.0.3)
       erb
       psych (>= 4.0.0)
       tsort
@@ -372,7 +355,6 @@ GEM
     sawyer (0.9.3)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
-    sdl4r (0.9.11)
     securerandom (0.4.1)
     semantic_range (2.3.1)
     shoulda (4.0.0)
@@ -385,7 +367,7 @@ GEM
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
-    simple_form (5.4.0)
+    simple_form (5.4.1)
       actionpack (>= 7.0)
       activemodel (>= 7.0)
     snaky_hash (2.0.3)
@@ -415,8 +397,6 @@ GEM
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
-    typhoeus (1.4.1)
-      ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     useragent (0.16.11)
@@ -435,12 +415,10 @@ GEM
     zlib (3.2.2)
 
 PLATFORMS
-  ruby
-  x86_64-darwin-20
+  arm64-darwin
   x86_64-linux
 
 DEPENDENCIES
-  bibliothecary!
   bootsnap
   bootstrap (= 4.6.2.1)
   bugsnag
@@ -450,6 +428,7 @@ DEPENDENCIES
   csv
   dalli
   dotenv-rails
+  ecosystems-bibliothecary!
   faraday
   faraday_middleware
   google-protobuf
@@ -489,7 +468,7 @@ DEPENDENCIES
   zlib
 
 RUBY VERSION
-  ruby 3.4.7p58
+  ruby 3.4.7
 
 BUNDLED WITH
-  4.0.0.beta2
+  4.0.3

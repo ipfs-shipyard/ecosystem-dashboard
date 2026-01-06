@@ -24,7 +24,7 @@ gem 'pg_query'
 gem 'pg_search'
 
 gem 'commonmarker', '0.23.10'
-gem 'bibliothecary', git: "https://github.com/ecosyste-ms/bibliothecary"
+gem 'ecosystems-bibliothecary', git: "https://github.com/ecosyste-ms/bibliothecary", require: 'bibliothecary'
 gem "license-compatibility"
 gem "semantic", git: "https://github.com/librariesio/semantic"
 gem "semantic_range", '2.3.1'
