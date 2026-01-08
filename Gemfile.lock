@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/ecosyste-ms/bibliothecary
-  revision: f591866b2398af9fab378cf46dfcdaf2ffd2dec3
+  revision: f287ef4eab3ee9fec6f3dd35708f1f64910dd3da
   specs:
-    ecosystems-bibliothecary (15.1.0)
+    ecosystems-bibliothecary (15.1.1)
       bundler
       csv
       json (~> 2.8)
