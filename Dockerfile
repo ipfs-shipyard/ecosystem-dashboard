@@ -30,7 +30,6 @@ RUN apk add --update \
  && gem install bundler foreman \
  && bundle config --global frozen 1 \
  && bundle config set without 'test' \
- && bundle config set force_ruby_platform true \
  && bundle install --jobs 2
 
 # ========================================================
