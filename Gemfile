@@ -32,7 +32,7 @@ gem 'oj'
 gem 'ox'
 gem 'faraday'
 gem "faraday_middleware"
-gem 'typhoeus', '~> 1.3.1'
+gem 'typhoeus'
 gem "counter_culture"
 gem "spdx", '2.0.10'
 

@@ -129,9 +129,8 @@ GEM
     erb (6.0.1)
     erubi (1.13.1)
     escape_utils (1.3.0)
-    ethon (0.18.0)
+    ethon (0.15.0)
       ffi (>= 1.15.0)
-      logger
     execjs (2.10.0)
     faraday (1.10.4)
       faraday-em_http (~> 1.0)
@@ -419,8 +418,8 @@ GEM
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
-    typhoeus (1.3.1)
-      ethon (>= 0.9.0)
+    typhoeus (1.5.0)
+      ethon (>= 0.9.0, < 0.16.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     useragent (0.16.11)
@@ -490,7 +489,7 @@ DEPENDENCIES
   sprockets-rails
   sql_queries_count
   turbolinks
-  typhoeus (~> 1.3.1)
+  typhoeus
   web-console
   zlib
 
