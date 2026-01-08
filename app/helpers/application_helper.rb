@@ -169,7 +169,10 @@ module ApplicationHelper
 
   def render_markdown(str)
     return if str.blank?
-    CommonMarker.render_html(str, :UNSAFE, [:tagfilter, :autolink, :table, :strikethrough]).html_safe
+    Commonmarker.to_html(str, options: {
+      render: { unsafe: true },
+      extension: { tagfilter: true, autolink: true, table: true, strikethrough: true }
+    }).html_safe
   end
 
   def page_title
