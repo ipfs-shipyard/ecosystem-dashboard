@@ -48,8 +48,9 @@ gem 'simple_form'
 
 gem 'rack-cors'
 gem 'dalli'
+gem 'redis'
 
-gem 'sidekiq', '<7'
+gem 'sidekiq'
 
 gem 'google-protobuf'
 gem 'ostruct'
