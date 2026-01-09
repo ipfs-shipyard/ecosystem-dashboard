@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '4.0.0'
 
-gem 'rails', '7.2.2'
+gem 'rails', '8.1.2'
 gem 'pg'
 gem 'puma'
 gem 'sassc-rails'
@@ -31,7 +31,11 @@ gem "semantic_range", '2.3.1'
 gem 'oj'
 gem 'ox'
 gem 'faraday'
-gem "faraday_middleware"
+gem 'faraday-retry'
+gem 'faraday-gzip'
+gem 'faraday-follow_redirects'
+gem 'faraday-multipart'
+gem 'faraday-net_http_persistent'
 gem 'typhoeus'
 gem "counter_culture"
 gem "spdx", '2.0.10'

@@ -240,8 +240,8 @@ module PackageManager
 
     private_class_method def self.request(url, options = {})
       connection = Faraday.new url.strip, options do |builder|
-        builder.use FaradayMiddleware::Gzip
-        builder.use FaradayMiddleware::FollowRedirects, limit: 3
+        builder.request :gzip
+        builder.response :follow_redirects, limit: 3
         builder.request :retry, { max: 2, interval: 0.05, interval_randomness: 0.5, backoff_factor: 2 }
 
         builder.use :instrumentation
