@@ -120,7 +120,8 @@ GEM
       activesupport (>= 4.2)
     crass (1.0.6)
     csv (3.3.5)
-    dalli (3.2.8)
+    dalli (4.0.0)
+      logger
     date (3.5.1)
     dotenv (3.2.0)
     dotenv-rails (3.2.0)
